@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Details - Orbit CI/CD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Manter o mesmo CSS base da página principal */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #1e293b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --glass: rgba(30, 41, 59, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header - Mesmo estilo da página principal */
+        header {
+            background-color: var(--dark);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .logo-icon {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 68px);
+        }
+
+        /* Sidebar - Mesmo estilo da página principal */
+        .sidebar {
+            background-color: var(--dark);
+            border-right: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(30, 41, 59, 0.5);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-menu a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        /* Pipeline Header */
+        .pipeline-header {
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pipeline-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pipeline-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .pipeline-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .pipeline-info p {
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pipeline-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-running {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .pipeline-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* Pipeline Tabs */
+        .pipeline-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .pipeline-tab {
+            padding: 0.75rem 1.5rem;
+            background-color: transparent;
+            border: none;
+            color: var(--gray);
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .pipeline-tab.active {
+            color: var(--primary);
+        }
+
+        .pipeline-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        /* Pipeline Content */
+        .pipeline-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Pipeline Sidebar */
+        .pipeline-sidebar {
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-section h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .commit-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .commit-hash {
+            font-family: monospace;
+            background-color: var(--dark);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .author-name {
+            font-weight: 500;
+        }
+
+        .author-email {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Pipeline Main */
+        .pipeline-main {
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        /* Pipeline Stages */
+        .pipeline-stages {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stage {
+            background-color: var(--dark);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .stage-header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .stage-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+        }
+
+        .stage-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .icon-success {
+            background-color: var(--success);
+        }
+
+        .icon-running {
+            background-color: var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        .stage-duration {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .stage-body {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .stage-body.expanded {
+            padding: 1rem 1.5rem;
+            max-height: 1000px;
+        }
+
+        .job {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .job:last-child {
+            border-bottom: none;
+        }
+
+        .job-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .job-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+        }
+
+        .job-name {
+            font-weight: 500;
+        }
+
+        .job-duration {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Log Output */
+        .log-output {
+            background-color: var(--dark);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 2rem;
+        }
+
+        .log-line {
+            margin-bottom: 0.25rem;
+            white-space: pre-wrap;
+        }
+
+        .log-info {
+            color: var(--primary);
+        }
+
+        .log-success {
+            color: var(--success);
+        }
+
+        .log-error {
+            color: var(--error);
+        }
+
+        .log-warning {
+            color: var(--warning);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .pipeline-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pipeline-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .pipeline-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fas fa-satellite-dish logo-icon"></i>
+                    <span>Orbit</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Repositories</a></li>
+                    <li><a href="#" class="active">Pipelines</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Deploy
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-code-branch"></i>
+                        Repositories
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active">
+                        <i class="fas fa-project-diagram"></i>
+                        Pipelines
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-tasks"></i>
+                        Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-life-ring"></i>
+                        Support
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Pipeline Details</h1>
+                <div class="page-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-redo"></i> Rerun
+                    </button>
+                </div>
+            </div>
+
+            <div class="pipeline-header">
+                <div class="pipeline-title">
+                    <div class="pipeline-icon">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <div class="pipeline-info">
+                        <h2>Frontend Build Pipeline</h2>
+                        <p>
+                            <i class="fas fa-code-branch"></i>
+                            main • 
+                            <i class="fas fa-code-commit"></i>
+                            a1b2c3d • 
+                            <span class="pipeline-status status-success">
+                                <i class="fas fa-check-circle"></i>
+                                Success
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="pipeline-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-code"></i> View Config
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Download Logs
+                    </button>
+                </div>
+            </div>
+
+            <div class="pipeline-tabs">
+                <button class="pipeline-tab active">Overview</button>
+                <button class="pipeline-tab">Logs</button>
+                <button class="pipeline-tab">Artifacts</button>
+                <button class="pipeline-tab">Tests</button>
+                <button class="pipeline-tab">Metrics</button>
+            </div>
+
+            <div class="pipeline-content">
+                <div class="pipeline-sidebar">
+                    <div class="sidebar-section">
+                        <h3>Pipeline Information</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value">
+                                <span class="pipeline-status status-success">
+                                    Success
+                                </span>
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Duration</span>
+                            <span class="detail-value">3m 42s</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Started At</span>
+                            <span class="detail-value">2023-06-15 14:30:22 UTC</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Finished At</span>
+                            <span class="detail-value">2023-06-15 14:34:04 UTC</span>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Commit Information</h3>
+                        <div class="commit-info">
+                            <i class="fas fa-code-commit"></i>
+                            <span class="commit-hash">a1b2c3d</span>
+                        </div>
+                        <p style="margin-bottom: 0.5rem;">Fixed issue with responsive layout in dashboard</p>
+                        <div class="author-info">
+                            <img src="https://via.placeholder.com/40" alt="Author" class="author-avatar">
+                            <div>
+                                <div class="author-name">John Doe</div>
+                                <div class="author-email">john.doe@example.com</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Trigger Information</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Triggered By</span>
+                            <span class="detail-value">Git Push</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Triggered At</span>
+                            <span class="detail-value">2023-06-15 14:29:15 UTC</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Triggered By</span>
+                            <span class="detail-value">John Doe</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-main">
+                    <h3 style="margin-bottom: 1.5rem;">Pipeline Stages</h3>
+                    
+                    <div class="pipeline-stages">
+                        <div class="stage">
+                            <div class="stage-header">
+                                <div class="stage-title">
+                                    <i class="fas fa-cog"></i>
+                                    <span>Install Dependencies</span>
+                                </div>
+                                <div class="stage-status">
+                                    <span class="status-icon icon-success"></span>
+                                    <span>Success</span>
+                                    <span class="stage-duration">42s</span>
+                                </div>
+                            </div>
+                            <div class="stage-body expanded">
+                                <div class="job">
+                                    <div class="job-info">
+                                        <div class="job-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <span class="job-name">npm install</span>
+                                    </div>
+                                    <span class="job-duration">42s</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stage">
+                            <div class="stage-header">
+                                <div class="stage-title">
+                                    <i class="fas fa-vial"></i>
+                                    <span>Run Tests</span>
+                                </div>
+                                <div class="stage-status">
+                                    <span class="status-icon icon-success"></span>
+                                    <span>Success</span>
+                                    <span class="stage-duration">1m 23s</span>
+                                </div>
+                            </div>
+                            <div class="stage-body">
+                                <div class="job">
+                                    <div class="job-info">
+                                        <div class="job-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <span class="job-name">unit tests</span>
+                                    </div>
+                                    <span class="job-duration">45s</span>
+                                </div>
+                                <div class="job">
+                                    <div class="job-info">
+                                        <div class="job-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <span class="job-name">integration tests</span>
+                                    </div>
+                                    <span class="job-duration">38s</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stage">
+                            <div class="stage-header">
+                                <div class="stage-title">
+                                    <i class="fas fa-box"></i>
+                                    <span>Build Artifacts</span>
+                                </div>
+                                <div class="stage-status">
+                                    <span class="status-icon icon-success"></span>
+                                    <span>Success</span>
+                                    <span class="stage-duration">56s</span>
+                                </div>
+                            </div>
+                            <div class="stage-body">
+                                <div class="job">
+                                    <div class="job-info">
+                                        <div class="job-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <span class="job-name">build production</span>
+                                    </div>
+                                    <span class="job-duration">56s</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stage">
+                            <div class="stage-header">
+                                <div class="stage-title">
+                                    <i class="fas fa-upload"></i>
+                                    <span>Deploy to Staging</span>
+                                </div>
+                                <div class="stage-status">
+                                    <span class="status-icon icon-running"></span>
+                                    <span>Running</span>
+                                    <span class="stage-duration">1m 12s</span>
+                                </div>
+                            </div>
+                            <div class="stage-body">
+                                <div class="job">
+                                    <div class="job-info">
+                                        <div class="job-icon">
+                                            <i class="fas fa-sync fa-spin"></i>
+                                        </div>
+                                        <span class="job-name">deploy to AWS</span>
+                                    </div>
+                                    <span class="job-duration">1m 12s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="log-output">
+                        <div class="log-line log-info">[INFO] Starting pipeline execution</div>
+                        <div class="log-line log-info">[INFO] Cloning repository...</div>
+                        <div class="log-line log-info">[INFO] Repository cloned successfully</div>
+                        <div class="log-line log-info">[INFO] Starting stage: Install Dependencies</div>
+                        <div class="log-line">> frontend@1.0.0 install</div>
+                        <div class="log-line">> npm ci</div>
+                        <div class="log-line">added 1254 packages in 42.123s</div>
+                        <div class="log-line log-success">[SUCCESS] Stage completed: Install Dependencies</div>
+                        <div class="log-line log-info">[INFO] Starting stage: Run Tests</div>
+                        <div class="log-line">> frontend@1.0.0 test</div>
+                        <div class="log-line">> jest</div>
+                        <div class="log-line">PASS src/App.test.js</div>
+                        <div class="log-line">Test Suites: 12 passed, 12 total</div>
+                        <div class="log-line">Tests:       84 passed, 84 total</div>
+                        <div class="log-line log-success">[SUCCESS] Stage completed: Run Tests</div>
+                        <div class="log-line log-info">[INFO] Starting stage: Build Artifacts</div>
+                        <div class="log-line">> frontend@1.0.0 build</div>
+                        <div class="log-line">> react-scripts build</div>
+                        <div class="log-line">Creating an optimized production build...</div>
+                        <div class="log-line">Compiled successfully.</div>
+                        <div class="log-line log-success">[SUCCESS] Stage completed: Build Artifacts</div>
+                        <div class="log-line log-info">[INFO] Starting stage: Deploy to Staging</div>
+                        <div class="log-line">Uploading build artifacts to S3...</div>
+                        <div class="log-line">Invalidating CloudFront cache...</div>
+                        <div class="log-line log-info">[INFO] Pipeline execution in progress</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Toggle stage expansion
+        const stageHeaders = document.querySelectorAll('.stage-header');
+        
+        stageHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const stageBody = header.nextElementSibling;
+                stageBody.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>

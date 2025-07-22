@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositories - Orbit CI/CD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Manter o mesmo CSS da página principal */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #1e293b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --glass: rgba(30, 41, 59, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header - Mesmo estilo da página principal */
+        header {
+            background-color: var(--dark);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .logo-icon {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 68px);
+        }
+
+        /* Sidebar - Mesmo estilo da página principal */
+        .sidebar {
+            background-color: var(--dark);
+            border-right: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(30, 41, 59, 0.5);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-menu a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        /* Search and Filter */
+        .repo-tools {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background-color: var(--secondary);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 0.5rem;
+            color: var(--light);
+            font-size: 0.875rem;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            background-color: transparent;
+            border: none;
+            border-radius: 0.25rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab.active, .filter-tab:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+
+        /* Repositories Table */
+        .repositories-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .repositories-table th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background-color: rgba(15, 23, 42, 0.5);
+        }
+
+        .repositories-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .repo-row:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .repo-name {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .repo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .repo-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .repo-info p {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .repo-language {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .javascript {
+            background-color: #f1e05a;
+        }
+
+        .typescript {
+            background-color: #3178c6;
+        }
+
+        .python {
+            background-color: #3572a5;
+        }
+
+        .go {
+            background-color: #00add8;
+        }
+
+        .repo-branch {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .repo-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .repo-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
+            background-color: transparent;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn.active, .page-btn:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+
+        /* Add Repository Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--dark);
+            border-radius: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: var(--secondary);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 0.25rem;
+            color: var(--light);
+            font-size: 0.875rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .select-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .repo-tools {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .repositories-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fas fa-satellite-dish logo-icon"></i>
+                    <span>Orbit</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#" class="active">Repositories</a></li>
+                    <li><a href="#">Pipelines</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button id="addRepoBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Repository
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active">
+                        <i class="fas fa-code-branch"></i>
+                        Repositories
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-project-diagram"></i>
+                        Pipelines
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-tasks"></i>
+                        Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-life-ring"></i>
+                        Support
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Repositories</h1>
+                <div class="page-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="repo-tools">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search repositories...">
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active">All</button>
+                    <button class="filter-tab">Connected</button>
+                    <button class="filter-tab">Inactive</button>
+                    <button class="filter-tab">By Language</button>
+                </div>
+            </div>
+
+            <table class="repositories-table">
+                <thead>
+                    <tr>
+                        <th>Repository</th>
+                        <th>Language</th>
+                        <th>Branch</th>
+                        <th>Last Run</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="repo-row">
+                        <td>
+                            <div class="repo-name">
+                                <div class="repo-icon">
+                                    <i class="fab fa-js"></i>
+                                </div>
+                                <div class="repo-info">
+                                    <h4>frontend-webapp</h4>
+                                    <p>github.com/yourorg/frontend-webapp</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-language">
+                                <span class="language-color javascript"></span>
+                                <span>JavaScript</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-branch">
+                                <i class="fas fa-code-branch"></i>
+                                <span>main</span>
+                            </div>
+                        </td>
+                        <td>2 hours ago</td>
+                        <td>
+                            <span class="repo-status status-active">
+                                <i class="fas fa-check-circle"></i>
+                                Active
+                            </span>
+                        </td>
+                        <td>
+                            <div class="repo-actions">
+                                <button class="action-btn">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="repo-row">
+                        <td>
+                            <div class="repo-name">
+                                <div class="repo-icon">
+                                    <i class="fab fa-python"></i>
+                                </div>
+                                <div class="repo-info">
+                                    <h4>backend-service</h4>
+                                    <p>github.com/yourorg/backend-service</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-language">
+                                <span class="language-color python"></span>
+                                <span>Python</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-branch">
+                                <i class="fas fa-code-branch"></i>
+                                <span>dev</span>
+                            </div>
+                        </td>
+                        <td>1 day ago</td>
+                        <td>
+                            <span class="repo-status status-active">
+                                <i class="fas fa-check-circle"></i>
+                                Active
+                            </span>
+                        </td>
+                        <td>
+                            <div class="repo-actions">
+                                <button class="action-btn">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="repo-row">
+                        <td>
+                            <div class="repo-name">
+                                <div class="repo-icon">
+                                    <i class="fab fa-android"></i>
+                                </div>
+                                <div class="repo-info">
+                                    <h4>mobile-app</h4>
+                                    <p>github.com/yourorg/mobile-app</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-language">
+                                <span class="language-color javascript"></span>
+                                <span>JavaScript</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-branch">
+                                <i class="fas fa-code-branch"></i>
+                                <span>feature/auth</span>
+                            </div>
+                        </td>
+                        <td>3 days ago</td>
+                        <td>
+                            <span class="repo-status status-inactive">
+                                <i class="fas fa-times-circle"></i>
+                                Inactive
+                            </span>
+                        </td>
+                        <td>
+                            <div class="repo-actions">
+                                <button class="action-btn">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="repo-row">
+                        <td>
+                            <div class="repo-name">
+                                <div class="repo-icon">
+                                    <i class="fab fa-node-js"></i>
+                                </div>
+                                <div class="repo-info">
+                                    <h4>api-gateway</h4>
+                                    <p>github.com/yourorg/api-gateway</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-language">
+                                <span class="language-color typescript"></span>
+                                <span>TypeScript</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-branch">
+                                <i class="fas fa-code-branch"></i>
+                                <span>main</span>
+                            </div>
+                        </td>
+                        <td>5 hours ago</td>
+                        <td>
+                            <span class="repo-status status-active">
+                                <i class="fas fa-check-circle"></i>
+                                Active
+                            </span>
+                        </td>
+                        <td>
+                            <div class="repo-actions">
+                                <button class="action-btn">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="repo-row">
+                        <td>
+                            <div class="repo-name">
+                                <div class="repo-icon">
+                                    <i class="fab fa-go"></i>
+                                </div>
+                                <div class="repo-info">
+                                    <h4>auth-service</h4>
+                                    <p>github.com/yourorg/auth-service</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-language">
+                                <span class="language-color go"></span>
+                                <span>Go</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="repo-branch">
+                                <i class="fas fa-code-branch"></i>
+                                <span>staging</span>
+                            </div>
+                        </td>
+                        <td>1 week ago</td>
+                        <td>
+                            <span class="repo-status status-inactive">
+                                <i class="fas fa-times-circle"></i>
+                                Inactive
+                            </span>
+                        </td>
+                        <td>
+                            <div class="repo-actions">
+                                <button class="action-btn">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <button class="page-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Repository Modal -->
+    <div class="modal-overlay" id="addRepoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Repository</h3>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="repoSource">Repository Source</label>
+                    <select id="repoSource" class="form-control select-control">
+                        <option value="github">GitHub</option>
+                        <option value="gitlab">GitLab</option>
+                        <option value="bitbucket">Bitbucket</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="repoUrl">Repository URL</label>
+                    <input type="text" id="repoUrl" class="form-control" placeholder="https://github.com/yourorg/repo">
+                </div>
+                <div class="form-group">
+                    <label for="repoBranch">Default Branch</label>
+                    <input type="text" id="repoBranch" class="form-control" placeholder="main">
+                </div>
+                <div class="form-group">
+                    <label for="repoConfig">Configuration File</label>
+                    <select id="repoConfig" class="form-control select-control">
+                        <option value="auto">Auto-detect</option>
+                        <option value="custom">Custom Path</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelModal">
+                    Cancel
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Repository
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const addRepoBtn = document.getElementById('addRepoBtn');
+        const addRepoModal = document.getElementById('addRepoModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelModal = document.getElementById('cancelModal');
+
+        addRepoBtn.addEventListener('click', () => {
+            addRepoModal.classList.add('active');
+        });
+
+        closeModal.addEventListener('click', () => {
+            addRepoModal.classList.remove('active');
+        });
+
+        cancelModal.addEventListener('click', () => {
+            addRepoModal.classList.remove('active');
+        });
+
+        // Close modal when clicking outside
+        addRepoModal.addEventListener('click', (e) => {
+            if (e.target === addRepoModal) {
+                addRepoModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
