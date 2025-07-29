@@ -6,7 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 export default function header () {
     return (
         <header className="w-full px-0 pr-5 py-0 border-b border-slate-700 flex justify-between items-center bg-[var(--dark)]">
-            <Logo />
+            <h1 className="flex justify-center items-center space-x-2"><Logo /><p className="text-blue-500 text-3xl font-bold transform -translate-x-5">CI/CD</p></h1>
             <nav>
                 <a href=""></a>
             </nav>

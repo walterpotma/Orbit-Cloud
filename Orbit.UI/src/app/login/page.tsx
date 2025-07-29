@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import Form from "@/components/ui/form"
+import Form from "@/components/ui/form1"
 import Button1 from "@/components/ui/button1"
 import Logo from "@/components/layout/logo"
 import Input1 from "@/components/ui/input1"
