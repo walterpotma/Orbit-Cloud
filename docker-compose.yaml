@@ -1,0 +1,9 @@
+services:
+  next-app:
+    build:
+      context: ./Orbit.UI
+      dockerfile: Dockerfile
+    container_name: Orbit-ui
+    restart: always
+    ports:
+      - "3000:3000"
