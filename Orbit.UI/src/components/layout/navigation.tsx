@@ -20,11 +20,11 @@ export default function Nav () {
             </button>
             <button onClick={() => router.push('/pipeline')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/pipeline' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-layer-forward mr-2 text-lg"></i> 
-                Pipeline
+                Pipelines
             </button>
-            <button onClick={() => router.push('/jobs')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/jobs' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
-                <i className="bi bi-ui-checks mr-2 text-lg"></i> 
-                Tarefas
+            <button onClick={() => router.push('/jobs')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/deploy' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
+                <i className="bi bi-rocket-takeoff-fill mr-2 text-lg"></i> 
+                Deploys
             </button>
             <button onClick={() => router.push('/analytics')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/analytics' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-clipboard-data-fill mr-2 text-lg"></i> 
