@@ -14,6 +14,6 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-EXPOSE 8100
+EXPOSE 7000
 
 ENTRYPOINT ["dotnet", "Orbit.Api.dll"]
