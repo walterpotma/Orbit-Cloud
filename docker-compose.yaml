@@ -19,6 +19,6 @@ services:
     restart: unless-stopped
     networks:
       - orbit-network
-  networks:
-    orbit-network:
-      driver: bridge
+networks:
+  orbit-network:
+    driver: bridge
