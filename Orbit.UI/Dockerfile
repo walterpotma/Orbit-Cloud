@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-FROM node:22.16-alpine AS build
+FROM node:22.16-alpine AS builder
 
 WORKDIR /app
 COPY --from=base /app/node_modules ./node_modules
@@ -27,5 +27,6 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
+
 
 CMD ["npm", "start"]
