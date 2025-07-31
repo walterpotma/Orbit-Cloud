@@ -20,6 +20,5 @@ services:
     networks:
       - orbit-network
   networks:
-  npm-network:
-    external: true
-    name: orbit-network
+    orbit-network:
+      driver: bridge
