@@ -13,7 +13,7 @@ using System.Reflection;
 
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("5d95d60b-e776-4199-8335-f0b6ca6a4e87")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Orbit.Api")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12ef3e50d024743bafbd4e5a5e48a895ba69fd52")]
 [assembly: System.Reflection.AssemblyProductAttribute("Orbit.Api")]
