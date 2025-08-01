@@ -1,12 +1,87 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-ci-cd\\orbit.api\\orbit.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\walte\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\build\\Container.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-ci-cd\\orbit.api\\orbit.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\Dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\Orbit.Api\\Dockerfile",
+              "RelativeDocumentMoniker": "Orbit.Api\\Dockerfile",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\Orbit.Api\\Dockerfile",
+              "RelativeToolTip": "Orbit.Api\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-08-01T12:41:00.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Container.targets",
+              "DocumentMoniker": "C:\\Users\\walte\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\build\\Container.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\build\\Container.targets",
+              "ToolTip": "C:\\Users\\walte\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\build\\Container.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\build\\Container.targets",
+              "ViewState": "AgIAAMoAAAAAAAAAAAAwwNkAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-08-01T12:40:55.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\Orbit.Api\\Program.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Program.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\Orbit.Api\\Program.cs",
+              "RelativeToolTip": "Orbit.Api\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T12:37:32.692Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\Dockerfile",
+              "RelativeDocumentMoniker": "Dockerfile",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-CI-CD\\Orbit.Api\\Dockerfile",
+              "RelativeToolTip": "Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-08-01T12:35:30.616Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
