@@ -21,4 +21,6 @@ RUN dotnet publish Orbit.Api.csproj -c $BUILD_CONFIGURATION -o /app/publish /p:U
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:7000
 ENTRYPOINT ["dotnet", "Orbit.Api.dll"]

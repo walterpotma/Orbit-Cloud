@@ -16,6 +16,8 @@ services:
       dockerfile: Orbit.Api/Orbit.Api/Dockerfile
     ports:
       - "7000:7000"
+    environment:
+      - ASPNETCORE_URLS=http://+:7000
     restart: unless-stopped
     networks:
       - orbit-network
