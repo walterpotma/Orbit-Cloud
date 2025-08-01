@@ -12,8 +12,8 @@ services:
   orbit-api:
     container_name: orbit-api
     build:
-      context: ./Orbit.Api
-      dockerfile: Orbit.Api/Dockerfile
+      context: .
+      dockerfile: Orbit.Api/Orbit.Api/Dockerfile
     ports:
       - "7000:7000"
     restart: unless-stopped
