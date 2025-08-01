@@ -11,7 +11,7 @@ EXPOSE 7000
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Orbit.Api/Orbit.Api.csproj", "src/Orbit.Api/"]
+COPY ["src/Orbit.Api/Orbit.Api/Orbit.Api.csproj", "src/Orbit.Api/"]
 RUN dotnet restore "./Orbit.Api/Orbit.Api.csproj"
 COPY . .
 WORKDIR "/src/Orbit.Api"
