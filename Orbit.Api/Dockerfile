@@ -1,9 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-COPY Orbit.Api/Orbit.Api.csproj Orbit.Api/
-RUN dotnet restore Orbit.Api/Orbit.Api.csproj
-COPY Orbit.Api/Orbit.Api/. Orbit.Api/
+COPY src/Orbit.Api/Orbit.Api.csproj Orbit.Api/
+RUN dotnet restore src/Orbit.Api/Orbit.Api.csproj
+COPY src/Orbit.Api/Orbit.Api/. Orbit.Api/
 
 RUN dotnet publish Orbit.Api/Orbit.Api.csproj -c Release -o /app/publish
 
