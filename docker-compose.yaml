@@ -1,8 +1,8 @@
 services:
   next-app:
     build:
-      context: .
-      dockerfile: Orbit.UI/Dockerfile
+      context: ./Orbit.UI
+      dockerfile: Dockerfile
     container_name: Orbit-ui
     restart: always
     ports:
@@ -12,8 +12,8 @@ services:
   orbit-api:
     container_name: orbit-api
     build:
-      context: .
-      dockerfile: Orbit.Api/Dockerfile
+      context: ./Orbit.Api
+      dockerfile: Dockerfile
     ports:
       - "7000:7000"
     restart: unless-stopped
