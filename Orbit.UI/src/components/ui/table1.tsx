@@ -54,6 +54,32 @@ export default function Table ({}) {
                     </div>
                 </div>
             </div>
+            <div className="w-full">
+                <div className="w-full p-4 border-t border-slate-700 flex justify-around items-center space-x-4">
+                    <span className="w-40 text-sm flex justify-center items-center space-x-2">
+                        <i className="bi bi-circle-fill text-green-400 text-xs"></i>
+                        <p>Sucesso</p>
+                    </span>
+                    <span className="w-40 text-sm flex justify-center items-center space-x-2">
+                        <p>TesteJs</p>
+                    </span>
+                    <span className="w-40 text-sm flex justify-center items-center space-x-2">
+                        <GitCommit/>
+                        <p>Projeto-teste-js</p>
+                    </span>
+                    <span className="w-40 text-sm flex justify-center items-center space-x-2">
+                        <p>main</p>
+                    </span>
+                    <span className="w-40 text-sm flex justify-center items-center space-x-2">
+                        <p>3m 42s</p>
+                    </span>
+                    <div className="w-40 text-sm flex justify-center items-center space-x-2">
+                        <i className="bi bi-arrow-clockwise"></i>
+                        <i className="bi bi-trash-fill"></i>
+                        <i className="bi bi-eye-fill"></i>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
