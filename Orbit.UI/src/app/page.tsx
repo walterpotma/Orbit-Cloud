@@ -1,4 +1,5 @@
 import { RefreshCcw } from "lucide-react";
+import "./globals.css";
 import Image from "next/image";
 import Card1 from "@/components/ui/card1";
 import Card2 from "@/components/ui/card2";
@@ -7,8 +8,9 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import 'devicon/devicon.min.css';
 
 export default function Home() {
+    
     return (
-        <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start">
+        <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll">
             <div className="w-full">
                 <div className="w-full flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -48,7 +50,7 @@ export default function Home() {
                 </div>
             </div>
             <div className="w-full mt-4">
-                <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-layer-forward"></i><p>Pipelines Recentes</p></h1>
+                <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-layer-forward"></i><p>Imagens Recentes</p></h1>
                 <Table1 />
             </div>
         </div>

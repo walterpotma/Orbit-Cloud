@@ -9,7 +9,7 @@ export default function Nav () {
     const pathUrl = usePathname();
 
     return (
-        <nav className="w-74 pt-5 h-full bg-[var(--dark)]">
+        <nav className={`${pathUrl == "/login" || pathUrl == "/register" ? "hidden" : ""} w-74 pt-5 h-full bg-[var(--dark)]`}>
             <button onClick={() => router.push('/')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-grid-1x2-fill mr-2 text-lg"></i>
                 Dashboard
@@ -18,9 +18,9 @@ export default function Nav () {
                 <i className="bi bi-box-seam-fill mr-2 text-lg"></i>
                 Repositórios
             </button>
-            <button onClick={() => router.push('/pipeline')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/pipeline' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
+            <button onClick={() => router.push('/image-docker')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/image-docker' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-layer-forward mr-2 text-lg"></i> 
-                Pipelines
+                Image Docker
             </button>
             <button onClick={() => router.push('/jobs')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/deploy' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-rocket-takeoff-fill mr-2 text-lg"></i> 
