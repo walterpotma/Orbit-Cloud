@@ -22,7 +22,7 @@ export default function Nav () {
                 <i className="bi bi-layer-forward mr-2 text-lg"></i> 
                 Image Docker
             </button>
-            <button onClick={() => router.push('/jobs')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/deploy' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
+            <button onClick={() => router.push('/deploy')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/deploy' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-rocket-takeoff-fill mr-2 text-lg"></i> 
                 Deploys
             </button>
