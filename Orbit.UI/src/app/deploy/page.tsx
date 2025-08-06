@@ -15,7 +15,7 @@ export default function Page() {
         { id: 4, name: "redis", tag: "7", size: "32MB", created: "10m ago", status: 2 },
         { id: 5, name: "mongo", tag: "6", size: "130MB", created: "20m ago", status: 1 },
         { id: 6, name: "python", tag: "3.11-slim", size: "55MB", created: "1h ago", status: 1 },
-        { id: 7, name: "dotnet", tag: "8.0-sdk", size: "190MB", created: "3h ago", status: 2 },
+        { id: 7, name: "dotnet", tag: "8.0-sdk", size: "190MB", created: "3h ago", status: 2 }, 
         { id: 8, name: "golang", tag: "1.21", size: "82MB", created: "5h ago", status: 1 },
         { id: 9, name: "ubuntu", tag: "22.04", size: "29MB", created: "4h ago", status: 2 },
         { id: 10, name: "alpine", tag: "latest", size: "5MB", created: "6h ago", status: 1 },
@@ -49,7 +49,7 @@ export default function Page() {
         const date = new Date(dateString);
         const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-        const intervals = {
+        const intervals: Record<string, number> = {
             ano: 31536000,
             mês: 2592000,
             dia: 86400,
@@ -58,15 +58,16 @@ export default function Page() {
             segundo: 1,
         };
 
-        for (const key in intervals) {
-            const typedKey = key as keyof typeof intervals;
-            const interval = Math.floor(seconds / intervals[typedKey]);
+        for (const key of Object.keys(intervals)) {
+            const interval = Math.floor(seconds / intervals[key]);
             if (interval >= 1) {
                 return `há ${interval} ${key}${interval > 1 ? 's' : ''}`;
             }
         }
+
         return "agora mesmo";
-    }
+    };
+
 
     const totalPagesImage = Math.ceil(imagensDocker.length / itemsPerPageImage);
     const startIndexImage = (currentPageImage - 1) * itemsPerPageImage;
