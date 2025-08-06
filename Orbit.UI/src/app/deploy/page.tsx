@@ -44,10 +44,10 @@ export default function Page() {
     ];
 
 
-    const timeAgo = (dateString: Date) => {
+    const timeAgo = (dateString: string) => {
         const now = new Date();
         const date = new Date(dateString);
-        const seconds = Math.floor((now - date) / 1000);
+        const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
         const intervals = {
             ano: 31536000,
@@ -59,7 +59,8 @@ export default function Page() {
         };
 
         for (const key in intervals) {
-            const interval = Math.floor(seconds / intervals[key]);
+            const typedKey = key as keyof typeof intervals;
+            const interval = Math.floor(seconds / intervals[typedKey]);
             if (interval >= 1) {
                 return `há ${interval} ${key}${interval > 1 ? 's' : ''}`;
             }
@@ -160,7 +161,7 @@ export default function Page() {
                                     </div>
                                     <div className="w-full text-sm text-slate-500 flex justify-start items-center space-x-6">
                                         <span className="flex justify-center items-center space-x-2">
-                                            <i className="bi bi-git"></i> 
+                                            <i className="bi bi-git"></i>
                                             <p>{deploy.repository}</p>
                                         </span>
                                         <span className="flex justify-center items-center space-x-1">
