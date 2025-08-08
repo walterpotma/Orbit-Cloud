@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,16 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(7000); // Mesma porta exposta no Dockerfile
 });
 
+
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<DbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddAuthentication(options =>
 {
