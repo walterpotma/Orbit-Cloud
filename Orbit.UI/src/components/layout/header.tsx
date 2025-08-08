@@ -10,7 +10,7 @@ export default function header () {
     
     return (
         <header className={`${pathUrl == "/login" || pathUrl == "/register" ? "hidden" : ""} w-full px-0 pr-5 py-0 border-b border-slate-700 flex justify-between items-center bg-[var(--dark)] `}>
-            <h1 className="flex justify-center items-center space-x-2"><Logo /><p className="text-blue-500 text-3xl font-bold transform -translate-x-5">CI/CD</p></h1>
+            <h1 className="flex justify-center items-center space-x-2"><Logo /><p className="text-blue-500 text-3xl font-bold transform -translate-x-5">Cloud</p></h1>
             <nav>
                 <a href=""></a>
             </nav>
