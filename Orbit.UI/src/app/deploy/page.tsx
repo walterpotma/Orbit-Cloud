@@ -2,12 +2,18 @@
 import { Database, GitBranch, RefreshCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import 'devicon/devicon.min.css';
+import NewDeploy from "@/components/deploy/new-deploy";
+import EditDeploy from "@/components/deploy/edit-deploy";
 
 export default function Page() {
     const [currentPageImage, setCurrentPageImage] = useState(1);
     const [currentPageDeploy, setCurrentPageDeploy] = useState(1);
     const itemsPerPageImage = 6;
     const itemsPerPageDeploy = 3;
+
+    const [newDeploy, setNewDeploy] = useState(false);
+    const [editDeploy, setEditDeploy] = useState(false);
+
     const imagensDocker = [
         { id: 1, name: "nginx", tag: "1.25", size: "23MB", created: "2h ago", status: 1 },
         { id: 2, name: "node", tag: "18-alpine", size: "45MB", created: "1h ago", status: 1 },
@@ -15,7 +21,7 @@ export default function Page() {
         { id: 4, name: "redis", tag: "7", size: "32MB", created: "10m ago", status: 2 },
         { id: 5, name: "mongo", tag: "6", size: "130MB", created: "20m ago", status: 1 },
         { id: 6, name: "python", tag: "3.11-slim", size: "55MB", created: "1h ago", status: 1 },
-        { id: 7, name: "dotnet", tag: "8.0-sdk", size: "190MB", created: "3h ago", status: 2 }, 
+        { id: 7, name: "dotnet", tag: "8.0-sdk", size: "190MB", created: "3h ago", status: 2 },
         { id: 8, name: "golang", tag: "1.21", size: "82MB", created: "5h ago", status: 1 },
         { id: 9, name: "ubuntu", tag: "22.04", size: "29MB", created: "4h ago", status: 2 },
         { id: 10, name: "alpine", tag: "latest", size: "5MB", created: "6h ago", status: 1 },
@@ -116,7 +122,7 @@ export default function Page() {
 
                                         <button className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-400 cursor-pointer transition ease-in-out duration-200 flex justify-center items-center space-x-2">
                                             <i className="bi bi-rocket-fill"></i>
-                                            <p>Deploy</p>
+                                            <button onClick={() => setNewDeploy(true)} className="cursor-pointer">Deploy</button>
                                         </button>
                                     </div>
                                 </div>
@@ -160,15 +166,21 @@ export default function Page() {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="w-full text-sm text-slate-500 flex justify-start items-center space-x-6">
-                                        <span className="flex justify-center items-center space-x-2">
-                                            <i className="bi bi-git"></i>
-                                            <p>{deploy.repository}</p>
-                                        </span>
-                                        <span className="flex justify-center items-center space-x-1">
-                                            <GitBranch size={16} />
-                                            <p>{deploy.branch}</p>
-                                        </span>
+                                    <div className="w-full text-sm text-slate-500 flex justify-between items-center space-x-6">
+                                        <div className="flex space-x-5">
+                                            <span className="flex justify-center items-center space-x-2">
+                                                <i className="bi bi-git"></i>
+                                                <p>{deploy.repository}</p>
+                                            </span>
+                                            <span className="flex justify-center items-center space-x-1">
+                                                <GitBranch size={16} />
+                                                <p>{deploy.branch}</p>
+                                            </span>
+                                        </div>
+                                        <button onClick={() => setEditDeploy(true)} className="px-4 py-2 rounded-lg bg-blue-500 text-white flex items-center space-x-2 cursor-pointer hover:bg-blue-400 transition ease-in-out duration-200">
+                                            <i className="bi bi-pencil-fill"></i>
+                                            <p>Edit</p>
+                                        </button>
                                     </div>
                                     <span className="w-full p-2 rounded-lg bg-slate-900/50 text-slate-600">url: {deploy.url}</span>
                                 </div>
@@ -194,6 +206,15 @@ export default function Page() {
                     </div>
                 </div>
             </div>
+
+            {newDeploy && (
+                <NewDeploy onClose={setNewDeploy} />
+            )}
+
+            {editDeploy && (
+                <EditDeploy onClose={setEditDeploy} />
+            )}
+
         </div>
     );
 }
