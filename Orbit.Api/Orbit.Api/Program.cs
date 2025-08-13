@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Orbit.Api.Repository;
+using Orbit.Api.Repository.Interface;
+using Orbit.Api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<DbContext>(options =>
     options.UseNpgsql(connectionString));
+builder.Services.AddScoped<DeployService>();
+builder.Services.AddScoped<IDeployRepository, DeployRepository>();
+
 
 builder.Services.AddAuthentication(options =>
 {

@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "gcjsXsqnG94=",
+  "dgSpecHash": "Y5/F36tgqW4=",
   "success": true,
   "projectFilePath": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Orbit.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\walte\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\dapper\\2.0.35\\dapper.2.0.35.nupkg.sha512",
+    "C:\\Users\\walte\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\google.protobuf\\3.6.1\\google.protobuf.3.6.1.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\k4os.compression.lz4\\1.1.11\\k4os.compression.lz4.1.1.11.nupkg.sha512",
@@ -15,6 +16,7 @@
     "C:\\Users\\walte\\.nuget\\packages\\kikikot.becore.dependenceinjection\\1.0.4\\kikikot.becore.dependenceinjection.1.0.4.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\kikikot.becore.domain\\1.0.3\\kikikot.becore.domain.1.0.3.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\kikikot.becore.infrastructure\\1.0.3\\kikikot.becore.infrastructure.1.0.3.nupkg.sha512",
+    "C:\\Users\\walte\\.nuget\\packages\\kubernetesclient\\17.0.4\\kubernetesclient.17.0.4.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.3.0\\microsoft.aspnetcore.authentication.2.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.3.0\\microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.3.0\\microsoft.aspnetcore.authentication.core.2.3.0.nupkg.sha512",
@@ -188,7 +190,8 @@
     "C:\\Users\\walte\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\system.xml.xmldocument\\4.0.1\\system.xml.xmldocument.4.0.1.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\system.xml.xpath\\4.0.1\\system.xml.xpath.4.0.1.nupkg.sha512",
-    "C:\\Users\\walte\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512"
+    "C:\\Users\\walte\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512",
+    "C:\\Users\\walte\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512"
   ],
   "logs": []
 }
