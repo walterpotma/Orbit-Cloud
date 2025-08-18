@@ -8,6 +8,9 @@ namespace Orbit.Api.Model
         [Column("id")]
         public int Id { get; set; }
 
+        [Column("github_id")]
+        public string? GithubId { get; set; }
+
         [Column("name")]
         public string? Name { get; set; }
 

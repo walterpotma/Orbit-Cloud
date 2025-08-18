@@ -1,6 +1,52 @@
-﻿namespace Orbit.Api.Service
+﻿using Orbit.Api.Dto_s;
+using Orbit.Api.Model;
+using Orbit.Api.Repository.Interface;
+
+namespace Orbit.Api.Service
 {
     public class AccountService
     {
+        public IAccountRepository _repository;
+
+        public AccountService (IAccountRepository repository) {
+            _repository = repository;
+        }
+
+        public async Task<DtoAccount> GetByGitIdOrCreate(string gitId, string name, string email)
+        {
+            var response = await _repository.GetByGithubId(gitId);
+
+            if (response != null)
+            {
+                return new DtoAccount
+                {
+                    Id = response.Id,
+                    GithubId = response.GithubId,
+                    Name = response.Name,
+                    Email = response.Email,
+                    Plano = response.Plano
+                };
+            }
+
+            var account = new Account
+            { 
+                Id = 0,
+                GithubId = gitId,
+                Name = name,
+                Email = email,
+                Plano = "starter"
+            };
+
+            var created = await _repository.Create(account);
+
+            return new DtoAccount
+            {
+                Id = created.Id,
+                GithubId = created.GithubId,
+                Name = created.Name,
+                Email = created.Email,
+                Plano = created.Plano
+            };
+        }
     }
 }

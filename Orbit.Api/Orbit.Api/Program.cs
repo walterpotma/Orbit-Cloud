@@ -1,30 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
+using Orbit.Api.Data;
 using Orbit.Api.Repository;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(7000); // Mesma porta exposta no Dockerfile
+    options.ListenAnyIP(7000);
 });
 
 
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<DbContext>(options =>
+builder.Services.AddDbContext<OrbitDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddScoped<DeployService>();
 builder.Services.AddScoped<IDeployRepository, DeployRepository>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 
 builder.Services.AddAuthentication(options =>
@@ -38,7 +39,6 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
 
-    // O caminho que o GitHub vai chamar depois do login
     options.CallbackPath = new PathString("/weatherforecast");
 
     options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
@@ -66,13 +66,19 @@ builder.Services.AddAuthentication(options =>
 
             using var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             context.RunClaimActions(user.RootElement);
+
+            var githubId = user.RootElement.GetProperty("id").GetInt64().ToString();
+            var name = user.RootElement.GetProperty("name").GetString();
+            var email = user.RootElement.TryGetProperty("email", out var emailProp) ? emailProp.GetString() : null;
+
+            var accountService = context.HttpContext.RequestServices.GetRequiredService<AccountService>();
+            await accountService.GetByGitIdOrCreate(githubId, name, email);
         },
 
-        // 🔹 Depois do login, redireciona para o domínio final
         OnTicketReceived = context =>
         {
             context.Response.Redirect("https://orbit.crion.dev");
-            context.HandleResponse(); // evita processamento extra
+            context.HandleResponse(); 
             return Task.CompletedTask;
         }
     };
@@ -87,7 +93,6 @@ var app = builder.Build();
 app.MapGet("/", () => "API com GitHub Auth rodando!");
 app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "https://orbit.crion.dev" }, new[] { "GitHub" }));
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

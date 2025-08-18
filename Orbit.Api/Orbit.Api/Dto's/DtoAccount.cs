@@ -4,10 +4,10 @@ namespace Orbit.Api.Dto_s
 {
     public class DtoAccount
     {
-        [JsonPropertyName("nome")]
-        public string? Nome { get; set; }
-
-        [JsonPropertyName("email")]
+        public int Id { get; set; }
+        public string? GithubId { get; set; }
+        public string? Name { get; set; }
         public string? Email { get; set; }
+        public string? Plano { get; set; }
     }
 }
