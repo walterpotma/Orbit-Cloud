@@ -12,6 +12,7 @@
           "KubernetesClient": "17.0.4",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.8",
           "Microsoft.AspNetCore.Authentication.OAuth": "2.3.0",
+          "Microsoft.AspNetCore.Authentication.OpenIdConnect": "9.0.8",
           "Microsoft.AspNetCore.OpenApi": "9.0.6",
           "Microsoft.EntityFrameworkCore": "9.0.8",
           "Microsoft.EntityFrameworkCore.Tools": "9.0.8",
@@ -209,6 +210,17 @@
         "dependencies": {
           "Microsoft.AspNetCore.Authentication": "2.3.0",
           "Newtonsoft.Json": "12.0.3"
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.OpenIdConnect/9.0.8": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Authentication.OpenIdConnect.dll": {
+            "assemblyVersion": "9.0.8.0",
+            "fileVersion": "9.0.825.36808"
+          }
         }
       },
       "Microsoft.AspNetCore.Cryptography.Internal/2.3.0": {},
@@ -2137,6 +2149,13 @@
       "sha512": "sha512-ph4A+Y3v2r5pYynyXl1fy7EELydm/EClMhTjhvYmIQy6yeo1uN1RwyXKLtasK6cr0wsEPv7d9X0Fhw+m59bt+Q==",
       "path": "microsoft.aspnetcore.authentication.oauth/2.3.0",
       "hashPath": "microsoft.aspnetcore.authentication.oauth.2.3.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.OpenIdConnect/9.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rCtlhSicB3MfIsLzIaJbEeEbASM8yqjhZuJ489n0C91dNl4ppx9nphp28lQEq3mrxYpAbBOLpJJnhZ9uZG5Gmw==",
+      "path": "microsoft.aspnetcore.authentication.openidconnect/9.0.8",
+      "hashPath": "microsoft.aspnetcore.authentication.openidconnect.9.0.8.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Cryptography.Internal/2.3.0": {
       "type": "package",

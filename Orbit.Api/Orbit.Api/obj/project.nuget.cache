@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Y5/F36tgqW4=",
+  "dgSpecHash": "Xi5punA7uOI=",
   "success": true,
   "projectFilePath": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Orbit.Api.csproj",
   "expectedPackageFiles": [
@@ -22,6 +22,7 @@
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.3.0\\microsoft.aspnetcore.authentication.core.2.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.8\\microsoft.aspnetcore.authentication.jwtbearer.9.0.8.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.authentication.oauth\\2.3.0\\microsoft.aspnetcore.authentication.oauth.2.3.0.nupkg.sha512",
+    "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.authentication.openidconnect\\9.0.8\\microsoft.aspnetcore.authentication.openidconnect.9.0.8.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\2.3.0\\microsoft.aspnetcore.cryptography.internal.2.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.dataprotection\\2.3.0\\microsoft.aspnetcore.dataprotection.2.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\microsoft.aspnetcore.dataprotection.abstractions\\2.3.0\\microsoft.aspnetcore.dataprotection.abstractions.2.3.0.nupkg.sha512",

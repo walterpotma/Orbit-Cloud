@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Orbit.Api.Repository;
 using Orbit.Api.Repository.Interface;
@@ -36,7 +37,9 @@ builder.Services.AddAuthentication(options =>
 {
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
-    options.CallbackPath = "/signin-github";
+
+    // O caminho que o GitHub vai chamar depois do login
+    options.CallbackPath = new PathString("/weatherforecast");
 
     options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
@@ -63,9 +66,18 @@ builder.Services.AddAuthentication(options =>
 
             using var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             context.RunClaimActions(user.RootElement);
+        },
+
+        // 🔹 Depois do login, redireciona para o domínio final
+        OnTicketReceived = context =>
+        {
+            context.Response.Redirect("https://orbit.crion.dev");
+            context.HandleResponse(); // evita processamento extra
+            return Task.CompletedTask;
         }
     };
 });
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
@@ -73,7 +85,7 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 app.MapGet("/", () => "API com GitHub Auth rodando!");
-app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "/" }, new[] { "GitHub" }));
+app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "https://orbit.crion.dev" }, new[] { "GitHub" }));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

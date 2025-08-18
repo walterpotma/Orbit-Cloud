@@ -206,3 +206,4 @@ C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\keys\ca.crt
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\keys\token.txt
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll

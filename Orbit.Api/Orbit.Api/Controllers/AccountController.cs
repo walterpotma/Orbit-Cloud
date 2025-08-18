@@ -7,5 +7,6 @@ namespace Orbit.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+
     }
 }
