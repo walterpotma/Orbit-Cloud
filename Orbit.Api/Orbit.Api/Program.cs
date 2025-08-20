@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Orbit.Api.Data;
 using Orbit.Api.Repository;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,13 +48,14 @@ builder.Services.AddAuthentication(options =>
 
     options.Scope.Add("user:email");
 
-    options.ClaimActions.MapJsonKey(System.Security.Claims.ClaimTypes.NameIdentifier, "id");
-    options.ClaimActions.MapJsonKey(System.Security.Claims.ClaimTypes.Name, "name");
-    options.ClaimActions.MapJsonKey(System.Security.Claims.ClaimTypes.Email, "email");
+    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+
 
     options.SaveTokens = true;
 
-    options.Events = new Microsoft.AspNetCore.Authentication.OAuth.OAuthEvents
+    options.Events = new OAuthEvents
     {
         OnCreatingTicket = async context =>
         {
@@ -64,21 +66,29 @@ builder.Services.AddAuthentication(options =>
             var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
             response.EnsureSuccessStatusCode();
 
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine("----------- RESPOSTA DO GITHUB -----------");
+            Console.WriteLine(jsonResponse);
+            Console.WriteLine("------------------------------------------");
+
             using var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             context.RunClaimActions(user.RootElement);
 
             var githubId = user.RootElement.GetProperty("id").GetInt64().ToString();
             var name = user.RootElement.GetProperty("name").GetString();
-            var email = user.RootElement.TryGetProperty("email", out var emailProp) ? emailProp.GetString() : null;
+
+            var email = user.RootElement.TryGetProperty("email", out var emailProp) && emailProp.ValueKind != System.Text.Json.JsonValueKind.Null ? emailProp.GetString() : null;
 
             var accountService = context.HttpContext.RequestServices.GetRequiredService<AccountService>();
-            await accountService.GetByGitIdOrCreate(githubId, name, email);
+
+            await accountService.GetByGitIdOrCreate(githubId, name ?? "Usuário Sem Nome", email);
         },
 
         OnTicketReceived = context =>
         {
             context.Response.Redirect("https://orbit.crion.dev");
-            context.HandleResponse(); 
+            context.HandleResponse();
             return Task.CompletedTask;
         }
     };
