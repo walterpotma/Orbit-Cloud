@@ -59,6 +59,10 @@ builder.Services.AddAuthentication(options =>
     {
         OnCreatingTicket = async context =>
         {
+            Console.WriteLine("----------- TOKEN DE ACESSO DO GITHUB -----------");
+            Console.WriteLine(context.AccessToken);
+            Console.WriteLine("-----------------------------------------------");
+
             using var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
