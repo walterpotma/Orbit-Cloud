@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import Navigation from "@/components/layout/navigation";
+import Loading from "@/components/layout/loading";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Loading/>
         <Header/>
         <div className="w-full h-screen flex justify-between items-start">
           <Navigation/>

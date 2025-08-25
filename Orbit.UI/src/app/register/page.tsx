@@ -37,6 +37,9 @@ export default function Page() {
                     <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-2"/>
                     <label htmlFor="">Eu aceito os <a href="" className="text-blue-500">Termos de Serviço</a> e <a href="" className="text-blue-500">Política de Privacidade</a></label>
                 </div>
+                <div className="w-full text-center my-2">
+                    <p>Já tem conta? <a href="/login" className="text-blue-500">Faca login</a>!</p>
+                </div>
                 <Button1 type="submit" className="">
                     Entrar
                 </Button1>

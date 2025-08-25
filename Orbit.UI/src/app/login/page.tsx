@@ -43,6 +43,9 @@ export default function Page() {
                     </div>
                     <button className="text-blue-500 cursor-pointer hover:text-blue-400 hover:underline transition ease-in-out duration-200">Esqueceu a Senha?</button>
                 </div>
+                <div className="w-full text-center my-2">
+                    <p>É novo aqui? <a href="/register" className="text-blue-500">Crie sua conta</a>!</p>
+                </div>
                 <Button1 type="submit" className="">
                     Entrar
                 </Button1>

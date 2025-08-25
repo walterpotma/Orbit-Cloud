@@ -1,11 +1,12 @@
 import { RefreshCcw } from "lucide-react";
 import "./globals.css";
 import Image from "next/image";
+import 'devicon/devicon.min.css';
+import "bootstrap-icons/font/bootstrap-icons.css"
 import Card1 from "@/components/ui/card1";
 import Card2 from "@/components/ui/card2";
 import Table1 from "@/components/ui/table1";
-import "bootstrap-icons/font/bootstrap-icons.css"
-import 'devicon/devicon.min.css';
+import BtnRefresh from "@/components/ui/BtnRefresh";
 
 export default function Home() {
     
@@ -14,7 +15,7 @@ export default function Home() {
             <div className="w-full">
                 <div className="w-full flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Dashboard</h1>
-                    <button className="py-2 px-4 rounded-lg text-blue-500 text-sm border border-blue-600 flex justify-center items-center space-x-2 cursor-pointer hover:bg-blue-600/20 transition ease-in-out duration-200"><p>Refresh</p> <RefreshCcw size={16} /></button>
+                    <BtnRefresh/>
                 </div>
                 <div className="w-full flex justify-around items-center space-x-5">
                     <Card1 title="Repositorios Ativos" value={5} analysis="15% a mais" className="" />

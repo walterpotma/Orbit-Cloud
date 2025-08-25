@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import 'devicon/devicon.min.css';
 import NewDeploy from "@/components/deploy/new-deploy";
 import EditDeploy from "@/components/deploy/edit-deploy";
+import BtnRefresh from "@/components/ui/BtnRefresh";
 
 export default function Page() {
     const [currentPageImage, setCurrentPageImage] = useState(1);
@@ -90,7 +91,7 @@ export default function Page() {
                 <div className="w-full flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Deploys</h1>
                     <div className="flex justify-center items-center space-x-3">
-                        <button className="py-2 px-4 rounded-lg text-blue-500 text-sm border border-blue-600 flex justify-center items-center space-x-2 cursor-pointer hover:bg-blue-600/20 transition ease-in-out duration-200"><p>Refresh</p> <RefreshCcw size={16} /></button>
+                        <BtnRefresh />
                     </div>
                 </div>
                 <div className="w-full my-4 flex justify-between space-x-4">
