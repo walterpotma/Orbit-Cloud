@@ -14,6 +14,8 @@
   --success: #10b981;
   --error: #ef4444;
   --glass: rgba(30, 41, 59, 0.5);
+  --yellow: #fef08a;
+  --base-color: #374151;
 }
 
 @theme inline {
@@ -58,3 +60,31 @@ body {
   scrollbar-color: #475569 #1e293b;
   scrollbar-width: thin;
 }
+.anel-gradiente {
+  border-top: 0;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  
+  background: linear-gradient(90deg, 
+    var(--base-color), 
+    var(--base-color) 25%,
+    var(--yellow),
+    var(--primary),
+    var(--base-color) 75%,
+    var(--base-color)
+  );
+  background-size: 400% 100%;
+
+  animation: moverGradiente 1.8s linear infinite;
+}
+
+@keyframes moverGradiente {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+

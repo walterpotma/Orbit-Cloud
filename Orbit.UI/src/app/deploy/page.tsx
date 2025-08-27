@@ -121,9 +121,9 @@ export default function Page() {
                                             {img.created.length > 11 ? img.created.slice(0, 11) + '...' : img.created}
                                         </span>
 
-                                        <button className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-400 cursor-pointer transition ease-in-out duration-200 flex justify-center items-center space-x-2">
+                                        <button onClick={() => setNewDeploy(true)} className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-400 cursor-pointer transition ease-in-out duration-200 flex justify-center items-center space-x-2">
                                             <i className="bi bi-rocket-fill"></i>
-                                            <button onClick={() => setNewDeploy(true)} className="cursor-pointer">Deploy</button>
+                                            <button className="cursor-pointer">Deploy</button>
                                         </button>
                                     </div>
                                 </div>
