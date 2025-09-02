@@ -8,7 +8,7 @@ import Loading from "@/components/layout/loading";
 export default function Nav() {
     const router = useRouter();
     const pathUrl = usePathname();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const navigationTo = (url: string) => {
         setLoading(true);
@@ -17,7 +17,7 @@ export default function Nav() {
         }, 50);
     }
     useEffect(() => {
-        setLoading(false);
+        setLoading(true);
     }, [pathUrl]);
     
     return (
