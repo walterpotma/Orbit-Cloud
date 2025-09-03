@@ -8,7 +8,7 @@ import Loading from "@/components/layout/loading";
 export default function Nav() {
     const router = useRouter();
     const pathUrl = usePathname();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const navigationTo = (url: string) => {
         setLoading(true);
@@ -17,7 +17,7 @@ export default function Nav() {
         }, 50);
     }
     useEffect(() => {
-        setLoading(true);
+        setLoading(false);
     }, [pathUrl]);
     
     return (
@@ -30,18 +30,18 @@ export default function Nav() {
                 <i className="bi bi-box-seam-fill mr-2 text-lg"></i>
                 Repositórios
             </button>
-            <button onClick={() => navigationTo('/image-docker')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/image-docker' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
-                <i className="bi bi-layer-forward mr-2 text-lg"></i>
-                Image Docker
-            </button>
             <button onClick={() => navigationTo('/deploy')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/deploy' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-rocket-takeoff-fill mr-2 text-lg"></i>
                 Deploys
             </button>
-            <button onClick={() => navigationTo('/analytics')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/analytics' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
+            <button onClick={() => navigationTo('/storage')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/storage' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
+                <i className="bi bi-folder-fill mr-2 text-lg"></i>
+                Armazenamento
+            </button>
+            {/* <button onClick={() => navigationTo('/analytics')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/analytics' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-clipboard-data-fill mr-2 text-lg"></i>
                 Análises
-            </button>
+            </button> */}
             <button onClick={() => navigationTo('/settings')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/settings' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-gear-fill mr-2 text-lg"></i>
                 Configurações

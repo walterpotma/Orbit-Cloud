@@ -95,7 +95,7 @@ export default function Page() {
                     </div>
                 </div>
                 <div className="w-full my-4 flex justify-between space-x-4">
-                    <div className="w-1/2 p-6 rounded-xl bg-slate-900">
+                    {/* <div className="w-1/2 p-6 rounded-xl bg-slate-900">
                         <h1 className="text-xl mb-6">Imagens</h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                             {paginatedImage.map((img, index) => (
@@ -146,10 +146,10 @@ export default function Page() {
                                 Próxima
                             </button>
                         </div>
-                    </div>
-                    <div className="w-1/2 p-6 rounded-xl bg-slate-900">
+                    </div> */}
+                    <div className="w-full p-6 rounded-xl bg-slate-900">
                         <h1 className="text-xl mb-6">Deploys</h1>
-                        <div className="w-full space-y-4">
+                        <div className="w-full space-y-4 flex flex-col justify-start items-start">
                             {paginatedDeploy.map((deploy, index) => (
                                 <div key={index} className="w-full p-4 rounded-lg bg-slate-800 flex flex-col justify-between items-start space-y-3.5">
                                     <div className="w-full flex justify-between items-center space-x-2">
