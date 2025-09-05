@@ -8,7 +8,7 @@ type FileNode = {
 };
 
 type FolderNode = {
-    type: 'folder';
+    type: 'folder' | 'deploy' | 'volume';
     name: string;
     size: number;
     contents: FileSystemNode[];
@@ -26,14 +26,26 @@ export default function FileSystemItem({ node }: { node: FileSystemNode }) {
         return parts.length > 1 ? parts.pop()! : 'unknown';
     }
 
-    if (node.type === 'folder') {
+    function getIconClass(nodeType: 'folder' | 'deploy' | 'volume', isOpen: boolean): string {
+        switch (nodeType) {
+            case 'deploy':
+                return `bi-rocket-takeoff${isOpen ? "-fill" : " "}`;
+            case 'volume':
+                return `bi-cloud${isOpen ? "-fill" : ""}`;
+            case 'folder':
+            default:
+                return `bi-folder${isOpen ? "-fill" : " "}`;
+        }
+    }
+
+    if (node.type === 'folder' || node.type === 'deploy' || node.type === 'volume') {
         return (
             <div className="ml-2">
                 <div
                     onClick={() => setIsOpen(!isOpen)}
                     className="flex items-center p-1 cursor-pointer hover:bg-slate-800 rounded"
                 >
-                    <i className={`bi bi-folder-${isOpen ? "minus" : "plus"} mr-2 text-blue-400`}></i>
+                    <i className={`bi ${getIconClass(node.type, isOpen)} mr-2 text-blue-400`}></i>
                     <span>{node.name}</span>
                 </div>
                 {isOpen && (
