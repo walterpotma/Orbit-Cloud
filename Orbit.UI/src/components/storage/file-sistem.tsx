@@ -29,12 +29,12 @@ export default function FileSystemItem({ node }: { node: FileSystemNode }) {
     function getIconClass(nodeType: 'folder' | 'deploy' | 'volume', isOpen: boolean): string {
         switch (nodeType) {
             case 'deploy':
-                return `bi-rocket-takeoff${isOpen ? "-fill" : " "}`;
+                return `bi-rocket-takeoff${isOpen ? "-fill" : ""}`;
             case 'volume':
                 return `bi-cloud${isOpen ? "-fill" : ""}`;
             case 'folder':
             default:
-                return `bi-folder${isOpen ? "-fill" : " "}`;
+                return `bi-folder${isOpen ? "-fill" : ""}`;
         }
     }
 

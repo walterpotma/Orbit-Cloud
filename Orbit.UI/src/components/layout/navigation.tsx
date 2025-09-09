@@ -9,6 +9,8 @@ export default function Nav() {
     const router = useRouter();
     const pathUrl = usePathname();
     const [loading, setLoading] = useState(false);
+    const [newApp, setNewApp] = useState(false);
+
 
     const navigationTo = (url: string) => {
         setLoading(true);
@@ -41,6 +43,10 @@ export default function Nav() {
             {/* <button onClick={() => navigationTo('/analytics')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/analytics' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-clipboard-data-fill mr-2 text-lg"></i>
                 Análises
+            </button> */}
+            {/* <button onClick={() => navigationTo('/services')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/analytics' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
+                <i className={`bi bi-grid-fill mr-2 text-lg`}></i>
+                Serviços Adicionais
             </button> */}
             <button onClick={() => navigationTo('/settings')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/settings' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-gear-fill mr-2 text-lg"></i>
