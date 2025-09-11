@@ -26,7 +26,7 @@ export default function Home() {
             </div>
             <div className="w-full mt-4">
                 <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-box-seam-fill"></i><p>Repositorios Recentes</p></h1>
-                <div className="flex space-x-4">
+                <div className="grid grid-cols-3 gap-4">
                     <Card2 data={{
                         icone: <i className="bi bi-javascript"></i>,
                         title: "Projeto-teste-js",
@@ -48,10 +48,17 @@ export default function Home() {
                         nota: 4.2,
                         branchs: 1
                     }} />
+                    <Card2 data={{
+                        icone: <i className="devicon-python-plain"></i>,
+                        title: "Api-Node-Express",
+                        tecnologia: "Typescript",
+                        nota: 4.2,
+                        branchs: 1
+                    }} />
                 </div>
             </div>
             <div className="w-full mt-4">
-                <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-layer-forward"></i><p>Imagens Recentes</p></h1>
+                <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-layer-forward"></i><p>Ultimos Deploys</p></h1>
                 <Table1 />
             </div>
         </div>

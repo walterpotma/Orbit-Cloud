@@ -46,7 +46,8 @@ const fileTree: FileSystemNode[] = [
             { type: 'file', name: 'relatorio.docx', size: 50 }
         ]
     },
-    { type: 'file', name: 'README.md', size: 2 }
+    { type: 'file', name: 'README.md', size: 2 },
+    { type: 'file', name: 'index.html', size: 2 }
 ];
 
 
