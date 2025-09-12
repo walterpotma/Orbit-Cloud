@@ -4,58 +4,9 @@ import { useState, useEffect } from "react";
 import 'devicon/devicon.min.css';
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import FileSystemItem from "@/components/storage/file-sistem";
-
-type FileNode = {
-    type: 'file';
-    name: string;
-    size: number;
-};
-
-type FolderNode = {
-    type: 'folder' | 'deploy' | 'volume';
-    name: string;
-    size: number;
-    contents: FileSystemNode[];
-};
-
-type FileSystemNode = FileNode | FolderNode;
-
-const fileTree: FileSystemNode[] = [
-    {
-        type: 'deploy',
-        name: 'api-flask',
-        size: 30,
-        contents: [
-            { type: 'file', name: 'app.py', size: 15 },
-            { type: 'file', name: 'requirements.txt', size: 5 },
-            {
-                type: 'volume',
-                name: 'src', // Subpasta
-                size: 10,
-                contents: [
-                    { type: 'file', name: 'main.py', size: 8 },
-                ]
-            }
-        ]
-    },
-    {
-        type: 'folder',
-        name: 'documentos',
-        size: 50,
-        contents: [
-            { type: 'file', name: 'relatorio.docx', size: 50 }
-        ]
-    },
-    { type: 'file', name: 'README.md', size: 2 },
-    { type: 'file', name: 'index.html', size: 2 }
-];
-
+import fileTree from "@/model/file-system";
 
 export default function Page() {
-    const [filter, setFilter] = useState(0);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
 
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll">

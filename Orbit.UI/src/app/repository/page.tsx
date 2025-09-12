@@ -3,30 +3,16 @@ import { GitBranch, RefreshCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import 'devicon/devicon.min.css';
 import BtnRefresh from "@/components/ui/BtnRefresh";
+import fileTree from "@/model/file-system";
 
 export default function Page() {
     const [filter, setFilter] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
-    const status = ["", "Ativo", "Inativo"];
-    const [repositorios, setRepositorios] = useState([
-        { id: 1, name: "Projeto-teste-js", technology: "JavaScript", branch: "main", lastRun: "2h ago", status: 1 },
-        { id: 2, name: "WebApi-teste", technology: "C#", branch: "develop", lastRun: "1h ago", status: 2 },
-        { id: 3, name: "ApiFlask-teste", technology: "Python", branch: "master", lastRun: "30m ago", status: 1 },
-        { id: 4, name: "FrontEnd-Next", technology: "JavaScript", branch: "main", lastRun: "10m ago", status: 1 },
-        { id: 5, name: "BackEnd-NodeJS", technology: "JavaScript", branch: "develop", lastRun: "20m ago", status: 2 },
-        { id: 6, name: "API-NestJS", technology: "TypeScript", branch: "main", lastRun: "1h ago", status: 1 },
-        { id: 7, name: "Sistema-ERP", technology: "C#", branch: "release", lastRun: "3h ago", status: 1 },
-        { id: 8, name: "AutomacaoPython", technology: "Python", branch: "main", lastRun: "5h ago", status: 2 },
-        { id: 9, name: "Script-Bash", technology: "Shell", branch: "main", lastRun: "4h ago", status: 1 },
-        { id: 10, name: "Site-Institucional", technology: "HTML", branch: "master", lastRun: "6h ago", status: 1 },
-        { id: 11, name: "Painel-Admin", technology: "Vue.js", branch: "develop", lastRun: "8h ago", status: 2 },
-        { id: 12, name: "Mobile-App", technology: "Dart", branch: "main", lastRun: "7h ago", status: 1 },
-        { id: 13, name: "Microservico-Auth", technology: "Go", branch: "develop", lastRun: "2h ago", status: 1 },
-        { id: 14, name: "Service-Java", technology: "Java", branch: "main", lastRun: "9h ago", status: 2 },
-        { id: 15, name: "DashBoard-Analytics", technology: "React", branch: "main", lastRun: "15m ago", status: 1 }
-    ]);
+    const status = ["N/A", "Ativo", "Inativo"];
+
+    const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
 
     const filteredRepos = repositorios.filter((repo) => {
         const matchesStatus = filter === 0 || repo.status === filter;
@@ -41,6 +27,24 @@ export default function Page() {
     useEffect(() => {
         setCurrentPage(1);
     }, [filter]);
+
+    const selectIcon = (language: string | undefined) => {
+        if (language === undefined) {
+            return <i className="devicon-git-plain p-2 rounded-full bg-blue-500 text-2xl"></i>;
+        }
+        var iconName = language.toLowerCase();
+
+        switch (iconName) {
+            case 'html':
+                iconName = 'html5';
+                console.log(iconName);
+                break;
+            case 'css':
+                iconName = 'css3';
+                break;
+        }
+        return <i className={`devicon-${iconName}-plain p-2 rounded-full bg-blue-500 text-2xl`}></i>;
+    }
 
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll">
@@ -83,19 +87,19 @@ export default function Page() {
                             <div className="w-full">
                                 <div className="w-full p-2 border-t border-slate-700 flex justify-around items-center space-x-4">
                                     <span className="w-40 flex justify-start items-center space-x-2">
-                                        <i className="devicon-javascript-plain p-2 rounded-full bg-blue-600 text-white text-xl"></i>
+                                        {selectIcon(repos.language)}
                                         <p>{repos.name}</p>
                                     </span>
                                     <span className="w-20 flex justify-start items-center space-x-2">
-                                        <i className="bi bi-circle-fill text-green-400 text-xs"></i>
-                                        <p>{repos.technology}</p>
+                                        <i className={`bi bi-circle-fill ${repos.status == 1 ? "text-green-400" : "text-red-400"} text-xs`}></i>
+                                        <p>{repos.language ?? "N/A"}</p>
                                     </span>
                                     <span className="w-20 flex justify-center items-center space-x-2">
                                         <GitBranch size={16} />
                                         <p>{repos.branch}</p>
                                     </span>
-                                    <span className="w-20 flex justify-center items-center space-x-2">{repos.lastRun}</span>
-                                    <span className={`w-20 px-2 py-1 rounded-md ${repos.status == 1 ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-400"}  flex justify-center items-center space-x-2`}>{status[repos.status]}</span>
+                                    <span className="w-20 flex justify-center items-center space-x-2">{repos.lastRun ?? "N/A"}</span>
+                                    <span className={`w-20 px-2 py-1 rounded-md ${repos.status == 1 ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-400"}  flex justify-center items-center space-x-2`}>{status[repos.status ?? 0]}</span>
                                     <div className="w-20 text-sm flex justify-center items-center space-x-2">
                                         <button className="hover:text-green-500 cursor-pointer transition ease-in-out duration-200">
                                             <i className="bi bi-eye-fill"></i>

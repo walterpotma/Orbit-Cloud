@@ -4,25 +4,47 @@ import { useState, useEffect, ReactNode } from "react";
 import 'devicon/devicon.min.css';
 
 export type CardData = {
-  icone: ReactNode;
-  title: string;
-  tecnologia: string
-  nota: number;
-  branchs: number;
+    type: string;
+    icone: ReactNode;
+    title: string;
+    tecnologia?: string
+    nota: number;
+    branch?: string;
 };
 
 export type CardProps = {
-  data: CardData;
-  className?: string;
+    data: CardData;
+    className?: string;
 };
-export default function Card({data}: CardProps) {
+export default function Card({ data }: CardProps) {
+
+    const actionsRepos = (type: string) => {
+        if (type == "folder") {
+            return (
+            <button className="px-4 py-1.5 rounded-md bg-blue-600 text-white text-sm flex justify-center items-center space-x-1 cursor-pointer hover:bg-blue-500 transition ease-in-out duration-200">
+                <i className="bi bi-rocket-fill"></i>
+                <p>Deploy</p>
+            </button>
+            )
+        }
+        else if (type == 'deploy') {
+            return (
+            <button className="px-4 py-1.5 rounded-md bg-blue-600 text-white text-sm flex justify-center items-center space-x-2 cursor-pointer hover:bg-blue-500 transition ease-in-out duration-200">
+                <i className="bi bi-pencil-fill"></i>
+                <p>Edit</p>
+            </button>
+            )
+        }
+        return <p>Error</p>;
+    }
+
     return (
         <div className="w-full bg-slate-800 rounded-xl">
             <div className="p-4 border-b border-slate-600 flex justify-start items-center">
                 <p className="w-12 h-12 px-2 py-2 mr-2 rounded-full bg-blue-600 text-2xl flex justify-center items-center">{data.icone}</p>
                 <div>
                     <h1 className="text-xl font-bold">{data.title}</h1>
-                    <h2 className="text-sm text-slate-400 flex justify-start items-center space-x-1"><GitBranch size={16} /> <p>Branch Main</p></h2>
+                    <h2 className="text-sm text-slate-400 flex justify-start items-center space-x-1"><GitBranch size={16} /> <p>{data.branch}</p></h2>
                 </div>
             </div>
             <div className="p-4 pt-2">
@@ -35,17 +57,14 @@ export default function Card({data}: CardProps) {
                         <i className="bi bi-star-fill"></i>
                         <p>{data.nota}</p>
                     </div>
-                    <div className="flex justify-center items-center space-x-1">
+                    {/* <div className="flex justify-center items-center space-x-1">
                         <GitBranch size={16} />
-                        <p>{data.branchs}</p>
-                    </div>
+                        <p>{data.branch}</p>
+                    </div> */}
                 </div>
                 <div className="w-full mt-2 flex justify-start items-center space-x-2">
-                    <button className="px-4 py-1.5 rounded-sm bg-blue-600 text-white text-sm flex justify-center items-center space-x-2 cursor-pointer hover:bg-blue-500 transition ease-in-out duration-200">
-                        <i className="bi bi-play-fill"></i>
-                        <p>Deploy</p>
-                    </button>
-                    <button className="py-1 px-2 rounded-sm border border-blue-600 text-blue-600 cursor-pointer hover:bg-blue-600/20 transition ease-in-out duration-200">
+                    {actionsRepos(data.type)}
+                    <button className="py-1 px-2 rounded-md border border-blue-600 text-blue-600 cursor-pointer hover:bg-blue-600/20 transition ease-in-out duration-200">
                         <i className="bi bi-gear-fill"></i>
                     </button>
                 </div>

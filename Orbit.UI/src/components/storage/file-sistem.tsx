@@ -1,20 +1,6 @@
 "use client";
 import { useState } from "react";
-
-type FileNode = {
-    type: 'file';
-    name: string;
-    size: number;
-};
-
-type FolderNode = {
-    type: 'folder' | 'deploy' | 'volume';
-    name: string;
-    size: number;
-    contents: FileSystemNode[];
-};
-
-type FileSystemNode = FileNode | FolderNode;
+import { FileSystemNode } from "@/model/file-system";
 
 
 export default function FileSystemItem({ node }: { node: FileSystemNode }) {
