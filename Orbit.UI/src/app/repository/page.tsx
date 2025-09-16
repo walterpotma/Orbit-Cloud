@@ -76,7 +76,7 @@ export default function Page() {
                 <div>
                     <div className="w-full p-4 rounded-t-2xl bg-slate-900 text-slate-400 flex justify-around items-center space-x-4">
                         <span className="w-40 flex justify-start items-start">Repositório</span>
-                        <span className="w-20 flex justify-center items-start">tecnologia</span>
+                        <span className="w-20 flex justify-center items-start">Linguagem</span>
                         <span className="w-20 flex justify-center items-start">Branch</span>
                         <span className="w-20 flex justify-center items-start">Ultima Run</span>
                         <span className="w-20 flex justify-center items-start">Status</span>
@@ -98,7 +98,7 @@ export default function Page() {
                                         <GitBranch size={16} />
                                         <p>{repos.branch}</p>
                                     </span>
-                                    <span className="w-20 flex justify-center items-center space-x-2">{repos.lastRun ?? "N/A"}</span>
+                                    <span className="w-20 flex justify-center items-center space-x-2">{"N/A"}</span>
                                     <span className={`w-20 px-2 py-1 rounded-md ${repos.status == 1 ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-400"}  flex justify-center items-center space-x-2`}>{status[repos.status ?? 0]}</span>
                                     <div className="w-20 text-sm flex justify-center items-center space-x-2">
                                         <button className="hover:text-green-500 cursor-pointer transition ease-in-out duration-200">

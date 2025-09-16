@@ -12,7 +12,7 @@ type Input1Props = {
 
 export default function Input ({label, type = 'text', value, onChange, placeholder, className}: Input1Props) {
     return (
-        <div className="my-1 flex flex-col space-y-0.5 ">
+        <div className="my-2 flex flex-col space-y-0.5 ">
             {label && <label >{label}</label>}
             <input
                 value={value}

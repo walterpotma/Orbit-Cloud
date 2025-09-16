@@ -13,11 +13,6 @@ export default function Home() {
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
     console.log(repositorios);
 
-    const selectIcon = (language: string | undefined) => {
-        if (language !== undefined) return <i className={`devicon-${language.toLowerCase()}-plain`}></i>;
-        return <i className="bi bi-git"></i>;
-    }
-
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll">
             <div className="w-full">
@@ -40,9 +35,9 @@ export default function Home() {
                         return (
                             <Card2 key={repos.name} data={{
                                 type: repos.type,
-                                icone: selectIcon(repos.language),
+                                icone: repos.language,
                                 title: repos.name,
-                                tecnologia: repos.language == null ? "N/A" : repos.language,
+                                tecnologia: repos.language,
                                 nota: 3.9,
                                 branch: repos.branch
                             }} />

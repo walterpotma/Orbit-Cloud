@@ -74,6 +74,17 @@ const fileTree: FileSystemNode[] = [
         contents: [
             { type: 'file', name: 'style.css', size: 50 }
         ]
+    },
+    {
+        type: 'folder',
+        status: 1,
+        name: 'Teste',
+        language: 'csharp',
+        branch: 'default',
+        size: 50,
+        contents: [
+            { type: 'file', name: 'style.css', size: 50 }
+        ]
     }
 ];
 

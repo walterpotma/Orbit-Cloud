@@ -38,10 +38,23 @@ export default function Card({ data }: CardProps) {
         return <p>Error</p>;
     }
 
+    function selectIcon(language: string | undefined): string {
+        switch (language) {
+            case 'html':
+                return "devicon-html5-plain";
+            case 'css':
+                return "devicon-css3-plain";
+            default:
+                return `devicon-${language === undefined ? "git" : language.toLowerCase()}-plain`;
+        }
+    }
+
     return (
         <div className="w-full bg-slate-800 rounded-xl">
             <div className="p-4 border-b border-slate-600 flex justify-start items-center">
-                <p className="w-12 h-12 px-2 py-2 mr-2 rounded-full bg-blue-600 text-2xl flex justify-center items-center">{data.icone}</p>
+                <p className="w-12 h-12 px-2 py-2 mr-2 rounded-full bg-blue-600 text-2xl flex justify-center items-center">
+                    <i className={`${selectIcon(data.tecnologia)}`}></i>
+                </p>
                 <div>
                     <h1 className="text-xl font-bold">{data.title}</h1>
                     <h2 className="text-sm text-slate-400 flex justify-start items-center space-x-1"><GitBranch size={16} /> <p>{data.branch}</p></h2>
@@ -51,7 +64,7 @@ export default function Card({ data }: CardProps) {
                 <div className="text-slate-400 text-sm flex justify-start items-center space-x-5">
                     <div className="flex justify-center items-center space-x-1">
                         <i className="bi bi-code-slash"></i>
-                        <p>{data.tecnologia}</p>
+                        <p>{data.tecnologia  == null ? "N/A" : data.tecnologia}</p>
                     </div>
                     <div className="flex justify-center items-center space-x-1">
                         <i className="bi bi-star-fill"></i>

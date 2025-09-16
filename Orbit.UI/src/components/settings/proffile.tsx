@@ -8,18 +8,14 @@ export default function Page() {
                 <h1 className="text-xl font-bold pb-4 mb-4 border-b border-slate-800">Perfil</h1>
             </div>
             <div className="w-full flex justify-start items-start space-x-10">
-                <div>
-                    <form action="">
+                <div className="w-full">
+                    <form className="w-full">
                         <Input1 label="Nome/Apelido:"/>
                         <Input1 label="Email:"/>
-                        <Input1/>
-                        <Input1/>
+                        <Input1 label="Senha:"/>
+                        <Input1 label="Role"/>
+                        <Input1 label="Equipe"/>
                     </form>
-                </div>
-                <div>
-                    <img src="" alt="" />
-                    <h1>Nome</h1>
-                    <p>Cargo</p>
                 </div>
             </div>
         </div>
