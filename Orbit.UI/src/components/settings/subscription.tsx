@@ -8,6 +8,7 @@ import Pro from "@/components/subscription/pro";
 import Business from "@/components/subscription/business";
 import Enterprise from "@/components/subscription/entrepise";
 import Custom from "@/components/subscription/custom";
+import BtnNav1Subscription from "@/components/ui/subscriptions/btn-nav-subsc1";
 
 const subscriptions = {
     basic: Basic,
@@ -52,6 +53,7 @@ export default function Page() {
     return (
         <div className="w-full h-full rounded-xl">
             <nav className="w-full p-1 pb-0 rounded-t-xl bg-slate-950 flex items-end justify-between space-x-0">
+                <BtnNav1Subscription title="teste" />
                 {cantoRedondo('right')}
                 <button onClick={() => handleTabClick('micro')} className={`w-full ${activeTab === 'micro' ? `${styleActive}` : ''} px-2 py-1 rounded-t-lg flex justify-center items-center space-x-1 hover:bg-slate-900 hover:text-blue-500 cursor-pointer`}>
                     <i className="bi bi-feather"></i>
