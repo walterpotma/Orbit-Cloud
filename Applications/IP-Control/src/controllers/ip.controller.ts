@@ -16,11 +16,11 @@ export async function getExternalIp(req: Request, res: Response) {
             html: `<p><b>IPv4:</b> ${response.ipv4}</p><p><b>IPv6:</b> ${response.ipv6}</p>`,
         };
 
-        const emailResponse = await emailService.sendEmail(req, res, message);
+        const emailResponse = await emailService.sendEmail(message);
 
         res.status(200).json({
             success: true,
-            message: "Email enviado com sucesso",
+            message: emailResponse,
             data: {
                 ipv4: response.ipv4,
                 ipv6: response.ipv6

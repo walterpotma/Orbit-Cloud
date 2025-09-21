@@ -12,11 +12,11 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export async function sendEmail(req: Request, res: Response, message: EmailRequest) {
+export async function sendEmail(message: EmailRequest) {
     try {
         await transporter.sendMail(message);
-        res.json({ success: true, message: "Email enviado com sucesso" });
+        return "Email enviado com sucesso";
     } catch (error) {
-        res.status(500).json({ error: "Erro ao enviar email" });
+        return "Erro ao enviar email" + error;
     }
 }
