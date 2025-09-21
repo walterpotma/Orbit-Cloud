@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "node dist/app.ts",
+    "dev": "nodemon src/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +18,9 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "node-fetch": "^3.3.2",
-    "nodemailer": "^7.0.6"
+    "nodemailer": "^7.0.6",
+    "nodemo": "^1.0.0",
+    "nodemon": "^3.1.10"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
