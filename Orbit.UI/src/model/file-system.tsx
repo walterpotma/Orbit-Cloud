@@ -6,6 +6,7 @@ export type FileNode = {
     size: number;
     branch?: string;
     language?: string;
+    isInitiallyExpanded?: boolean;
 };
 
 export type FolderNode = {
@@ -16,6 +17,7 @@ export type FolderNode = {
     language?: string;
     size: number;
     contents: FileSystemNode[];
+    isInitiallyExpanded?: boolean;
 };
 
 export type FileSystemNode = FileNode | FolderNode;

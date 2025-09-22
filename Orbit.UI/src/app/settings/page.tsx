@@ -3,11 +3,9 @@ import { RefreshCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import Profille from "@/components/settings/proffile";
 import Preference from "@/components/settings/preference";
-import Subscription from "@/components/settings/subscription";
 
 const componentMap = {
     profile: Profille,
-    subscriptions: Subscription,
     preferences: Preference,
 };
 
@@ -36,10 +34,6 @@ export default function Page() {
                         <button onClick={() => handleTabClick('profile')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${activeTab === 'profile' ? `${active}` : ''}`}>
                             <i className="bi bi-person-circle mr-2 text-lg"></i>
                             Perfil
-                        </button>
-                        <button onClick={() => handleTabClick('subscriptions')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${activeTab === 'subscriptions' ? `${active}` : ''}`}>
-                            <i className="bi bi-award-fill mr-2 text-lg"></i>
-                            Assinaturas
                         </button>
                         {/* <button className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 $`}>
                             <i className="bi bi-shield-shaded mr-2 text-lg"></i>

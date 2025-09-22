@@ -1,12 +1,42 @@
 "use client"
 import { Database, GitBranch, RefreshCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import 'devicon/devicon.min.css';
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import FileSystemItem from "@/components/storage/file-sistem";
-import fileTree from "@/model/file-system";
+import fileTree, { FileSystemNode } from "@/model/file-system";
+
+
+function filterTree(nodes: FileSystemNode[], searchTerm: string): FileSystemNode[] {
+    const searchLower = searchTerm.toLowerCase();
+    if (!searchLower) return nodes;
+
+    return nodes.reduce((acc: any, node: any) => {
+        const isNodeMatch = node.name.toLowerCase().includes(searchLower);
+        if (node.type === 'folder' || node.type === 'deploy' || node.type === 'volume') {
+            const filteredContents = filterTree(node.contents, searchTerm);
+            if (isNodeMatch || filteredContents.length > 0) {
+                const shouldExpand = !isNodeMatch && filteredContents.length > 0;
+                acc.push({ ...node, contents: isNodeMatch ? node.contents : filteredContents,
+                    isInitiallyExpanded: shouldExpand
+                 });
+            }
+        } else if (node.type === 'file' && isNodeMatch) {
+            acc.push(node);
+        }
+        return acc;
+    }, []);
+}
+
+
 
 export default function Page() {
+    const [searchTerm, setSearchTerm] = useState("");
+
+    
+    const filtered = useMemo(() => {
+        return filterTree(fileTree, searchTerm);
+    }, [searchTerm]);
 
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll">
@@ -19,6 +49,20 @@ export default function Page() {
                     </div>
                 </div>
                 <div className="w-full flex justify-between items-center my-4">
+                </div>
+
+                <div className="w-full flex justify-between items-center my-4">
+                    <div className="w-60 py-2 px-4 rounded-lg bg-slate-800 flex justify-between items-center">
+                        <input
+                            type="text"
+                            placeholder="Pesquisar..."
+                            className="bg-transparent text-slate-200 outline-none w-full"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <i className="bi bi-search"></i>
+                    </div>
+                    <nav className="flex justify-center items-center space-x-4"></nav>
                 </div>
 
                 <div className="w-full p-6 rounded-2xl bg-slate-900 flex flex-col justify-start items-start overflow-auto custom-scroll space-y-3">
@@ -39,7 +83,7 @@ export default function Page() {
                         </div>
                     </div>
                     <div className="w-full p-6 rounded-xl bg-slate-950/50">
-                        {fileTree.map((node, index) => (
+                        {filtered.map((node, index) => (
                             <FileSystemItem key={index} node={node} />
                         ))}
                     </div>

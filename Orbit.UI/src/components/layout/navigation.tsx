@@ -48,6 +48,10 @@ export default function Nav() {
                 <i className={`bi bi-grid-fill mr-2 text-lg`}></i>
                 Serviços Adicionais
             </button> */}
+            <button onClick={() => navigationTo('/subscriptions')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/subscriptions' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
+                <i className="bi bi-award-fill mr-2 text-lg"></i>
+                Planos
+            </button>
             <button onClick={() => navigationTo('/settings')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${pathUrl === '/settings' ? 'bg-slate-800 text-blue-500 border-l-2' : 'text-slate-400'}`}>
                 <i className="bi bi-gear-fill mr-2 text-lg"></i>
                 Configurações

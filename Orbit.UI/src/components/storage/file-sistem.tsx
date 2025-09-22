@@ -1,10 +1,19 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FileSystemNode } from "@/model/file-system";
 
+type FileSystemItemProps = {
+    node: FileSystemNode & { isInitiallyExpanded?: boolean };
+};
 
 export default function FileSystemItem({ node }: { node: FileSystemNode }) {
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        if (node.isInitiallyExpanded) {
+            setIsOpen(true);
+        }
+    }, [node.isInitiallyExpanded]);
 
     function getAfterLastDot(text: string): string {
         if (!text) return 'unknown';
