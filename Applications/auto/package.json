@@ -1,7 +1,7 @@
 {
-  "name": "request.ia",
+  "name": "ia",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import BtnRefresh from "@/components/ui/BtnRefresh";
-import Card from "@/components/subscription/card";
+import Card from "@/components/ui/subscription/card";
 import { standardPlans, customPlan } from "@/model/plans";
 
 export default function Page() {

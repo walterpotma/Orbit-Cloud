@@ -1,9 +1,7 @@
 "use client";
 import { Circle, Sparkle } from "lucide-react";
-import { useState } from "react";
 
 export default function Loading() {
-
     return (
         <div className={`position fixed w-full h-screen flex justify-center items-center bg-black/70`}>
             <span className="position relative">

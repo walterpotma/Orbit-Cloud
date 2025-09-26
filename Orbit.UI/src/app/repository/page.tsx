@@ -3,7 +3,8 @@ import { GitBranch, RefreshCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import 'devicon/devicon.min.css';
 import BtnRefresh from "@/components/ui/BtnRefresh";
-import fileTree from "@/model/file-system";
+import fileTree from "@/model/storage";
+import SearchBar from "@/components/ui/table/search";
 
 export default function Page() {
     const [filter, setFilter] = useState(0);
@@ -11,6 +12,7 @@ export default function Page() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
     const status = ["N/A", "Ativo", "Inativo"];
+    const filterOptions = ["Todos", "Ativos", "Inativos"];
 
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
 
@@ -56,23 +58,7 @@ export default function Page() {
                         <BtnRefresh />
                     </div>
                 </div>
-                <div className="w-full flex justify-between items-center my-4">
-                    <div className="w-60 py-2 px-4 rounded-lg bg-slate-800 flex justify-between items-center">
-                        <input
-                            type="text"
-                            placeholder="Pesquisar repositórios..."
-                            className="bg-transparent text-slate-200 outline-none w-full"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <i className="bi bi-search"></i>
-                    </div>
-                    <nav className="flex justify-center items-center space-x-4">
-                        <button onClick={() => setFilter(0)} className={`px-3 py-2 rounded-lg ${filter == 0 ? "bg-slate-800 text-blue-400" : "text-slate-300"} cursor-pointer transition ease-in-out duration-200 hover:bg-slate-800 hover:text-blue-400`}>Todos</button>
-                        <button onClick={() => setFilter(1)} className={`px-3 py-2 rounded-lg ${filter == 1 ? "bg-slate-800 text-blue-400" : "text-slate-300"} cursor-pointer transition ease-in-out duration-200 hover:bg-slate-800 hover:text-blue-400`}>Ativos</button>
-                        <button onClick={() => setFilter(2)} className={`px-3 py-2 rounded-lg ${filter == 2 ? "bg-slate-800 text-blue-400" : "text-slate-300"} cursor-pointer transition ease-in-out duration-200 hover:bg-slate-800 hover:text-blue-400`}>Inativos</button>
-                    </nav>
-                </div>
+                <SearchBar value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} filter={{ options: filterOptions, activeFilter: filter, onFilterChange: setFilter }} />
                 <div>
                     <div className="w-full p-4 rounded-t-2xl bg-slate-900 text-slate-400 flex justify-around items-center space-x-4">
                         <span className="w-40 flex justify-start items-start">Repositório</span>

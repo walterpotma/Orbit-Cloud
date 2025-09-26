@@ -1,9 +1,9 @@
 "use client"
 import { useState, useEffect } from "react"
-import Form from "@/components/ui/form1"
-import Button1 from "@/components/ui/button1"
+import Form from "@/components/ui/form/form"
+import Button1 from "@/components/ui/form/button"
 import Logo from "@/components/layout/logo"
-import Input1 from "@/components/ui/input1"
+import Input1 from "@/components/ui/form/input"
 
 export default function Page() {
     const [email, setEmail] = useState("");

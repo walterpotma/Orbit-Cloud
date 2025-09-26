@@ -35,22 +35,6 @@ export default function Page() {
                             <i className="bi bi-person-circle mr-2 text-lg"></i>
                             Perfil
                         </button>
-                        {/* <button className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 $`}>
-                            <i className="bi bi-shield-shaded mr-2 text-lg"></i>
-                            Segurança
-                        </button>
-                        <button className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 $`}>
-                            <i className="bi bi-bell-fill mr-2 text-lg"></i>
-                            Notificações
-                        </button> 
-                        <button className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 $`}>
-                            <i className="bi bi-people-fill mr-2 text-lg"></i>
-                            Equipe
-                        </button>
-                        <button className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 $`}>
-                            <i className="bi bi-key-fill mr-2 text-lg"></i>
-                            Keys
-                        </button>*/}
                         <button onClick={() => handleTabClick('preferences')} className={`w-full py-4 px-10 flex justify-start items-center cursor-pointer hover:bg-slate-800 hover:text-blue-500 hover:border-l-2 border-blue-500 ${activeTab === 'preferences' ? `${active}` : ''}`}>
                             <i className="bi bi-sliders mr-2 text-lg"></i>
                             Preferencias

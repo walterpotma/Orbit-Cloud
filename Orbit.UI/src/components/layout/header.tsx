@@ -27,7 +27,6 @@ export default function header () {
                 <a href=""></a>
             </nav>
             <div className="space-x-3">
-                {/* <button onClick={() => navigationTo("/image-docker")} className="px-5 py-2 rounded-lg border-2 border-blue-500 text-blue-400 cursor-pointer">+ Nova Image</button> */}
                 <button onClick={() => navigationTo("/deploy")} className="px-5 py-2 rounded-lg border-2 bg-blue-500 border-blue-500 text-white cursor-pointer"><i className="bi bi-rocket-takeoff-fill mr-2"></i>Deploy</button>
             </div>
 

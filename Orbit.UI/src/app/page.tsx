@@ -3,11 +3,11 @@ import "./globals.css";
 import Image from "next/image";
 import 'devicon/devicon.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css"
-import Card1 from "@/components/ui/card1";
-import Card2 from "@/components/ui/card2";
-import Table1 from "@/components/ui/table1";
+import Card1 from "@/components/ui/dashboard/card1";
+import Card2 from "@/components/ui/dashboard/card2";
+import Table1 from "@/components/ui/dashboard/table";
 import BtnRefresh from "@/components/ui/BtnRefresh";
-import fileTree from "@/model/file-system";
+import fileTree from "@/model/storage";
 
 export default function Home() {
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
