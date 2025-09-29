@@ -6,8 +6,8 @@ import Input2 from "@/components/ui/input";
 
 export default function Page({ onClose }: { onClose: (value: boolean) => void }) {
     return (
-        <div onClick={() => onClose(false)} className="w-full h-screen bg-black/70 flex justify-center items-center absolute inset-0 cursor-pointer">
-            <div onClick={(e) => e.stopPropagation()} className="w-4/5 max-h-11/12 p-8 bg-slate-800 rounded-xl overflow-auto custom-scroll cursor-auto">
+        <div onClick={() => onClose(false)} className="w-full h-screen bg-black/70 flex justify-center items-center cursor-pointer">
+            <div onClick={(e) => e.stopPropagation()} className="w-4/5 p-8 bg-slate-800 rounded-xl cursor-auto">
                 <div>
                     <h1 className="text-2xl font-bold mb-4">Edit Deploy</h1>
                 </div>

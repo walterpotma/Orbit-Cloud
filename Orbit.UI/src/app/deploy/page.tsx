@@ -5,12 +5,17 @@ import 'devicon/devicon.min.css';
 import NewDeploy from "@/components/deploy/new-deploy";
 import EditDeploy from "@/components/deploy/edit-deploy";
 import BtnRefresh from "@/components/ui/BtnRefresh";
+import SearchBar from "@/components/ui/table/search";
 
 export default function Page() {
     const [currentPageImage, setCurrentPageImage] = useState(1);
     const [currentPageDeploy, setCurrentPageDeploy] = useState(1);
     const itemsPerPageImage = 6;
     const itemsPerPageDeploy = 3;
+
+    const [filter, setFilter] = useState(0);
+    const [searchTerm, setSearchTerm] = useState("");
+    const filterOptions = ["Todos", "Ativos", "Inativos"];
 
     const [newDeploy, setNewDeploy] = useState(false);
     const [editDeploy, setEditDeploy] = useState(false);
@@ -75,16 +80,19 @@ export default function Page() {
         return "agora mesmo";
     };
 
+    const filteredDeploy = deploys.filter((deploy) => {
+        const matchesStatus = filter === 0 || deploy.status === filter;
+        const matchesSearch = deploy.name.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesStatus && matchesSearch;
+    });
 
-    const totalPagesImage = Math.ceil(imagensDocker.length / itemsPerPageImage);
-    const startIndexImage = (currentPageImage - 1) * itemsPerPageImage;
-    const paginatedImage = imagensDocker.slice(startIndexImage, startIndexImage + itemsPerPageImage);
-
-    const totalPagesDeploy = Math.ceil(deploys.length / itemsPerPageDeploy);
+    const totalPagesDeploy = Math.ceil(filteredDeploy.length / itemsPerPageDeploy);
     const startIndexDeploy = (currentPageDeploy - 1) * itemsPerPageDeploy;
-    const paginatedDeploy = deploys.slice(startIndexDeploy, startIndexDeploy + itemsPerPageDeploy);
+    const paginatedDeploy = filteredDeploy.slice(startIndexDeploy, startIndexDeploy + itemsPerPageDeploy);
 
-
+    useEffect(() => {
+        setCurrentPageDeploy(1);
+    }, [filter, searchTerm]);
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll">
             <div className="w-full">
@@ -94,59 +102,8 @@ export default function Page() {
                         <BtnRefresh />
                     </div>
                 </div>
-                <div className="w-full my-4 flex justify-between space-x-4">
-                    {/* <div className="w-1/2 p-6 rounded-xl bg-slate-900">
-                        <h1 className="text-xl mb-6">Imagens</h1>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                            {paginatedImage.map((img, index) => (
-                                <div
-                                    key={index}
-                                    className={`w-full p-4 rounded-lg bg-slate-800 flex flex-col justify-start space-x-4 space-y-1`}
-                                >
-                                    <div className="w-full flex justify-between items-center">
-                                        <div className="flex justify-start items-center space-x-2">
-                                            <i className="devicon-javascript-plain p-2 rounded-full bg-blue-600 text-white text-xl"></i>
-                                            <p>{img.name}</p>
-                                        </div>
-                                        <span className={`px-3 py-1 rounded-lg bg-green-500/10 text-green-700`}>{img.status == 1 ? "Ativo" : "Inativo"}</span>
-                                    </div>
-                                    <div className="w-full flex justify-between items-center space-x-4">
-                                        <div className="w-full text-slate-600 flex justify-between items-center space-x-2">
-                                            <span className="p-2 rounded-lg">size: {img.size}</span>
-                                            <span>Tag: {img.tag}</span>
-                                        </div>
-                                    </div>
-                                    <div className="w-full flex justify-between items-center space-x-2">
-                                        <span className="min-w-30 p-2 rounded-lg bg-slate-900/50 text-slate-600">
-                                            {img.created.length > 11 ? img.created.slice(0, 11) + '...' : img.created}
-                                        </span>
-
-                                        <button onClick={() => setNewDeploy(true)} className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-400 cursor-pointer transition ease-in-out duration-200 flex justify-center items-center space-x-2">
-                                            <i className="bi bi-rocket-fill"></i>
-                                            <button className="cursor-pointer">Deploy</button>
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="w-full flex justify-center items-center mt-6 space-x-4">
-                            <button
-                                onClick={() => setCurrentPageImage((prev) => Math.max(prev - 1, 1))}
-                                disabled={currentPageImage === 1}
-                                className="px-4 py-2 rounded bg-slate-700 text-white disabled:opacity-50 cursor-pointer"
-                            >
-                                Anterior
-                            </button>
-                            <span className="text-slate-400">Página {currentPageImage} de {totalPagesImage}</span>
-                            <button
-                                onClick={() => setCurrentPageImage((prev) => Math.min(prev + 1, totalPagesImage))}
-                                disabled={currentPageImage === totalPagesImage}
-                                className="px-4 py-2 rounded bg-slate-700 text-white disabled:opacity-50 cursor-pointer"
-                            >
-                                Próxima
-                            </button>
-                        </div>
-                    </div> */}
+                <div className="w-full my-4 flex flex-col justify-between space-x-4">
+                    <SearchBar value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} filter={{ options: filterOptions, activeFilter: filter, onFilterChange: setFilter }} />
                     <div className="w-full p-6 rounded-xl bg-slate-900">
                         <h1 className="text-xl mb-6">Deploys</h1>
                         <div className="w-full space-y-4 flex flex-col justify-start items-start">
@@ -213,7 +170,9 @@ export default function Page() {
             )}
 
             {editDeploy && (
-                <EditDeploy onClose={setEditDeploy} />
+                <div className="w-full absolute top-10 left-0 z-50">
+                    <EditDeploy onClose={setEditDeploy} />
+                </div>
             )}
 
         </div>
