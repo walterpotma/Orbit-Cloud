@@ -26,8 +26,12 @@ export default function header () {
             <nav>
                 <a href=""></a>
             </nav>
-            <div className="space-x-3">
-                <button onClick={() => navigationTo("/deploy")} className="px-5 py-2 rounded-lg border-2 bg-blue-500 border-blue-500 text-white cursor-pointer"><i className="bi bi-rocket-takeoff-fill mr-2"></i>Deploy</button>
+            <div className="flex items-center space-x-10">
+                {/* <button onClick={() => navigationTo("/deploy")} className="px-5 py-2 rounded-lg border-2 bg-blue-500 border-blue-500 text-white cursor-pointer"><i className="bi bi-rocket-takeoff-fill mr-2"></i>Deploy</button> */}
+                <div className="text-slate-500 flex items-center space-x-3 cursor-pointer">
+                    <p>primeiro nome</p>
+                    <i className="bi bi-person-circle text-4xl"></i>
+                </div>
             </div>
 
             {loading && <div className="position fixed top-0 left-0"><Loading /></div>}

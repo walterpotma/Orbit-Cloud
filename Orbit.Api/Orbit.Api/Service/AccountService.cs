@@ -23,8 +23,7 @@ namespace Orbit.Api.Service
                     Id = response.Id,
                     GithubId = response.GithubId,
                     Name = response.Name,
-                    Email = response.Email,
-                    Plano = response.Plano
+                    Email = response.Email
                 };
             }
 
@@ -33,8 +32,7 @@ namespace Orbit.Api.Service
                 Id = 0,
                 GithubId = gitId,
                 Name = name,
-                Email = email,
-                Plano = "starter"
+                Email = email
             };
 
             var created = await _repository.Create(account);
@@ -44,8 +42,7 @@ namespace Orbit.Api.Service
                 Id = created.Id,
                 GithubId = created.GithubId,
                 Name = created.Name,
-                Email = created.Email,
-                Plano = created.Plano
+                Email = created.Email
             };
         }
     }

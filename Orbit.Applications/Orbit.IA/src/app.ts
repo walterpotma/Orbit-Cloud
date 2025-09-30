@@ -6,7 +6,7 @@ import aiRoutes from './routes/ai.routes';
 
 
 const app = express();
-const port = 3800;
+const port = 7001;
 
 app.use(cors());
 app.use(express.json());

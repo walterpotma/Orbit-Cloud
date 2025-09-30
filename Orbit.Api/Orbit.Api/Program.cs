@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(8080);
+    options.ListenAnyIP(7000);
 });
 
 
@@ -104,7 +104,9 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "API com GitHub Auth rodando!");
+app.MapGet("/", () => {
+    return Results.File("index.html", "text/html");
+});
 app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "https://orbit.crion.dev" }, new[] { "GitHub" }));
 
 if (app.Environment.IsDevelopment())
@@ -117,5 +119,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseStaticFiles();
 
 app.Run();

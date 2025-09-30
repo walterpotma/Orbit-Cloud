@@ -3,6 +3,38 @@
   "WorkspaceRootPath": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\subscription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\model\\subscription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\transacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\model\\transacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\plan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\model\\plan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\model\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\organization.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\model\\organization.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\rule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\model\\rule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\dto\\dtogitrepos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\dto\\dtogitrepos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\repository\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\repository\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\controllers\\githubcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\controllers\\githubcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\repository\\interface\\igithubrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\repository\\interface\\igithubrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\dto\\dtogitrepos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\dto\\dtogitrepos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\gitrepos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,20 +75,12 @@
       "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\service\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\repository\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\repository\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\repository\\deployrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\repository\\deployrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\model\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|solutionrelative:orbit.api\\model\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0A92302C-C8D7-4044-92A0-35C894356AAC}|Orbit.Api\\Orbit.Api.csproj|c:\\users\\walte\\onedrive\\documentos\\projetos\\2025\\orbit-cloud\\orbit.api\\orbit.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -78,60 +98,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IGithubRepository.cs",
-              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
-              "RelativeDocumentMoniker": "Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
-              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
-              "RelativeToolTip": "Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T11:52:52.993Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "GithubService.cs",
-              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Service\\GithubService.cs",
-              "RelativeDocumentMoniker": "Orbit.Api\\Service\\GithubService.cs",
-              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Service\\GithubService.cs",
-              "RelativeToolTip": "Orbit.Api\\Service\\GithubService.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAcwBwAAAAAAAAAAAAAAA==",
+              "Title": "Transacion.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Transacion.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Model\\Transacion.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Transacion.cs",
+              "RelativeToolTip": "Orbit.Api\\Model\\Transacion.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAxwBUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T11:57:16.193Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GithubController.cs",
-              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Controllers\\GithubController.cs",
-              "RelativeDocumentMoniker": "Orbit.Api\\Controllers\\GithubController.cs",
-              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Controllers\\GithubController.cs",
-              "RelativeToolTip": "Orbit.Api\\Controllers\\GithubController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T11:54:11.338Z",
+              "WhenOpened": "2025-09-30T12:17:05.705Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Program.cs",
-              "RelativeDocumentMoniker": "Orbit.Api\\Program.cs",
-              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Program.cs",
-              "RelativeToolTip": "Orbit.Api\\Program.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAAAD8AAABRAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "subscription.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\subscription.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Model\\subscription.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\subscription.cs",
+              "RelativeToolTip": "Orbit.Api\\Model\\subscription.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T12:37:32.692Z"
+              "WhenOpened": "2025-09-30T12:10:48.373Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "Rule.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Rule.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Model\\Rule.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Rule.cs",
+              "RelativeToolTip": "Orbit.Api\\Model\\Rule.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-30T11:49:08.18Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Plan.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Plan.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Model\\Plan.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Plan.cs",
+              "RelativeToolTip": "Orbit.Api\\Model\\Plan.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-30T11:58:23.443Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Organization.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Organization.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Model\\Organization.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Organization.cs",
+              "RelativeToolTip": "Orbit.Api\\Model\\Organization.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-30T11:35:30.901Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "GitRepos.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\GitRepos.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Model\\GitRepos.cs",
@@ -143,7 +179,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "DtoGitRepos.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Dto\\DtoGitRepos.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Dto\\DtoGitRepos.cs",
@@ -151,11 +187,12 @@
               "RelativeToolTip": "Orbit.Api\\Dto\\DtoGitRepos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T11:59:40.671Z"
+              "WhenOpened": "2025-08-21T11:59:40.671Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 10,
               "Title": "GithubRepository.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\GithubRepository.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Repository\\GithubRepository.cs",
@@ -167,7 +204,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 14,
               "Title": "IAccountRepository.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\Interface\\IAccountRepository.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Repository\\Interface\\IAccountRepository.cs",
@@ -179,7 +216,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 15,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Dockerfile",
               "RelativeDocumentMoniker": "Orbit.Api\\Dockerfile",
@@ -191,31 +228,81 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "AccountRepository.cs",
-              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\AccountRepository.cs",
-              "RelativeDocumentMoniker": "Orbit.Api\\Repository\\AccountRepository.cs",
-              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\AccountRepository.cs",
-              "RelativeToolTip": "Orbit.Api\\Repository\\AccountRepository.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAcwB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T12:21:58.79Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 3,
               "Title": "Account.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Account.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Model\\Account.cs",
               "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Model\\Account.cs",
               "RelativeToolTip": "Orbit.Api\\Model\\Account.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAqwAYAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T12:21:09.424Z"
+              "WhenOpened": "2025-08-15T12:21:09.424Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Program.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Program.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Program.cs",
+              "RelativeToolTip": "Orbit.Api\\Program.cs",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAD8AAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T12:37:32.692Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GithubController.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Controllers\\GithubController.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Controllers\\GithubController.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Controllers\\GithubController.cs",
+              "RelativeToolTip": "Orbit.Api\\Controllers\\GithubController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T11:54:11.338Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AccountRepository.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\AccountRepository.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Repository\\AccountRepository.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\AccountRepository.cs",
+              "RelativeToolTip": "Orbit.Api\\Repository\\AccountRepository.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAApwBUAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-15T12:21:58.79Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "GithubService.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Service\\GithubService.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Service\\GithubService.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Service\\GithubService.cs",
+              "RelativeToolTip": "Orbit.Api\\Service\\GithubService.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAcwBwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T11:57:16.193Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IGithubRepository.cs",
+              "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
+              "RelativeDocumentMoniker": "Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
+              "ToolTip": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
+              "RelativeToolTip": "Orbit.Api\\Repository\\Interface\\IGithubRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T11:52:52.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "DtoAccount.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Dto\\DtoAccount.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Dto\\DtoAccount.cs",
@@ -227,7 +314,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 19,
               "Title": "DeployRepository.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Repository\\DeployRepository.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Repository\\DeployRepository.cs",
@@ -239,7 +326,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 17,
               "Title": "AccountService.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Service\\AccountService.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Service\\AccountService.cs",
@@ -251,7 +338,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 18,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Controllers\\AccountController.cs",
@@ -263,7 +350,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 20,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\appsettings.json",
               "RelativeDocumentMoniker": "Orbit.Api\\appsettings.json",
@@ -275,7 +362,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 21,
               "Title": "DbContext.cs",
               "DocumentMoniker": "C:\\Users\\walte\\OneDrive\\Documentos\\PROJETOS\\2025\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Data\\DbContext.cs",
               "RelativeDocumentMoniker": "Orbit.Api\\Data\\DbContext.cs",

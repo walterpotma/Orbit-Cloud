@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import ipRoutes from "./routes/ip.routes";
 
 const app = express();
-const port = 3700;
+const port = 7002;
 
 app.use(express.json());
 

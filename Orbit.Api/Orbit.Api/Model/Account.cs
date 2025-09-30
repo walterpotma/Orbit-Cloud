@@ -8,16 +8,25 @@ namespace Orbit.Api.Model
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("github_id")]
+        [Column("GithubId")]
         public string? GithubId { get; set; }
 
-        [Column("name")]
+        [Column("Name")]
         public string? Name { get; set; }
 
-        [Column("email")]
+        [Column("Email")]
         public string? Email { get; set; }
 
-        [Column("plano")]
-        public string? Plano { get; set; }
+        [Column("PasswordHash")]
+        public string PasswordHash {  get; set; }
+
+        [Column("Points")]
+        public decimal Points { get; set; }
+
+        [Column("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("UpdatedAt")]
+        public DateTime UpdatedAt { get; set; }
     }
 }
