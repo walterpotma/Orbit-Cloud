@@ -14,6 +14,11 @@ namespace Orbit.Api.Repository
             _context = context;
         }
 
+        public async Task<List<Account>> GetAll ()
+        {
+            return await _context.Accounts.ToListAsync();
+        }
+
         public async Task<Account> GetByGithubId (string githubId)
         {
             return await _context.Accounts.FirstOrDefaultAsync(x => x.GithubId == githubId);

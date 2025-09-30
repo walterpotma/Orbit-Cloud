@@ -12,6 +12,18 @@ namespace Orbit.Api.Service
             _repository = repository;
         }
 
+        public async Task<List<DtoAccount>> GetAll()
+        {
+            var response = await _repository.GetAll();
+            return response.Select(x => new DtoAccount
+            {
+                Id = x.Id,
+                GithubId = x.GithubId,
+                Name = x.Name,
+                Email = x.Email
+            }).ToList();
+        }
+
         public async Task<DtoAccount> GetByGitIdOrCreate(string gitId, string name, string email)
         {
             var response = await _repository.GetByGithubId(gitId);

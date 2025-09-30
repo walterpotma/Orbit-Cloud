@@ -16,6 +16,12 @@ namespace Orbit.Api.Controllers
             _accountService = accountService;
         }
 
+        [HttpGet]
+        public async Task<List<IActionResult>> GetAll()
+        {
+            return await _accountService.GetAll();
+        }
+
         [HttpGet("GetInfos")]
         public async Task<IActionResult> GetOrCreate()
         {
