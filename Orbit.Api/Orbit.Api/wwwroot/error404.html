@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - PageNot Found</title>
+</head>
+<style>
+    :root {
+        --bg-primary: #010218;
+        --bg-secondary: #1e293b;
+        --text-primary: #ededed;
+        --text-discreto: #565f6c;
+        --text-active: #10b981;
+        --text-destaque: #136dff;
+        --text-inactive: #ef4444;
+        --card-primary: #0f172b;
+        --card-secondary: #1e293b;
+    }
+
+    body {
+        width: auto;
+        height: 90vh;
+        background-color: var(--bg-primary);
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .status-card {
+        width: 400px;
+        padding: 30px;
+        border-radius: 8px;
+        background-color: var(--card-primary);
+        color: var(--text-primary);
+        box-shadow: 0 4px 200px #2e2e2e1a;
+    }
+
+    .status-card .status-indicator {
+        font-size: 30px;
+        color: var(--text-active);
+    }
+
+    .status-card h1 {
+        font-size: 28px;
+    }
+
+    .status-card h1 span:first-child {
+        color: var(--text-discreto);
+    }
+
+    .status-card h1 span:last-child {
+        color: var(--text-destaque);
+    }
+
+    .status-card a {
+        text-decoration: underline;
+        color: var(--text-destaque);
+    }
+</style>
+
+<body>
+    <div class="status-card">
+        <div class="status-indicator">● 404</div>
+        <h1>Not Found</h1>
+        <p>Pagina não encontrada Acesse nosso site na Url: <a href="">https://orbitcloud.com.br</a></p>
+        <p><small>&copy; 2025 Orbit Cloud Todos os Direitos Reservados</small></p>
+    </div>
+</body>
+
+</html>
