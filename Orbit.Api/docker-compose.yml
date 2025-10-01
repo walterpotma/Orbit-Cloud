@@ -1,0 +1,6 @@
+services:
+  orbit.api:
+    image: ${DOCKER_REGISTRY-}orbitapi
+    build:
+      context: .
+      dockerfile: Orbit.Api/Dockerfile

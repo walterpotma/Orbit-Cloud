@@ -16,6 +16,6 @@ namespace Orbit.Api.Model
         public int OrganizationId { get; set; }
 
         [Column("Access")]
-        public JsonArray Access {  get; set; }
+        public List<String> Access {  get; set; }
     }
 }

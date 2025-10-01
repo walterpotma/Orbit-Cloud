@@ -6,7 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5d95d60b-e776-4199-8335-f0b6ca6a4e87</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Data\Dockerfile" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Kikikot.BECore.DependenceInjection" Version="1.0.4" />

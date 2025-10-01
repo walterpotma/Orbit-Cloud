@@ -1,4 +1,0 @@
-wwwroot\index.html
-wwwroot\style.css
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\index.html
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\style.css

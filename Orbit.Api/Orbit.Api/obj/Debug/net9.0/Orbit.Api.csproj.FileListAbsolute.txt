@@ -155,7 +155,6 @@ C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\Orbit.Api.csproj.Up2Date
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\Orbit.Api.dll
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\refint\Orbit.Api.dll
@@ -208,5 +207,5 @@ C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\swae.build.ex.cache
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\Orbit.Api.staticwebassets.runtime.json
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\ok5rglraem-{0}-3cm28xoue5-3cm28xoue5.gz
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\wq4vk2ukz2-{0}-yfos9br67c-yfos9br67c.gz
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\ok5rglraem-{0}-liwgg5y0jd-liwgg5y0jd.gz
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\wq4vk2ukz2-{0}-zei3lxr8m3-zei3lxr8m3.gz
