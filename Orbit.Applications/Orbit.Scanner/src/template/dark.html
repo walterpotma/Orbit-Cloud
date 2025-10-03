@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatorio do scan</title>
+    <link rel="shortcut icon"
+        href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/trello/trello-original.svg" type="image/x-icon">
+</head>
+<style>
+    * {
+        border: 0;
+        margin: 0;
+        padding: 0
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    :root {
+        --primary-color: #0f172a;
+        --secondary-color: #121212;
+        --text-color: #ffffff;
+        --primary: #2563eb;
+        --primary-dark: #1e40af;
+        --primary-light: #3b82f6;
+        --darker: #020617;
+        --info: #10b981;
+        --low: #4099ff;
+        --middle: #ffb672;
+        --high: #ff5b5b;
+        --button: #1e293b;
+        --button-active: #475569;
+        --card: #0f172a;
+    }
+
+    body {
+        background-color: var(--darker);
+        color: var(--text-color);
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+    }
+
+    header,
+    footer {
+        background-color: var(--primary-color);
+        padding: 10px;
+        text-align: center;
+    }
+
+    header {
+        padding: 10px 30px;
+        color: var(--accent-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    main {
+        width: 80%;
+        height: 100%;
+        margin: 50px auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }
+
+    main .vunerability {
+        width: 100%;
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+    main .vunerability .card {
+        width: 100%;
+        height: 150px;
+        background-color: var(--card);
+        border-radius: 8px;
+        color: var(--low);
+    }
+
+    main nav.filter {
+        width: 100%;
+        margin: 20px 0;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 15px;
+    }
+
+    main nav.filter button {
+        width: 100px;
+        height: 40px;
+        background-color: var(--button);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    main nav.filter button:hover {
+        background-color: var(--button-active);
+    }
+
+    main .alerts {
+        width: 100%;
+        margin: 20px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        gap: 15px;
+    }
+
+    main .alerts .resume {
+        width: 100%;
+        height: 200px;
+        background-color: var(--card);
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+
+    main .alerts .resume.info {
+        border-left: 4px solid var(--info);
+    }
+    main .alerts .resume.low {
+        border-left: 4px solid var(--low);
+    }
+    main .alerts .resume.middle {
+        border-left: 4px solid var(--middle);
+    }
+    main .alerts .resume.high {
+        border-left: 4px solid var(--high);
+    }
+
+
+
+    footer {
+        color: var(--accent-color);
+    }
+</style>
+
+<body>
+    <header>
+        <h1>Relatório do Scan</h1>
+        <span>Data 21/05/2025 17h30</span>
+    </header>
+    <main>
+        <div class="vunerability">
+            <div class="card"> 123</div>
+            <div class="card info">123</div>
+            <div class="card low">123</div>
+            <div class="card middle">123</div>
+            <div class="card high">123</div>
+        </div>
+        <nav class="filter">
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+        </nav>
+        <div class="alerts">
+            <div class="resume info"></div>
+            <div class="resume low"></div>
+            <div class="resume middle"></div>
+            <div class="resume high"></div>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+<script>
+
+</script>
+
+</html>
