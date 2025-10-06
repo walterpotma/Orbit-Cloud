@@ -83,10 +83,17 @@
 
     main .vunerability .card {
         width: 100%;
-        height: 150px;
+        height: 120px;
+        padding: 20px;
         background-color: var(--card);
         border-radius: 8px;
         color: var(--low);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    main .vunerability .card p {
+        font: bold 30px Arial, sans-serif;
     }
 
     main nav.filter {
@@ -99,10 +106,11 @@
     }
 
     main nav.filter button {
-        width: 100px;
-        height: 40px;
+        padding: 10px 20px;
         background-color: var(--button);
         border-radius: 8px;
+        color: var(--text-color);
+        font: bold 16px Arial, sans-serif;
         cursor: pointer;
         transition: .2s;
     }
@@ -161,18 +169,33 @@
     </header>
     <main>
         <div class="vunerability">
-            <div class="card"> 123</div>
-            <div class="card info">123</div>
-            <div class="card low">123</div>
-            <div class="card middle">123</div>
-            <div class="card high">123</div>
+            <div class="card">
+                <h1>123</h1>
+                <span>Total de Vulnerabilidades</span>
+            </div>
+            <div class="card info">
+                <h1>123</h1>
+                <span>Alerts Informativos</span>
+            </div>
+            <div class="card low">
+                <h1>123</h1>
+                <span>Alerts Low</span>
+            </div>
+            <div class="card middle">
+                <h1>123</h1>
+                <span>Alerts Medium</span>
+            </div>
+            <div class="card high">
+                <h1>123</h1>
+                <span>Alerts High</span>
+            </div>
         </div>
         <nav class="filter">
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
+            <button>Todos</button>
+            <button>Altos</button>
+            <button>Medios</button>
+            <button>Baixos</button>
+            <button>Informativos</button>
         </nav>
         <div class="alerts">
             <div class="resume info"></div>
