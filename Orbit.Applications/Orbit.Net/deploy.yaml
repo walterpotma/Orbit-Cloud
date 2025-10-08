@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-orbitnet
+  namespace: orbitcloud # Assumindo namespace 'default' para as apps
+  labels:
+    app: api-orbitnet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-orbitnet
+  template:
+    metadata:
+      labels:
+        app: api-orbitnet
+    spec:
+      containers:
+      - name: api-orbitnet-container
+        image: api-orbitnet:latest # <--- SUBSTITUA PELA IMAGEM REAL DO ESTOQUE
+        ports:
+        - containerPort: 7002
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+# 2. SERVICE: API de Estoque (api-estoque)
+# Expõe a API internamente na porta 8080 do cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-orbitnet
+  namespace: orbitcloud
+spec:
+  selector:
+    app: api-orbitnet
+  ports:
+    - protocol: TCP
+      port: 7002         # Porta do Cluster/Service
+      targetPort: 7002   # Porta dentro do Container (Node.js)
+  type: ClusterIP

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-orbitsender
+  namespace: orbitcloud # Assumindo namespace 'default' para as apps
+  labels:
+    app: api-orbitsender
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-orbitsender
+  template:
+    metadata:
+      labels:
+        app: api-orbitsender
+    spec:
+      containers:
+      - name: api-orbitsender-container
+        image: api-orbitsender:latest # <--- SUBSTITUA PELA IMAGEM REAL DO ESTOQUE
+        ports:
+        - containerPort: 7003
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+# 2. SERVICE: API de Estoque (api-estoque)
+# Expõe a API internamente na porta 8080 do cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-orbitsender
+  namespace: orbitcloud
+spec:
+  selector:
+    app: api-orbitsender
+  ports:
+    - protocol: TCP
+      port: 7003
+      targetPort: 7003
+  type: ClusterIP
