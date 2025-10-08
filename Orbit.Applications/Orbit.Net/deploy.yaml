@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api-orbitnet-container
-        image: localhost:5000/api-orbitnet:latest # <--- ENDEREÇO COMPLETO
+        image: localhost:5000/api-orbitnet:v1.01 # <--- ENDEREÇO COMPLETO
         ports:
         - containerPort: 7002
         resources:
