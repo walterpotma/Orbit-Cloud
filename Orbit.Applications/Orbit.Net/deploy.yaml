@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api-orbitnet-container
-        image: api-orbitnet:latest # <--- SUBSTITUA PELA IMAGEM REAL DO ESTOQUE
+        image: image: localhost:5000/api-orbitnet:v1 # <--- ENDEREÇO COMPLETO
         ports:
         - containerPort: 7002
         resources:
