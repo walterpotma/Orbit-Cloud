@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api-orbitsender-container
-        image: localhost:5000/api-orbitsender:v1.02 # <--- ENDEREÇO COMPLETO
+        image: localhost:5000/api-orbitsender:v1 # <--- ENDEREÇO COMPLETO
         ports:
         - containerPort: 7003
         resources:
