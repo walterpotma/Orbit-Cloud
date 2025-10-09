@@ -38,3 +38,71 @@ spec:
       port: 8080
       targetPort: 8080
   type: ClusterIP
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ip-checker-job
+  namespace: orbitcloud
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ip-checker-container
+            image: alpine/curl:latest
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                echo "Iniciando consulta...";
+
+                # 1. Executa o curl (com retry, fail, e silent) e salva a saída.
+                RESPONSE=$(curl --fail --retry 5 -s -X GET http://orbitnet-api:8080/api/v1/get-ip);
+
+                # 2. Captura o código de saída do comando curl.
+                EXIT_CODE=$?
+
+                # 3. Imprime a Resposta e o Código de Saída para o Log do K8s
+                echo "--- STATUS DA CONSULTA ---"
+                echo "RESPONSE: $RESPONSE"
+                echo "CURL EXIT CODE: $EXIT_CODE"
+
+                # 4. Se o código for diferente de 0, forçamos o Pod a retornar o erro
+                if [ $EXIT_CODE -ne 0 ]; then
+                  echo "ERRO: A consulta falhou. Código de saída do curl foi: $EXIT_CODE";
+                  exit $EXIT_CODE
+                fi
+                echo "Consulta concluída com sucesso (EXIT CODE 0).";
+          restartPolicy: OnFailure
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orbitnet-api
+  namespace: orbitcloud
+  annotations:
+    # 1. ANOTAÇÃO OBRIGATÓRIA: Diz ao ExternalDNS o hostname a ser criado.
+    # ***SUBSTITUA PELO SEU DOMÍNIO REAL***
+    external-dns.alpha.kubernetes.io/hostname: api.orbitnet.crion.dev
+    
+    # 2. Anotação para o Ingress Controller (K3s usa Traefik por padrão)
+    # Isso garante que o Traefik saiba o que fazer com a regra.
+    # O K3s muitas vezes infere isso, mas é bom ser explícito.
+    # Se você tem um Ingress Controller específico (como Traefik), use a annotation dele aqui.
+    # Caso contrário, essa pode ser opcional ou específica do seu setup.
+spec:
+  rules:
+  - host: api.orbitnet.crion.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            # Aponta para o Service interno que já está rodando
+            name: orbitnet-api
+            port:
+              number: 8080
