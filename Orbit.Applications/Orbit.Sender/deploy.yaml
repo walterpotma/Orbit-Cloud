@@ -38,3 +38,32 @@ spec:
       port: 8080
       targetPort: 8080
   type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orbitsender-api
+  namespace: orbitcloud
+  annotations:
+    # 1. ANOTAÇÃO OBRIGATÓRIA: Diz ao ExternalDNS o hostname a ser criado.
+    # ***SUBSTITUA PELO SEU DOMÍNIO REAL***
+    external-dns.alpha.kubernetes.io/exclude: "true"
+    
+    # 2. Anotação para o Ingress Controller (K3s usa Traefik por padrão)
+    # Isso garante que o Traefik saiba o que fazer com a regra.
+    # O K3s muitas vezes infere isso, mas é bom ser explícito.
+    # Se você tem um Ingress Controller específico (como Traefik), use a annotation dele aqui.
+    # Caso contrário, essa pode ser opcional ou específica do seu setup.
+spec:
+  rules:
+  - host: api.orbitsender.crion.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            # Aponta para o Service interno que já está rodando
+            name: orbitsender-api
+            port:
+              number: 8080
