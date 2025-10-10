@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import Router from './routes/routes';
 
 const app = express();
-const port = 8080;
+const port = 80;
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Olá, mundo! API com Express e TypeScript está funcionando!');
