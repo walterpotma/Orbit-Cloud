@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
       - name: orbitnet-api-container
-        image: localhost:5000/orbitnet-api:v1.07
+        image: localhost:5000/orbitnet-api:v1.08
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         resources:
           limits:
             memory: "128Mi"
@@ -35,8 +35,8 @@ spec:
     app: orbitnet-api
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 8080
+      targetPort: 8080
   type: ClusterIP
 ---
 apiVersion: batch/v1
@@ -105,4 +105,4 @@ spec:
             # Aponta para o Service interno que já está rodando
             name: orbitnet-api
             port:
-              number: 80
+              number: 8080
