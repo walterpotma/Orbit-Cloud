@@ -88,6 +88,7 @@ metadata:
     # ***SUBSTITUA PELO SEU DOMÍNIO REAL***
     external-dns.alpha.kubernetes.io/target: "crion.dev"
     cert-manager.io/cluster-issuer: "letsencrypt-prod" 
+    nginx.ingress.kubernetes.io/whitelist-source-range: "0.0.0.0/0"
     
     # 2. Anotação para o Ingress Controller (K3s usa Traefik por padrão)
     # Isso garante que o Traefik saiba o que fazer com a regra.
