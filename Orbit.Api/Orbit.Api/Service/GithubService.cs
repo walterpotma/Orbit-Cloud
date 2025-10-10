@@ -1,28 +1,37 @@
-﻿using Orbit.Api.Dto_s;
+﻿using Microsoft.AspNetCore.Authentication;
+using Orbit.Api.Dto;
+using Orbit.Api.Dto_s;
 using Orbit.Api.Model;
 using Orbit.Api.Repository;
 using Orbit.Api.Repository.Interface;
+using System.Security.Claims;
 
 namespace Orbit.Api.Service
 {
     public class GithubService
     {
         private readonly IGithubRepository _githubRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GithubService(IGithubRepository githubRepository)
+        public GithubService(IGithubRepository githubRepository, IHttpContextAccessor httpContextAccessor)
         {
             _githubRepository = githubRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<List<DtoGitRepos>> GetRepositoriesAsync(string accessToken)
+        public async Task<IEnumerable<DtoGithubRepos>> GetCurrentUserRepositoriesAsync()
         {
-            var repos = await _githubRepository.GetRepository(accessToken);
+            // Pega o token de acesso que foi salvo no cookie durante o login
+            var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
 
-            return repos.Select(r => new DtoGitRepos
+            if (string.IsNullOrEmpty(accessToken))
             {
-                Name = r.Name,
-                Url = r.Url
-            }).ToList();
+                // Lança uma exceção se o usuário não estiver logado ou o token não for encontrado
+                throw new System.Exception("Token de acesso não encontrado. O usuário está autenticado?");
+            }
+
+            // Chama o repositório para buscar os dados
+            return await _githubRepository.GetUserRepositoriesAsync(accessToken);
         }
     }
 }

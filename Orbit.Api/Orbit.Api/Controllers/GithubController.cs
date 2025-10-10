@@ -1,41 +1,62 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Api.Service;
-using System.Net.Http.Headers;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace Orbit.Api.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class GithubController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class GithubController : ControllerBase
+    private readonly GithubService _githubService; // Adicione esta injeção
+
+    // Atualize o construtor
+    public GithubController(GithubService githubService)
     {
-        private readonly GithubService _githubService;
+        _githubService = githubService;
+    }
 
-        public GithubController(GithubService githubService)
+    [HttpGet("login")]
+    public IActionResult Login()
+    {
+        var properties = new AuthenticationProperties { RedirectUri = "/api/github/callback" };
+
+        return Challenge(properties, "GitHub");
+    }
+
+    [HttpGet("callback")]
+    public async Task<IActionResult> Callback()
+    {
+        var claims = HttpContext.User.Claims;
+
+        var userData = new
         {
-            _githubService = githubService;
+            IsAuthenticated = HttpContext.User.Identity?.IsAuthenticated ?? false,
+
+            Id = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
+            Name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value,
+            Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
+            Username = claims.FirstOrDefault(c => c.Type == "urn:github:login")?.Value,
+            AllClaims = claims.ToDictionary(c => c.Type, c => c.Value)
+        };
+
+        return Ok(userData);
+    }
+
+    [HttpGet("repos")]
+    [Authorize]
+    public async Task<IActionResult> GetRepositories()
+    {
+        try
+        {
+            var repositories = await _githubService.GetCurrentUserRepositoriesAsync();
+            return Ok(repositories);
         }
-
-        [HttpGet("repos")]
-        [Authorize]
-        public async Task<IActionResult> GetRepositories()
+        catch (System.Exception ex)
         {
-            string accessToken = string.Empty;
-
-            if (AuthenticationHeaderValue.TryParse(Request.Headers["Authorization"], out var headerValue))
-            {
-                accessToken = headerValue.Parameter;
-            }
-
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                return Unauthorized("O token de acesso não foi encontrado ou está mal formatado.");
-            }
-
-            var repos = await _githubService.GetRepositoriesAsync(accessToken);
-            return Ok(repos);
+            return Unauthorized(new { message = ex.Message });
         }
     }
 }
