@@ -56,7 +56,7 @@ metadata:
     # Caso contrário, essa pode ser opcional ou específica do seu setup.
 spec:
   rules:
-  - host: orbitsender.crion.dev
+  - host: api.orbitsender.crion.dev
     http:
       paths:
       - path: /
@@ -66,4 +66,4 @@ spec:
             # Aponta para o Service interno que já está rodando
             name: orbitsender-api
             port:
-              number: 8080
+              number: 80
