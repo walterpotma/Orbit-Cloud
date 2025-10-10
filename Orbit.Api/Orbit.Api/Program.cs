@@ -19,6 +19,9 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 
 builder.Services.AddDbContext<OrbitDbContext>(options =>
@@ -37,14 +40,16 @@ builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<TransacionService>();
 builder.Services.AddScoped<ITransacionRepository, TransacionRepository>();
+builder.Services.AddScoped<GithubService>();
+builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "GitHub";
+options.DefaultScheme = "Cookies"; // Usado para gerenciar o estado da autenticação
+options.DefaultChallengeScheme = "GitHub";
 })
-.AddCookie("Cookies")
+.AddCookie("Cookies") // O cookie é necessário para o fluxo funcionar
 .AddOAuth("GitHub", options =>
 {
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
@@ -54,12 +59,17 @@ builder.Services.AddAuthentication(options =>
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
     options.UserInformationEndpoint = "https://api.github.com/user";
 
-    options.Scope.Add("user:email");
+    options.CallbackPath = "/signin-github";
 
+    // Estas linhas são importantes! Elas mapeiam o JSON do GitHub para Claims
     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+    options.ClaimActions.MapJsonKey("urn:github:login", "login");
 
+    options.Scope.Add("read:user");
+    options.Scope.Add("user:email");
+    options.Scope.Add("repo");
 
     options.SaveTokens = true;
 
@@ -67,41 +77,26 @@ builder.Services.AddAuthentication(options =>
     {
         OnCreatingTicket = async context =>
         {
-            Console.WriteLine("----------- TOKEN DE ACESSO DO GITHUB -----------");
-            Console.WriteLine(context.AccessToken);
-            Console.WriteLine("-----------------------------------------------");
-
-            using var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+            // Cria uma nova requisição para o UserInformationEndpoint
+            var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
 
-            var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
+            // ##################################################
+            // ##        A SOLUÇÃO FINAL ESTÁ AQUI             ##
+            // ## Adicionando o header User-Agent obrigatório  ##
+            // ##################################################
+            request.Headers.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("DotNet-App-Login", "1.0"));
+
+            // Envia a requisição usando o HttpClient seguro do handler
+            var response = await context.Backchannel.SendAsync(request,
+                HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
+
             response.EnsureSuccessStatusCode();
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine("----------- RESPOSTA DO GITHUB -----------");
-            Console.WriteLine(jsonResponse);
-            Console.WriteLine("------------------------------------------");
-
-            using var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            // Lê a resposta JSON e usa as ClaimActions para popular o usuário
+            var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             context.RunClaimActions(user.RootElement);
-
-            var githubId = user.RootElement.GetProperty("id").GetInt64().ToString();
-            var name = user.RootElement.GetProperty("name").GetString();
-
-            var email = user.RootElement.TryGetProperty("email", out var emailProp) && emailProp.ValueKind != System.Text.Json.JsonValueKind.Null ? emailProp.GetString() : null;
-
-            var accountService = context.HttpContext.RequestServices.GetRequiredService<AccountService>();
-
-            await accountService.GetByGitIdOrCreate(githubId, name ?? "Usuário Sem Nome", email);
-        },
-
-        OnTicketReceived = context =>
-        {
-            context.Response.Redirect("https://orbit.crion.dev");
-            context.HandleResponse();
-            return Task.CompletedTask;
         }
     };
 });
@@ -115,7 +110,7 @@ var app = builder.Build();
 app.MapGet("/", () => {
     return Results.File("index.html", "text/html");
 });
-app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "https://orbit.crion.dev" }, new[] { "GitHub" }));
+//app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "https://orbit.crion.dev" }, new[] { "GitHub" }));
 
 if (app.Environment.IsDevelopment())
 {
@@ -124,6 +119,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

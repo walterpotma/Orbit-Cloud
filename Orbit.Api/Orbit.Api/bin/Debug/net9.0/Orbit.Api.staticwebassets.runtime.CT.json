@@ -5,6 +5,54 @@
   ],
   "Root": {
     "Children": {
+      "error400.html": {
+        "Children": null,
+        "Asset": {
+          "ContentRootIndex": 0,
+          "SubPath": "error400.html"
+        },
+        "Patterns": null
+      },
+      "error400.html.gz": {
+        "Children": null,
+        "Asset": {
+          "ContentRootIndex": 1,
+          "SubPath": "7tdyi1clhs-{0}-stabjkia3l-stabjkia3l.gz"
+        },
+        "Patterns": null
+      },
+      "error401.html": {
+        "Children": null,
+        "Asset": {
+          "ContentRootIndex": 0,
+          "SubPath": "error401.html"
+        },
+        "Patterns": null
+      },
+      "error401.html.gz": {
+        "Children": null,
+        "Asset": {
+          "ContentRootIndex": 1,
+          "SubPath": "ze5nddn8ce-{0}-hyjugefekp-hyjugefekp.gz"
+        },
+        "Patterns": null
+      },
+      "error404.html": {
+        "Children": null,
+        "Asset": {
+          "ContentRootIndex": 0,
+          "SubPath": "error404.html"
+        },
+        "Patterns": null
+      },
+      "error404.html.gz": {
+        "Children": null,
+        "Asset": {
+          "ContentRootIndex": 1,
+          "SubPath": "ydqoehetlh-{0}-tmnf1b5ged-tmnf1b5ged.gz"
+        },
+        "Patterns": null
+      },
       "index.html": {
         "Children": null,
         "Asset": {

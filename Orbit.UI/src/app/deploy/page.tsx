@@ -11,7 +11,7 @@ export default function Page() {
     const [currentPageImage, setCurrentPageImage] = useState(1);
     const [currentPageDeploy, setCurrentPageDeploy] = useState(1);
     const itemsPerPageImage = 6;
-    const itemsPerPageDeploy = 3;
+    const itemsPerPageDeploy = 9;
 
     const [filter, setFilter] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
@@ -106,7 +106,7 @@ export default function Page() {
                     <SearchBar value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} filter={{ options: filterOptions, activeFilter: filter, onFilterChange: setFilter }} />
                     <div className="w-full p-6 rounded-xl bg-slate-900">
                         <h1 className="text-xl mb-6">Deploys</h1>
-                        <div className="w-full space-y-4 flex flex-col justify-start items-start">
+                        <div className="w-full grid grid-cols-3 gap-3 space-y-2 justify-start items-start">
                             {paginatedDeploy.map((deploy, index) => (
                                 <div key={index} className="w-full p-4 rounded-lg bg-slate-800 flex flex-col justify-between items-start space-y-3.5">
                                     <div className="w-full flex justify-between items-center space-x-2">

@@ -9,10 +9,8 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -44,9 +42,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Orbit.Api.Controllers.GithubController",
-    "Method": "GetRepositories",
-    "RelativePath": "api/Github/repos",
+    "ContainingType": "GithubController",
+    "Method": "Callback",
+    "RelativePath": "api/Github/callback",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -54,40 +52,13 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Program\u002B\u003C\u003Ec",
-    "Method": "\u003C\u003CMain\u003E$\u003Eb__0_5",
-    "RelativePath": "login",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Orbit.Api.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
+    "ContainingType": "GithubController",
+    "Method": "Login",
+    "RelativePath": "api/Github/login",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[Orbit.Api.WeatherForecast, Orbit.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
   }
 ]

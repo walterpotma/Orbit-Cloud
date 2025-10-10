@@ -209,3 +209,7 @@ C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\Orbit.Api.staticwebassets.runtime.json
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\ok5rglraem-{0}-liwgg5y0jd-liwgg5y0jd.gz
 C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\wq4vk2ukz2-{0}-zei3lxr8m3-zei3lxr8m3.gz
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\7tdyi1clhs-{0}-stabjkia3l-stabjkia3l.gz
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\ze5nddn8ce-{0}-hyjugefekp-hyjugefekp.gz
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\compressed\ydqoehetlh-{0}-tmnf1b5ged-tmnf1b5ged.gz
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
