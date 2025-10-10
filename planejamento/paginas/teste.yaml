@@ -58,6 +58,8 @@ spec:
             - --source=ingress # Observar recursos Ingress para criar registros DNS
             - --domain-filter=crion.dev # <-- SUBSTITUA: Pelo seu domínio raiz (ou o domínio que a zona gerencia)
             - --google-project=orbitcloud # <-- SUBSTITUA: Pelo ID do seu projeto no Google Cloud
+            - --registry=noop
+            - --exclude-resource-record="crion.dev. A"
           
           # Monta a chave JSON no local que o ExternalDNS espera
           volumeMounts:
