@@ -87,6 +87,7 @@ metadata:
     # 1. ANOTAÇÃO OBRIGATÓRIA: Diz ao ExternalDNS o hostname a ser criado.
     # ***SUBSTITUA PELO SEU DOMÍNIO REAL***
     external-dns.alpha.kubernetes.io/target: "crion.dev"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" 
     
     # 2. Anotação para o Ingress Controller (K3s usa Traefik por padrão)
     # Isso garante que o Traefik saiba o que fazer com a regra.
@@ -94,6 +95,10 @@ metadata:
     # Se você tem um Ingress Controller específico (como Traefik), use a annotation dele aqui.
     # Caso contrário, essa pode ser opcional ou específica do seu setup.
 spec:
+  tls:
+  - hosts:
+    - api.orbitnet.crion.dev
+    secretName: orbitnet-tls-secret
   rules:
   - host: api.orbitnet.crion.dev
     http:
