@@ -48,7 +48,7 @@ metadata:
     # 1. ANOTAÇÃO OBRIGATÓRIA: Diz ao ExternalDNS o hostname a ser criado.
     # ***SUBSTITUA PELO SEU DOMÍNIO REAL***
     external-dns.alpha.kubernetes.io/target: "crion.dev"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod" 
+    cert-manager.io/cluster-issuer: "letsencrypt-prod-gcp-dns" 
     nginx.ingress.kubernetes.io/whitelist-source-range: "0.0.0.0/0"
     
     # 2. Anotação para o Ingress Controller (K3s usa Traefik por padrão)
