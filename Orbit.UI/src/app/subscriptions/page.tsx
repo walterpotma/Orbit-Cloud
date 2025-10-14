@@ -13,7 +13,7 @@ export default function Page() {
                     <BtnRefresh />
                 </div>
             </div>
-            <div className="w-full flex flex-wrap justify-center space-x-4 space-y-4">
+            <div className="w-full flex flex-wrap justify-center space-x-6 space-y-6">
                 {standardPlans.map((plan, index) => (
                     <Card key={index} {...plan} />
                 ))}

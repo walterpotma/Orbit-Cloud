@@ -6,20 +6,34 @@ import BtnRefresh from "@/components/ui/BtnRefresh";
 import fileTree from "@/model/storage";
 import SearchBar from "@/components/ui/table/search";
 
+import { Github } from "@/api/github";
+
+
 export default function Page() {
     const [filter, setFilter] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
+    const itemsPerPage = 7;
     const status = ["N/A", "Ativo", "Inativo"];
     const filterOptions = ["Todos", "Ativos", "Inativos"];
 
-    const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
+    const [gitRepos, SetGitRepos] = useState([]);
 
-    const filteredRepos = repositorios.filter((repo) => {
-        const matchesStatus = filter === 0 || repo.status === filter;
+    useEffect(() => {
+        Github.Repos()
+            .then((response) => {
+                SetGitRepos(response.data);
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }, []);
+
+    const filteredRepos = gitRepos.filter((repo) => {
+        // const matchesStatus = filter === 0 || repo.status === filter;
         const matchesSearch = repo.name.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesStatus && matchesSearch;
+        return matchesSearch;
     });
 
     const totalPages = Math.ceil(filteredRepos.length / itemsPerPage);
@@ -31,7 +45,7 @@ export default function Page() {
     }, [filter]);
 
     const selectIcon = (language: string | undefined) => {
-        if (language === undefined) {
+        if (!language) {
             return <i className="devicon-git-plain p-2 rounded-full bg-blue-500 text-2xl"></i>;
         }
         var iconName = language.toLowerCase();
@@ -43,6 +57,12 @@ export default function Page() {
                 break;
             case 'css':
                 iconName = 'css3';
+                break;
+            case 'c#':
+                iconName = 'csharp';
+                break;
+            case 'c++':
+                iconName = 'cplusplus';
                 break;
         }
         return <i className={`devicon-${iconName}-plain p-2 rounded-full bg-blue-500 text-2xl`}></i>;

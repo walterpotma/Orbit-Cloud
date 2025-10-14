@@ -14,6 +14,16 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(7000);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 
 builder.Services.AddControllers();
@@ -107,10 +117,13 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+
+app.UseCors("CorsPolicy");
+
 app.MapGet("/", () => {
     return Results.File("index.html", "text/html");
 });
-//app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "https://orbit.crion.dev" }, new[] { "GitHub" }));
+//app.MapGet("/relogin", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "http://localhost:3000" }, new[] { "GitHub" }));
 
 if (app.Environment.IsDevelopment())
 {
@@ -118,6 +131,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 app.UseAuthorization();

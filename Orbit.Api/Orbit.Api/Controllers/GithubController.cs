@@ -21,7 +21,7 @@ public class GithubController : ControllerBase
     [HttpGet("login")]
     public IActionResult Login()
     {
-        var properties = new AuthenticationProperties { RedirectUri = "/api/github/callback" };
+        var properties = new AuthenticationProperties { RedirectUri = "http://localhost:3000" };
 
         return Challenge(properties, "GitHub");
     }
