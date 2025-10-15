@@ -76,16 +76,13 @@ metadata:
   name: orbitnet-api
   namespace: orbitcloud
   annotations:
-    # A MÁGICA ACONTECE AQUI! Gatilho para o Let's Encrypt.
+    # Esta anotação é a única instrução necessária para o TLS.
+    # Ela diz ao Traefik para usar o resolvedor "letsencrypt" para este Ingress.
     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
-    # Opcional: Anotação para o ExternalDNS, se você o tiver instalado.
+    
+    # Anotação para o ExternalDNS (está correta).
     external-dns.alpha.kubernetes.io/target: "crion.dev"
 spec:
-  tls:
-  - hosts:
-    - api.orbitnet.crion.dev
-    # O certificado gerado será salvo neste "Segredo".
-    secretName: orbitnet-tls-secret
   rules:
   - host: api.orbitnet.crion.dev
     http:
