@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Kikikot.BECore.DependenceInjection" Version="1.0.4" />
     <PackageReference Include="KubernetesClient" Version="17.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8" />

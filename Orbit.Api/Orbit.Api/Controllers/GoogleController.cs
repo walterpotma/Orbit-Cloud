@@ -7,5 +7,7 @@ namespace Orbit.Api.Controllers
     [ApiController]
     public class GoogleController : ControllerBase
     {
+        [HttpGet("login")]
+
     }
 }
