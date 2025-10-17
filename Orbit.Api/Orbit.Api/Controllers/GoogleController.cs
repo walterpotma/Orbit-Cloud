@@ -8,6 +8,17 @@ namespace Orbit.Api.Controllers
     public class GoogleController : ControllerBase
     {
         [HttpGet("login")]
+        public IActionResult Login()
+        {
+            // Placeholder for Google login logic
+            return Ok("Google login endpoint");
+        }
 
+        [HttpGet("callback")]
+        public IActionResult Callback()
+        {
+            // Placeholder for Google callback logic
+            return Ok("Google callback endpoint");
+        }
     }
 }

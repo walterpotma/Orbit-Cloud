@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto
+﻿namespace Orbit.Api.Dto.organization
 {
     public class DtoRule
     {

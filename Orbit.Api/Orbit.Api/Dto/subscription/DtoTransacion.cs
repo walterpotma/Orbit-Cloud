@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto
+﻿namespace Orbit.Api.Dto.subscription
 {
     public class DtoTransacion
     {

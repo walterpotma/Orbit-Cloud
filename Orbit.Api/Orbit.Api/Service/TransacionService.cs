@@ -1,4 +1,4 @@
-﻿using Orbit.Api.Dto;
+﻿using Orbit.Api.Dto.subscription;
 using Orbit.Api.Model;
 using Orbit.Api.Repository;
 using Orbit.Api.Repository.Interface;
