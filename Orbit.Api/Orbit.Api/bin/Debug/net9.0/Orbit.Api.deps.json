@@ -10,6 +10,7 @@
         "dependencies": {
           "Kikikot.BECore.DependenceInjection": "1.0.4",
           "KubernetesClient": "17.0.4",
+          "Microsoft.AspNetCore.Authentication.Google": "9.0.10",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.8",
           "Microsoft.AspNetCore.Authentication.OpenIdConnect": "9.0.8",
           "Microsoft.AspNetCore.OpenApi": "9.0.6",
@@ -147,6 +148,14 @@
           "lib/net9.0/KubernetesClient.dll": {
             "assemblyVersion": "17.0.0.0",
             "fileVersion": "17.0.4.61714"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Google/9.0.10": {
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "assemblyVersion": "9.0.10.0",
+            "fileVersion": "9.0.1025.47517"
           }
         }
       },
@@ -1097,6 +1106,13 @@
       "sha512": "sha512-cpWJdHP2HM2/p+GCeZf5vdIZrmGcRmfJeCJYg7YCbyYrWvIPFdR0daFdBj1k1DDZ9hIgqf6h4EvXF8pz49lDAA==",
       "path": "kubernetesclient/17.0.4",
       "hashPath": "kubernetesclient.17.0.4.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Google/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vRWwcYJEhNQnE05cahg55Lx7uTC6h+q0u2rysX9h4DzHyARQ0cm4ZlZQDUtZHn23gALmqk+agfTGopfTMnvbuQ==",
+      "path": "microsoft.aspnetcore.authentication.google/9.0.10",
+      "hashPath": "microsoft.aspnetcore.authentication.google.9.0.10.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/9.0.8": {
       "type": "package",

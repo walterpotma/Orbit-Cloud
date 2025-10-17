@@ -1,14 +1,21 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
+﻿using k8s;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Orbit.Api.Data;
 using Orbit.Api.Repository;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service;
+using Orbit.Api.Service.Interface;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var kubeConfigPath = "keys/kube/hayom.yaml";
+var kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile(kubeConfigPath);
+
+builder.Services.AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig));
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -53,6 +60,10 @@ builder.Services.AddScoped<TransacionService>();
 builder.Services.AddScoped<ITransacionRepository, TransacionRepository>();
 builder.Services.AddScoped<GithubService>();
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
+
+// Novo modelo de arquitetura da api
+builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
+builder.Services.AddScoped<IKubernetesService, KubernetesService>();
 
 
 builder.Services.AddAuthentication(options =>

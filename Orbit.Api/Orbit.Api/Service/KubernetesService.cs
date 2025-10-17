@@ -13,9 +13,9 @@ namespace Orbit.Api.Service
             _repository = repository;
         }
 
-        public async Task<IEnumerable<DtoPod>> GetAllPodsAsync()
+        public async Task<IEnumerable<DtoPod>> GetAllPodsAsync(string? namespaceName = null)
         {
-            var pods = await _repository.ListPodsAsync();
+            var pods = await _repository.ListPodsAsync(namespaceName);
             // Mapeando do modelo do k8s para o nosso DTO
             return pods.Select(p => new DtoPod
             {
@@ -27,9 +27,11 @@ namespace Orbit.Api.Service
             });
         }
 
-        public async Task<IEnumerable<DtoService>> GetAllServicesAsync()
+
+
+        public async Task<IEnumerable<DtoService>> GetAllServicesAsync(string? namespaceName = null)
         {
-            var services = await _repository.ListServicesAsync();
+            var services = await _repository.ListServicesAsync(namespaceName);
             return services.Select(s => new DtoService
             {
                 Name = s.Metadata.Name,
@@ -40,9 +42,9 @@ namespace Orbit.Api.Service
             });
         }
 
-        public async Task<IEnumerable<DtoIngress>> GetAllIngressesAsync()
+        public async Task<IEnumerable<DtoIngress>> GetAllIngressesAsync(string? namespaceName = null)
         {
-            var ingresses = await _repository.ListIngressesAsync();
+            var ingresses = await _repository.ListIngressesAsync(namespaceName);
             return ingresses.Select(i => new DtoIngress
             {
                 Name = i.Metadata.Name,
@@ -51,9 +53,9 @@ namespace Orbit.Api.Service
             });
         }
 
-        public async Task<IEnumerable<DtoSecret>> GetAllSecretsAsync()
+        public async Task<IEnumerable<DtoSecret>> GetAllSecretsAsync(string? namespaceName = null)
         {
-            var secrets = await _repository.ListSecretsAsync();
+            var secrets = await _repository.ListSecretsAsync(namespaceName);
             return secrets.Select(s => new DtoSecret
             {
                 Name = s.Metadata.Name,

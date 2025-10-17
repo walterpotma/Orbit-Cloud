@@ -1,10 +1,10 @@
-wwwroot\index.html
-wwwroot\style.css
 wwwroot\error400.html
 wwwroot\error401.html
 wwwroot\error404.html
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\style.css
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\index.html
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error400.html
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error401.html
-C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error404.html
+wwwroot\index.html
+wwwroot\style.css
+C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\index.html
+C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\style.css
+C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error404.html
+C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error401.html
+C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error400.html
