@@ -395,3 +395,4 @@ C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0
 C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\Orbit.Api.pdb
 C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\Orbit.Api.genruntimeconfig.cache
 C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\obj\Debug\net9.0\ref\Orbit.Api.dll
+C:\Users\walte\OneDrive\Documentos\PROJETOS\2025\Orbit-Cloud\Orbit.Api\Orbit.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll

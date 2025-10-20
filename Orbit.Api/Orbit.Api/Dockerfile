@@ -21,5 +21,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+VOLUME ../:/app/FileSystem
+
 ENV ASPNETCORE_URLS=http://+:7000
 ENTRYPOINT ["dotnet", "Orbit.Api.dll"]

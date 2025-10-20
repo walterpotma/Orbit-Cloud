@@ -65,6 +65,9 @@ builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
 builder.Services.AddScoped<IKubernetesService, KubernetesService>();
 
+builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
+builder.Services.AddScoped<IFileSystemService, FileSystemService>();
+
 
 builder.Services.AddAuthentication(options =>
 {

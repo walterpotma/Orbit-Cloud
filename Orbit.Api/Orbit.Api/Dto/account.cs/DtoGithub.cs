@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Orbit.Api.Dto
+namespace Orbit.Api.Dto.account.cs
 {
     public class DtoGithub
     {
