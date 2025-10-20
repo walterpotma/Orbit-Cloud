@@ -68,10 +68,10 @@ builder.Services.AddScoped<IKubernetesService, KubernetesService>();
 
 builder.Services.AddAuthentication(options =>
 {
-options.DefaultScheme = "Cookies"; // Usado para gerenciar o estado da autenticação
+options.DefaultScheme = "Cookies";
 options.DefaultChallengeScheme = "GitHub";
 })
-.AddCookie("Cookies") // O cookie é necessário para o fluxo funcionar
+.AddCookie("Cookies")
 .AddOAuth("GitHub", options =>
 {
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
@@ -83,7 +83,6 @@ options.DefaultChallengeScheme = "GitHub";
 
     options.CallbackPath = "/signin-github";
 
-    // Estas linhas são importantes! Elas mapeiam o JSON do GitHub para Claims
     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
@@ -99,24 +98,17 @@ options.DefaultChallengeScheme = "GitHub";
     {
         OnCreatingTicket = async context =>
         {
-            // Cria uma nova requisição para o UserInformationEndpoint
             var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
 
-            // ##################################################
-            // ##        A SOLUÇÃO FINAL ESTÁ AQUI             ##
-            // ## Adicionando o header User-Agent obrigatório  ##
-            // ##################################################
             request.Headers.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("DotNet-App-Login", "1.0"));
 
-            // Envia a requisição usando o HttpClient seguro do handler
             var response = await context.Backchannel.SendAsync(request,
                 HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
 
             response.EnsureSuccessStatusCode();
 
-            // Lê a resposta JSON e usa as ClaimActions para popular o usuário
             var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             context.RunClaimActions(user.RootElement);
         }
@@ -135,7 +127,6 @@ app.UseCors("CorsPolicy");
 app.MapGet("/", () => {
     return Results.File("index.html", "text/html");
 });
-//app.MapGet("/relogin", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "http://localhost:3000" }, new[] { "GitHub" }));
 
 if (app.Environment.IsDevelopment())
 {
