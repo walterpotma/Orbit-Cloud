@@ -39,33 +39,7 @@ spec:
     targetPort: 8080
   type: ClusterIP
 ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: orbitnet-api
-#   namespace: orbitcloud
-#   annotations:
-#     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
-#     external-dns.alpha.kubernetes.io/target: "crion.dev"
-# spec:
-#   tls:
-#   - hosts:
-#     - api.orbitnet.crion.dev
-#     secretName: orbitnet-tls-secret
-  
-#   rules:
-#   - host: api.orbitnet.crion.dev
-#     http:
-#       paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: orbitnet-api
-#             port:
-#               number: 8080
-# orbitnet-route.yaml (Versão Corrigida)
-apiVersion: traefik.io/v1alpha1 # <-- AQUI ESTÁ A CORREÇÃO
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: orbitnet-api-route
@@ -80,8 +54,7 @@ spec:
         - name: orbitnet-api
           port: 8080
   tls:
-    certResolver: letsencrypt
-    # secretName: orbitnet-tls-secret
+    secretName: orbitnet-api-tls   # cert-manager vai criar esse secret
 ---
 apiVersion: batch/v1
 kind: CronJob
