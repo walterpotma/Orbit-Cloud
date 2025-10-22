@@ -44,8 +44,7 @@ var connectionString = builder.Configuration.GetConnectionString("DatabaseConnec
 
 builder.Services.AddDbContext<OrbitDbContext>(options =>
     options.UseNpgsql(connectionString));
-builder.Services.AddScoped<DeployService>();
-builder.Services.AddScoped<IDeployRepository, DeployRepository>();
+
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<OrganizationService>();
@@ -67,6 +66,9 @@ builder.Services.AddScoped<IKubernetesService, KubernetesService>();
 
 builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
 builder.Services.AddScoped<IFileSystemService, FileSystemService>();
+
+builder.Services.AddScoped<IDeployRepository, DeployRepository>();
+builder.Services.AddScoped<IDeployService, DeployService>();
 
 
 builder.Services.AddAuthentication(options =>

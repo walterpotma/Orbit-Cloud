@@ -62,5 +62,12 @@ namespace Orbit.Api.Controllers
                 return Unauthorized(new { message = ex.Message });
             }
         }
+
+        [HttpGet("webhook")]
+        public async Task<IActionResult> Teste()
+        {
+            Console.WriteLine("deu certo o webhook");
+            return Ok("Teste");
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Orbit.Api.Dto.kubertnetes;
 using Orbit.Api.Dto_s;
 using Orbit.Api.Service;
 
@@ -16,16 +17,27 @@ namespace Orbit.Api.Controllers
             _deployService = deployService;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] CreateDeployRequest request)
+        [HttpPost]
+        [ProducesResponseType(typeof(DtoDeployment), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateOrUpdateDeployment([FromBody] DtoDeployRequest deployRequest)
         {
-            if (string.IsNullOrEmpty(request.ImageName))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("O campo ImageName é obrigatório.");
+                return BadRequest(ModelState);
             }
 
-            await _deployService.DeployImage(request.ImageName);
-            return Ok("Deployment criado com sucesso!");
+            try
+            {
+                var result = await _deployService.CreateOrUpdateDeploymentAsync(deployRequest);
+                // Retorna 201 Created com os dados do deploy
+                return CreatedAtAction(nameof(CreateOrUpdateDeployment), new { name = result.Name, ns = result.Namespace }, result);
+            }
+            catch (Exception ex)
+            {
+                // Captura erros da API do Kubernetes
+                return StatusCode(500, $"Erro ao processar deploy: {ex.Message}");
+            }
         }
     }
 }

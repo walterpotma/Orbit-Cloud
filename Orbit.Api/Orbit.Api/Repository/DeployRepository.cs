@@ -11,63 +11,42 @@ namespace Orbit.Api.Repository
 {
     public class DeployRepository : IDeployRepository
     {
-        private readonly Kubernetes _client;
+        private readonly IKubernetes _k8sClient;
 
-        public DeployRepository()
+        // O IKubernetes é injetado aqui, pois você o registrou no Program.cs
+        public DeployRepository(IKubernetes k8sClient)
         {
-            var caCertPath = Path.Combine(AppContext.BaseDirectory, "keys", "ca.crt");
-            var tokenPath = Path.Combine(AppContext.BaseDirectory, "keys", "token.txt");
-
-            var caCert = new X509Certificate2(caCertPath);
-            var certs = new X509Certificate2Collection(caCert);
-
-            var token = File.ReadAllText(tokenPath);
-
-            var config = new KubernetesClientConfiguration
-            {
-                Host = "https://34.45.18.183:6443",
-                SslCaCerts = certs,
-                AccessToken = token
-            };
-
-            _client = new Kubernetes(config);
+            _k8sClient = k8sClient;
         }
-        public async Task CreateDeploy(string imageName)
+
+        public async Task<V1Deployment> GetDeploymentAsync(string name, string namespaceName)
         {
-            var deployment = new V1Deployment
+            try
             {
-                ApiVersion = "apps/v1",
-                Kind = "Deployment",
-                Metadata = new V1ObjectMeta { Name = "teste-redis" },
-                Spec = new V1DeploymentSpec
-                {
-                    Replicas = 1,
-                    Selector = new V1LabelSelector
-                    {
-                        MatchLabels = new Dictionary<string, string> { { "app", "teste-api" } }
-                    },
-                    Template = new V1PodTemplateSpec
-                    {
-                        Metadata = new V1ObjectMeta
-                        {
-                            Labels = new Dictionary<string, string> { { "app", "teste-api" } }
-                        },
-                        Spec = new V1PodSpec
-                        {
-                            Containers = new List<V1Container>
-                            {
-                                new V1Container
-                                {
-                                    Name = "app",
-                                    Image = imageName,
-                                    Ports = new List<V1ContainerPort> { new V1ContainerPort(80) }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            await _client.CreateNamespacedDeploymentAsync(deployment, "default");
+                // Lê um deployment específico
+                return await _k8sClient.AppsV1.ReadNamespacedDeploymentAsync(name, namespaceName);
+            }
+            catch (k8s.Autorest.HttpOperationException ex) when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null; // Retorna nulo se não encontrar
+            }
+        }
+
+        public async Task<V1Deployment> CreateDeploymentAsync(V1Deployment deployment)
+        {
+            // Cria um novo deployment
+            return await _k8sClient.AppsV1.CreateNamespacedDeploymentAsync(deployment, deployment.Metadata.NamespaceProperty);
+        }
+
+        public async Task<V1Deployment> UpdateDeploymentAsync(V1Deployment deployment)
+        {
+            // Atualiza um deployment existente
+            return await _k8sClient.AppsV1.ReplaceNamespacedDeploymentAsync(deployment, deployment.Metadata.Name, deployment.Metadata.NamespaceProperty);
+        }
+
+        public async Task DeleteDeploymentAsync(string name, string namespaceName)
+        {
+            // Deleta um deployment
+            await _k8sClient.AppsV1.DeleteNamespacedDeploymentAsync(name, namespaceName);
         }
     }
-}

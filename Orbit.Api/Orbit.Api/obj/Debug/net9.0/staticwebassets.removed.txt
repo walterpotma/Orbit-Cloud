@@ -1,5 +1,0 @@
-C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\index.html
-C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\style.css
-C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error404.html
-C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error401.html
-C:\Users\walte\Documents\GitHub\Orbit-Cloud\Orbit.Api\Orbit.Api\wwwroot\error400.html
