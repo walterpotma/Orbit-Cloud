@@ -1,0 +1,364 @@
+# --- 1. Namespace ---
+# Isola todos os nossos recursos em um espaço lógico
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mega-app-ns
+
+---
+
+# --- 2. ConfigMap ---
+# Armazena dados de configuração não-sensíveis
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: mega-app-ns
+data:
+  LOG_LEVEL: "info"
+  DATABASE_HOST: "db-service.mega-app-ns.svc.cluster.local" # DNS interno do K8s
+  DATABASE_PORT: "5432"
+
+---
+
+# --- 3. Secret ---
+# Armazena dados sensíveis (senhas, chaves de API)
+# O valor 'c3VwZXJzZWNyZXQ=' é 'supersecret' codificado em Base64
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+  namespace: mega-app-ns
+type: Opaque
+data:
+  DATABASE_PASSWORD: "c3VwZXJzZWNyZXQ="
+  API_KEY: "YXBpa2V5MTIzNDU2"
+---
+# Usado pelo Ingress para TLS (HTTPS)
+# (Você precisaria criar este secret com seu certificado e chave reais)
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: mega-app-tls
+#   namespace: mega-app-ns
+# type: kubernetes.io/tls
+# data:
+#   tls.crt: (base64-encoded-cert)
+#   tls.key: (base64-encoded-key)
+
+---
+
+# --- 4. StatefulSet ---
+# Para aplicações "com estado", como bancos de dados.
+# Garante ordem na criação/deleção e identidade de rede/storage estável.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db-statefulset
+  namespace: mega-app-ns
+spec:
+  # O nome do Service (Headless) que gerencia o DNS deste StatefulSet
+  serviceName: "db-service"
+  replicas: 1 # Um banco de dados simples (não-replicado)
+  selector:
+    matchLabels:
+      app: db # O Service vai selecionar pods com esta label
+  template:
+    metadata:
+      labels:
+        app: db # Pods criados terão esta label
+    spec:
+      containers:
+      - name: postgres-db
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+          name: db-port
+        env:
+        - name: POSTGRES_DB
+          value: "megadb"
+        - name: POSTGRES_USER
+          value: "admin"
+        # Puxa a senha do Secret que criamos
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DATABASE_PASSWORD
+        volumeMounts:
+        # Monta o volume persistente
+        - name: db-data
+          mountPath: /var/lib/postgresql/data
+  # Cria um PersistentVolumeClaim (PVC) dinamicamente para cada Pod
+  volumeClaimTemplates:
+  - metadata:
+      name: db-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ] # Só pode ser montado por 1 nó
+      storageClassName: "local-path" # IMPORTANTE: Mude para o seu StorageClass (ex: "gp2", "standard")
+      resources:
+        requests:
+          storage: 2Gi # Solicita 2 GiB de espaço
+
+---
+
+# --- 5. Service (para o StatefulSet) ---
+# Um Service "Headless" (clusterIP: None) é usado pelo StatefulSet
+# para dar a cada pod um DNS único (ex: db-statefulset-0.db-service.mega-app-ns...)
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  namespace: mega-app-ns
+spec:
+  type: ClusterIP # Acessível apenas de dentro do cluster
+  clusterIP: None # Isso o torna "Headless"
+  ports:
+  - port: 5432
+    targetPort: db-port
+  selector:
+    app: db # Aponta para qualquer Pod com a label 'app: db'
+
+---
+
+# --- 6. Deployment ---
+# Para aplicações "sem estado" (stateless), como seu backend de API.
+# Gerencia réplicas e atualizações (Rolling Updates).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  namespace: mega-app-ns
+spec:
+  replicas: 3 # Executa 3 instâncias da sua aplicação
+  strategy:
+    type: RollingUpdate # Atualiza os pods um por um, sem downtime
+    rollingUpdate:
+      maxUnavailable: 1 # No máximo 1 pod pode estar indisponível durante a atualização
+      maxSurge: 1 # Pode criar 1 pod extra acima das 3 réplicas
+  selector:
+    matchLabels:
+      app: backend # O Service 'app-service' vai selecionar estes pods
+  template:
+    metadata:
+      labels:
+        app: backend # Os pods criados terão esta label
+    spec:
+      containers:
+      - name: backend-api
+        image: "sua-imagem-de-api:1.2.0" # Mude para sua imagem
+        ports:
+        - containerPort: 8080
+          name: http-app
+        # Carrega TODAS as chaves do ConfigMap e do Secret como variáveis de ambiente
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secret
+        
+        # Sondas de Verificação de Saúde
+        livenessProbe: # Se falhar, o K8s reinicia o container
+          httpGet:
+            path: /healthz
+            port: http-app
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe: # Se falhar, o K8s tira o pod do Service (não recebe tráfego)
+          httpGet:
+            path: /ready
+            port: http-app
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        
+        # Limites de Recursos
+        resources:
+          requests: # O que o pod "pede" para ser agendado
+            memory: "128Mi"
+            cpu: "250m" # 250 millicores (0.25 de um vCPU)
+          limits: # O máximo que o pod pode consumir
+            memory: "256Mi"
+            cpu: "500m"
+
+---
+
+# --- 7. Service (para o Deployment) ---
+# Expõe o Deployment como um serviço interno (ClusterIP).
+# O Ingress vai apontar para este Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: mega-app-ns
+spec:
+  type: ClusterIP # Padrão. Acessível apenas internamente.
+  # Outros tipos:
+  # NodePort: Expõe em uma porta estática em CADA nó do cluster.
+  # LoadBalancer: Expõe externamente usando um Load Balancer do seu provedor de nuvem (AWS, GCP, Azure).
+  selector:
+    app: backend # Aponta para os pods do Deployment
+  ports:
+  - name: http
+    port: 80 # O Service escuta na porta 80
+    targetPort: http-app # E envia o tráfego para a porta 8080 do container
+
+---
+
+# --- 8. Ingress ---
+# Gerencia tráfego externo (HTTP/HTTPS) e o roteia para os Services corretos.
+# Requer um Ingress Controller (como NGINX, Traefik, etc.) instalado no cluster.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  namespace: mega-app-ns
+  annotations:
+    # Esta anotação diz qual Ingress Controller deve gerenciar este Ingress
+    # (o valor exato depende do seu controller: "nginx", "traefik", etc.)
+    kubernetes.io/ingress.class: "nginx-example" 
+spec:
+  # Configuração de TLS/SSL (HTTPS)
+  tls:
+  - hosts:
+    - "mega-app.meudominio.com"
+    # O nome do Secret (tipo tls) que contém o certificado e a chave
+    secretName: mega-app-tls 
+  rules:
+  - host: "mega-app.meudominio.com" # O domínio público
+    http:
+      paths:
+      - path: / # Roteia todo o tráfego a partir da raiz (/)
+        pathType: Prefix
+        backend:
+          service:
+            name: app-service # Para o Service do nosso Deployment
+            port:
+              name: http # Para a porta 'http' (porta 80) do Service
+
+---
+
+# --- 9. RBAC (ServiceAccount, Role, RoleBinding) ---
+# Dá permissões específicas para uma tarefa (o CronJob)
+
+# 9a. A Identidade
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backup-sa
+  namespace: mega-app-ns
+
+# 9b. As Permissões
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader-role
+  namespace: mega-app-ns
+rules:
+- apiGroups: [""] # "" indica a API "core"
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list", "watch"] # Pode ler pods e seus logs
+
+# 9c. A Ligação (Dá as Permissões para a Identidade)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bind-backup-sa-to-pod-reader
+  namespace: mega-app-ns
+subjects:
+- kind: ServiceAccount
+  name: backup-sa # O "quem"
+  namespace: mega-app-ns
+roleRef:
+  kind: Role # O "o quê" (as permissões)
+  name: pod-reader-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+# --- 10. CronJob ---
+# Executa uma tarefa em um agendamento (cron)
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-backup-job
+  namespace: mega-app-ns
+spec:
+  schedule: "0 1 * * *" # Todo dia à 1:00 da manhã
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          # Usa a identidade que criamos com as permissões corretas
+          serviceAccountName: backup-sa
+          containers:
+          - name: backup-container
+            image: "alpine" # Imagem de exemplo
+            command: ["/bin/sh", "-c"]
+            args:
+            - "echo 'Iniciando backup...'; sleep 30; echo 'Backup concluído.'"
+          restartPolicy: OnFailure # Se o Job falhar, não tenta de novo
+
+---
+
+# --- 11. NetworkPolicies (Firewall) ---
+# Controla o fluxo de tráfego entre os pods.
+# Requer um CNI (Plugin de Rede) que suporte NetworkPolicy (ex: Calico, Cilium).
+
+# 11a. Nega todo o tráfego de entrada (Ingress) por padrão
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all-ingress
+  namespace: mega-app-ns
+spec:
+  podSelector: {} # Seleciona TODOS os pods no namespace
+  policyTypes:
+  - Ingress # Aplica-se apenas ao tráfego de entrada
+
+---
+
+# 11b. Permite tráfego do Ingress Controller para o 'app-backend'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-app
+  namespace: mega-app-ns
+spec:
+  podSelector:
+    matchLabels:
+      app: backend # Aplica-se aos pods do nosso Deployment
+  policyTypes:
+  - Ingress
+  ingress:
+  # Permite tráfego de namespaces que tenham esta label
+  # (ex: o namespace 'ingress-nginx' ou 'traefik')
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          # Mude esta label para a label do seu namespace de Ingress Controller
+          kubernetes.io/metadata.name: ingress-nginx 
+    ports:
+    - port: http-app # Permite na porta 'http-app' (8080)
+
+---
+
+# 11c. Permite que o 'app-backend' fale com o 'db'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-app-to-db
+  namespace: mega-app-ns
+spec:
+  podSelector:
+    matchLabels:
+      app: db # Aplica-se aos pods do StatefulSet (banco de dados)
+  policyTypes:
+  - Ingress
+  ingress:
+  # Permite tráfego de pods com a label 'app: backend'
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+    ports:
+    - port: db-port # Permite na porta 'db-port' (5432)

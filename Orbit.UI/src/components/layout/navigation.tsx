@@ -32,6 +32,9 @@ export default function Nav() {
             <Button text="Dashboard" icon="grid-1x2-fill" onClick={() => navigationTo('/')} active={pathUrl === '/'}/>
             <Button text="Repositórios" icon="box-seam-fill" onClick={() => navigationTo('/repository')} active={pathUrl === '/repository'}/>
             <Button text="Deploys" icon="rocket-takeoff-fill" onClick={() => navigationTo('/deploy')} active={pathUrl === '/deploy'}/>
+            <Button text="Rede" icon="globe2" onClick={() => navigationTo('/net')} active={pathUrl === '/net'}/>
+            <Button text="Segredos" icon="shield-lock-fill" onClick={() => navigationTo('/secrets')} active={pathUrl === '/secrets'}/>
+            <Button text="Variaveis" icon="intersect" onClick={() => navigationTo('/variables')} active={pathUrl === '/variables'}/>
             <Button text="Armazenamento" icon="folder-fill" onClick={() => navigationTo('/storage')} active={pathUrl === '/storage'}/>
             <Button text="Planos" icon="award-fill" onClick={() => navigationTo('/subscriptions')} active={pathUrl === '/subscriptions'}/>
             <Button text="Configurações" icon="gear-fill" onClick={() => navigationTo('/settings')} active={pathUrl === '/settings'}/>
