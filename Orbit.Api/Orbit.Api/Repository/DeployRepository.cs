@@ -50,3 +50,4 @@ namespace Orbit.Api.Repository
             await _k8sClient.AppsV1.DeleteNamespacedDeploymentAsync(name, namespaceName);
         }
     }
+}
