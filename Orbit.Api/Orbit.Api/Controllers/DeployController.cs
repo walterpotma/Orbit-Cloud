@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Orbit.Api.Dto.kubertnetes;
+using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Dto_s;
 using Orbit.Api.Service;
 

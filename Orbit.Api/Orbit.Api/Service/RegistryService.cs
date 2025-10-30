@@ -11,7 +11,7 @@ namespace Orbit.Api.Service
 
         public RegistryService(IRegistryService imageRepository, IConfiguration configuration)
         {
-            _imageRepository = imageRepository;
+            _imageRepository = (IRegistryRepository?)imageRepository;
             // Pega a URL do registry sem "http://" para usar na tag da imagem
             var fullUrl = configuration["DockerRegistry:Url"] ?? "http://localhost:5000";
             _registryUrl = new Uri(fullUrl).Host + ":" + new Uri(fullUrl).Port;

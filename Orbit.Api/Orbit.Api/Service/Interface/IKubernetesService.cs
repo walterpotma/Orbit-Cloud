@@ -1,4 +1,4 @@
-﻿using Orbit.Api.Dto.kubertnetes;
+﻿using Orbit.Api.Dto.kubernetes;
 
 namespace Orbit.Api.Service.Interface
 {
@@ -8,6 +8,12 @@ namespace Orbit.Api.Service.Interface
         Task<IEnumerable<DtoService>> GetAllServicesAsync(string? namespaceName = null);
         Task<IEnumerable<DtoIngress>> GetAllIngressesAsync(string? namespaceName = null);
         Task<IEnumerable<DtoSecret>> GetAllSecretsAsync(string? namespaceName = null);
-        Task<IEnumerable<DtoNamespace>> GetAllNamespacesAsync();
+
+
+        // Namespace
+        Task<IEnumerable<DtoNamespaceResponse>> GetAllNamespacesAsync();
+        Task<DtoNamespaceResponse> GetNamespaceAsync(string name);
+        Task<DtoNamespaceResponse> CreateNamespaceAsync(DtoNamespaceRequest request);
+        Task DeleteNamespaceAsync(string name);
     }
 }

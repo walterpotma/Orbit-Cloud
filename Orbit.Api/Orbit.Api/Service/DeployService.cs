@@ -1,5 +1,5 @@
 ﻿using k8s.Models;
-using Orbit.Api.Dto.kubertnetes;
+using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service.Interface;
 

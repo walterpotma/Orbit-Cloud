@@ -33,7 +33,7 @@ namespace Orbit.Api.Controllers
 
         [HttpPost("build")]
         [ProducesResponseType(typeof(DtoImageBuild), StatusCodes.Status201Created)]
-        public async Task<IActionResult> BuildImage([FromBody] DtoImage request)
+        public async Task<IActionResult> BuildImage([FromBody] DtoImageBuild request)
         {
             if (!ModelState.IsValid)
             {
