@@ -45,10 +45,32 @@ namespace Orbit.Api.Repository
             return secrets.Items;
         }
 
+
+
+        // Namespace
         public async Task<IEnumerable<V1Namespace>> ListNamespacesAsync()
         {
             var namespaces = await _kubernetesClient.CoreV1.ListNamespaceAsync();
             return namespaces.Items;
+        }
+        public async Task<V1Namespace> GetNamespaceAsync(string name)
+        {
+            try
+            {
+                return await _kubernetesClient.CoreV1.ReadNamespaceAsync(name);
+            }
+            catch (k8s.Autorest.HttpOperationException ex) when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+        public async Task<V1Namespace> CreateNamespaceAsync(V1Namespace ns)
+        {
+            return await _kubernetesClient.CoreV1.CreateNamespaceAsync(ns);
+        }
+        public async Task DeleteNamespaceAsync(string name)
+        {
+            await _kubernetesClient.CoreV1.DeleteNamespaceAsync(name);
         }
     }
 }

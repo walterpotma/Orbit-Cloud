@@ -1,4 +1,5 @@
-﻿using Orbit.Api.Dto.kubertnetes;
+﻿using k8s.Models;
+using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service.Interface;
 
@@ -8,6 +9,31 @@ namespace Orbit.Api.Service
     {
         private readonly IKubernetesRepository _repository;
 
+        private V1Namespace BuildNamespaceObject(DtoNamespaceRequest request)
+        {
+            return new V1Namespace
+            {
+                Metadata = new k8s.Models.V1ObjectMeta
+                {
+                    Name = request.Name
+                }
+            };
+        }
+
+        private DtoNamespaceResponse MapToDto(V1Namespace createdEntity)
+        {
+            if (createdEntity == null)
+            {
+                return null;
+            }
+
+            return new DtoNamespaceResponse
+            {
+                Name = createdEntity.Name(),
+                Status = createdEntity.Status?.Phase
+            };
+        }
+
         public KubernetesService(IKubernetesRepository repository)
         {
             _repository = repository;
@@ -16,7 +42,6 @@ namespace Orbit.Api.Service
         public async Task<IEnumerable<DtoPod>> GetAllPodsAsync(string? namespaceName = null)
         {
             var pods = await _repository.ListPodsAsync(namespaceName);
-            // Mapeando do modelo do k8s para o nosso DTO
             return pods.Select(p => new DtoPod
             {
                 Name = p.Metadata.Name,
@@ -64,14 +89,53 @@ namespace Orbit.Api.Service
             });
         }
 
-        public async Task<IEnumerable<DtoNamespace>> GetAllNamespacesAsync()
+
+
+
+        // Namespace
+        public async Task<IEnumerable<DtoNamespaceResponse>> GetAllNamespacesAsync()
         {
             var namespaces = await _repository.ListNamespacesAsync();
-            return namespaces.Select(n => new DtoNamespace
+            return namespaces.Select(n => new DtoNamespaceResponse
             {
                 Name = n.Metadata.Name,
                 Status = n.Status.Phase
             });
+        }
+
+        public async Task<DtoNamespaceResponse> CreateNamespaceAsync(DtoNamespaceRequest request)
+        {
+            var existing = await _repository.GetNamespaceAsync(request.Name);
+            if (existing != null)
+            {
+                throw new Exception($"Namespace '{request.Name}' já existe.");
+            }
+
+            var newNs = BuildNamespaceObject(request);
+            var created = await _repository.CreateNamespaceAsync(newNs);
+            return MapToDto(created);
+        }
+
+        
+
+        public async Task<DtoNamespaceResponse> GetNamespaceAsync(string name)
+        {
+            var ns = await _repository.GetNamespaceAsync(name);
+            if (ns == null)
+            {
+                throw new Exception($"Namespace '{name}' não encontrado.");
+            }
+            return MapToDto(ns);
+        }
+        public async Task DeleteNamespaceAsync(string name)
+        {
+            var existing = await _repository.GetNamespaceAsync(name);
+            if (existing == null)
+            {
+                throw new Exception($"Namespace '{name}' não encontrado.");
+            }
+
+            await _repository.DeleteNamespaceAsync(name);
         }
     }
 }

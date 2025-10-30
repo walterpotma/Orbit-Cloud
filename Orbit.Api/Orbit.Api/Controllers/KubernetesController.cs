@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Service;
 using Orbit.Api.Service.Interface;
 
@@ -95,12 +96,62 @@ namespace Orbit.Api.Controllers
             return Ok(secrets);
         }
 
-        [HttpGet("namespaces")]
+        [HttpGet("namespace")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetNamespaces()
         {
             var namespaces = await _kubernetesService.GetAllNamespacesAsync();
             return Ok(namespaces);
+        }
+
+        [HttpPost("namespace")]
+        [ProducesResponseType(typeof(DtoNamespaceResponse), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<IActionResult> CreateNamespace([FromBody] DtoNamespaceRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var createdNamespace = await _kubernetesService.CreateNamespaceAsync(request);
+
+            return CreatedAtAction(
+                nameof(GetNamespaceByName),
+                new { name = createdNamespace.Name },
+                createdNamespace
+            );
+        }
+
+        [HttpGet("namespace/{name}")]
+        [ActionName(nameof(GetNamespaceByName))]
+        [ProducesResponseType(typeof(DtoNamespaceResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<DtoNamespaceResponse>> GetNamespaceByName(string name)
+        {
+            var namespaceDto = await _kubernetesService.GetNamespaceAsync(name);
+
+            if (namespaceDto == null)
+            {
+                return NotFound($"Namespace '{name}' não encontrado.");
+            }
+
+            return Ok(namespaceDto);
+        }
+        [HttpDelete("namespace/{name}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteNamespace(string name)
+        {
+            var existing = await _kubernetesService.GetNamespaceAsync(name);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            await _kubernetesService.DeleteNamespaceAsync(name);
+
+            return NoContent();
         }
     }
 }

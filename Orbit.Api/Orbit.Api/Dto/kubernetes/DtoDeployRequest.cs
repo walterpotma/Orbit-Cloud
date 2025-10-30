@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Orbit.Api.Dto.kubertnetes
+namespace Orbit.Api.Dto.kubernetes
 {
     public class DtoDeployRequest
     {

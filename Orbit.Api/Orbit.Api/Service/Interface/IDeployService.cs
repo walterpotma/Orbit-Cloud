@@ -1,4 +1,4 @@
-﻿using Orbit.Api.Dto.kubertnetes;
+﻿using Orbit.Api.Dto.kubernetes;
 
 namespace Orbit.Api.Service.Interface
 {
