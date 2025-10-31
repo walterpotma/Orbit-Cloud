@@ -63,34 +63,3 @@ spec:
                 name: orbitnet-api
                 port:
                   number: 8080
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: ip-checker-job
-  namespace: orbitcloud
-spec:
-  schedule: "0 * * * *"
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: ip-checker-container
-            image: alpine/curl:latest
-            imagePullPolicy: IfNotPresent
-            command: ["/bin/sh", "-c"]
-            args:
-            - |
-              echo "Iniciando consulta...";
-              RESPONSE=$(curl --fail --retry 5 -s -X GET http://orbitnet-api:8080/api/v1/get-ip);
-              EXIT_CODE=$?
-              echo "--- STATUS DA CONSULTA ---"
-              echo "RESPONSE: $RESPONSE"
-              echo "CURL EXIT CODE: $EXIT_CODE"
-              if [ $EXIT_CODE -ne 0 ]; then
-                echo "ERRO: A consulta falhou. Código de saída do curl foi: $EXIT_CODE";
-                exit $EXIT_CODE
-              fi
-              echo "Consulta concluída com sucesso (EXIT CODE 0).";
-          restartPolicy: OnFailure
