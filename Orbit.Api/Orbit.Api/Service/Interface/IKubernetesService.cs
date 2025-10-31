@@ -6,7 +6,15 @@ namespace Orbit.Api.Service.Interface
     {
         Task<IEnumerable<DtoPod>> GetAllPodsAsync(string? namespaceName = null);
         Task<IEnumerable<DtoService>> GetAllServicesAsync(string? namespaceName = null);
-        Task<IEnumerable<DtoIngress>> GetAllIngressesAsync(string? namespaceName = null);
+
+
+
+        #region Kubernetes Ingress
+        Task<IEnumerable<DtoIngressResponse>> GetAllIngressAsync(string? namespaces = null);
+        Task<DtoIngressResponse> GetIngressAsync(string name, string namespaces);
+        Task<DtoIngressResponse> CreateIngressAsync(DtoIngressRequest request, string namespaces);
+        Task DeleteIngressAsync(string name, string namespaces);
+        #endregion
 
         #region Kubernetes Secret
         Task<IEnumerable<DtoSecretResponse>> GetAllSecretsAsync(string? namespaceName = null);

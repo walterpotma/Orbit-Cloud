@@ -99,16 +99,45 @@ namespace Orbit.Api.Service
             });
         }
 
-        public async Task<IEnumerable<DtoIngress>> GetAllIngressesAsync(string? namespaceName = null)
+        #region Kubernetes Ingress
+        public async Task<IEnumerable<DtoSecretResponse>> GetAllSecretsAsync(string? namespaces = null)
         {
-            var ingresses = await _repository.ListIngressesAsync(namespaceName);
-            return ingresses.Select(i => new DtoIngress
+            var secrets = await _repository.ListSecretsAsync(namespaces);
+            return secrets.Select(s => new DtoSecretResponse
             {
-                Name = i.Metadata.Name,
-                Namespace = i.Metadata.NamespaceProperty,
-                Hosts = i.Spec.Rules?.Select(r => r.Host) ?? Enumerable.Empty<string>()
+                Name = s.Metadata.Name,
+                Namespace = s.Metadata.NamespaceProperty,
+                Type = s.Type,
+                Keys = s.Data?.Keys,
+                CreationTimestamp = s.Metadata.CreationTimestamp
             });
         }
+        public async Task<DtoSecretResponse> GetSecretsAsync(string name, string namespaces)
+        {
+            var secret = await _repository.GetSecretsAsync(name, namespaces);
+            if (secret == null)
+            {
+                return null;
+            }
+            return MapToDtoSecret(secret);
+        }
+        public async Task<DtoSecretResponse> CreateSecretsAsync(DtoSecretRequest request, string namespaces)
+        {
+            var existing = await _repository.GetSecretsAsync(request.Name, namespaces);
+            if (existing != null)
+            {
+                throw new Exception($"Secret '{request.Name}' já existe.");
+            }
+
+            var newSecret = BuildSecretObject(request);
+            var created = await _repository.CreateSecretsAsync(newSecret, namespaces);
+            return MapToDtoSecret(created);
+        }
+        public async Task DeleteSecretsAsync(string name, string namespaces)
+        {
+            await _repository.DeleteSecretsAsync(name, namespaces);
+        }
+        #endregion
 
         #region Kubernetes Secret
         public async Task<IEnumerable<DtoSecretResponse>> GetAllSecretsAsync(string? namespaces = null)

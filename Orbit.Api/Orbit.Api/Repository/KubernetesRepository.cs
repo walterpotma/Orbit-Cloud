@@ -30,6 +30,8 @@ namespace Orbit.Api.Repository
             return services.Items;
         }
 
+
+        #region Kubernetes Ingress
         public async Task<IEnumerable<V1Ingress>> ListIngressesAsync(string? namespaceName = null)
         {
             var ingresses = string.IsNullOrEmpty(namespaceName)
@@ -37,7 +39,26 @@ namespace Orbit.Api.Repository
                 : await _kubernetesClient.NetworkingV1.ListNamespacedIngressAsync(namespaceName);
             return ingresses.Items;
         }
-
+        public async Task<V1Ingress> GetIngressAsync(string name, string namespaces)
+        {
+            try
+            {
+                return await _kubernetesClient.NetworkingV1.ReadNamespacedIngressAsync(name, namespaces);
+            }
+            catch (k8s.Autorest.HttpOperationException ex) when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+        public async Task<V1Ingress> CreateIngressAsync(V1Ingress ingress, string namespaces)
+        {
+            return await _kubernetesClient.NetworkingV1.CreateNamespacedIngressAsync(ingress, namespaces);
+        }
+        public async Task DeleteIngressAsync(string name, string namespaces)
+        {
+            await _kubernetesClient.NetworkingV1.DeleteNamespacedIngressAsync(name, namespaces);
+        }
+        #endregion
 
 
         #region Kubernetes Secret

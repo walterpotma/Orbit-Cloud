@@ -6,7 +6,13 @@ namespace Orbit.Api.Repository.Interface
     {
         Task<IEnumerable<V1Pod>> ListPodsAsync(string? namespaceName = null);
         Task<IEnumerable<V1Service>> ListServicesAsync(string? namespaceName = null);
-        Task<IEnumerable<V1Ingress>> ListIngressesAsync(string? namespaceName = null);
+
+        #region Kubernetes Ingress
+        Task<IEnumerable<V1Ingress>> ListIngressAsync(string? namespaceName = null);
+        Task<V1Ingress> GetIngressAsync(string name, string namespaces);
+        Task<V1Ingress> CreateIngressAsync(V1Ingress ingress, string namespaces);
+        Task DeleteIngressAsync(string name, string namespaces);
+        #endregion
 
         #region Kubernetes Secret
         Task<IEnumerable<V1Secret>> ListSecretsAsync(string? namespaces = null);
