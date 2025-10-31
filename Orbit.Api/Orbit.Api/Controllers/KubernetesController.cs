@@ -57,14 +57,14 @@ namespace Orbit.Api.Controllers
         }
 
 
-        [HttpGet("ingresses")]
+        [HttpGet("ingress")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetIngresses(string? namespaceName = null)
         {
             var ingresses = await _kubernetesService.GetAllIngressesAsync(namespaceName);
             return Ok(ingresses);
         }
-        [HttpGet("ingresses/{namespaceName}")]
+        [HttpGet("ingress/{namespaceName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetIngressesNamespace(string namespaceName)
         {
@@ -76,6 +76,8 @@ namespace Orbit.Api.Controllers
             return Ok(ingresses);
         }
 
+
+        #region Kubernetes Secret
         [HttpGet("secrets")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSecrets(string? namespaceName = null)
@@ -84,19 +86,71 @@ namespace Orbit.Api.Controllers
             return Ok(secrets);
         }
 
-        [HttpGet("secrets/{namespaceName}")]
+        [HttpGet("secrets/{namespaces}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetSecretsNamespace(string namespaceName)
+        public async Task<IActionResult> GetSecretsNamespace(string namespaces)
         {
-            var secrets = await _kubernetesService.GetAllSecretsAsync(namespaceName);
+            var secrets = await _kubernetesService.GetAllSecretsAsync(namespaces);
             if (!secrets.Any())
             {
-                return NotFound($"No secrets found in namespace '{namespaceName}'.");
+                return NotFound($"No secrets found in namespace '{namespaces}'.");
             }
             return Ok(secrets);
         }
 
-        [HttpGet("namespace")]
+        [HttpGet("secrets/{namespaces}/{name}")]
+        [ActionName(nameof(GetSecretByName))]
+        [ProducesResponseType(typeof(DtoNamespaceResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<DtoSecretResponse>> GetSecretByName(string name, string namespaces)
+        {
+            var response = await _kubernetesService.GetSecretsAsync(name, namespaces);
+
+            if (response == null)
+            {
+                return NotFound($"Secret '{name}' não encontrado.");
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost("secrets/{namespaces}")]
+        [ProducesResponseType(typeof(DtoSecretResponse), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<IActionResult> CreateSecret([FromBody] DtoSecretRequest request, string namespaces)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _kubernetesService.CreateSecretsAsync(request, namespaces);
+
+            return CreatedAtAction(
+                nameof(GetSecretByName),
+                new { name = response.Name, namespaces = response.Namespace },
+                response
+            );
+        }
+        [HttpDelete("secrets/{namespaces}/{name}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteSecret(string name, string namespaces)
+        {
+            var existing = await _kubernetesService.GetSecretsAsync(name, namespaces);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            await _kubernetesService.DeleteSecretsAsync(name, namespaces);
+
+            return NoContent();
+        }
+        #endregion
+
+        #region Kubernetes Namespace
+        [HttpGet("namespaces")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetNamespaces()
         {
@@ -104,7 +158,7 @@ namespace Orbit.Api.Controllers
             return Ok(namespaces);
         }
 
-        [HttpPost("namespace")]
+        [HttpPost("namespaces")]
         [ProducesResponseType(typeof(DtoNamespaceResponse), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
@@ -123,7 +177,7 @@ namespace Orbit.Api.Controllers
             );
         }
 
-        [HttpGet("namespace/{name}")]
+        [HttpGet("namespaces/{name}")]
         [ActionName(nameof(GetNamespaceByName))]
         [ProducesResponseType(typeof(DtoNamespaceResponse), 200)]
         [ProducesResponseType(404)]
@@ -138,7 +192,8 @@ namespace Orbit.Api.Controllers
 
             return Ok(namespaceDto);
         }
-        [HttpDelete("namespace/{name}")]
+
+        [HttpDelete("namespaces/{name}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteNamespace(string name)
@@ -153,5 +208,6 @@ namespace Orbit.Api.Controllers
 
             return NoContent();
         }
+        #endregion
     }
 }

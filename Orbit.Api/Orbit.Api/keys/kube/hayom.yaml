@@ -1,7 +1,7 @@
 apiVersion: v1
 clusters:
 - cluster:
-    server: https://200.101.177.130:6443
+    server: https://192.168.100.21:6443
     insecure-skip-tls-verify: true
   name: default
 contexts:

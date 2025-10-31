@@ -34,6 +34,38 @@ namespace Orbit.Api.Service
             };
         }
 
+        private V1Secret BuildSecretObject(DtoSecretRequest request)
+        {
+            return new V1Secret
+            {
+                ApiVersion = "v1",
+                Kind = "Secret",
+                Metadata = new V1ObjectMeta
+                {
+                    Name = request.Name,
+                    NamespaceProperty = request.Namespace ?? "default"
+                },
+                Type = "Opaque",
+                StringData = request.Data
+            };
+        }
+        private DtoSecretResponse MapToDtoSecret(V1Secret createdEntity)
+        {
+            if (createdEntity == null)
+            {
+                return null;
+            }
+
+            return new DtoSecretResponse
+            {
+                Name = createdEntity.Name(),
+                Namespace = createdEntity.Namespace(),
+                Type = createdEntity.Type,
+                CreationTimestamp = createdEntity.Metadata.CreationTimestamp,
+                Keys = createdEntity.Data?.Keys
+            };
+        }
+
         public KubernetesService(IKubernetesRepository repository)
         {
             _repository = repository;
@@ -78,21 +110,47 @@ namespace Orbit.Api.Service
             });
         }
 
-        public async Task<IEnumerable<DtoSecret>> GetAllSecretsAsync(string? namespaceName = null)
+        #region Kubernetes Secret
+        public async Task<IEnumerable<DtoSecretResponse>> GetAllSecretsAsync(string? namespaces = null)
         {
-            var secrets = await _repository.ListSecretsAsync(namespaceName);
-            return secrets.Select(s => new DtoSecret
+            var secrets = await _repository.ListSecretsAsync(namespaces);
+            return secrets.Select(s => new DtoSecretResponse
             {
                 Name = s.Metadata.Name,
                 Namespace = s.Metadata.NamespaceProperty,
-                Type = s.Type
+                Type = s.Type,
+                Keys = s.Data?.Keys,
+                CreationTimestamp = s.Metadata.CreationTimestamp
             });
         }
+        public async Task<DtoSecretResponse> GetSecretsAsync(string name, string namespaces)
+        {
+            var secret = await _repository.GetSecretsAsync(name, namespaces);
+            if (secret == null)
+            {
+                return null;
+            }
+            return MapToDtoSecret(secret);
+        }
+        public async Task<DtoSecretResponse> CreateSecretsAsync(DtoSecretRequest request, string namespaces)
+        {
+            var existing = await _repository.GetSecretsAsync(request.Name, namespaces);
+            if (existing != null)
+            {
+                throw new Exception($"Secret '{request.Name}' já existe.");
+            }
 
+            var newSecret = BuildSecretObject(request);
+            var created = await _repository.CreateSecretsAsync(newSecret, namespaces);
+            return MapToDtoSecret(created);
+        }
+        public async Task DeleteSecretsAsync(string name, string namespaces)
+        {
+            await _repository.DeleteSecretsAsync(name, namespaces);
+        }
+        #endregion
 
-
-
-        // Namespace
+        #region Kubernetes Namespace
         public async Task<IEnumerable<DtoNamespaceResponse>> GetAllNamespacesAsync()
         {
             var namespaces = await _repository.ListNamespacesAsync();
@@ -102,7 +160,15 @@ namespace Orbit.Api.Service
                 Status = n.Status.Phase
             });
         }
-
+        public async Task<DtoNamespaceResponse> GetNamespaceAsync(string name)
+        {
+            var ns = await _repository.GetNamespaceAsync(name);
+            if (ns == null)
+            {
+                throw new Exception($"Namespace '{name}' não encontrado.");
+            }
+            return MapToDto(ns);
+        }
         public async Task<DtoNamespaceResponse> CreateNamespaceAsync(DtoNamespaceRequest request)
         {
             var existing = await _repository.GetNamespaceAsync(request.Name);
@@ -115,18 +181,6 @@ namespace Orbit.Api.Service
             var created = await _repository.CreateNamespaceAsync(newNs);
             return MapToDto(created);
         }
-
-        
-
-        public async Task<DtoNamespaceResponse> GetNamespaceAsync(string name)
-        {
-            var ns = await _repository.GetNamespaceAsync(name);
-            if (ns == null)
-            {
-                throw new Exception($"Namespace '{name}' não encontrado.");
-            }
-            return MapToDto(ns);
-        }
         public async Task DeleteNamespaceAsync(string name)
         {
             var existing = await _repository.GetNamespaceAsync(name);
@@ -137,5 +191,6 @@ namespace Orbit.Api.Service
 
             await _repository.DeleteNamespaceAsync(name);
         }
+        #endregion
     }
 }

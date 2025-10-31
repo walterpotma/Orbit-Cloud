@@ -1,10 +1,7 @@
-.vs/slnx.sqlite
-Orbit.Api/.vs/Orbit.Api/CopilotIndices/17.14.878.3237/CodeChunks.db
-/Orbit.Api/.vs
-/Orbit.Api/.vs/Orbit.Api
-/Orbit.Api/.vs
-/Orbit.Api/.vs/Orbit.Api/FileContentIndex
-Orbit.Api/.vs/Orbit.Api/FileContentIndex/2e1e5bf9-246c-4b60-9abe-cf27661b922f.vsidx
-/services/Request.IA/.env
-Orbit.Api/Orbit.Api/keys/
+/.vs/
+/Orbit.Api/.vs/
+/Orbit.Api/.vs/
+/Orbit.Api/Orbit.Api/keys/
 /Orbit.Api/Orbit.Api/obj/
+/Orbit.Api/Orbit.Api/bin/
+/services/Request.IA/.env

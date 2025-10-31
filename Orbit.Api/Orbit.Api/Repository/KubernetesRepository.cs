@@ -1,6 +1,7 @@
 ﻿using k8s;
 using k8s.Models;
 using Orbit.Api.Repository.Interface;
+using System.Xml.Linq;
 
 namespace Orbit.Api.Repository
 {
@@ -37,17 +38,38 @@ namespace Orbit.Api.Repository
             return ingresses.Items;
         }
 
-        public async Task<IEnumerable<V1Secret>> ListSecretsAsync(string? namespaceName = null)
+
+
+        #region Kubernetes Secret
+        public async Task<IEnumerable<V1Secret>> ListSecretsAsync(string? namespaces = null)
         {
-            var secrets = string.IsNullOrEmpty(namespaceName)
+            var secrets = string.IsNullOrEmpty(namespaces)
                 ? await _kubernetesClient.CoreV1.ListSecretForAllNamespacesAsync()
-                : await _kubernetesClient.CoreV1.ListNamespacedSecretAsync(namespaceName);
+                : await _kubernetesClient.CoreV1.ListNamespacedSecretAsync(namespaces);
             return secrets.Items;
         }
+        public async Task<V1Secret> GetSecretsAsync(string name, string namespaces)
+        {
+            try
+            {
+                return await _kubernetesClient.CoreV1.ReadNamespacedSecretAsync(name, namespaces);
+            }
+            catch (k8s.Autorest.HttpOperationException ex) when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+        public async Task<V1Secret> CreateSecretsAsync(V1Secret secret, string namespaces)
+        {
+            return await _kubernetesClient.CoreV1.CreateNamespacedSecretAsync(secret, namespaces);
+        }
+        public async Task DeleteSecretsAsync(string name, string namespaces)
+        {
+            await _kubernetesClient.CoreV1.DeleteNamespacedSecretAsync(name, namespaces);
+        }
+        #endregion
 
-
-
-        // Namespace
+        #region Kubernetes Namespaces
         public async Task<IEnumerable<V1Namespace>> ListNamespacesAsync()
         {
             var namespaces = await _kubernetesClient.CoreV1.ListNamespaceAsync();
@@ -72,5 +94,6 @@ namespace Orbit.Api.Repository
         {
             await _kubernetesClient.CoreV1.DeleteNamespaceAsync(name);
         }
+        #endregion
     }
 }
