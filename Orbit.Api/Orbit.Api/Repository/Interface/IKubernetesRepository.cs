@@ -4,8 +4,19 @@ namespace Orbit.Api.Repository.Interface
 {
     public interface IKubernetesRepository
     {
-        Task<IEnumerable<V1Pod>> ListPodsAsync(string? namespaceName = null);
+
+        #region Kubernetes Pods
+        Task<IEnumerable<V1Pod>> ListPodsAsync(string? namespaces = null);
+        Task<V1Pod> GetPodsAsync(string name, string namespaces);
+        Task DeletePodsAsync(string name, string namespaces);
+        #endregion
+
+        #region Kubernetes Service
         Task<IEnumerable<V1Service>> ListServicesAsync(string? namespaceName = null);
+        Task<V1Service> GetServicesAsync(string name, string namespaces);
+        Task<V1Service> CreateServicesAsync(V1Service service, string namespaces);
+        Task DeleteServicesAsync(string name, string namespaces);
+        #endregion
 
         #region Kubernetes Ingress
         Task<IEnumerable<V1Ingress>> ListIngressAsync(string? namespaceName = null);

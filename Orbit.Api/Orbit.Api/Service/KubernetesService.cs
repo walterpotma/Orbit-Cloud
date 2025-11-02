@@ -97,38 +97,112 @@ namespace Orbit.Api.Service
             };
         }
 
+        private V1Service BuildServiceObject(DtoServiceRequest request)
+        {
+            return new V1Service
+            {
+                ApiVersion = "v1",
+                Kind = "Service",
+            };
+        }
+        private DtoServiceResponse MapToDtoService(V1Service createdEntity)
+        {
+            if (createdEntity == null)
+            {
+                return null;
+            }
+
+            return new DtoServiceResponse
+            {
+                Name = createdEntity.Name(),
+                Namespace = createdEntity.Namespace()
+            };
+        }
+
+        private DtoPodResponse MapToDtoPod(V1Pod createdEntity)
+        {
+            if (createdEntity == null)
+            {
+                return null;
+            }
+
+            return new DtoPodResponse
+            {
+                Name = createdEntity.Name(),
+                Namespace = createdEntity.Namespace()
+            };
+        }
+
         public KubernetesService(IKubernetesRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<IEnumerable<DtoPod>> GetAllPodsAsync(string? namespaceName = null)
+        #region Kubernetes Pods
+        public async Task<IEnumerable<DtoPodResponse>> GetAllPodsAsync(string? namespaces = null)
         {
-            var pods = await _repository.ListPodsAsync(namespaceName);
-            return pods.Select(p => new DtoPod
+            var pods = await _repository.ListPodsAsync(namespaces);
+            return pods.Select(p => new DtoPodResponse
             {
                 Name = p.Metadata.Name,
                 Namespace = p.Metadata.NamespaceProperty,
                 Status = p.Status.Phase,
-                IpAddress = p.Status.PodIP,
                 CreationTimestamp = p.Metadata.CreationTimestamp
             });
         }
-
-
-
-        public async Task<IEnumerable<DtoService>> GetAllServicesAsync(string? namespaceName = null)
+        public async Task<DtoPodResponse> GetPodsAsync(string name, string namespaces)
         {
-            var services = await _repository.ListServicesAsync(namespaceName);
-            return services.Select(s => new DtoService
+            var response = await _repository.GetPodsAsync(name, namespaces);
+            if (response == null)
+            {
+                return null;
+            }
+            return MapToDtoPod(response);
+        }
+        public async Task DeletePodsAsync(string name, string namespaces)
+        {
+            await _repository.DeletePodsAsync(name, namespaces);
+        }
+        #endregion
+
+        #region Kubernetes Service
+        public async Task<IEnumerable<DtoServiceResponse>> GetAllServicesAsync(string? namespaces = null)
+        {
+            var services = await _repository.ListServicesAsync(namespaces);
+            return services.Select(s => new DtoServiceResponse
             {
                 Name = s.Metadata.Name,
                 Namespace = s.Metadata.NamespaceProperty,
                 Type = s.Spec.Type,
                 ClusterIp = s.Spec.ClusterIP,
-                Ports = s.Spec.Ports?.Select(p => $"{p.Port}:{p.TargetPort}/{p.Protocol}") ?? Enumerable.Empty<string>()
             });
         }
+        public async Task<DtoServiceResponse> GetServicesAsync(string name, string namespaces)
+        {
+            var response = await _repository.GetServicesAsync(name, namespaces);
+            if (response == null)
+            {
+                return null;
+            }
+            return MapToDtoService(response);
+        }
+        public async Task<DtoServiceResponse> CreateServicesAsync(DtoServiceRequest request, string namespaces)
+        {
+            var existing = await _repository.GetServicesAsync(request.Name, namespaces);
+            if (existing != null)
+            {
+                throw new Exception($"Service '{request.Name}' já existe.");
+            }
+
+            var newServices = BuildServiceObject(request);
+            var created = await _repository.CreateServicesAsync(newServices, namespaces);
+            return MapToDtoService(created);
+        }
+        public async Task DeleteServicesAsync(string name, string namespaces)
+        {
+            await _repository.DeleteServicesAsync(name, namespaces);
+        }
+        #endregion
 
         #region Kubernetes Ingress
         public async Task<IEnumerable<DtoIngressResponse>> GetAllIngressAsync(string? namespaces = null)
@@ -238,7 +312,7 @@ namespace Orbit.Api.Service
             var created = await _repository.CreateNamespacesAsync(newNs);
             return MapToDto(created);
         }
-        public async Task DeleteNamespaceAsync(string name)
+        public async Task DeleteNamespacesAsync(string name)
         {
             var existing = await _repository.GetNamespacesAsync(name);
             if (existing == null)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Service;
 using Orbit.Api.Service.Interface;
+using System.Xml.Linq;
 
 namespace Orbit.Api.Controllers
 {
@@ -17,26 +18,61 @@ namespace Orbit.Api.Controllers
             _kubernetesService = kubernetesService;
         }
 
+        #region Kubernetes Pods
         [HttpGet("pods")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPods(string? namespaceName = null)
+        public async Task<IActionResult> GetPods(string? namespaces = null)
         {
-            var pods = await _kubernetesService.GetAllPodsAsync(namespaceName);
+            var pods = await _kubernetesService.GetAllPodsAsync(namespaces);
             return Ok(pods);
         }
-        [HttpGet("pods/{namespaceName}")]
+        [HttpGet("pods/{namespaces}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPodsNamespace(string namespaceName)
+        public async Task<IActionResult> GetPodsNamespace(string namespaces)
         {
-            var pods = await _kubernetesService.GetAllPodsAsync(namespaceName);
+            var pods = await _kubernetesService.GetAllPodsAsync(namespaces);
             if (!pods.Any())
             {
-                return NotFound($"No pods found in namespace '{namespaceName}'.");
+                return NotFound($"No pods found in namespace '{namespaces}'.");
             }
 
             return Ok(pods);
         }
 
+
+        [HttpGet("pods/{namespaces}/{name}")]
+        [ActionName(nameof(GetPodsByName))]
+        [ProducesResponseType(typeof(DtoNamespaceResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<DtoIngressResponse>> GetPodsByName(string name, string namespaces)
+        {
+            var response = await _kubernetesService.GetPodsAsync(name, namespaces);
+
+            if (response == null)
+            {
+                return NotFound($"Pods '{name}' não encontrado.");
+            }
+
+            return Ok(response);
+        }
+        [HttpDelete("pods/{namespaces}/{name}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeletePods(string name, string namespaces)
+        {
+            var existing = await _kubernetesService.GetPodsAsync(name, namespaces);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            await _kubernetesService.DeletePodsAsync(name, namespaces);
+
+            return NoContent();
+        }
+        #endregion
+
+        #region Kubernetes Service
         [HttpGet("services")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetServices(string? namespaceName = null)
@@ -55,8 +91,57 @@ namespace Orbit.Api.Controllers
             }
             return Ok(services);
         }
+        [HttpGet("service/{namespaces}/{name}")]
+        [ActionName(nameof(GetServicesByName))]
+        [ProducesResponseType(typeof(DtoNamespaceResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<DtoServiceResponse>> GetServicesByName(string name, string namespaces)
+        {
+            var response = await _kubernetesService.GetServicesAsync(name, namespaces);
 
-        #region
+            if (response == null)
+            {
+                return NotFound($"Service '{name}' não encontrado.");
+            }
+
+            return Ok(response);
+        }
+        [HttpPost("service/{namespaces}")]
+        [ProducesResponseType(typeof(DtoServiceResponse), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<IActionResult> CreateService([FromBody] DtoServiceRequest request, string namespaces)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _kubernetesService.CreateServicesAsync(request, namespaces);
+
+            return CreatedAtAction(
+                nameof(GetServicesByName),
+                new { name = response.Name, namespaces = response.Namespace },
+                response
+            );
+        }
+        [HttpDelete("service/{namespaces}/{name}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteServices(string name, string namespaces)
+        {
+            var existing = await _kubernetesService.GetServicesAsync(name, namespaces);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            await _kubernetesService.DeleteServicesAsync(name, namespaces);
+
+            return NoContent();
+        }
+        #endregion
+
+        #region Kubernetes Ingress
         [HttpGet("ingress")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetIngresses(string? namespaces = null)

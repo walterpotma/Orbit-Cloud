@@ -4,10 +4,18 @@ namespace Orbit.Api.Service.Interface
 {
     public interface IKubernetesService
     {
-        Task<IEnumerable<DtoPod>> GetAllPodsAsync(string? namespaceName = null);
-        Task<IEnumerable<DtoService>> GetAllServicesAsync(string? namespaceName = null);
+        #region Kubernetes Pods
+        Task<IEnumerable<DtoPodResponse>> GetAllPodsAsync(string? namespaces = null);
+        Task<DtoPodResponse> GetPodsAsync(string name, string namespaces);
+        Task DeletePodsAsync(string name, string namespaces);
+        #endregion
 
-
+        #region Kubernetes Service
+        Task<IEnumerable<DtoServiceResponse>> GetAllServicesAsync(string? namespaces = null);
+        Task<DtoServiceResponse> GetServicesAsync(string name, string namespaces);
+        Task<DtoServiceResponse> CreateServicesAsync(DtoServiceRequest request, string namespaces);
+        Task DeleteServicesAsync(string name, string namespaces);
+        #endregion
 
         #region Kubernetes Ingress
         Task<IEnumerable<DtoIngressResponse>> GetAllIngressAsync(string? namespaces = null);

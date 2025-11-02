@@ -14,22 +14,59 @@ namespace Orbit.Api.Repository
             _kubernetesClient = kubernetesClient;
         }
 
-        public async Task<IEnumerable<V1Pod>> ListPodsAsync(string? namespaceName = null)
+        #region Kubernetes Pods
+        public async Task<IEnumerable<V1Pod>> ListPodsAsync(string? namespaces = null)
         {
-            var pods = string.IsNullOrEmpty(namespaceName)
+            var pods = string.IsNullOrEmpty(namespaces)
                 ? await _kubernetesClient.CoreV1.ListPodForAllNamespacesAsync()
-                : await _kubernetesClient.CoreV1.ListNamespacedPodAsync(namespaceName);
+                : await _kubernetesClient.CoreV1.ListNamespacedPodAsync(namespaces);
             return pods.Items;
         }
-
-        public async Task<IEnumerable<V1Service>> ListServicesAsync(string? namespaceName = null)
+        public async Task<V1Pod> GetPodsAsync(string name, string namespaces)
         {
-            var services = string.IsNullOrEmpty(namespaceName)
+            try
+            {
+                return await _kubernetesClient.CoreV1.ReadNamespacedPodAsync(name, namespaces);
+            }
+            catch (k8s.Autorest.HttpOperationException ex) when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+        public async Task DeletePodsAsync(string name, string namespaces)
+        {
+            await _kubernetesClient.CoreV1.DeleteNamespacedPodAsync(name, namespaces);
+        }
+        #endregion
+
+        #region Kubernetes Service
+        public async Task<IEnumerable<V1Service>> ListServicesAsync(string? namespaces = null)
+        {
+            var services = string.IsNullOrEmpty(namespaces)
                 ? await _kubernetesClient.CoreV1.ListServiceForAllNamespacesAsync()
-                : await _kubernetesClient.CoreV1.ListNamespacedServiceAsync(namespaceName);
+                : await _kubernetesClient.CoreV1.ListNamespacedServiceAsync(namespaces);
             return services.Items;
         }
-
+        public async Task<V1Service> GetServicesAsync(string name, string namespaces)
+        {
+            try
+            {
+                return await _kubernetesClient.CoreV1.ReadNamespacedServiceAsync(name, namespaces);
+            }
+            catch (k8s.Autorest.HttpOperationException ex) when (ex.Response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+        public async Task<V1Service> CreateServicesAsync(V1Service service, string namespaces)
+        {
+            return await _kubernetesClient.CoreV1.CreateNamespacedServiceAsync(service, namespaces);
+        }
+        public async Task DeleteServicesAsync(string name, string namespaces)
+        {
+            await _kubernetesClient.CoreV1.DeleteNamespacedServiceAsync(name, namespaces);
+        }
+        #endregion
 
         #region Kubernetes Ingress
         public async Task<IEnumerable<V1Ingress>> ListIngressAsync(string? namespaceName = null)

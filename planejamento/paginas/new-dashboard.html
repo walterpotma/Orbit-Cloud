@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Cliente - Orbit Cloud</title>
+    <style>
+        /* * Paleta de Cores Baseada na sua Imagem
+         */
+        :root {
+            --bg-dark-main: #111827;
+            --bg-dark-sidebar: #1F2937;
+            --bg-dark-card: #374151;
+            --primary-blue: #3B82F6;
+            --primary-blue-hover: #2563EB;
+            --text-light: #F9FAFB;
+            --text-secondary: #9CA3AF;
+            --border-color: #4B5563;
+            --status-success: #10B981;
+            --status-fail: #EF4444;
+            --status-running: #F59E0B;
+        }
+
+        /* * Reset Básico e Estilo Global
+         */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark-main);
+            color: var(--text-light);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            color: var(--primary-blue-hover);
+            text-decoration: underline;
+        }
+        
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            background-color: var(--bg-dark-card);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        /* * Layout Principal (Sidebar + Conteúdo)
+         */
+        .dashboard-container { display: flex; width: 100%; height: 100%; }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-dark-sidebar);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .sidebar-header .logo-icon {
+            width: 32px; height: 32px;
+            background-color: var(--primary-blue);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold;
+        }
+        .sidebar-header h1 { font-size: 20px; color: var(--text-light); }
+
+        .sidebar-nav { flex-grow: 1; }
+        .sidebar-nav a {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; margin-bottom: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar-nav a svg { width: 20px; height: 20px; stroke: var(--text-secondary); transition: all 0.2s ease; }
+        .sidebar-nav a.active, .sidebar-nav a:hover {
+            background-color: var(--bg-dark-card);
+            color: var(--text-light);
+        }
+        .sidebar-nav a.active svg, .sidebar-nav a:hover svg { stroke: var(--primary-blue); }
+
+        /* * Conteúdo Principal
+         */
+        .main-content {
+            flex-grow: 1;
+            padding: 24px 48px;
+            overflow-y: auto; /* Permite scroll no conteúdo */
+        }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .main-header h2 { font-size: 28px; font-weight: 600; }
+        .user-profile {
+            width: 40px; height: 40px;
+            background-color: var(--bg-dark-card);
+            border-radius: 50%;
+            border: 2px solid var(--primary-blue);
+        }
+        
+        /* * Grid de Seções
+         */
+        .content-grid { display: grid; gap: 24px; grid-template-columns: repeat(4, 1fr); }
+        .stat-card {
+            background-color: var(--bg-dark-sidebar);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .stat-card h3 { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 500; }
+        .stat-card .stat-value { font-size: 32px; font-weight: 600; color: var(--text-light); }
+        .stat-card .stat-description { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+        
+        .resource-card {
+            grid-column: span 2; 
+            background-color: var(--bg-dark-sidebar);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .resource-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+        .resource-header h3 { font-size: 18px; font-weight: 600; }
+        .resource-header .usage-text { font-size: 14px; color: var(--text-secondary); }
+        
+        .progress-bar {
+            width: 100%; height: 12px;
+            background-color: var(--bg-dark-card);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-bar-inner { height: 100%; background-color: var(--primary-blue); border-radius: 6px; }
+
+        /* * Seções de Conteúdo (Cards e Tabelas)
+         */
+        .pods-section,
+        .deployments-section {
+            grid-column: 1 / -1; /* Ocupa todas as 4 colunas */
+            margin-top: 24px;
+        }
+        .pods-section h3,
+        .deployments-section h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+        
+        /* * =================================== */
+        /* * NOVO: Grid de Cards de Aplicação    */
+        /* * =================================== */
+
+        .app-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .app-card {
+            background-color: var(--bg-dark-sidebar);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+        .app-card:hover { border-color: var(--primary-blue); }
+
+        .app-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+        }
+        .app-card-icon {
+            width: 40px; height: 40px; flex-shrink: 0;
+            background-color: var(--primary-blue);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .app-card-icon svg { width: 24px; height: 24px; stroke: var(--text-light); }
+        .app-card-header h4 { font-size: 18px; font-weight: 600; color: var(--text-light); }
+        
+        /* NOVO: Corpo do Card com Métricas e URL */
+        .app-card-body {
+            padding: 0 20px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .app-card-url {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .app-card-url svg { width: 16px; height: 16px; flex-shrink: 0; }
+        
+        .app-card-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 13px;
+        }
+        .metric { display: flex; flex-direction: column; gap: 6px; }
+        .metric-label {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+        }
+        .metric-label span:first-child { color: var(--text-light); }
+        .metric-bar {
+            width: 100%; height: 6px;
+            background-color: var(--bg-dark-card);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .metric-bar-inner { height: 100%; background-color: var(--primary-blue); border-radius: 3px; }
+        .metric-bar-inner.fail { background-color: var(--status-fail); } /* Para uso alto */
+
+        /* NOVO: Footer do Card com Ações */
+        .app-card-footer {
+            margin-top: auto; /* Empurra o footer para baixo */
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-dark-main); /* Um pouco mais escuro */
+            border-radius: 0 0 11px 11px; /* Arredonda cantos inferiores */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* * =================================== */
+        /* * Tabela de Histórico (Genérica)      */
+        /* * =================================== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-dark-sidebar);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .data-table th, .data-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table th {
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: var(--bg-dark-card);
+        }
+
+        /* Indicador de Status */
+        .status-indicator { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .status-dot.success { background-color: var(--status-success); }
+        .status-dot.fail { background-color: var(--status-fail); }
+        .status-dot.running { background-color: var(--status-running); }
+
+        /* Botão de Ação */
+        .action-button {
+            background-color: var(--bg-dark-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .action-button svg { width: 16px; height: 16px; }
+        
+        .action-button:hover {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            border-color: var(--primary-blue);
+        }
+        
+        /* Botão Primário (destaque) */
+        .action-button.primary {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: var(--text-light);
+        }
+        .action-button.primary:hover {
+            background-color: var(--primary-blue-hover);
+        }
+        
+        /* Botão Secundário (para ações menos comuns) */
+        .action-button.secondary {
+             background-color: transparent;
+        }
+        .action-button.secondary:hover {
+            background-color: var(--bg-dark-card);
+            border-color: var(--border-color);
+            color: var(--text-light);
+        }
+
+        /* * =================================== */
+        /* * Estilos do Modal (Genérico)       */
+        /* * =================================== */
+        
+        .modal-overlay {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex; /* Alterado para flex para centralizar */
+            align-items: center;
+            justify-content: center;
+            
+            /* Animação */
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--bg-dark-sidebar);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 90%;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+            
+            /* Animação */
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        .modal-header h2 { font-size: 22px; color: var(--text-light); }
+        .modal-header h2 span { color: var(--primary-blue); } /* Destaca nome da app */
+
+        .modal-close {
+            color: var(--text-secondary);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .modal-close:hover { color: var(--text-light); }
+        
+        .modal-body {
+            max-height: 70vh; /* Scroll se o conteúdo for grande */
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .modal-section h3 {
+            font-size: 16px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--bg-dark-card);
+            padding-bottom: 8px;
+        }
+        .modal-section ul { list-style: none; padding-left: 0; }
+        .modal-section li {
+            background-color: var(--bg-dark-main);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Estilos para Formulários no Modal */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .form-group input, .form-group select {
+            background-color: var(--bg-dark-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        /* * =================================== */
+        /* * NOVO: Modal de Logs Específico    */
+        /* * =================================== */
+        
+        .modal-content-logs {
+            background-color: var(--bg-dark-main); /* Fundo bem escuro */
+            width: 90%;
+            max-width: 1000px; /* Mais largo para logs */
+            height: 80vh; /* Alto */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .log-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .log-viewer {
+            flex-grow: 1;
+            padding: 24px;
+            background-color: #000; /* Preto terminal */
+            color: #E0E0E0;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            overflow-y: auto;
+            border-radius: 0 0 11px 11px;
+            white-space: pre-wrap; /* Quebra linha */
+            word-break: break-all;
+        }
+        
+        .log-viewer span { /* Cores de log (exemplo) */
+            color: #888;
+        }
+        .log-viewer span.error {
+            color: var(--status-fail);
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">O</div> 
+                <h1>Orbit Cloud</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active">
+                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Dashboard
+                </a>
+                <a href="#">
+                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10.5 11.25h3M12 15V3.75m0 0l-3.75 3.75M12 3.75l3.75 3.75" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Aplicações (Deploys)
+                </a>
+                 <a href="#">
+                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.83-5.83M11.42 15.17l.227.227a.563.563 0 0 1 0 .796l-1.5 1.5a.563.563 0 0 1-.796 0L9.17 17.5a.563.563 0 0 1 0-.796l1.5-1.5a.563.563 0 0 1 .796 0l.227.227Zm3.53-3.53.227.227a.563.563 0 0 1 0 .796l-1.5 1.5a.563.563 0 0 1-.796 0L12.67 12.5a.563.563 0 0 1 0-.796l1.5-1.5a.563.563 0 0 1 .796 0l.227.227ZM3 21l5.83-5.83M21 3l-5.83 5.83" stroke-linecap="round" stroke-linejoin="round"></fsf-symbol-description"></path></svg>
+                    Variáveis de Ambiente
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h2>Dashboard</h2>
+                <div class="user-profile"></div>
+            </header>
+
+            <div class="content-grid">
+                
+                <div class="stat-card">
+                    <h3>Aplicações Ativas</h3>
+                    <div class="stat-value">3</div>
+                    <div class="stat-description">de 10 permitidas</div>
+                </div>
+                 <div class="stat-card">
+                    <h3>Recursos Alocados</h3>
+                    <div class="stat-value">2 vCPU</div>
+                    <div class="stat-description">4 GB RAM</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Domínios</h3>
+                    <div class="stat-value">3</div>
+                    <div class="stat-description">Conectados</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Builds no Mês</h3>
+                    <div class="stat-value">132</div>
+                    <div class="stat-description">Uso da pipeline</div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <h3>Uso de CPU (Quota Total)</h3>
+                        <span class="usage-text">1.2 / 2.0 vCPU (60%)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" style="width: 60%;"></div>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <h3>Uso de Memória (Quota Total)</h3>
+                        <span class="usage-text">3.1 / 4.0 GB (77.5%)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" style="width: 77.5%;"></div>
+                    </div>
+                </div>
+
+                <section class="pods-section">
+                    <h3>Aplicações Ativas</h3>
+                    <div class="app-card-grid">
+                        
+                        <div class="app-card" data-app-name="api-flask">
+                            <div class="app-card-header">
+                                <div class="app-card-icon"> <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                </div>
+                                <div>
+                                    <h4>api-flask</h4>
+                                    <span class="status-indicator">
+                                        <span class="status-dot success"></span> Rodando
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="app-card-body">
+                                <a class="app-card-url" href="#" target="_blank">
+                                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                    <span>https://api-flask.orbit.dev</span>
+                                </a>
+                                <div class="app-card-metrics">
+                                    <div class="metric">
+                                        <div class="metric-label"><span>CPU</span> <span>0.2 / 0.5 vCPU</span></div>
+                                        <div class="metric-bar"><div class="metric-bar-inner" style="width: 40%;"></div></div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-label"><span>Memória</span> <span>256 / 512 MB</span></div>
+                                        <div class="metric-bar"><div class="metric-bar-inner" style="width: 50%;"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="app-card-footer">
+                                <button class="action-button primary modal-trigger-details">
+                                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.594 3.94c.09-.542.56-1.003 1.11-1.226.55-.223 1.19-.223 1.74 0 .55.223 1.02.684 1.11 1.226.09.542-.05 1.13-.44 1.59-.39.46-.98.7-1.61.7-.63 0-1.22-.24-1.61-.7-.39-.46-.53-1.048-.44-1.59Z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 6.75a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V7.5a.75.75 0 0 1 .75-.75Zm0 10.5a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-1.5 0v-.008a.75.75 0 0 1 .75-.75Z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                    Configurações
+                                </button>
+                                <button class="action-button modal-trigger-logs">
+                                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25v.008c0 .317.215.615.53.744a4.5 4.5 0 0 0 4.018-4.018.75.75 0 0 1 .744-.53h.008v.008c0 .317.215.615.53.744a4.5 4.5 0 0 0 4.018-4.018.75.75 0 0 1 .744-.53h.008v.008c0 .317.215.615.53.744a4.5 4.5 0 0 0 4.018-4.018.75.75 0 0 1 .744-.53H21M10.125 2.25H21m0 0v10.5M13.875 11.25h-3.75" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                    Logs
+                                </button>
+                                <button class="action-button secondary" title="Reiniciar">
+                                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="app-card" data-app-name="batch-worker">
+                            <div class="app-card-header">
+                                <div class="app-card-icon"> <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                </div>
+                                <div>
+                                    <h4>batch-worker</h4>
+                                    <span class="status-indicator">
+                                        <span class="status-dot fail"></span> Falhou
+                                    </span>
+                                </div>
+                            </div>
+                             <div class="app-card-body">
+                                <a class="app-card-url" href="#">
+                                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                    <span>(sem endpoint público)</span>
+                                </a>
+                                <div class="app-card-metrics">
+                                    <div class="metric">
+                                        <div class="metric-label"><span>CPU</span> <span>0.8 / 1.0 vCPU</span></div>
+                                        <div class="metric-bar"><div class="metric-bar-inner" style="width: 80%;"></div></div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-label"><span>Memória</span> <span>490 / 512 MB</span></div>
+                                        <div class="metric-bar"><div class="metric-bar-inner fail" style="width: 95%;"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="app-card-footer">
+                                <button class="action-button primary modal-trigger-details">Configurações</button>
+                                <button class="action-button modal-trigger-logs">Logs</button>
+                                <button class="action-button secondary" title="Reiniciar">
+                                    <svg fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </section>
+
+                <section class="deployments-section">
+                    <h3>Histórico de Deploys</h3>
+                    <table class="data-table">
+                        </table>
+                </section>
+
+            </div> </main>
+    </div>
+    
+    
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2>Configurações: <span>api-flask</span></h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            
+            <div class="modal-body">
+                
+                <div class="modal-section">
+                    <h3>Recursos & Scale</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label for="replicas">Réplicas (Pods)</label>
+                            <select id="replicas">
+                                <option value="1">1 (Padrão)</option>
+                                <option value="2">2 (Alta Disponibilidade)</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpu">CPU</label>
+                            <select id="cpu">
+                                <option value="0.5">0.5 vCPU</option>
+                                <option value="1">1 vCPU</option>
+                                <option value="2">2 vCPU</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mem">Memória</label>
+                            <select id="mem">
+                                <option value="512">512 MB</option>
+                                <option value="1024">1 GB</option>
+                                <option value="2048">2 GB</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Variáveis de Ambiente (ConfigMap)</h3>
+                    <ul>
+                        <li><code>FLASK_ENV</code> = <code>production</code></li>
+                        <li><code>CACHE_TYPE</code> = <code>redis</code></li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>Segredos (Secrets)</h3>
+                    <ul>
+                        <li><code>DATABASE_URL</code> = <code>(oculto) **********</code></li>
+                        <li><code>REDIS_PASSWORD</code> = <code>(oculto) **********</code></li>
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>Eventos Recentes</h3>
+                    <ul>
+                        <li><span>[14:32:01]</span> Pod 'api-flask-7b5d...' iniciado com sucesso.</li>
+                        <li><span>[14:32:00]</span> Imagem 'user/api-flask:latest' baixada.</li>
+                        <li><span>[14:31:55]</span> Criando pod 'api-flask-7b5d...'.</li>
+                        <li><span>[14:31:54]</span> Deployment 'api-flask' escalado para 1.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div id="logModal" class="modal-overlay">
+        <div class="modal-content modal-content-logs">
+            <div class="log-header modal-header">
+                <div>
+                    <h2>Logs: <span>api-flask</span></h2>
+                    <span class="status-indicator" style="font-size: 14px; margin-top: 8px;">
+                        <span class="status-dot success"></span> Conectado (stream em tempo real)
+                    </span>
+                </div>
+                <span class="modal-close">&times;</span>
+            </div>
+            <pre class="log-viewer"><span>[2025-11-02 16:22:01]</span> [INFO] Iniciando Gunicorn server...
+<span>[2025-11-02 16:22:01]</span> [INFO] Ouvindo em: http://0.0.0.0:5000
+<span>[2025-11-02 16:22:01]</span> [INFO] Usando 4 workers.
+<span>[2025-11-02 16:22:01]</span> [INFO] Booting worker with pid: 32
+<span>[2025-11-02 16:23:10]</span> 172.17.0.1 - "GET /healthz" 200 -
+<span>[2025-11-02 16:23:40]</span> 172.17.0.1 - "GET /healthz" 200 -
+<span class="error">[2025-11-02 16:23:55]</span> [ERROR] Exception on /api/v1/users [POST]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.9/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/app/api/routes.py", line 88, in create_user
+    db.session.commit()
+<span class="error">sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "users_email_key"</span>
+<span class="error">DETAIL:  Key (email)=(user@example.com) already exists.</span>
+</pre>
+        </div>
+    </div>
+
+
+    <script>
+        // Pega os elementos principais dos dois modais
+        const detailsModal = document.getElementById("detailsModal");
+        const logModal = document.getElementById("logModal");
+
+        // Gatilhos
+        const detailsTriggers = document.querySelectorAll(".modal-trigger-details");
+        const logTriggers = document.querySelectorAll(".modal-trigger-logs");
+
+        // Botões de Fechar
+        const detailsCloseBtn = detailsModal.querySelector(".modal-close");
+        const logCloseBtn = logModal.querySelector(".modal-close");
+
+        // Função para abrir um modal
+        function openModal(modal) {
+            if (modal) {
+                modal.classList.add("open");
+            }
+        }
+
+        // Função para fechar um modal
+        function closeModal(modal) {
+            if (modal) {
+                modal.classList.remove("open");
+            }
+        }
+
+        // Adiciona evento para todos os botões "Configurações"
+        detailsTriggers.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // Pega o nome da app do atributo data-
+                const appName = btn.closest('.app-card').dataset.appName;
+                // Atualiza o título do modal
+                detailsModal.querySelector("h2 span").textContent = appName;
+                // Abre o modal
+                openModal(detailsModal);
+            });
+        });
+
+        // Adiciona evento para todos os botões "Logs"
+        logTriggers.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // Pega o nome da app
+                const appName = btn.closest('.app-card').dataset.appName;
+                // Atualiza o título do modal
+                logModal.querySelector("h2 span").textContent = appName;
+                // Abre o modal
+                openModal(logModal);
+            });
+        });
+
+        // Eventos de fechar
+        detailsCloseBtn.addEventListener("click", () => closeModal(detailsModal));
+        logCloseBtn.addEventListener("click", () => closeModal(logModal));
+
+        // Fechar clicando fora (no overlay)
+        window.addEventListener("click", function(event) {
+            if (event.target == detailsModal) {
+                closeModal(detailsModal);
+            }
+            if (event.target == logModal) {
+                closeModal(logModal);
+            }
+        });
+        
+        // Fechar com a tecla ESC
+        window.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                closeModal(detailsModal);
+                closeModal(logModal);
+            }
+        });
+    </script>
+
+</body>
+</html>
