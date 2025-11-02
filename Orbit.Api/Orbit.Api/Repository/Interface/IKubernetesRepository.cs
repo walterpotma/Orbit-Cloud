@@ -23,9 +23,9 @@ namespace Orbit.Api.Repository.Interface
 
         #region Kubernetes Namespace
         Task<IEnumerable<V1Namespace>> ListNamespacesAsync();
-        Task<V1Namespace> GetNamespaceAsync(string name);
-        Task<V1Namespace> CreateNamespaceAsync(V1Namespace ns);
-        Task DeleteNamespaceAsync(string name);
+        Task<V1Namespace> GetNamespacesAsync(string name);
+        Task<V1Namespace> CreateNamespacesAsync(V1Namespace ns);
+        Task DeleteNamespacesAsync(string name);
         #endregion
     }
 }

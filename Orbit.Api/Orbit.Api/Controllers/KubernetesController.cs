@@ -56,26 +56,75 @@ namespace Orbit.Api.Controllers
             return Ok(services);
         }
 
-
+        #region
         [HttpGet("ingress")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetIngresses(string? namespaceName = null)
+        public async Task<IActionResult> GetIngresses(string? namespaces = null)
         {
-            var ingresses = await _kubernetesService.GetAllIngressesAsync(namespaceName);
+            var ingresses = await _kubernetesService.GetAllIngressAsync(namespaces);
             return Ok(ingresses);
         }
-        [HttpGet("ingress/{namespaceName}")]
+        [HttpGet("ingress/{namespaces}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetIngressesNamespace(string namespaceName)
+        public async Task<IActionResult> GetIngressesNamespace(string namespaces)
         {
-            var ingresses = await _kubernetesService.GetAllIngressesAsync(namespaceName);
-            if (!ingresses.Any())
+            var response = await _kubernetesService.GetAllIngressAsync(namespaces);
+            if (!response.Any())
             {
-                return NotFound($"No ingresses found in namespace '{namespaceName}'.");
+                return NotFound($"No ingresses found in namespace '{namespaces}'.");
             }
-            return Ok(ingresses);
+            return Ok(response);
         }
 
+        [HttpGet("ingress/{namespaces}/{name}")]
+        [ActionName(nameof(GetIngressByName))]
+        [ProducesResponseType(typeof(DtoNamespaceResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<DtoIngressResponse>> GetIngressByName(string name, string namespaces)
+        {
+            var response = await _kubernetesService.GetIngressAsync(name, namespaces);
+
+            if (response == null)
+            {
+                return NotFound($"Ingress '{name}' não encontrado.");
+            }
+
+            return Ok(response);
+        }
+        [HttpPost("ingress/{namespaces}")]
+        [ProducesResponseType(typeof(DtoIngressResponse), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<IActionResult> CreateSecret([FromBody] DtoIngressRequest request, string namespaces)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _kubernetesService.CreateIngressAsync(request, namespaces);
+
+            return CreatedAtAction(
+                nameof(GetIngressByName),
+                new { name = response.Name, namespaces = response.Namespace },
+                response
+            );
+        }
+        [HttpDelete("ingress/{namespaces}/{name}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteIngress(string name, string namespaces)
+        {
+            var existing = await _kubernetesService.GetIngressAsync(name, namespaces);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            await _kubernetesService.DeleteIngressAsync(name, namespaces);
+
+            return NoContent();
+        }
+        #endregion
 
         #region Kubernetes Secret
         [HttpGet("secrets")]
@@ -154,8 +203,8 @@ namespace Orbit.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetNamespaces()
         {
-            var namespaces = await _kubernetesService.GetAllNamespacesAsync();
-            return Ok(namespaces);
+            var response = await _kubernetesService.GetAllNamespacesAsync();
+            return Ok(response);
         }
 
         [HttpPost("namespaces")]
@@ -168,12 +217,12 @@ namespace Orbit.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var createdNamespace = await _kubernetesService.CreateNamespaceAsync(request);
+            var created = await _kubernetesService.CreateNamespacesAsync(request);
 
             return CreatedAtAction(
                 nameof(GetNamespaceByName),
-                new { name = createdNamespace.Name },
-                createdNamespace
+                new { name = created.Name },
+                created
             );
         }
 
@@ -183,7 +232,7 @@ namespace Orbit.Api.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<DtoNamespaceResponse>> GetNamespaceByName(string name)
         {
-            var namespaceDto = await _kubernetesService.GetNamespaceAsync(name);
+            var namespaceDto = await _kubernetesService.GetNamespacesAsync(name);
 
             if (namespaceDto == null)
             {
@@ -198,13 +247,13 @@ namespace Orbit.Api.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteNamespace(string name)
         {
-            var existing = await _kubernetesService.GetNamespaceAsync(name);
+            var existing = await _kubernetesService.GetNamespacesAsync(name);
             if (existing == null)
             {
                 return NotFound();
             }
 
-            await _kubernetesService.DeleteNamespaceAsync(name);
+            await _kubernetesService.DeleteNamespacesAsync(name);
 
             return NoContent();
         }

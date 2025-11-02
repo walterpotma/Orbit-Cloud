@@ -32,7 +32,7 @@ namespace Orbit.Api.Repository
 
 
         #region Kubernetes Ingress
-        public async Task<IEnumerable<V1Ingress>> ListIngressesAsync(string? namespaceName = null)
+        public async Task<IEnumerable<V1Ingress>> ListIngressAsync(string? namespaceName = null)
         {
             var ingresses = string.IsNullOrEmpty(namespaceName)
                 ? await _kubernetesClient.NetworkingV1.ListIngressForAllNamespacesAsync()
@@ -59,7 +59,6 @@ namespace Orbit.Api.Repository
             await _kubernetesClient.NetworkingV1.DeleteNamespacedIngressAsync(name, namespaces);
         }
         #endregion
-
 
         #region Kubernetes Secret
         public async Task<IEnumerable<V1Secret>> ListSecretsAsync(string? namespaces = null)
@@ -93,10 +92,10 @@ namespace Orbit.Api.Repository
         #region Kubernetes Namespaces
         public async Task<IEnumerable<V1Namespace>> ListNamespacesAsync()
         {
-            var namespaces = await _kubernetesClient.CoreV1.ListNamespaceAsync();
-            return namespaces.Items;
+            var response = await _kubernetesClient.CoreV1.ListNamespaceAsync();
+            return response.Items;
         }
-        public async Task<V1Namespace> GetNamespaceAsync(string name)
+        public async Task<V1Namespace> GetNamespacesAsync(string name)
         {
             try
             {
@@ -107,11 +106,11 @@ namespace Orbit.Api.Repository
                 return null;
             }
         }
-        public async Task<V1Namespace> CreateNamespaceAsync(V1Namespace ns)
+        public async Task<V1Namespace> CreateNamespacesAsync(V1Namespace created)
         {
-            return await _kubernetesClient.CoreV1.CreateNamespaceAsync(ns);
+            return await _kubernetesClient.CoreV1.CreateNamespaceAsync(created);
         }
-        public async Task DeleteNamespaceAsync(string name)
+        public async Task DeleteNamespacesAsync(string name)
         {
             await _kubernetesClient.CoreV1.DeleteNamespaceAsync(name);
         }

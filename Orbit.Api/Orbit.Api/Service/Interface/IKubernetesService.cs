@@ -25,9 +25,9 @@ namespace Orbit.Api.Service.Interface
 
         #region Kubernetes Namespace
         Task<IEnumerable<DtoNamespaceResponse>> GetAllNamespacesAsync();
-        Task<DtoNamespaceResponse> GetNamespaceAsync(string name);
-        Task<DtoNamespaceResponse> CreateNamespaceAsync(DtoNamespaceRequest request);
-        Task DeleteNamespaceAsync(string name);
+        Task<DtoNamespaceResponse> GetNamespacesAsync(string name);
+        Task<DtoNamespaceResponse> CreateNamespacesAsync(DtoNamespaceRequest request);
+        Task DeleteNamespacesAsync(string name);
         #endregion
     }
 }

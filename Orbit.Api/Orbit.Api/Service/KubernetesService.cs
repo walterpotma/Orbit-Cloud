@@ -66,6 +66,37 @@ namespace Orbit.Api.Service
             };
         }
 
+        private V1Ingress BuildIngressObject(DtoIngressRequest request)
+        {
+            return new V1Ingress
+            {
+                ApiVersion = "v1",
+                Kind = "Ingress",
+                Metadata = new V1ObjectMeta
+                {
+                    Name = request.Name,
+                    NamespaceProperty = request.Namespace ?? "default",
+                    Annotations = new Dictionary<string, string>
+                    {
+                        { "kubernetes.io/ingress.class", request.IngressClassName ?? "nginx" }
+                    }
+                },
+            };
+        }
+        private DtoIngressResponse MapToDtoIngress(V1Ingress createdEntity)
+        {
+            if (createdEntity == null)
+            {
+                return null;
+            }
+
+            return new DtoIngressResponse
+            {
+                Name = createdEntity.Name(),
+                Namespace = createdEntity.Namespace()
+            };
+        }
+
         public KubernetesService(IKubernetesRepository repository)
         {
             _repository = repository;
@@ -100,42 +131,39 @@ namespace Orbit.Api.Service
         }
 
         #region Kubernetes Ingress
-        public async Task<IEnumerable<DtoSecretResponse>> GetAllSecretsAsync(string? namespaces = null)
+        public async Task<IEnumerable<DtoIngressResponse>> GetAllIngressAsync(string? namespaces = null)
         {
-            var secrets = await _repository.ListSecretsAsync(namespaces);
-            return secrets.Select(s => new DtoSecretResponse
+            var reponse = await _repository.ListIngressAsync(namespaces);
+            return reponse.Select(s => new DtoIngressResponse
             {
                 Name = s.Metadata.Name,
                 Namespace = s.Metadata.NamespaceProperty,
-                Type = s.Type,
-                Keys = s.Data?.Keys,
-                CreationTimestamp = s.Metadata.CreationTimestamp
             });
         }
-        public async Task<DtoSecretResponse> GetSecretsAsync(string name, string namespaces)
+        public async Task<DtoIngressResponse> GetIngressAsync(string name, string namespaces)
         {
-            var secret = await _repository.GetSecretsAsync(name, namespaces);
-            if (secret == null)
+            var reponse = await _repository.GetIngressAsync(name, namespaces);
+            if (reponse == null)
             {
                 return null;
             }
-            return MapToDtoSecret(secret);
+            return MapToDtoIngress(reponse);
         }
-        public async Task<DtoSecretResponse> CreateSecretsAsync(DtoSecretRequest request, string namespaces)
+        public async Task<DtoIngressResponse> CreateIngressAsync(DtoIngressRequest request, string namespaces)
         {
-            var existing = await _repository.GetSecretsAsync(request.Name, namespaces);
+            var existing = await _repository.GetIngressAsync(request.Name, namespaces);
             if (existing != null)
             {
-                throw new Exception($"Secret '{request.Name}' já existe.");
+                throw new Exception($"Ingress '{request.Name}' já existe.");
             }
 
-            var newSecret = BuildSecretObject(request);
-            var created = await _repository.CreateSecretsAsync(newSecret, namespaces);
-            return MapToDtoSecret(created);
+            var newIngress = BuildIngressObject(request);
+            var created = await _repository.CreateIngressAsync(newIngress, namespaces);
+            return MapToDtoIngress(created);
         }
-        public async Task DeleteSecretsAsync(string name, string namespaces)
+        public async Task DeleteIngressAsync(string name, string namespaces)
         {
-            await _repository.DeleteSecretsAsync(name, namespaces);
+            await _repository.DeleteIngressAsync(name, namespaces);
         }
         #endregion
 
@@ -182,43 +210,43 @@ namespace Orbit.Api.Service
         #region Kubernetes Namespace
         public async Task<IEnumerable<DtoNamespaceResponse>> GetAllNamespacesAsync()
         {
-            var namespaces = await _repository.ListNamespacesAsync();
-            return namespaces.Select(n => new DtoNamespaceResponse
+            var response = await _repository.ListNamespacesAsync();
+            return response.Select(n => new DtoNamespaceResponse
             {
                 Name = n.Metadata.Name,
                 Status = n.Status.Phase
             });
         }
-        public async Task<DtoNamespaceResponse> GetNamespaceAsync(string name)
+        public async Task<DtoNamespaceResponse> GetNamespacesAsync(string name)
         {
-            var ns = await _repository.GetNamespaceAsync(name);
-            if (ns == null)
+            var response = await _repository.GetNamespacesAsync(name);
+            if (response == null)
             {
                 throw new Exception($"Namespace '{name}' não encontrado.");
             }
-            return MapToDto(ns);
+            return MapToDto(response);
         }
-        public async Task<DtoNamespaceResponse> CreateNamespaceAsync(DtoNamespaceRequest request)
+        public async Task<DtoNamespaceResponse> CreateNamespacesAsync(DtoNamespaceRequest request)
         {
-            var existing = await _repository.GetNamespaceAsync(request.Name);
+            var existing = await _repository.GetNamespacesAsync(request.Name);
             if (existing != null)
             {
                 throw new Exception($"Namespace '{request.Name}' já existe.");
             }
 
             var newNs = BuildNamespaceObject(request);
-            var created = await _repository.CreateNamespaceAsync(newNs);
+            var created = await _repository.CreateNamespacesAsync(newNs);
             return MapToDto(created);
         }
         public async Task DeleteNamespaceAsync(string name)
         {
-            var existing = await _repository.GetNamespaceAsync(name);
+            var existing = await _repository.GetNamespacesAsync(name);
             if (existing == null)
             {
                 throw new Exception($"Namespace '{name}' não encontrado.");
             }
 
-            await _repository.DeleteNamespaceAsync(name);
+            await _repository.DeleteNamespacesAsync(name);
         }
         #endregion
     }
