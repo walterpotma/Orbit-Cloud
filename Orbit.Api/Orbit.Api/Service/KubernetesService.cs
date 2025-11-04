@@ -2,140 +2,19 @@
 using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service.Interface;
+using Orbit.Api.Mappers;
 
 namespace Orbit.Api.Service
 {
     public class KubernetesService : IKubernetesService
     {
         private readonly IKubernetesRepository _repository;
+        private readonly MapperKubernetes _mapper;
 
-        private V1Namespace BuildNamespaceObject(DtoNamespaceRequest request)
-        {
-            return new V1Namespace
-            {
-                Metadata = new k8s.Models.V1ObjectMeta
-                {
-                    Name = request.Name
-                }
-            };
-        }
-
-        private DtoNamespaceResponse MapToDto(V1Namespace createdEntity)
-        {
-            if (createdEntity == null)
-            {
-                return null;
-            }
-
-            return new DtoNamespaceResponse
-            {
-                Name = createdEntity.Name(),
-                Status = createdEntity.Status?.Phase
-            };
-        }
-
-        private V1Secret BuildSecretObject(DtoSecretRequest request)
-        {
-            return new V1Secret
-            {
-                ApiVersion = "v1",
-                Kind = "Secret",
-                Metadata = new V1ObjectMeta
-                {
-                    Name = request.Name,
-                    NamespaceProperty = request.Namespace ?? "default"
-                },
-                Type = "Opaque",
-                StringData = request.Data
-            };
-        }
-        private DtoSecretResponse MapToDtoSecret(V1Secret createdEntity)
-        {
-            if (createdEntity == null)
-            {
-                return null;
-            }
-
-            return new DtoSecretResponse
-            {
-                Name = createdEntity.Name(),
-                Namespace = createdEntity.Namespace(),
-                Type = createdEntity.Type,
-                CreationTimestamp = createdEntity.Metadata.CreationTimestamp,
-                Keys = createdEntity.Data?.Keys
-            };
-        }
-
-        private V1Ingress BuildIngressObject(DtoIngressRequest request)
-        {
-            return new V1Ingress
-            {
-                ApiVersion = "v1",
-                Kind = "Ingress",
-                Metadata = new V1ObjectMeta
-                {
-                    Name = request.Name,
-                    NamespaceProperty = request.Namespace ?? "default",
-                    Annotations = new Dictionary<string, string>
-                    {
-                        { "kubernetes.io/ingress.class", request.IngressClassName ?? "nginx" }
-                    }
-                },
-            };
-        }
-        private DtoIngressResponse MapToDtoIngress(V1Ingress createdEntity)
-        {
-            if (createdEntity == null)
-            {
-                return null;
-            }
-
-            return new DtoIngressResponse
-            {
-                Name = createdEntity.Name(),
-                Namespace = createdEntity.Namespace()
-            };
-        }
-
-        private V1Service BuildServiceObject(DtoServiceRequest request)
-        {
-            return new V1Service
-            {
-                ApiVersion = "v1",
-                Kind = "Service",
-            };
-        }
-        private DtoServiceResponse MapToDtoService(V1Service createdEntity)
-        {
-            if (createdEntity == null)
-            {
-                return null;
-            }
-
-            return new DtoServiceResponse
-            {
-                Name = createdEntity.Name(),
-                Namespace = createdEntity.Namespace()
-            };
-        }
-
-        private DtoPodResponse MapToDtoPod(V1Pod createdEntity)
-        {
-            if (createdEntity == null)
-            {
-                return null;
-            }
-
-            return new DtoPodResponse
-            {
-                Name = createdEntity.Name(),
-                Namespace = createdEntity.Namespace()
-            };
-        }
-
-        public KubernetesService(IKubernetesRepository repository)
+        public KubernetesService(IKubernetesRepository repository, MapperKubernetes mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         #region Kubernetes Pods
@@ -157,7 +36,7 @@ namespace Orbit.Api.Service
             {
                 return null;
             }
-            return MapToDtoPod(response);
+            return _mapper.MapToDtoPod(response);
         }
         public async Task DeletePodsAsync(string name, string namespaces)
         {
@@ -184,7 +63,7 @@ namespace Orbit.Api.Service
             {
                 return null;
             }
-            return MapToDtoService(response);
+            return _mapper.MapToDtoService(response);
         }
         public async Task<DtoServiceResponse> CreateServicesAsync(DtoServiceRequest request, string namespaces)
         {
@@ -194,9 +73,9 @@ namespace Orbit.Api.Service
                 throw new Exception($"Service '{request.Name}' já existe.");
             }
 
-            var newServices = BuildServiceObject(request);
+            var newServices = _mapper.BuildServiceObject(request);
             var created = await _repository.CreateServicesAsync(newServices, namespaces);
-            return MapToDtoService(created);
+            return _mapper.MapToDtoService(created);
         }
         public async Task DeleteServicesAsync(string name, string namespaces)
         {
@@ -221,7 +100,7 @@ namespace Orbit.Api.Service
             {
                 return null;
             }
-            return MapToDtoIngress(reponse);
+            return _mapper.MapToDtoIngress(reponse);
         }
         public async Task<DtoIngressResponse> CreateIngressAsync(DtoIngressRequest request, string namespaces)
         {
@@ -231,9 +110,9 @@ namespace Orbit.Api.Service
                 throw new Exception($"Ingress '{request.Name}' já existe.");
             }
 
-            var newIngress = BuildIngressObject(request);
+            var newIngress = _mapper.BuildIngressObject(request);
             var created = await _repository.CreateIngressAsync(newIngress, namespaces);
-            return MapToDtoIngress(created);
+            return _mapper.MapToDtoIngress(created);
         }
         public async Task DeleteIngressAsync(string name, string namespaces)
         {
@@ -261,7 +140,7 @@ namespace Orbit.Api.Service
             {
                 return null;
             }
-            return MapToDtoSecret(secret);
+            return _mapper.MapToDtoSecret(secret);
         }
         public async Task<DtoSecretResponse> CreateSecretsAsync(DtoSecretRequest request, string namespaces)
         {
@@ -271,9 +150,9 @@ namespace Orbit.Api.Service
                 throw new Exception($"Secret '{request.Name}' já existe.");
             }
 
-            var newSecret = BuildSecretObject(request);
+            var newSecret = _mapper.BuildSecretObject(request);
             var created = await _repository.CreateSecretsAsync(newSecret, namespaces);
-            return MapToDtoSecret(created);
+            return _mapper.MapToDtoSecret(created);
         }
         public async Task DeleteSecretsAsync(string name, string namespaces)
         {
@@ -298,7 +177,7 @@ namespace Orbit.Api.Service
             {
                 throw new Exception($"Namespace '{name}' não encontrado.");
             }
-            return MapToDto(response);
+            return _mapper.MapToDtoNamespace(response);
         }
         public async Task<DtoNamespaceResponse> CreateNamespacesAsync(DtoNamespaceRequest request)
         {
@@ -308,9 +187,9 @@ namespace Orbit.Api.Service
                 throw new Exception($"Namespace '{request.Name}' já existe.");
             }
 
-            var newNs = BuildNamespaceObject(request);
+            var newNs = _mapper.BuildNamespaceObject(request);
             var created = await _repository.CreateNamespacesAsync(newNs);
-            return MapToDto(created);
+            return _mapper.MapToDtoNamespace(created);
         }
         public async Task DeleteNamespacesAsync(string name)
         {

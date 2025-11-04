@@ -29,4 +29,5 @@ spec:
                 exit $EXIT_CODE
               fi
               echo "Consulta concluída com sucesso (EXIT CODE 0).";
+              exit 0;
           restartPolicy: OnFailure

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Orbit.Api.Data;
+using Orbit.Api.Mappers;
 using Orbit.Api.Repository;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service;
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 // Novo modelo de arquitetura da api
 builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
 builder.Services.AddScoped<IKubernetesService, KubernetesService>();
+builder.Services.AddSingleton<MapperKubernetes>();
 
 builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
 builder.Services.AddScoped<IFileSystemService, FileSystemService>();
