@@ -10,44 +10,19 @@ namespace Orbit.Api.Controllers
     public class RegistryController : ControllerBase
     {
         private readonly IRegistryService _imageService;
-
         public RegistryController(IRegistryService imageService)
         {
             _imageService = imageService;
         }
 
+
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<DtoImage>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ListImagesInRegistry()
         {
-            try
-            {
-                var images = await _imageService.ListImagesAsync();
-                return Ok(images);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao listar imagens: {ex.Message}");
-            }
-        }
-
-        [HttpPost("build")]
-        [ProducesResponseType(typeof(DtoImageBuild), StatusCodes.Status201Created)]
-        public async Task<IActionResult> BuildImage([FromBody] DtoImageBuild request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                var result = await _imageService.BuildAndPushImageAsync(request);
-                return CreatedAtAction(nameof(BuildImage), result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao construir imagem: {ex.Message}");
-            }
+            var images = await _imageService.ListImagesAsync();
+            return Ok(images);
         }
     }
 }

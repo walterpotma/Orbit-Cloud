@@ -6,52 +6,33 @@ namespace Orbit.Api.Service
 {
     public class RegistryService : IRegistryService
     {
-        private readonly IRegistryRepository _imageRepository;
-        private readonly string _registryUrl;
+        private readonly IRegistryRepository _apiRepository;
 
-        public RegistryService(IRegistryService imageRepository, IConfiguration configuration)
+        public RegistryService(IRegistryRepository apiRepository)
         {
-            _imageRepository = (IRegistryRepository?)imageRepository;
-            // Pega a URL do registry sem "http://" para usar na tag da imagem
-            var fullUrl = configuration["DockerRegistry:Url"] ?? "http://localhost:5000";
-            _registryUrl = new Uri(fullUrl).Host + ":" + new Uri(fullUrl).Port;
+            _apiRepository = apiRepository;
         }
 
         public async Task<IEnumerable<DtoImage>> ListImagesAsync()
         {
-            var repositories = await _imageRepository.GetRepositoriesAsync();
-            var imageList = new List<DtoImage>();
+            var repositories = await _apiRepository.GetRepositoriesAsync();
+            var tasks = new List<Task<DtoImage>>();
 
             foreach (var repoName in repositories)
             {
-                var tags = await _imageRepository.GetTagsAsync(repoName);
-                imageList.Add(new DtoImage
+                tasks.Add(Task.Run(async () =>
                 {
-                    Name = repoName,
-                    Tags = tags
-                });
+                    var tags = await _apiRepository.GetTagsAsync(repoName);
+                    return new DtoImage
+                    {
+                        Name = repoName,
+                        Tags = tags
+                    };
+                }));
             }
-            return imageList;
-        }
 
-        public async Task<DtoImage> BuildAndPushImageAsync(DtoImageBuild request)
-        {
-            // 1. Monta o nome completo da imagem: 192.168.100.21:5000/meu-app:latest
-            var fullImageName = $"{_registryUrl}/{request.ImageName}";
-            var fullImageNameWithTag = $"{fullImageName}:{request.Tag}";
-
-            // 2. Manda o repositório construir
-            await _imageRepository.BuildImageAsync(request.BuildContextPath, request.DockerfilePath, fullImageNameWithTag);
-
-            // 3. Manda o repositório enviar para o registry
-            await _imageRepository.PushImageAsync(fullImageNameWithTag);
-
-            // 4. Retorna o DTO do que foi criado
-            return new DtoImage
-            {
-                Name = request.ImageName,
-                Tags = new List<string> { request.Tag }
-            };
+            var results = await Task.WhenAll(tasks);
+            return results;
         }
     }
 }

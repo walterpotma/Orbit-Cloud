@@ -41,6 +41,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 
+builder.Services.AddSingleton<Docker.DotNet.IDockerClient>(sp =>
+{
+    var dockerUri = new Uri("npipe://./pipe/docker_engine");
+    return new Docker.DotNet.DockerClientConfiguration(dockerUri).CreateClient();
+});
+
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 
 builder.Services.AddDbContext<OrbitDbContext>(options =>
@@ -72,7 +78,10 @@ builder.Services.AddScoped<IFileSystemService, FileSystemService>();
 builder.Services.AddScoped<IDeployRepository, DeployRepository>();
 builder.Services.AddScoped<IDeployService, DeployService>();
 
+builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
+builder.Services.AddScoped<IRegistryService, RegistryService>();
 
+#region Authentication Github
 builder.Services.AddAuthentication(options =>
 {
 options.DefaultScheme = "Cookies";
@@ -121,7 +130,7 @@ options.DefaultChallengeScheme = "GitHub";
         }
     };
 });
-
+#endregion
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
