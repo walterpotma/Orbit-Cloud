@@ -77,7 +77,8 @@ namespace Orbit.Api.Repository
             return user;
         }
 
-        public async Task<IEnumerable<DtoGithubRepos>> GetUserRepositoriesAsync(string accessToken)
+        #region Github Repositories
+        public async Task<IEnumerable<DtoReposResponse>> GetUserRepositoriesAsync(string accessToken)
         {
             var httpClient = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user/repos?type=owner");
@@ -94,10 +95,48 @@ namespace Orbit.Api.Repository
             }
 
             var responseStream = await response.Content.ReadAsStreamAsync();
-            var repositories = await JsonSerializer.DeserializeAsync<IEnumerable<DtoGithubRepos>>(responseStream);
+            var repositories = await JsonSerializer.DeserializeAsync<IEnumerable<DtoReposResponse>>(responseStream);
 
-            return repositories ?? new List<DtoGithubRepos>();
+            return repositories ?? new List<DtoReposResponse>();
         }
+        public async Task<DtoReposResponse> GetRepositoryByNameAsync(string accessToken, string owner, string repoName)
+        {
+            var endpointUrl = $"https://api.github.com/repos/{owner}/{repoName}";
+            var httpClient = _httpClientFactory.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, endpointUrl);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("Orbit-App", "1.0"));
+            var response = await httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException($"Erro ao buscar repositório do GitHub. Status: {response.StatusCode}");
+            }
+            var responseStream = await response.Content.ReadAsStreamAsync();
+            var repository = await JsonSerializer.DeserializeAsync<DtoReposResponse>(responseStream);
+            if (repository == null)
+            {
+                throw new InvalidOperationException("Não foi possível deserializar os dados do repositório do GitHub.");
+            }
+            return repository;
+        }
+        public async Task CloneReposByNameAsync(string accessToken, string owner, string repoName)
+        {
+            var endpointUrl = $"https://api.github.com/repos/{owner}/{repoName}/zipball";
+            var httpClient = _httpClientFactory.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, endpointUrl);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("Orbit-App", "1.0"));
+            var response = await httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException($"Erro ao clonar repositório do GitHub. Status: {response.StatusCode}");
+            }
+        }
+        #endregion
+
+        #region Github Webhooks
         public async Task<IEnumerable<DtoWebhookResponse>> GetRepositoryWebhooksAsync(string accessToken, string owner, string repoName)
         {
             var endpointUrl = $"https://api.github.com/repos/{owner}/{repoName}/hooks";
@@ -202,5 +241,6 @@ namespace Orbit.Api.Repository
                 throw new HttpRequestException($"Erro ao deletar webhook do GitHub. Status: {response.StatusCode}");
             }
         }
+        #endregion
     }
 }

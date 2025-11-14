@@ -16,12 +16,23 @@ namespace Orbit.Api.Service
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IEnumerable<DtoGithubRepos>> GetCurrentUserRepositoriesAsync()
+        #region Github Repositories
+        public async Task<IEnumerable<DtoReposResponse>> GetCurrentUserRepositoriesAsync()
         {
             var accessToken = await GetAccessTokenAsync();
             return await _githubRepository.GetUserRepositoriesAsync(accessToken);
         }
-
+        public async Task<DtoReposResponse> GetCurrentUserRepositoryByNameAsync(string owner, string repoName)
+        {
+            var accessToken = await GetAccessTokenAsync();
+            return await _githubRepository.GetRepositoryByNameAsync(accessToken, owner, repoName);
+        }
+        public async Task CloneReposByName(string acessToken, string owner, string repoName)
+        {
+            var accessToken = await GetAccessTokenAsync();
+            await _githubRepository.CloneReposByNameAsync(accessToken, owner, repoName);
+        }
+        #endregion
 
         #region Gtihub Webhooks
         public async Task<IEnumerable<DtoWebhookResponse>> GetCurrentUserRepoWebhooksAsync(string owner, string repoName)

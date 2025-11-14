@@ -4,7 +4,11 @@ namespace Orbit.Api.Service.Interface
 {
     public interface IGithubService
     {
-        Task<IEnumerable<DtoGithubRepos>> GetCurrentUserRepositoriesAsync();
+        #region Github Repositories
+        Task<IEnumerable<DtoReposResponse>> GetCurrentUserRepositoriesAsync();
+        Task<DtoReposResponse> GetCurrentUserRepositoryAsync(string accessToken ,string owner, string repoName);
+        Task CloneReposByNameAsync(string acessToken, string owner, string repoName);
+        #endregion
 
         #region Github Webhooks
         Task<IEnumerable<DtoWebhookResponse>> GetCurrentUserRepoWebhooksAsync(string owner, string repoName);
