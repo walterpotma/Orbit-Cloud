@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Orbit.Api.Dto.account.cs;
-using Orbit.Api.Dto_s;
-using Orbit.Api.Model;
-using Orbit.Api.Repository;
+﻿using Orbit.Api.Dto.Github;
 using Orbit.Api.Repository.Interface;
-using System.Security.Claims;
+using Orbit.Api.Service.Interface;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Orbit.Api.Service
 {
-    public class GithubService
+    public class GithubService : IGithubService
     {
         private readonly IGithubRepository _githubRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -21,17 +18,47 @@ namespace Orbit.Api.Service
 
         public async Task<IEnumerable<DtoGithubRepos>> GetCurrentUserRepositoriesAsync()
         {
-            // Pega o token de acesso que foi salvo no cookie durante o login
+            var accessToken = await GetAccessTokenAsync();
+            return await _githubRepository.GetUserRepositoriesAsync(accessToken);
+        }
+
+
+        #region Gtihub Webhooks
+        public async Task<IEnumerable<DtoWebhookResponse>> GetCurrentUserRepoWebhooksAsync(string owner, string repoName)
+        {
+            var accessToken = await GetAccessTokenAsync();
+            return await _githubRepository.GetRepositoryWebhooksAsync(accessToken, owner, repoName);
+        }
+
+        public async Task<DtoWebhookResponse> GetCurrentUserRepoWebhookIdAsync(string owner, string repoName, int hookId)
+        {
+            var accessToken = await GetAccessTokenAsync();
+            return await _githubRepository.GetRepositoryWebhookIdAsync(accessToken, owner, repoName, hookId);
+        }
+
+        private async Task<string> GetAccessTokenAsync()
+        {
             var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
 
             if (string.IsNullOrEmpty(accessToken))
             {
-                // Lança uma exceção se o usuário não estiver logado ou o token não for encontrado
                 throw new System.Exception("Token de acesso não encontrado. O usuário está autenticado?");
             }
-
-            // Chama o repositório para buscar os dados
-            return await _githubRepository.GetUserRepositoriesAsync(accessToken);
+            return accessToken;
         }
+
+        public async Task<DtoWebhookResponse> CreateCurrentUserRepoWebhookAsync(string owner, string repoName, DtoWebhookRequest request)
+        {
+            var accessToken = await GetAccessTokenAsync();
+
+            return await _githubRepository.CreateRepositoryWebhookAsync(accessToken, owner, repoName, request);
+        }
+
+        public async Task DeleteWebhookAsync(string owner, string repoName, int hookId)
+        {
+            var accessToken = await GetAccessTokenAsync();
+            await _githubRepository.DeleteWebhookAsync(accessToken, owner, repoName, hookId);
+        }
+        #endregion
     }
 }

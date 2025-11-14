@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Orbit.Api.Dto.Github;
 using Orbit.Api.Service;
+using Orbit.Api.Service.Interface;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,10 +15,9 @@ namespace Orbit.Api.Controllers
     [ApiController]
     public class GithubController : ControllerBase
     {
-        private readonly GithubService _githubService; // Adicione esta injeção
+        private readonly IGithubService _githubService;
 
-        // Atualize o construtor
-        public GithubController(GithubService githubService)
+        public GithubController(IGithubService githubService)
         {
             _githubService = githubService;
         }
@@ -48,6 +49,20 @@ namespace Orbit.Api.Controllers
             return Ok(userData);
         }
 
+        [HttpGet("token")]
+        [Authorize]
+        public async Task<IActionResult> GetMyTokenForTesting()
+        {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return NotFound("Token não encontrado. Faça o login primeiro.");
+            }
+
+            return Ok(new { AccessToken = accessToken });
+        }
+
         [HttpGet("repos")]
         [Authorize]
         public async Task<IActionResult> GetRepositories()
@@ -63,11 +78,85 @@ namespace Orbit.Api.Controllers
             }
         }
 
-        [HttpGet("webhook")]
-        public async Task<IActionResult> Teste()
+        [HttpGet("repos/{owner}/{repoName}/webhooks")]
+        public async Task<IActionResult> GetWebhooks([FromRoute] string owner, [FromRoute] string repoName)
         {
-            Console.WriteLine("deu certo o webhook");
-            return Ok("Teste");
+            try
+            {
+                var webhooks = await _githubService.GetCurrentUserRepoWebhooksAsync(owner, repoName);
+                return Ok(webhooks);
+            }
+            catch (System.Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("repos/{owner}/{repoName}/webhooks/{hookId}")]
+        public async Task<IActionResult> GetWebhookById(
+            [FromRoute] string owner,
+            [FromRoute] string repoName,
+            [FromRoute] int hookId)
+        {
+            try
+            {
+                var webhook = await _githubService.GetCurrentUserRepoWebhookIdAsync(owner, repoName, hookId);
+                return Ok(webhook);
+            }
+            catch (System.Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("repos/{owner}/{repoName}/webhooks")]
+        [Authorize]
+        public async Task<IActionResult> CreateWebhook(
+        [FromRoute] string owner,
+        [FromRoute] string repoName,
+        [FromBody] DtoWebhookRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var createdWebhook = await _githubService.CreateCurrentUserRepoWebhookAsync(owner, repoName, request);
+
+                return Ok(createdWebhook);
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(new { message = $"Falha na API do GitHub: {ex.Message}" });
+            }
+            catch (System.Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("repos/{owner}/{repoName}/webhooks/{hookId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteWebhook(
+            [FromRoute] string owner,
+            [FromRoute] string repoName,
+            [FromRoute] int hookId)
+        {
+            try
+            {
+                await _githubService.DeleteWebhookAsync(owner, repoName, hookId);
+                return NoContent();
+            }
+            catch (HttpRequestException ex)
+            {
+                return BadRequest(new { message = $"Falha na API do GitHub: {ex.Message}" });
+            }
+            catch (System.Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
         }
     }
 }

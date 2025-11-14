@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Orbit.Api.Dto.account.cs
+namespace Orbit.Api.Dto.Github
 {
-    public class DtoGithubRepos
+    public class DtoReposResponse
     {
         [JsonPropertyName("id")]
         public long Id { get; set; }

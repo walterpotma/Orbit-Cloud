@@ -64,10 +64,11 @@ builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<TransacionService>();
 builder.Services.AddScoped<ITransacionRepository, TransacionRepository>();
-builder.Services.AddScoped<GithubService>();
-builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 
 // Novo modelo de arquitetura da api
+builder.Services.AddScoped<IGithubService, GithubService>();
+builder.Services.AddScoped<IGithubRepository, GithubRepository>();
+
 builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
 builder.Services.AddScoped<IKubernetesService, KubernetesService>();
 builder.Services.AddSingleton<MapperKubernetes>();
