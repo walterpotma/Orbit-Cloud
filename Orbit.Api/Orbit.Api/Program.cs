@@ -66,12 +66,17 @@ builder.Services.AddScoped<TransacionService>();
 builder.Services.AddScoped<ITransacionRepository, TransacionRepository>();
 
 // Novo modelo de arquitetura da api
+
+#region Github Scoped
 builder.Services.AddScoped<IGithubService, GithubService>();
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
+#endregion
 
+#region Kubernetes Scoped
 builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
 builder.Services.AddScoped<IKubernetesService, KubernetesService>();
 builder.Services.AddSingleton<MapperKubernetes>();
+#endregion
 
 builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
 builder.Services.AddScoped<IFileSystemService, FileSystemService>();

@@ -6,8 +6,10 @@ namespace Orbit.Api.Repository.Interface
 {
     public interface IGithubRepository
     {
+        #region Github Authentication
         Task<string> GetAccessTokenAsync(string code);
         Task<DtoGithub> GetUserFromTokenAsync(string accessToken);
+        #endregion
 
         #region Github Repositories
         Task<IEnumerable<DtoReposResponse>> GetUserRepositoriesAsync(string accessToken);

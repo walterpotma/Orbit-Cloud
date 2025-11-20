@@ -22,6 +22,7 @@ namespace Orbit.Api.Repository
             _configuration = configuration;
         }
 
+        #region Github Authentication
         public async Task<string> GetAccessTokenAsync(string code)
         {
             var httpClient = _httpClientFactory.CreateClient("GitHub");
@@ -76,6 +77,7 @@ namespace Orbit.Api.Repository
             }
             return user;
         }
+        #endregion
 
         #region Github Repositories
         public async Task<IEnumerable<DtoReposResponse>> GetUserRepositoriesAsync(string accessToken)

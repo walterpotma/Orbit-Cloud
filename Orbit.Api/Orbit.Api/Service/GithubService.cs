@@ -22,12 +22,12 @@ namespace Orbit.Api.Service
             var accessToken = await GetAccessTokenAsync();
             return await _githubRepository.GetUserRepositoriesAsync(accessToken);
         }
-        public async Task<DtoReposResponse> GetCurrentUserRepositoryByNameAsync(string owner, string repoName)
+        public async Task<DtoReposResponse> GetCurrentUserRepositoryAsync(string owner, string repoName)
         {
             var accessToken = await GetAccessTokenAsync();
             return await _githubRepository.GetRepositoryByNameAsync(accessToken, owner, repoName);
         }
-        public async Task CloneReposByName(string acessToken, string owner, string repoName)
+        public async Task CloneReposByNameAsync(string owner, string repoName)
         {
             var accessToken = await GetAccessTokenAsync();
             await _githubRepository.CloneReposByNameAsync(accessToken, owner, repoName);

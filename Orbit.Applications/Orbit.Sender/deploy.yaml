@@ -45,8 +45,6 @@ metadata:
   name: orbitsender-api
   namespace: orbitcloud
   annotations:
-    # 1. ANOTAÇÃO OBRIGATÓRIA: Diz ao ExternalDNS o hostname a ser criado.
-    # ***SUBSTITUA PELO SEU DOMÍNIO REAL***
     external-dns.alpha.kubernetes.io/target: "crion.dev"
     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure

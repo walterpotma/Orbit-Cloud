@@ -22,6 +22,7 @@ namespace Orbit.Api.Controllers
             _githubService = githubService;
         }
 
+        #region Github Authentication
         [HttpGet("login")]
         public IActionResult Login()
         {
@@ -62,7 +63,9 @@ namespace Orbit.Api.Controllers
 
             return Ok(new { AccessToken = accessToken });
         }
+        #endregion
 
+        #region Github Repositories
         [HttpGet("repos")]
         [Authorize]
         public async Task<IActionResult> GetRepositories()
@@ -77,7 +80,42 @@ namespace Orbit.Api.Controllers
                 return Unauthorized(new { message = ex.Message });
             }
         }
+        [HttpGet("repos/{owner}/{repoName}")]
+        [Authorize]
+        public async Task<IActionResult> GetRepositoryByName(
+            [FromRoute] string owner,
+            [FromRoute] string repoName)
+        {
+            try
+            {
+                var repository = await _githubService.GetCurrentUserRepositoryAsync(owner, repoName);
+                return Ok(repository);
+            }
+            catch (System.Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
 
+        [HttpGet("repos/{owner}/{repoName}/clone")]
+        [Authorize]
+        public async Task<IActionResult> CloneRepository(
+            [FromRoute] string owner,
+            [FromRoute] string repoName)
+        {
+            try
+            {
+                await _githubService.CloneReposByNameAsync(owner, repoName);
+                return NoContent();
+            }
+            catch (System.Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
+        #endregion
+
+        #region Github Webhooks
         [HttpGet("repos/{owner}/{repoName}/webhooks")]
         public async Task<IActionResult> GetWebhooks([FromRoute] string owner, [FromRoute] string repoName)
         {
@@ -158,5 +196,6 @@ namespace Orbit.Api.Controllers
                 return Unauthorized(new { message = ex.Message });
             }
         }
+        #endregion
     }
 }
