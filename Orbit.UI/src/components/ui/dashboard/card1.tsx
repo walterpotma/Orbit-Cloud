@@ -1,5 +1,5 @@
-"use client"
-import { useState, useEffect, ReactNode } from "react"
+"use client";
+import { useState, useEffect, ReactNode } from "react";
 
 type cardProps = {
     title: string;
