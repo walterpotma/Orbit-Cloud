@@ -44,20 +44,17 @@ kind: Ingress
 metadata:
   name: orbitnet-api-ingress
   namespace: orbitcloud
-  annotations:
-    # Como a Cloudflare já faz o SSL lá fora, você pode manter isso
-    # para ter SSL interno ou pode até remover se quiser simplificar.
-    # Vou manter atualizado para o novo domínio:
-    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+  # REMOVI A ANOTAÇÃO DO CERT-RESOLVER
+  # annotations:
+  #   traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 spec:
   ingressClassName: traefik
-  tls:
-    - hosts:
-        # AQUI FOI A MUDANÇA: api-orbitnet
-        - api-orbitnet.crion.dev
-      secretName: orbitnet-api-tls 
+  # REMOVI A SEÇÃO TLS INTEIRA
+  # tls:
+  #   - hosts:
+  #       - api-orbitnet.crion.dev
+  #     secretName: orbitnet-api-tls 
   rules:
-    # AQUI TAMBÉM: api-orbitnet
     - host: api-orbitnet.crion.dev
       http:
         paths:
@@ -67,4 +64,4 @@ spec:
               service:
                 name: orbitnet-api
                 port:
-                  number: 8080
+                  number: 8080 # Isso continua 8080, pois é a porta do seu App
