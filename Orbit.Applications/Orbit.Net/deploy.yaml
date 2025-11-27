@@ -44,16 +44,18 @@ kind: Ingress
 metadata:
   name: orbitnet-api-ingress
   namespace: orbitcloud
-  # REMOVI A ANOTAÇÃO DO CERT-RESOLVER
-  # annotations:
-  #   traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+  annotations:
+    # Esta anotação garante que ele escute na porta segura
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
-  # REMOVI A SEÇÃO TLS INTEIRA
-  # tls:
-  #   - hosts:
-  #       - api-orbitnet.crion.dev
-  #     secretName: orbitnet-api-tls 
+  tls:
+    - hosts:
+        - api-orbitnet.crion.dev
+      # Podemos deixar um nome de secret qualquer aqui. 
+      # O Traefik vai usar um certificado padrão auto-assinado se não achar,
+      # e a Cloudflare vai aceitar por causa do "No TLS Verify".
+      secretName: orbitnet-default-cert 
   rules:
     - host: api-orbitnet.crion.dev
       http:
@@ -64,4 +66,4 @@ spec:
               service:
                 name: orbitnet-api
                 port:
-                  number: 8080 # Isso continua 8080, pois é a porta do seu App
+                  number: 8080
