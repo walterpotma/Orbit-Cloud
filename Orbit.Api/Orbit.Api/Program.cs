@@ -13,14 +13,34 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var kubeConfigPath = "keys/kube/hayom.yaml";
-var kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile(kubeConfigPath);
+KubernetesClientConfiguration kubernetesConfig;
+
+if (KubernetesClientConfiguration.IsInCluster())
+{
+    Console.WriteLine("🚀 Iniciando em modo In-Cluster (Kubernetes)");
+    kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
+}
+else
+{
+    Console.WriteLine("💻 Iniciando em modo Local (Dev)");
+    var kubeConfigPath = "keys/kube/hayom.yaml"; // Seu caminho local
+    
+    if (File.Exists(kubeConfigPath))
+    {
+        kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile(kubeConfigPath);
+    }
+    else
+    {
+        Console.WriteLine($"⚠️ Arquivo {kubeConfigPath} não encontrado. Tentando config padrão.");
+        kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile(); 
+    }
+}
 
 builder.Services.AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig));
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(7000);
+    options.ListenAnyIP(8080);
 });
 
 builder.Services.AddCors(options =>
