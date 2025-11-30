@@ -1,4 +1,7 @@
-﻿using k8s.Models;
+﻿using k8s;
+using k8s.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Orbit.Api.Repository.Interface
 {
@@ -12,6 +15,7 @@ namespace Orbit.Api.Repository.Interface
         Task<IEnumerable<V1Pod>> ListPodsAsync(string? namespaces = null);
         Task<V1Pod> GetPodsAsync(string name, string namespaces);
         Task DeletePodsAsync(string name, string namespaces);
+        Task<PodMetricsList> GetPodMetricsAsync();
         #endregion
 
         #region Kubernetes Service

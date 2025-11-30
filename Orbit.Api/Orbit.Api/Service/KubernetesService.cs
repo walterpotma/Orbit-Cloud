@@ -246,6 +246,76 @@ namespace Orbit.Api.Service
 
             await _repository.DeleteNamespacesAsync(name);
         }
+
+        public async Task<List<DtoNamespaceMetrics>> GetNamespaceMetricsAsync()
+        {
+            try
+            {
+                // 1. Busca dados brutos no Repo
+                var rawMetrics = await _repository.GetPodMetricsAsync();
+
+                // 2. Agrupa e Soma (Lógica de Negócio)
+                var grouped = rawMetrics.Items
+                    .GroupBy(m => m.Metadata.Namespace()) // Use .Namespace() com parênteses se for extensão
+                    .Select(g => new
+                    {
+                        Name = g.Key,
+                        Count = g.Count(),
+                        // Soma a CPU de todos os containers de todos os pods desse namespace
+                        TotalCpu = g.Sum(pod => pod.Containers.Sum(c => c.Usage["cpu"].ToDecimal())),
+                        // Soma a Memória
+                        TotalMem = g.Sum(pod => pod.Containers.Sum(c => c.Usage["memory"].ToDecimal()))
+                    })
+                    .ToList();
+
+                // 3. Mapeia para DTO e Formata
+                return grouped.Select(g => new DtoNamespaceMetrics
+                {
+                    Namespace = g.Name,
+                    PodCount = g.Count,
+                    RawCpu = g.TotalCpu,
+                    RawMemory = (long)g.TotalMem,
+                    CpuUsage = FormatCpu(g.TotalCpu),
+                    MemoryUsage = FormatMemory((long)g.TotalMem)
+                })
+                .OrderByDescending(x => x.RawMemory) // Ordena por quem gasta mais RAM
+                .ToList();
+            }
+            catch (Exception ex)
+            {
+                // Se o Metrics Server não estiver instalado no cluster, isso vai dar erro.
+                // Logar e retornar lista vazia é uma boa prática para não quebrar o dashboard.
+                Console.WriteLine($"Erro metrics: {ex.Message}");
+                return new List<DtoNamespaceMetrics>();
+            }
+        }
+
+        public async Task<DtoNamespaceMetrics> GetByNamespaceMetricsAsync(string namespaced)
+        {
+            var allMetrics = await GetNamespaceMetricsAsync();
+            return allMetrics.FirstOrDefault(m => m.Namespace == namespaced);
+        }
+
+        // --- Helpers Privados de Formatação ---
+
+        private string FormatCpu(decimal value)
+        {
+            // O K8s retorna CPU em cores decimais. 0.1 = 100m (millicores)
+            if (value < 1)
+                return $"{(value * 1000):0}m";
+            return $"{value:0.0} cpu";
+        }
+
+        private string FormatMemory(long bytes)
+        {
+            // 1 MiB = 1024 * 1024 bytes
+            double mb = bytes / (1024.0 * 1024.0);
+
+            if (mb > 1024)
+                return $"{(mb / 1024.0):0.00} GiB";
+
+            return $"{mb:0} MiB";
+        }
         #endregion
     }
 }

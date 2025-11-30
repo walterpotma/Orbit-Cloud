@@ -48,6 +48,12 @@ namespace Orbit.Api.Repository
         {
             await _kubernetesClient.CoreV1.DeleteNamespacedPodAsync(name, namespaces);
         }
+
+        public async Task<PodMetricsList> GetPodMetricsAsync()
+        {
+            // Essa extensão busca as métricas de todos os pods no cluster inteiro
+            return await _kubernetesClient.GetKubernetesPodsMetricsAsync();
+        }
         #endregion
 
         #region Kubernetes Service

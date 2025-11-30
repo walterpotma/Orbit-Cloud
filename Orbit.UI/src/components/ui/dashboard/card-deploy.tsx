@@ -15,11 +15,12 @@ type CardDeployProps = {
     status: string;        // "Running", "Pending", "Failed"
     ready: number;         // Réplicas prontas (Ex: 1)
     desired: number;       // Réplicas desejadas (Ex: 3)
-    age: string;           // Tempo de vida (Ex: "2d")
+    age: string;
+    tag: string;    // Tempo de vida (Ex: "2d")
     className?: string;
 }
 
-export default function CardDeploy({ name, namespace, status, ready, desired, age, className }: CardDeployProps) {
+export default function CardDeploy({ name, namespace, status, ready, desired, age, tag, className }: CardDeployProps) {
 
     // Calcula a porcentagem de saúde do deploy (Ex: 1/2 = 50%)
     const percentage = desired > 0 ? (ready / desired) * 100 : 0;
@@ -77,15 +78,21 @@ export default function CardDeploy({ name, namespace, status, ready, desired, ag
                         <h1 className="text-base font-semibold text-white truncate" title={name}>
                             {name}
                         </h1>
-                        <span className="text-sm px-2 py-0.5 bg-slate-800 rounded-full text-slate-400 border border-slate-700">
-                            {namespace}
-                        </span>
+
                     </div>
 
                     <div className={`flex items-center gap-1.5 mt-1 ${style.text}`}>
                         {style.icon}
                         <p className="text-sm font-medium">{status}</p>
                     </div>
+                </div>
+                <div className="min-w-20 flex flex-col gap-1">
+                    {/* <span className="text-sm px-2 py-0.5 bg-slate-800 rounded-full text-slate-400 border border-slate-700">
+                        {namespace}
+                    </span> */}
+                    <span className="text-sm px-2 py-0.5 bg-slate-800 rounded-full text-slate-400 border border-slate-700">
+                        {tag}
+                    </span>
                 </div>
             </div>
 

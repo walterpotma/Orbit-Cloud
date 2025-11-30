@@ -16,6 +16,9 @@ import { Deployments, Pods } from "@/api/kubernetes";
 
 export default function Home() {
     const [deployments, setDeployments] = useState<any[]>([]);
+    const [succededDeployments, setSuccededDeployments] = useState<any[]>([]);
+    const [failedDeployments, setFailedDeployments] = useState<any[]>([]);
+    const [pendingDeployments, setPendingDeployments] = useState<any[]>([]);
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
     console.log(repositorios);
 
@@ -30,6 +33,11 @@ export default function Home() {
             });
     }, []);
 
+    useEffect(() => {
+        setSuccededDeployments(deployments.filter(deploy => deploy.status.toLowerCase() === 'running'));
+        setFailedDeployments(deployments.filter(deploy => deploy.status.toLowerCase() === 'failed' || deploy.status.toLowerCase() === 'error' || deploy.status.toLowerCase() === 'crashloopbackoff'));
+        setPendingDeployments(deployments.filter(deploy => deploy.status.toLowerCase() === 'pending' || deploy.status.toLowerCase() === 'containercreating'));
+    }, [deployments]);
 
     console.log(deployments);
     return (
@@ -40,9 +48,9 @@ export default function Home() {
                     <BtnRefresh />
                 </div>
                 <div className="w-full flex justify-around space-x-5">
-                    <Card1 title="Deploys" value={repositorios.length} analysis="Ativos" className="" />
-                    <Card1 title="Deploys" value={repositorios.filter(repos => repos.type === 'deploy').length} analysis="Pausados" className="" />
-                    <Card1 title="Sub-Dominios" value={0} analysis="Registrados" className="" />
+                    <Card1 title="Deploys" value={succededDeployments.length} analysis="Bem Sucedidos" className="" />
+                    <Card1 title="Deploys" value={pendingDeployments.length} analysis="Pendentes" className="" />
+                    <Card1 title="Deploys" value={failedDeployments.length} analysis="Falhos" className="" />
                     <Card1 title="Builds" value={0} analysis="Mensais" className="" />
                 </div>
             </div>
@@ -65,6 +73,7 @@ export default function Home() {
                             ready={deploy.replicasReady}
                             desired={deploy.replicasDesired}
                             age={deploy.age}
+                            tag={deploy.imageTag}
                         />
                     ))}
                 </div>

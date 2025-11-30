@@ -40,6 +40,8 @@ namespace Orbit.Api.Service.Interface
         Task<DtoNamespaceResponse> GetNamespacesAsync(string name);
         Task<DtoNamespaceResponse> CreateNamespacesAsync(DtoNamespaceRequest request);
         Task DeleteNamespacesAsync(string name);
+        Task<List<DtoNamespaceMetrics>> GetNamespaceMetricsAsync();
+        Task<DtoNamespaceMetrics> GetByNamespaceMetricsAsync(string namespaces);
         #endregion
     }
 }

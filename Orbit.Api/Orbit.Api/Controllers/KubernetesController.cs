@@ -352,6 +352,18 @@ namespace Orbit.Api.Controllers
 
             return NoContent();
         }
+        [HttpGet("namespace/metrics")]
+        public async Task<IActionResult> GetMetrics()
+        {
+            var result = await _kubernetesService.GetNamespaceMetricsAsync();
+            return Ok(result);
+        }
+        [HttpGet("namespace/{namespaces}/metrics")]
+        public async Task<IActionResult> GetByNamespaceMetrics(string namespaces)
+        {
+            var result = await _kubernetesService.GetByNamespaceMetricsAsync(namespaces);
+            return Ok(result);
+        }
         #endregion
     }
 }
