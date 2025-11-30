@@ -63,7 +63,20 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<Docker.DotNet.IDockerClient>(sp =>
 {
-    var dockerUri = new Uri("npipe://./pipe/docker_engine");
+    Uri dockerUri;
+    
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        // Se você estiver rodando no Visual Studio no Windows
+        dockerUri = new Uri("npipe://./pipe/docker_engine");
+    }
+    else
+    {
+        // Se estiver rodando no K3s (Linux)
+        // Isso vai conectar no arquivo /var/run/docker.sock que montamos no deployment
+        dockerUri = new Uri("unix:///var/run/docker.sock");
+    }
+    
     return new Docker.DotNet.DockerClientConfiguration(dockerUri).CreateClient();
 });
 
