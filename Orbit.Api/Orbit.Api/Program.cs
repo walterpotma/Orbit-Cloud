@@ -115,9 +115,6 @@ builder.Services.AddSingleton<MapperKubernetes>();
 builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
 builder.Services.AddScoped<IFileSystemService, FileSystemService>();
 
-builder.Services.AddScoped<IDeployRepository, DeployRepository>();
-builder.Services.AddScoped<IDeployService, DeployService>();
-
 builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
 builder.Services.AddScoped<IRegistryService, RegistryService>();
 

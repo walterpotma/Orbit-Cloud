@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using k8s.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Service;
@@ -17,6 +18,15 @@ namespace Orbit.Api.Controllers
         {
             _kubernetesService = kubernetesService;
         }
+
+        #region Kubernetes Deployments
+        [HttpGet("deployments")] // URL final: /kubernetes/deployments
+        public async Task<IActionResult> GetDeployments()
+        {
+            var result = await _kubernetesService.GetAllDeploymentsAsync();
+            return Ok(result);
+        }
+        #endregion
 
         #region Kubernetes Pods
         [HttpGet("pods")]

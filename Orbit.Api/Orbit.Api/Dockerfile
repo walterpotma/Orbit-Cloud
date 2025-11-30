@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
-EXPOSE 7000
+EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -23,5 +23,5 @@ COPY --from=publish /app/publish .
 
 VOLUME /app/FileSystem
 
-ENV ASPNETCORE_URLS=http://+:7000
+ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "Orbit.Api.dll"]

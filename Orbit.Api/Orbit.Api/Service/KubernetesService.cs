@@ -17,6 +17,35 @@ namespace Orbit.Api.Service
             _mapper = mapper;
         }
 
+        #region Kubernetes Deployments
+        public async Task<List<DtoDeploymentResponse>> GetAllDeploymentsAsync()
+        {
+            var k8sDeployments = await _repository.GetDeploymentsAsync();
+
+            // Aqui fazemos o MAP e a Regra de Negócio
+            var result = k8sDeployments.Items.Select(d => new DtoDeploymentResponse
+            {
+                Name = d.Metadata.Name,
+                Namespace = d.Metadata.Namespace(),
+                ReplicasDesired = d.Status.Replicas ?? 0,
+                ReplicasReady = d.Status.ReadyReplicas ?? 0,
+
+                // Regra de Negócio: Define o status textual
+                Status = (d.Status.ReadyReplicas >= d.Status.Replicas) ? "Running" : "Pending",
+
+                // Calculo simples de idade
+                Age = d.Metadata.CreationTimestamp.HasValue
+                      ? (DateTime.UtcNow - d.Metadata.CreationTimestamp.Value).Days + "d"
+                      : "-"
+            })
+            // Filtro: Esconde coisas internas do K3s para limpar o dashboard
+            .Where(d => d.Namespace != "kube-system" && d.Namespace != "kube-public")
+            .ToList();
+
+            return result;
+        }
+        #endregion
+
         #region Kubernetes Pods
         public async Task<IEnumerable<DtoPodResponse>> GetAllPodsAsync(string? namespaces = null)
         {
