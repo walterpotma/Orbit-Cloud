@@ -23,7 +23,7 @@ if (KubernetesClientConfiguration.IsInCluster())
 else
 {
     Console.WriteLine("💻 Iniciando em modo Local (Dev)");
-    var kubeConfigPath = "keys/kube/hayom.yaml"; // Seu caminho local
+    var kubeConfigPath = "keys/kube/hayom.yaml";
     
     if (File.Exists(kubeConfigPath))
     {
@@ -47,7 +47,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "https://app.orbitcloud.com.br", "https://orbitcloud.com.br")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

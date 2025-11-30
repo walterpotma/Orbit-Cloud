@@ -10,7 +10,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use(express.json());
-app.use('/api/v1', Router);
+
+app.use('/v1', Router);
 
 app.listen(port, () => {
   console.log(`⚡️ Servidor rodando em http://localhost:${port}`);

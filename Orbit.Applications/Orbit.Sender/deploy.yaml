@@ -57,10 +57,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.orbitsender.crion.dev
+    - sender.orbitcloud.com.br
     secretName: orbitsender-tls-secret
   rules:
-  - host: api.orbitsender.crion.dev
+  - host: sender.orbitcloud.com.br
     http:
       paths:
       - path: /
