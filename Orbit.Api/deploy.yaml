@@ -47,13 +47,13 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - api-orbitcloud.crion.dev
+        - api-orbitcloud.com.br
       # Podemos deixar um nome de secret qualquer aqui. 
       # O Traefik vai usar um certificado padrão auto-assinado se não achar,
       # e a Cloudflare vai aceitar por causa do "No TLS Verify".
       secretName: orbitnet-default-cert 
   rules:
-    - host: api-orbitcloud.crion.dev
+    - host: api-orbitcloud.com.br
       http:
         paths:
           - path: /
