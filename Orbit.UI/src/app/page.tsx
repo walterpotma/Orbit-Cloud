@@ -12,18 +12,18 @@ import Table1 from "@/components/ui/dashboard/table";
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import fileTree from "@/model/storage";
 import { useEffect, useState } from "react";
-import { Pods } from "@/api/kubernetes";
+import { Deployments, Pods } from "@/api/kubernetes";
 
 export default function Home() {
-    const [kubernetesPods, setKubernetesPods] = useState<any[]>([]);
+    const [deployments, setDeployments] = useState<any[]>([]);
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
     console.log(repositorios);
 
     useEffect(() => {
-        Pods.List()
+        Deployments.List()
             .then((response: any) => {
                 console.log(response.data);
-                setKubernetesPods(response.data);
+                setDeployments(response.data);
             })
             .catch((error: any) => {
                 console.error("Error fetching pods:", error);
@@ -31,7 +31,7 @@ export default function Home() {
     }, []);
 
 
-    console.log(kubernetesPods);
+    console.log(deployments);
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start gap-5 overflow-auto custom-scroll">
             <div className="w-full">
@@ -56,18 +56,15 @@ export default function Home() {
                     <button className="px-4 py-2 rounded-lg border-1 border-blue-600 text-blue-600 text-sm">Ver Todos</button>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
-                    {kubernetesPods.map(pod => (
+                    {deployments.map(deploy => (
                         <CardDeploy
-                            // Use ?. para evitar erros se metadata não existir
-                            key={pod?.uid || Math.random()}
-                            title={pod?.name || "Pod sem nome"}
-                            metrics={[
-                                Math.floor(Math.random() * 100),
-                                Math.floor(Math.random() * 100),
-                                Math.floor(Math.random() * 100)
-                            ]}
-                            // Mesma coisa aqui para o status
-                            subTittle={`Status: ${pod?.status || "Desconhecido"}`}
+                            key={deploy.name}
+                            name={deploy.name}
+                            namespace={deploy.namespace}
+                            status={deploy.status}
+                            ready={deploy.replicasReady}
+                            desired={deploy.replicasDesired}
+                            age={deploy.age}
                         />
                     ))}
                 </div>

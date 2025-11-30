@@ -7,3 +7,9 @@ export class Pods {
         return axiosInstance.get(`${controller}/pods`, { withCredentials: true });
     }
 }
+
+export class Deployments {
+    static List() {
+        return axiosInstance.get(`${controller}/deployments`, { withCredentials: true });
+    }
+}

@@ -1,8 +1,9 @@
 ﻿using k8s.Models;
 using Orbit.Api.Dto.kubernetes;
+using Orbit.Api.Mappers;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service.Interface;
-using Orbit.Api.Mappers;
+using YamlDotNet.Core.Tokens;
 
 namespace Orbit.Api.Service
 {
@@ -22,24 +23,39 @@ namespace Orbit.Api.Service
         {
             var k8sDeployments = await _repository.GetDeploymentsAsync();
 
-            // Aqui fazemos o MAP e a Regra de Negócio
-            var result = k8sDeployments.Items.Select(d => new DtoDeploymentResponse
+            var result = k8sDeployments.Items.Select(d =>
             {
-                Name = d.Metadata.Name,
-                Namespace = d.Metadata.Namespace(),
-                ReplicasDesired = d.Status.Replicas ?? 0,
-                ReplicasReady = d.Status.ReadyReplicas ?? 0,
+                // 1. Pega o primeiro container da lista (geralmente é o principal)
+                var container = d.Spec.Template.Spec.Containers.FirstOrDefault();
 
-                // Regra de Negócio: Define o status textual
-                Status = (d.Status.ReadyReplicas >= d.Status.Replicas) ? "Running" : "Pending",
+                // 2. Pega a string da imagem (ou "-" se não achar)
+                string fullImage = container?.Image ?? "-";
 
-                // Calculo simples de idade
-                Age = d.Metadata.CreationTimestamp.HasValue
-                      ? (DateTime.UtcNow - d.Metadata.CreationTimestamp.Value).Days + "d"
-                      : "-"
+                // 3. Tenta extrair só a tag (tudo depois do último ":")
+                string tag = "latest";
+                if (fullImage.Contains(":"))
+                {
+                    tag = fullImage.Split(':').Last();
+                }
+
+                return new DtoDeploymentResponse
+                {
+                    Name = d.Metadata.Name,
+                    Namespace = d.Metadata.Namespace(), // Lembra dos parênteses!
+                    ReplicasDesired = d.Status.Replicas ?? 0,
+                    ReplicasReady = d.Status.ReadyReplicas ?? 0,
+                    Status = (d.Status.ReadyReplicas >= d.Status.Replicas) ? "Running" : "Pending",
+
+                    Age = d.Metadata.CreationTimestamp.HasValue
+                          ? (DateTime.UtcNow - d.Metadata.CreationTimestamp.Value).Days + "d"
+                          : "-",
+
+                    // NOVOS CAMPOS PREENCHIDOS
+                    Image = fullImage,
+                    ImageTag = tag
+                };
             })
-            // Filtro: Esconde coisas internas do K3s para limpar o dashboard
-            .Where(d => d.Namespace != "kube-system" && d.Namespace != "kube-public")
+            .Where(d => d.Namespace != "kube-system" && d.Namespace != "kube-public") // Filtro de sistema
             .ToList();
 
             return result;
