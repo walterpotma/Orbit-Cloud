@@ -1,3 +1,4 @@
+"use client";
 import { RefreshCcw } from "lucide-react";
 import "./globals.css";
 import Image from "next/image";
@@ -10,11 +11,27 @@ import CardList1 from "@/components/ui/dashboard/card-list1";
 import Table1 from "@/components/ui/dashboard/table";
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import fileTree from "@/model/storage";
+import { useEffect, useState } from "react";
+import { Pods } from "@/api/kubernetes";
 
 export default function Home() {
+    const [kubernetesPods, setKubernetesPods] = useState<any[]>([]);
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
     console.log(repositorios);
 
+    useEffect(() => {
+        Pods.List()
+            .then((response: any) => {
+                console.log(response.data);
+                setKubernetesPods(response.data);
+            })
+            .catch((error: any) => {
+                console.error("Error fetching pods:", error);
+            });
+    }, []);
+
+
+    console.log(kubernetesPods);
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start gap-5 overflow-auto custom-scroll">
             <div className="w-full">
@@ -30,7 +47,7 @@ export default function Home() {
                 </div>
             </div>
             <div className="w-full flex gap-5">
-                <CardList1 title="Uso de vCPU"  metrics={[10]} />
+                <CardList1 title="Uso de vCPU" metrics={[10]} />
                 <CardList1 title="Uso de RAM" metrics={[40]} />
             </div>
             <div className="w-full mt-4">
@@ -39,15 +56,26 @@ export default function Home() {
                     <button className="px-4 py-2 rounded-lg border-1 border-blue-600 text-blue-600 text-sm">Ver Todos</button>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
-                    <CardDeploy title="Deploys Recentes" metrics={[70, 40, 90]} subTittle="Analise dos ultimos deploys realizados." />
-                    <CardDeploy title="Builds Recentes" metrics={[60, 80, 30]} subTittle="Analise dos ultimos builds realizados." />
-                    <CardDeploy title="Erros Recentes" metrics={[20, 10, 50]} subTittle="Analise dos ultimos erros encontrados." />
+                    {kubernetesPods.map(pod => (
+                        <CardDeploy
+                            // Use ?. para evitar erros se metadata não existir
+                            key={pod?.uid || Math.random()}
+                            title={pod?.name || "Pod sem nome"}
+                            metrics={[
+                                Math.floor(Math.random() * 100),
+                                Math.floor(Math.random() * 100),
+                                Math.floor(Math.random() * 100)
+                            ]}
+                            // Mesma coisa aqui para o status
+                            subTittle={`Status: ${pod?.status || "Desconhecido"}`}
+                        />
+                    ))}
                 </div>
             </div>
             <div className="w-full mt-4">
                 <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-box-seam-fill"></i><p>Repositorios Recentes</p></h1>
                 <div className="grid grid-cols-3 gap-4">
-                    {repositorios.map(repos => { 
+                    {repositorios.map(repos => {
                         if (repos.type === 'file' && repos.branch == null) return null;
                         return (
                             <Card2 key={repos.name} data={{
