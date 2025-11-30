@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orbit-api-container
-        image: localhost:5000/orbit-api:v1.0.1
+        image: localhost:5000/orbit-api:v1.0.2
         ports:
         - containerPort: 8080
 ---
@@ -41,16 +41,12 @@ metadata:
   name: orbit-api-ingress
   namespace: orbitcloud
   annotations:
-    # Esta anotação garante que ele escute na porta segura
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
   tls:
     - hosts:
         - api.orbitcloud.com.br
-      # Podemos deixar um nome de secret qualquer aqui. 
-      # O Traefik vai usar um certificado padrão auto-assinado se não achar,
-      # e a Cloudflare vai aceitar por causa do "No TLS Verify".
       secretName: orbitnet-default-cert 
   rules:
     - host: api.orbitcloud.com.br
@@ -70,9 +66,9 @@ metadata:
   name: orbit-api-admin-binding
 subjects:
   - kind: ServiceAccount
-    name: default          # Nome da conta (padrão)
-    namespace: orbitcloud  # O namespace onde sua API roda (CONFIRA SE É ESSE MESMO)
+    name: default
+    namespace: orbitcloud
 roleRef:
   kind: ClusterRole
-  name: cluster-admin      # Permissão total no cluster inteiro
+  name: cluster-admin
   apiGroup: rbac.authorization.k8s.io

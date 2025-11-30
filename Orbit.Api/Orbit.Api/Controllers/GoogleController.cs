@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class GoogleController : ControllerBase
     {

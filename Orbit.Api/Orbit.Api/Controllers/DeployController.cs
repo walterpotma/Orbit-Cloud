@@ -6,7 +6,7 @@ using Orbit.Api.Service;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DeployController : ControllerBase
     {

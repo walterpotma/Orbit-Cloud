@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class GithubController : ControllerBase
     {

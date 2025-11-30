@@ -4,7 +4,7 @@ using Orbit.Api.Service.Interface;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class FileSystemController : ControllerBase
     {

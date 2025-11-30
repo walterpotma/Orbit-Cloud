@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {

@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class KubernetesController : ControllerBase
     {
