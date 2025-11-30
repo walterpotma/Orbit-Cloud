@@ -10,6 +10,7 @@ using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service;
 using Orbit.Api.Service.Interface;
 using System.Security.Claims;
+using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
