@@ -5,5 +5,7 @@ namespace Orbit.Api.Service.Interface
     public interface IFileSystemService
     {
         Task<IEnumerable<DtoFileSystem>> ListDirectoryContentsAsync(string subPath);
+        Task CreateDirectoryAsync(string relativePath);
+        Task CreateFileAsync(string relativePath, string content = "");
     }
 }

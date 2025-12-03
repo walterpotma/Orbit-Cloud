@@ -88,5 +88,37 @@ namespace Orbit.Api.Service
         {
             return Path.GetRelativePath(_rootPath, fullPath).Replace("\\", "/");
         }
+
+        public Task CreateDirectoryAsync(string relativePath)
+        {
+            // 1. Valida e pega o caminho completo seguro
+            string fullPath = GetAndValidateFullPath(relativePath);
+
+            // 2. Se já existe, não faz nada (ou pode lançar erro se preferir)
+            if (Directory.Exists(fullPath))
+            {
+                return Task.CompletedTask;
+            }
+
+            // 3. Cria o diretório
+            Directory.CreateDirectory(fullPath);
+            return Task.CompletedTask;
+        }
+
+        public async Task CreateFileAsync(string relativePath, string content = "")
+        {
+            // 1. Valida e pega o caminho completo seguro
+            string fullPath = GetAndValidateFullPath(relativePath);
+
+            // 2. Garante que a pasta pai exista
+            string parentDir = Path.GetDirectoryName(fullPath)!;
+            if (!Directory.Exists(parentDir))
+            {
+                Directory.CreateDirectory(parentDir);
+            }
+
+            // 3. Cria/Sobrescreve o arquivo com o conteúdo
+            await File.WriteAllTextAsync(fullPath, content);
+        }
     }
 }

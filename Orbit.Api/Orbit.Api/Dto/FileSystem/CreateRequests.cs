@@ -1,6 +1,13 @@
 ﻿namespace Orbit.Api.Dto.FileSystem
 {
-    public class CreateRequests
+    public class CreateDirectoryRequest
     {
+        public string Path { get; set; } = string.Empty; // Ex: "pasta1/subpasta"
+    }
+
+    public class CreateFileRequest
+    {
+        public string Path { get; set; } = string.Empty; // Ex: "pasta1/arquivo.txt"
+        public string Content { get; set; } = string.Empty;
     }
 }
