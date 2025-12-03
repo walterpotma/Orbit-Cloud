@@ -2,6 +2,7 @@
 using Orbit.Api.Data;
 using Orbit.Api.Model;
 using Orbit.Api.Repository.Interface;
+using System.Text.RegularExpressions;
 
 namespace Orbit.Api.Repository
 {
@@ -12,6 +13,27 @@ namespace Orbit.Api.Repository
         public AccountRepository (OrbitDbContext context)
         {
             _context = context;
+        }
+
+        public string SplitEmail (string email)
+        {
+            string slug = email.ToLowerInvariant();
+
+            slug = slug.Replace("@", "-at-");
+
+            slug = Regex.Replace(slug, @"[^a-z0-9]", "-");
+
+            slug = Regex.Replace(slug, @"-+", "-");
+
+            slug = slug.Trim('-');
+
+            if (slug.Length > 63)
+            {
+                var hash = email.GetHashCode().ToString("x");
+                slug = slug.Substring(0, 63 - hash.Length - 1) + "-" + hash;
+            }
+
+            return slug;
         }
 
         public async Task<List<Account>> GetAll ()

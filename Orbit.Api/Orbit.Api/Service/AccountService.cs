@@ -12,6 +12,11 @@ namespace Orbit.Api.Service
             _repository = repository;
         }
 
+        public string SplitEmail()
+        {
+            return _repository.SplitEmail("walterpotma@gmail.com");
+        }
+
         public async Task<List<DtoAccount>> GetAll()
         {
             var response = await _repository.GetAll();

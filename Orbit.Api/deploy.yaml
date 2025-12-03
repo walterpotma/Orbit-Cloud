@@ -20,6 +20,19 @@ spec:
         image: localhost:5000/orbit-api:v1.0.5
         ports:
         - containerPort: 8080
+        volumeMounts:
+        - name: orbit-storage
+          mountPath: /data/
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: orbit-storage
+        hostPath:
+          path: /data/
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
 ---
 apiVersion: v1
 kind: Service
