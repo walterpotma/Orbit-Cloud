@@ -30,7 +30,7 @@ export default function Page() {
             })
     }, []);
 
-    const filteredRepos = gitRepos.filter((repo) => {
+    const filteredRepos = gitRepos.filter((repo: any) => {
         // const matchesStatus = filter === 0 || repo.status === filter;
         const matchesSearch = repo.name.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesSearch;
@@ -89,7 +89,7 @@ export default function Page() {
                         <span className="w-20 flex justify-center items-start">Ações</span>
                     </div>
                     <div className="w-full pb-4 rounded-b-2xl bg-slate-800">
-                        {paginatedRepos.map((repos, index) => (
+                        {paginatedRepos.map((repos: any, index) => (
                             <div className="w-full">
                                 <div className="w-full p-2 border-t border-slate-700 flex justify-around items-center space-x-4">
                                     <span className="w-40 flex justify-start items-center space-x-2">
