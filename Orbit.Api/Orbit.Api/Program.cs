@@ -120,6 +120,12 @@ builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
 builder.Services.AddScoped<IRegistryService, RegistryService>();
 
 #region Authentication Github
+
+var githubId = builder.Configuration["Authentication:GitHub:ClientId"];
+var githubSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
+
+Console.WriteLine($"🔍 DEBUG GITHUB ID: '{githubId}'");
+Console.WriteLine($"🔍 DEBUG GITHUB SECRET: '{githubSecret}'");
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "Cookies";
@@ -132,11 +138,6 @@ builder.Services.AddAuthentication(options =>
 })
 .AddOAuth("GitHub", options =>
 {
-    var githubId = builder.Configuration["Authentication:GitHub:ClientId"];
-    var githubSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
-
-    Console.WriteLine($"🔍 DEBUG GITHUB ID: '{githubId}'");
-    Console.WriteLine($"🔍 DEBUG GITHUB SECRET: '{githubSecret}'");
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
 
