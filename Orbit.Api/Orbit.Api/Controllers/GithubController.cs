@@ -26,7 +26,10 @@ namespace Orbit.Api.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {
-            var properties = new AuthenticationProperties { RedirectUri = "https://orbitcloud.com.br" };
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("Callback", "Github")
+            };
 
             return Challenge(properties, "GitHub");
         }
@@ -34,20 +37,43 @@ namespace Orbit.Api.Controllers
         [HttpGet("callback")]
         public async Task<IActionResult> Callback()
         {
-            var claims = HttpContext.User.Claims;
+            var result = await HttpContext.AuthenticateAsync("Cookies");
 
-            var userData = new
+            if (!result.Succeeded)
             {
-                IsAuthenticated = HttpContext.User.Identity?.IsAuthenticated ?? false,
+                return Redirect("https://orbitcloud.com.br?error=auth_failed");
+            }
 
-                Id = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
-                Name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value,
-                Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-                Username = claims.FirstOrDefault(c => c.Type == "urn:github:login")?.Value,
-                AllClaims = claims.ToDictionary(c => c.Type, c => c.Value)
+            var claims = HttpContext.User.Claims;
+            var username = claims.FirstOrDefault(c => c.Type == "urn:github:login")?.Value;
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(username)) return BadRequest("Erro: Username não encontrado.");
+
+            try
+            {
+                Console.WriteLine($"[Login] Usuário {username} processado com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Login Error] {ex.Message}");
+            }
+
+            return Redirect("https://orbitcloud.com.br");
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public IActionResult GetMe()
+        {
+            var user = new
+            {
+                Username = User.FindFirst("urn:github:login")?.Value,
+                Name = User.FindFirst(ClaimTypes.Name)?.Value,
+                Avatar = User.FindFirst("avatar_url")?.Value,
+                IsAuthenticated = true
             };
-
-            return Ok(userData);
+            return Ok(user);
         }
 
         [HttpGet("token")]
