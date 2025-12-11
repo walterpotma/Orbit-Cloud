@@ -11,6 +11,7 @@ using Orbit.Api.Service;
 using Orbit.Api.Service.Interface;
 using System.Security.Claims;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,10 +122,14 @@ builder.Services.AddScoped<IRegistryService, RegistryService>();
 #region Authentication Github
 builder.Services.AddAuthentication(options =>
 {
-options.DefaultScheme = "Cookies";
-options.DefaultChallengeScheme = "GitHub";
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "GitHub";
 })
-.AddCookie("Cookies")
+.AddCookie("Cookies", options =>
+{
+    // Opcional: Define tempo de vida do login (ex: 7 dias)
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+})
 .AddOAuth("GitHub", options =>
 {
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
@@ -134,7 +139,7 @@ options.DefaultChallengeScheme = "GitHub";
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
     options.UserInformationEndpoint = "https://api.github.com/user";
 
-    options.CallbackPath = "/callback";
+    options.CallbackPath = "/signin-github";
 
     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
@@ -143,7 +148,6 @@ options.DefaultChallengeScheme = "GitHub";
 
     options.Scope.Add("read:user");
     options.Scope.Add("user:email");
-    options.Scope.Add("repo");
 
     options.SaveTokens = true;
 
@@ -154,12 +158,9 @@ options.DefaultChallengeScheme = "GitHub";
             var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
+            request.Headers.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Orbit-Cloud", "1.0"));
 
-            request.Headers.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("DotNet-App-Login", "1.0"));
-
-            var response = await context.Backchannel.SendAsync(request,
-                HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
-
+            var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
             response.EnsureSuccessStatusCode();
 
             var user = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync());
@@ -174,6 +175,10 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseCors("CorsPolicy");
 
@@ -186,7 +191,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 
 app.UseAuthentication();
