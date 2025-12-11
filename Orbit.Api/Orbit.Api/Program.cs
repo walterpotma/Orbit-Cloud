@@ -120,12 +120,6 @@ builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
 builder.Services.AddScoped<IRegistryService, RegistryService>();
 
 #region Authentication Github
-
-var githubId = builder.Configuration["Authentication:GitHub:ClientId"];
-var githubSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
-
-Console.WriteLine($"🔍 DEBUG GITHUB ID: '{githubId}'");
-Console.WriteLine($"🔍 DEBUG GITHUB SECRET: '{githubSecret}'");
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "Cookies";
@@ -199,6 +193,11 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https";
+    return next();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
