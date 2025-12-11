@@ -134,7 +134,7 @@ options.DefaultChallengeScheme = "GitHub";
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
     options.UserInformationEndpoint = "https://api.github.com/user";
 
-    options.CallbackPath = "/signin-github";
+    options.CallbackPath = "/callback";
 
     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");

@@ -26,7 +26,7 @@ namespace Orbit.Api.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {
-            var properties = new AuthenticationProperties { RedirectUri = "http://localhost:3000" };
+            var properties = new AuthenticationProperties { RedirectUri = "https://orbitcloud.com.br" };
 
             return Challenge(properties, "GitHub");
         }
