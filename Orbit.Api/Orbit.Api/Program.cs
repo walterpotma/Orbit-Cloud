@@ -132,8 +132,11 @@ builder.Services.AddAuthentication(options =>
 })
 .AddOAuth("GitHub", options =>
 {
-    Console.WriteLine("Authentication:GitHub:ClientId");
-    Console.WriteLine("Authentication:GitHub:ClientSecret");
+    var githubId = builder.Configuration["Authentication:GitHub:ClientId"];
+    var githubSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
+
+    Console.WriteLine($"🔍 DEBUG GITHUB ID: '{githubId}'");
+    Console.WriteLine($"🔍 DEBUG GITHUB SECRET: '{githubSecret}'");
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
 
