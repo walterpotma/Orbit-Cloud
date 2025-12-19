@@ -1,15 +1,19 @@
-﻿using Orbit.Api.Dto.account.cs;
+﻿using k8s.KubeConfigModels;
+using Orbit.Api.Dto.account.cs;
 using Orbit.Api.Model;
 using Orbit.Api.Repository.Interface;
+using Orbit.Api.Service.Interface;
 
 namespace Orbit.Api.Service
 {
     public class AccountService
     {
         public IAccountRepository _repository;
+        private readonly IFileSystemService _fileSystemService;
 
-        public AccountService (IAccountRepository repository) {
+        public AccountService (IAccountRepository repository, IFileSystemService fileSystemService) {
             _repository = repository;
+            _fileSystemService = fileSystemService;
         }
 
         public string SplitEmail()
@@ -61,6 +65,30 @@ namespace Orbit.Api.Service
                 Name = created.Name,
                 Email = created.Email
             };
+        }
+
+        public async Task<bool> CreateWorkspaceAsync(DtoCreateWorkspace workspace)
+        {
+            if (workspace == null) return false;
+
+            var safeUsername = workspace.Username.Trim().ToLowerInvariant();
+            var ownerTypeFolder = workspace.OwnerType.Equals("Org", StringComparison.OrdinalIgnoreCase) ? "organizations" : "users";
+
+            var userBasePath = Path.Combine("fast", ownerTypeFolder, safeUsername);
+
+            try
+            {
+                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
+
+                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] Falha ao criar workspace: {ex.Message}");
+                return false;
+            }
         }
     }
 }

@@ -16,10 +16,12 @@ namespace Orbit.Api.Controllers
     public class GithubController : ControllerBase
     {
         private readonly IGithubService _githubService;
+        private readonly IAccountService _accountService;
 
-        public GithubController(IGithubService githubService)
+        public GithubController(IGithubService githubService, IAccountService accountService)
         {
             _githubService = githubService;
+            _accountService = accountService;
         }
 
         #region Github Authentication
@@ -30,6 +32,8 @@ namespace Orbit.Api.Controllers
             {
                 RedirectUri = Url.Action("Callback", "Github")
             };
+
+
 
             return Challenge(properties, "GitHub");
         }

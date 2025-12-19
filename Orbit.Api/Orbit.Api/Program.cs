@@ -49,7 +49,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://app.orbitcloud.com.br", "https://orbitcloud.com.br")
+        policy.WithOrigins("http://localhost:3000", "https://app.orbitcloud.com.br", "https://orbitcloud.com.br", "https://admin.orbitcloud.com.br")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -129,6 +129,7 @@ builder.Services.AddAuthentication(options =>
 {
     // Opcional: Define tempo de vida do login (ex: 7 dias)
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    options.Cookie.Domain = ".orbitcloud.com.br"; // Note o ponto no início!
 })
 .AddOAuth("GitHub", options =>
 {

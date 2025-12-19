@@ -41,22 +41,43 @@ metadata:
   name: orbit-ui-ingress
   namespace: orbitcloud
   annotations:
-    # Esta anotação garante que ele escute na porta segura
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
   tls:
     - hosts:
         - orbitcloud.com.br
-      # Podemos deixar um nome de secret qualquer aqui. 
-      # O Traefik vai usar um certificado padrão auto-assinado se não achar,
-      # e a Cloudflare vai aceitar por causa do "No TLS Verify".
       secretName: orbitnet-default-cert 
   rules:
     - host: orbitcloud.com.br
       http:
         paths:
           - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: orbit-ui
+                port:
+                  number: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orbit-admin-ui-ingress
+  namespace: orbitcloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - admin.orbitcloud.com.br
+      secretName: orbitnet-default-cert 
+  rules:
+    - host: admin.orbitcloud.com.br
+      http:
+        paths:
+          - path: /storage
             pathType: Prefix
             backend:
               service:
