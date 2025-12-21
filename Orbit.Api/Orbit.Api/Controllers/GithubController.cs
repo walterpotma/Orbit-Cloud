@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Orbit.Api.Dto.account.cs;
 using Orbit.Api.Dto.Github;
 using Orbit.Api.Service;
 using Orbit.Api.Service.Interface;
@@ -33,8 +34,6 @@ namespace Orbit.Api.Controllers
                 RedirectUri = Url.Action("Callback", "Github")
             };
 
-
-
             return Challenge(properties, "GitHub");
         }
 
@@ -62,6 +61,17 @@ namespace Orbit.Api.Controllers
             {
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
+
+            var infos = new List<DtoCreateWorkspace>(
+                Username = username,
+                OwnerType = "user",
+                Email = email,
+                GithubId = claims.FirstOrDefault(c => c.Type == "urn:github:id")?.Value,
+                CPU = 1,
+                Memory = 2048
+            );
+
+            _accountService.CreateWorkspace();
 
             return Redirect("https://orbitcloud.com.br");
         }

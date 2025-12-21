@@ -10,10 +10,13 @@ namespace Orbit.Api.Service
     {
         public IAccountRepository _repository;
         private readonly IFileSystemService _fileSystemService;
+        private readonly IKubernetesService _kubernetesService;
 
-        public AccountService (IAccountRepository repository, IFileSystemService fileSystemService) {
+        public AccountService (IAccountRepository repository, IFileSystemService fileSystemService, IKubernetesService kubernetesService = null)
+        {
             _repository = repository;
             _fileSystemService = fileSystemService;
+            _kubernetesService = kubernetesService;
         }
 
         public string SplitEmail()
@@ -81,6 +84,8 @@ namespace Orbit.Api.Service
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
 
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
+
+                await _kubernetesService.CreateNamespacesAsync(safeUsername);
 
                 return true;
             }
