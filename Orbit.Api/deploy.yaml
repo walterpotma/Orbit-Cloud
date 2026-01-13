@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orbit-api-container
-        image: localhost:5000/orbit-api:v1.0.13
+        image: localhost:5000/orbit-api:v1.0.14
         ports:
         - containerPort: 8080
         volumeMounts:

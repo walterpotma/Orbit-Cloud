@@ -82,6 +82,7 @@ namespace Orbit.Api.Controllers
         {
             var user = new
             {
+                GithubID = User.FindFirst("urn:github:id")?.Value,
                 Username = User.FindFirst("urn:github:login")?.Value,
                 Name = User.FindFirst(ClaimTypes.Name)?.Value,
                 Avatar = User.FindFirst("avatar_url")?.Value,
