@@ -1,5 +1,5 @@
 "use client";
-import { RefreshCcw } from "lucide-react";
+import { RefreshCcw, User } from "lucide-react";
 import "./globals.css";
 import Image from "next/image";
 import 'devicon/devicon.min.css';
@@ -13,14 +13,18 @@ import BtnRefresh from "@/components/ui/BtnRefresh";
 import fileTree from "@/model/storage";
 import { useEffect, useState } from "react";
 import { Deployments, Pods } from "@/api/kubernetes";
+import { useUser } from "@/context/user";
 
 export default function Home() {
+    const { UserData, isLoading } = useUser();
     const [deployments, setDeployments] = useState<any[]>([]);
     const [succededDeployments, setSuccededDeployments] = useState<any[]>([]);
     const [failedDeployments, setFailedDeployments] = useState<any[]>([]);
     const [pendingDeployments, setPendingDeployments] = useState<any[]>([]);
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
     console.log(repositorios);
+    console.log("UserData:", UserData);
+    console.log("isLoading:", isLoading);
 
     useEffect(() => {
         Deployments.List()
