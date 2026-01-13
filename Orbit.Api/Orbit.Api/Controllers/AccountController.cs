@@ -30,12 +30,5 @@ namespace Orbit.Api.Controllers
 
             return Ok(userDto);
         }
-
-        [HttpGet("split-email")]
-        public IActionResult SplitEmail()
-        {
-            var result = _accountService.SplitEmail();
-            return Ok(result);
-        }
     }
 }
