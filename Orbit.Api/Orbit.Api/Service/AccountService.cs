@@ -70,30 +70,30 @@ namespace Orbit.Api.Service
             };
         }
 
-        public async Task<bool> CreateWorkspaceAsync(DtoCreateWorkspace workspace)
-        {
-            if (workspace == null) return false;
+        //public async Task<bool> CreateWorkspaceAsync(DtoCreateWorkspace workspace)
+        //{
+        //    if (workspace == null) return false;
 
-            var safeUsername = workspace.Username.Trim().ToLowerInvariant();
-            var ownerTypeFolder = workspace.OwnerType.Equals("Org", StringComparison.OrdinalIgnoreCase) ? "organizations" : "users";
+        //    var safeUsername = workspace.Username.Trim().ToLowerInvariant();
+        //    var ownerTypeFolder = workspace.OwnerType.Equals("Org", StringComparison.OrdinalIgnoreCase) ? "organizations" : "users";
 
-            var userBasePath = Path.Combine("fast", ownerTypeFolder, safeUsername);
+        //    var userBasePath = Path.Combine("fast", ownerTypeFolder, safeUsername);
 
-            try
-            {
-                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
+        //    try
+        //    {
+        //        await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
 
-                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
+        //        await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
 
-                await _kubernetesService.CreateNamespacesAsync(safeUsername);
+        //        await _kubernetesService.CreateNamespacesAsync(safeUsername);
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[Error] Falha ao criar workspace: {ex.Message}");
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"[Error] Falha ao criar workspace: {ex.Message}");
+        //        return false;
+        //    }
+        //}
     }
 }
