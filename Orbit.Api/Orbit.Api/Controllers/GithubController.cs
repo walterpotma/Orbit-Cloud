@@ -62,17 +62,6 @@ namespace Orbit.Api.Controllers
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
 
-            //var infos = new List<DtoCreateWorkspace>(
-            //    Username = username,
-            //    OwnerType = "user",
-            //    Email = email,
-            //    GithubId = claims.FirstOrDefault(c => c.Type == "urn:github:id")?.Value,
-            //    CPU = 1,
-            //    Memory = 2048
-            //);
-
-            //_accountService.CreateWorkspace();
-
             return Redirect("https://orbitcloud.com.br");
         }
 
@@ -82,7 +71,7 @@ namespace Orbit.Api.Controllers
         {
             var user = new
             {
-                GithubID = User.FindFirst("urn:github:id")?.Value,
+                GithubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
                 Username = User.FindFirst("urn:github:login")?.Value,
                 Name = User.FindFirst(ClaimTypes.Name)?.Value,
                 Avatar = User.FindFirst("avatar_url")?.Value,

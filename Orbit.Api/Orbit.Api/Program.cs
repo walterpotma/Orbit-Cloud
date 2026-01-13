@@ -143,6 +143,8 @@ builder.Services.AddAuthentication(options =>
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
     options.ClaimActions.MapJsonKey("urn:github:login", "login");
+    options.ClaimActions.MapJsonKey("urn:github:avatar", "avatar_url");
+    options.ClaimActions.MapJsonKey("urn:github:url", "html_url");
 
     options.Scope.Add("read:user");
     options.Scope.Add("user:email");
