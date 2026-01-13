@@ -1,5 +1,6 @@
 ﻿using k8s.KubeConfigModels;
 using Orbit.Api.Dto.account.cs;
+using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Model;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service.Interface;
@@ -70,30 +71,29 @@ namespace Orbit.Api.Service
             };
         }
 
-        //public async Task<bool> CreateWorkspaceAsync(DtoCreateWorkspace workspace)
-        //{
-        //    if (workspace == null) return false;
+        public async Task<bool> CreateWorkspaceAsync(string githubId)
+        {
+            var userBasePath = Path.Combine("fast/users/", githubId);
+            try
+            {
+                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
 
-        //    var safeUsername = workspace.Username.Trim().ToLowerInvariant();
-        //    var ownerTypeFolder = workspace.OwnerType.Equals("Org", StringComparison.OrdinalIgnoreCase) ? "organizations" : "users";
+                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
 
-        //    var userBasePath = Path.Combine("fast", ownerTypeFolder, safeUsername);
+                var namespaceRequest = new DtoNamespaceRequest
+                {
+                    Name = githubId
+                };
 
-        //    try
-        //    {
-        //        await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
+                await _kubernetesService.CreateNamespacesAsync(namespaceRequest);
 
-        //        await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
-
-        //        await _kubernetesService.CreateNamespacesAsync(safeUsername);
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"[Error] Falha ao criar workspace: {ex.Message}");
-        //        return false;
-        //    }
-        //}
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] Falha ao criar workspace: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

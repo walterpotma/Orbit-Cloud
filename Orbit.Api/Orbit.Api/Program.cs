@@ -88,6 +88,7 @@ builder.Services.AddDbContext<OrbitDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<OrganizationService>();
 builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
