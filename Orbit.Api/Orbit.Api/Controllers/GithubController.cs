@@ -48,6 +48,7 @@ namespace Orbit.Api.Controllers
             }
 
             var claims = HttpContext.User.Claims;
+            var GithubID = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var username = claims.FirstOrDefault(c => c.Type == "urn:github:login")?.Value;
             var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
@@ -61,6 +62,8 @@ namespace Orbit.Api.Controllers
             {
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
+
+            await _accountService.CreateWorkspaceAsync(GithubID ?? "");
 
             return Redirect("https://orbitcloud.com.br");
         }
