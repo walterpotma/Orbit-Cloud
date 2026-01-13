@@ -10,6 +10,7 @@ export class Pods {
 
 export class Deployments {
     static List(namespace?: string) {
+        console.log("Fetching deployments for namespace:", namespace);
         return axiosInstance.get(`${controller}/deployments/${namespace || ""}`, { withCredentials: true });
     }
 }
