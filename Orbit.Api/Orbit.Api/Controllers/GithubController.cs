@@ -62,16 +62,16 @@ namespace Orbit.Api.Controllers
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
 
-            var infos = new List<DtoCreateWorkspace>(
-                Username = username,
-                OwnerType = "user",
-                Email = email,
-                GithubId = claims.FirstOrDefault(c => c.Type == "urn:github:id")?.Value,
-                CPU = 1,
-                Memory = 2048
-            );
+            //var infos = new List<DtoCreateWorkspace>(
+            //    Username = username,
+            //    OwnerType = "user",
+            //    Email = email,
+            //    GithubId = claims.FirstOrDefault(c => c.Type == "urn:github:id")?.Value,
+            //    CPU = 1,
+            //    Memory = 2048
+            //);
 
-            _accountService.CreateWorkspace();
+            //_accountService.CreateWorkspace();
 
             return Redirect("https://orbitcloud.com.br");
         }

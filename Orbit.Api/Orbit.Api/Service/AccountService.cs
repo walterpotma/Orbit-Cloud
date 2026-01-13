@@ -12,7 +12,7 @@ namespace Orbit.Api.Service
         private readonly IFileSystemService _fileSystemService;
         private readonly IKubernetesService _kubernetesService;
 
-        public AccountService (IAccountRepository repository, IFileSystemService fileSystemService, IKubernetesService kubernetesService = null)
+        public AccountService (IAccountRepository repository, IFileSystemService fileSystemService, IKubernetesService kubernetesService)
         {
             _repository = repository;
             _fileSystemService = fileSystemService;

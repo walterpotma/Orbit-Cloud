@@ -95,10 +95,6 @@ builder.Services.AddScoped<PlanService>();
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<RuleService>();
 builder.Services.AddScoped<IRuleRepository, RuleRepository>();
-builder.Services.AddScoped<SubscriptionService>();
-builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
-builder.Services.AddScoped<TransacionService>();
-builder.Services.AddScoped<ITransacionRepository, TransacionRepository>();
 
 // Novo modelo de arquitetura da api
 
