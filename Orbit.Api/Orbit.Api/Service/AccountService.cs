@@ -7,7 +7,7 @@ using Orbit.Api.Service.Interface;
 
 namespace Orbit.Api.Service
 {
-    public class AccountService
+    public class AccountService : IAccountService
     {
         public IAccountRepository _repository;
         private readonly IFileSystemService _fileSystemService;
@@ -20,7 +20,7 @@ namespace Orbit.Api.Service
             _kubernetesService = kubernetesService;
         }
 
-        public string SplitEmail()
+        public string SplitEmail(string email)
         {
             return _repository.SplitEmail("walterpotma@gmail.com");
         }

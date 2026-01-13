@@ -6,6 +6,6 @@ namespace Orbit.Api.Service.Interface
     {
         string SplitEmail(string email);
 
-        Task <bool> CreateWorkspace(DtoCreateWorkspace workspace);
+        Task <bool> CreateWorkspaceAsync(string githubId);
     }
 }
