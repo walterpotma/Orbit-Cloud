@@ -5,7 +5,7 @@ import axios from "axios";
 import { Github } from "@/api/github";
 
 interface User {
-    id: string;
+    githubID: string;
     name: string;
     email: string;
     githubLogin: string;

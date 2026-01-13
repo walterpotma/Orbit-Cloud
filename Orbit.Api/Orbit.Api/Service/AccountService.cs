@@ -73,7 +73,7 @@ namespace Orbit.Api.Service
 
         public async Task<bool> CreateWorkspaceAsync(string githubId)
         {
-            var userBasePath = Path.Combine("fast/users/", githubId);
+            var userBasePath = Path.Combine("fast/clients/", githubId);
             try
             {
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));

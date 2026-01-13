@@ -27,7 +27,7 @@ export default function Home() {
     console.log("isLoading:", isLoading);
 
     useEffect(() => {
-        Deployments.List()
+        Deployments.List(UserData?.githubID || "")
             .then((response: any) => {
                 console.log(response.data);
                 setDeployments(response.data);
