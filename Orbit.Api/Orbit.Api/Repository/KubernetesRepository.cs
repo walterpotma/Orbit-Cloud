@@ -15,13 +15,13 @@ namespace Orbit.Api.Repository
         }
 
         #region Kubernetes Deployments
-        public async Task<V1DeploymentList> GetDeploymentsAsync(string namespaceName = "")
+        public async Task<V1DeploymentList> GetDeploymentsAsync(string namespaces = "")
         {
-            if (string.IsNullOrEmpty(namespaceName))
+            if (string.IsNullOrEmpty(namespaces))
             {
                 return await _kubernetesClient.AppsV1.ListDeploymentForAllNamespacesAsync();
             }
-            return await _kubernetesClient.AppsV1.ListNamespacedDeploymentAsync(namespaceName);
+            return await _kubernetesClient.AppsV1.ListNamespacedDeploymentAsync(namespaces);
         }
         #endregion
 

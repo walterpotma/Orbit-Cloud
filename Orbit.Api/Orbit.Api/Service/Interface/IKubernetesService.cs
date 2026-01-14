@@ -5,7 +5,7 @@ namespace Orbit.Api.Service.Interface
     public interface IKubernetesService
     {
         #region Kubernetes Deployments
-        Task<List<DtoDeploymentResponse>> GetAllDeploymentsAsync();
+        Task<List<DtoDeploymentResponse>> GetAllDeploymentsAsync(string? namespaces);
         #endregion
 
         #region Kubernetes Pods

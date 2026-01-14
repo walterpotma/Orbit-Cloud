@@ -20,10 +20,17 @@ namespace Orbit.Api.Controllers
         }
 
         #region Kubernetes Deployments
-        [HttpGet("deployments")] // URL final: /kubernetes/deployments
-        public async Task<IActionResult> GetDeployments()
+        [HttpGet("deployments")]
+        public async Task<IActionResult> GetAllDeployments(string namespaces)
         {
-            var result = await _kubernetesService.GetAllDeploymentsAsync();
+            var result = await _kubernetesService.GetAllDeploymentsAsync(namespaces);
+            return Ok(result);
+        }
+
+        [HttpGet("deployments/{namespaces}")]
+        public async Task<IActionResult> GetDeploymentsNamespace(string namespaces)
+        {
+            var result = await _kubernetesService.GetAllDeploymentsAsync(namespaces);
             return Ok(result);
         }
         #endregion

@@ -8,7 +8,7 @@ namespace Orbit.Api.Repository.Interface
     public interface IKubernetesRepository
     {
         #region Kubernetes Deployments
-        Task<V1DeploymentList> GetDeploymentsAsync(string namespaceName = "");
+        Task<V1DeploymentList> GetDeploymentsAsync(string namespaces = "");
         #endregion
 
         #region Kubernetes Pods

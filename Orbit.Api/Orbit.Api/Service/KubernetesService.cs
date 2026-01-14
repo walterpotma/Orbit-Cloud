@@ -19,9 +19,9 @@ namespace Orbit.Api.Service
         }
 
         #region Kubernetes Deployments
-        public async Task<List<DtoDeploymentResponse>> GetAllDeploymentsAsync()
+        public async Task<List<DtoDeploymentResponse>> GetAllDeploymentsAsync(string? namespaces)
         {
-            var k8sDeployments = await _repository.GetDeploymentsAsync();
+            var k8sDeployments = await _repository.GetDeploymentsAsync(namespaces);
 
             var result = k8sDeployments.Items.Select(d =>
             {
