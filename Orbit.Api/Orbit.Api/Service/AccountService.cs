@@ -80,6 +80,8 @@ namespace Orbit.Api.Service
 
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
 
+                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "registry"));
+
                 var namespaceRequest = new DtoNamespaceRequest
                 {
                     Name = githubId

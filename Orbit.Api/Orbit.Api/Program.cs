@@ -124,9 +124,13 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie("Cookies", options =>
 {
-    // Opcional: Define tempo de vida do login (ex: 7 dias)
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
-    options.Cookie.Domain = ".orbitcloud.com.br"; // Note o ponto no início!
+    options.Cookie.Domain = ".orbitcloud.com.br";
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
 })
 .AddOAuth("GitHub", options =>
 {
