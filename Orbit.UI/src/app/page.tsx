@@ -35,7 +35,7 @@ export default function Home() {
             .catch((error: any) => {
                 console.error("Error fetching pods:", error);
             });
-    }, []);
+    }, [UserData]);
 
     useEffect(() => {
         setSuccededDeployments(deployments.filter(deploy => deploy.status.toLowerCase() === 'running'));
