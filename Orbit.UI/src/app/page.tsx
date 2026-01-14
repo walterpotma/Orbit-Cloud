@@ -27,7 +27,10 @@ export default function Home() {
     console.log("isLoading:", isLoading);
 
     useEffect(() => {
-        Deployments.List(UserData?.githubID || "")
+        if (isLoading || !UserData || !UserData.githubID) {
+            return;
+        }
+        Deployments.List(UserData.githubID)
             .then((response: any) => {
                 console.log(response.data);
                 setDeployments(response.data);
@@ -35,7 +38,7 @@ export default function Home() {
             .catch((error: any) => {
                 console.error("Error fetching pods:", error);
             });
-    }, [UserData]);
+    }, [UserData, isLoading]);
 
     useEffect(() => {
         setSuccededDeployments(deployments.filter(deploy => deploy.status.toLowerCase() === 'running'));
