@@ -60,6 +60,17 @@ namespace Orbit.Api.Service
 
             return result;
         }
+        public async Task<DtoDeploymentResponse> CreateDeploymentAsync(DtoDeploymentRequest request, string namespaces)
+        {
+            // Passamos o namespace para o mapper preencher o Metadata
+            var newDeployment = _mapper.BuildDeploymentObject(request, namespaces);
+
+            // Agora o repo retorna UM item, não uma lista
+            var createdEntity = await _repository.CreateDeploymentAsync(newDeployment, namespaces);
+
+            // Mapeamos direto
+            return _mapper.MapToDtoDeployment(createdEntity);
+        }
         #endregion
 
         #region Kubernetes Pods

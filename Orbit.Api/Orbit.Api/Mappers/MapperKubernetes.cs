@@ -129,5 +129,76 @@ namespace Orbit.Api.Mappers
                 Namespace = createdEntity.Namespace()
             };
         }
+        public DtoDeploymentResponse MapToDtoDeployment(V1Deployment createdEntity)
+        {
+            if (createdEntity == null)
+            {
+                return null;
+            }
+            return new DtoDeploymentResponse
+            {
+                Name = createdEntity.Name(),
+                Namespace = createdEntity.Namespace()
+            };
+        }
+        public V1Deployment BuildDeploymentObject(DtoDeploymentRequest request, string namespaces)
+        {
+            // Labels são essenciais para o Service encontrar o Pod depois
+            var labels = new Dictionary<string, string>
+    {
+        { "app", request.Name }
+    };
+
+            return new V1Deployment
+            {
+                ApiVersion = "apps/v1",
+                Kind = "Deployment",
+                Metadata = new V1ObjectMeta
+                {
+                    Name = request.Name,
+                    NamespaceProperty = namespaces,
+                    Labels = labels
+                },
+                Spec = new V1DeploymentSpec
+                {
+                    Replicas = request.Replicas, // Vem do DTO
+                    Selector = new V1LabelSelector
+                    {
+                        MatchLabels = labels
+                    },
+                    Template = new V1PodTemplateSpec
+                    {
+                        Metadata = new V1ObjectMeta
+                        {
+                            Labels = labels
+                        },
+                        Spec = new V1PodSpec
+                        {
+                            Containers = new List<V1Container>
+                    {
+                        new V1Container
+                        {
+                            Name = request.Name,
+                            Image = request.Image + ":" + (request.Tag ?? "latest"),
+                            Ports = new List<V1ContainerPort>
+                            {
+                                new V1ContainerPort { ContainerPort = request.Port }
+                            },
+                            // Define limite de recursos (opcional mas recomendado)
+                            Resources = new V1ResourceRequirements
+                            {
+                                Requests = new Dictionary<string, ResourceQuantity>
+                                {
+                                    { "memory", new ResourceQuantity("128Mi") },
+                                    { "cpu", new ResourceQuantity("100m") }
+                                }
+                            }
+                        }
+                    }
+                        }
+                    }
+                }
+            };
+        }
     }
 }

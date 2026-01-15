@@ -166,7 +166,7 @@ namespace Orbit.Api.Repository
 
                 // 4. Clona!
                 Console.WriteLine($"🔄 Clonando {request.RepositoryUrl} em {localPath}...");
-                Repository.Clone(request.RepositoryUrl, localPath, cloneOptions);
+                //Repository.Clone(request.RepositoryUrl, localPath, cloneOptions);
                 Console.WriteLine("✅ Clone concluído!");
 
                 return true;

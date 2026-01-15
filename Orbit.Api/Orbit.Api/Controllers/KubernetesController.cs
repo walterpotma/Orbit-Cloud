@@ -5,6 +5,7 @@ using Orbit.Api.Dto.kubernetes;
 using Orbit.Api.Service;
 using Orbit.Api.Service.Interface;
 using System.Xml.Linq;
+using k8s.Autorest;
 
 namespace Orbit.Api.Controllers
 {
@@ -32,6 +33,30 @@ namespace Orbit.Api.Controllers
         {
             var result = await _kubernetesService.GetAllDeploymentsAsync(namespaces);
             return Ok(result);
+        }
+
+        [HttpPost("deployments/{namespaces}")]
+        public async Task<IActionResult> CreateDeployment([FromBody] DtoDeploymentRequest request, string namespaces)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var createdDeployment = await _kubernetesService.CreateDeploymentAsync(request, namespaces);
+
+                // Ajustei o CreatedAtAction para apontar para um Get específico (se tiver)
+                // Se não tiver get by name, pode deixar GetAllDeployments mesmo
+                return CreatedAtAction(
+                    nameof(GetAllDeployments),
+                    new { namespaces = namespaces },
+                    createdDeployment
+                );
+            }
+            catch (k8s.Autorest.HttpOperationException ex)
+            {
+                // O erro real geralmente está em ex.Response.Content
+                return BadRequest($"Erro no Kubernetes: {ex.Message} - {ex.Response.Content}");
+            }
         }
         #endregion
 
