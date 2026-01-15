@@ -21,6 +21,6 @@ export class Namespaces {
     }
 
     static Metrics(namespace: string) {
-        return axiosInstance.get(`${controller}/namespaces/metrics/u-${namespace}`, { withCredentials: true });
+        return axiosInstance.get(`${controller}/namespaces/u-${namespace}/metrics`, { withCredentials: true });
     }
 }
