@@ -1,4 +1,5 @@
-﻿using Orbit.Api.Dto.Github;
+﻿using Orbit.Api.Dto.github;
+using Orbit.Api.Dto.Github;
 using Orbit.Api.Model;
 using System.Security.Claims;
 
@@ -15,6 +16,7 @@ namespace Orbit.Api.Repository.Interface
         Task<IEnumerable<DtoReposResponse>> GetUserRepositoriesAsync(string accessToken);
         Task<DtoReposResponse> GetRepositoryByNameAsync(string accessToken, string owner, string repoName);
         Task CloneReposByNameAsync(string accessToken, string owner, string repoName);
+        bool CloneRepository(DtoCloneRequest request);
         #endregion
 
         #region Github Webhooks

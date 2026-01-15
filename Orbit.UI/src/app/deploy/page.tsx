@@ -41,23 +41,7 @@ export default function Page() {
     const [newDeploy, setNewDeploy] = useState(false);
     const [editDeploy, setEditDeploy] = useState(false);
 
-    const imagensDocker = [
-        { id: 1, name: "nginx", tag: "1.25", size: "23MB", created: "2h ago", status: 1 },
-        { id: 2, name: "node", tag: "18-alpine", size: "45MB", created: "1h ago", status: 1 },
-        { id: 3, name: "postgres", tag: "15", size: "110MB", created: "30m ago", status: 1 },
-        { id: 4, name: "redis", tag: "7", size: "32MB", created: "10m ago", status: 2 },
-        { id: 5, name: "mongo", tag: "6", size: "130MB", created: "20m ago", status: 1 },
-        { id: 6, name: "python", tag: "3.11-slim", size: "55MB", created: "1h ago", status: 1 },
-        { id: 7, name: "dotnet", tag: "8.0-sdk", size: "190MB", created: "3h ago", status: 2 },
-        { id: 8, name: "golang", tag: "1.21", size: "82MB", created: "5h ago", status: 1 },
-        { id: 9, name: "ubuntu", tag: "22.04", size: "29MB", created: "4h ago", status: 2 },
-        { id: 10, name: "alpine", tag: "latest", size: "5MB", created: "6h ago", status: 1 },
-        { id: 11, name: "mysql", tag: "8", size: "140MB", created: "8h ago", status: 1 },
-        { id: 12, name: "traefik", tag: "v2.10", size: "68MB", created: "7h ago", status: 1 },
-        { id: 13, name: "httpd", tag: "2.4", size: "53MB", created: "2h ago", status: 2 },
-        { id: 14, name: "busybox", tag: "latest", size: "1MB", created: "9h ago", status: 1 },
-        { id: 15, name: "nextcloud", tag: "27", size: "780MB", created: "15m ago", status: 1 }
-    ];
+   
     const deploys = [
         { id: 1, name: "nginx", tag: "1.25", status: 1, url: "https://nginx.example.com", created: "2021-08-06T13:00:00Z", branch: "main", repository: "nginx" },
         { id: 2, name: "node", tag: "18-alpine", status: 1, url: "https://node.example.com", created: "2022-08-06T13:00:00Z", branch: "develop", repository: "node" },
@@ -120,6 +104,7 @@ export default function Page() {
                 <div className="w-full flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Deploys</h1>
                     <div className="flex justify-center items-center space-x-3">
+                        <button onClick={() => setNewDeploy(true)} className="px-4 py-2 rounded-lg border-1 border-blue-600 text-blue-600 text-sm cursor-pointer hover:bg-blue-500 hover:text-white transition ease-in-out duration-200">Novo Deploy</button>
                         <BtnRefresh />
                     </div>
                 </div>

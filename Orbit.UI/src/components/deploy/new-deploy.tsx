@@ -1,59 +1,223 @@
 "use client"
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { X, Box, Globe, Cpu, Layers, HardDrive } from "lucide-react"; // Instale lucide-react se não tiver
 import CommandOutput from "@/components/deploy/command-output";
-import Input2 from "@/components/ui/input";
 
-export default function Page({ onClose }: { onClose: (value: boolean) => void }) {
+export default function NewDeployModal({ onClose }: { onClose: (value: boolean) => void }) {
+    const [deploying, setDeploying] = useState(false);
+    
+    // Estado do Formulário
+    const [form, setForm] = useState({
+        name: "",
+        image: "",
+        tag: "latest",
+        port: 80,
+        replicas: 1,
+        subdomain: "",
+        isPublic: true
+    });
+
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        setDeploying(true);
+        // Aqui chamaremos a API depois
+        console.log("Enviando deploy:", form);
+    };
+
     return (
-        <div onClick={() => onClose(false)} className="w-full h-screen bg-black/70 flex justify-center items-center absolute inset-0 cursor-pointer">
-            <div onClick={(e) => e.stopPropagation()} className="w-4/5 max-h-11/12 p-8 bg-slate-800 rounded-xl overflow-auto custom-scroll cursor-auto">
-                <div>
-                    <h1 className="text-2xl font-bold mb-4">New Deploy</h1>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+            
+            {/* Container Principal */}
+            <div className="w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                
+                {/* Header */}
+                <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-slate-900/50">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-600/20 rounded-lg">
+                            <Box className="w-6 h-6 text-blue-500" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-bold text-white">Nova Aplicação</h1>
+                            <p className="text-sm text-slate-400">Configure os detalhes do seu container</p>
+                        </div>
+                    </div>
+                    <button onClick={() => onClose(false)} className="text-slate-500 hover:text-white transition-colors">
+                        <X size={24} />
+                    </button>
                 </div>
-                <div>
-                    <form action="" className="w-1/2 my-6 flex flex-col justify-start items-start space-y-2 space-x-2">
-                        <div className="w-full flex space-x-2">
-                            <select name="" id="" className="w-1/2 py-2 px-4 rounded-lg bg-slate-900 text-sm text-slate-500 cursor-pointer outline-0">
-                                <option value="" className="outline-0" selected>Imagem</option>
-                                <option value="" className="outline-0">Node</option>
-                                <option value="" className="outline-0">Python</option>
-                                <option value="" className="outline-0">Next</option>
-                                <option value="" className="outline-0">WebApi C#</option>
-                                <option value="" className="outline-0">java SpringBot</option>
-                            </select>
-                            <select name="" id="" className="w-1/2 py-2 px-4 rounded-lg bg-slate-900 text-sm text-slate-500 cursor-pointer outline-0">
-                                <option value="" className="outline-0" selected>Imagem</option>
-                                <option value="" className="outline-0">Node</option>
-                                <option value="" className="outline-0">Python</option>
-                                <option value="" className="outline-0">Next</option>
-                                <option value="" className="outline-0">WebApi C#</option>
-                                <option value="" className="outline-0">java SpringBot</option>
-                            </select>
-                        </div>
-                        <select name="" id="" className="w-full py-2 px-4 rounded-lg bg-slate-900 text-sm text-slate-500 cursor-pointer outline-0">
-                            <option value="" className="outline-0" selected>Imagem</option>
-                            <option value="" className="outline-0">Node</option>
-                            <option value="" className="outline-0">Python</option>
-                            <option value="" className="outline-0">Next</option>
-                            <option value="" className="outline-0">WebApi C#</option>
-                            <option value="" className="outline-0">java SpringBot</option>
-                        </select>
-                        <div className="w-full flex justify-between items-center space-x-2">
-                            <Input2 placeholder="Sub Dominio" className="w-full" />
-                            <select name="" id="" className="w-30 py-3 px-4 rounded-lg bg-slate-900 text-sm text-slate-500 cursor-pointer outline-0">
-                                <option value="" className="outline-0" selected>Imagem</option>
-                                <option value="" className="outline-0">Node</option>
-                                <option value="" className="outline-0">Python</option>
-                                <option value="" className="outline-0">Next</option>
-                                <option value="" className="outline-0">WebApi C#</option>
-                                <option value="" className="outline-0">java SpringBot</option>
-                            </select>
-                        </div>
+
+                {/* Corpo do Modal (Scrollável) */}
+                <div className="flex-1 overflow-y-auto custom-scroll p-8">
+                    <form className="space-y-8" onSubmit={handleSubmit}>
+                        
+                        {/* SEÇÃO 1: INFORMAÇÕES BÁSICAS */}
+                        <section>
+                            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <Layers size={16} /> Detalhes do Container
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Nome da App */}
+                                <div className="space-y-2">
+                                    <label className="text-sm text-slate-300 font-medium">Nome da Aplicação <span className="text-red-500">*</span></label>
+                                    <input 
+                                        type="text" 
+                                        name="name"
+                                        placeholder="ex: minha-api-node" 
+                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                                        onChange={handleChange}
+                                    />
+                                    <p className="text-xs text-slate-500">Apenas letras minúsculas e traços.</p>
+                                </div>
+
+                                {/* Imagem Docker */}
+                                <div className="space-y-2">
+                                    <label className="text-sm text-slate-300 font-medium">Imagem Docker <span className="text-red-500">*</span></label>
+                                    <div className="flex gap-2">
+                                        <input 
+                                            type="text" 
+                                            name="image"
+                                            placeholder="ex: nginx, node" 
+                                            className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                                            onChange={handleChange}
+                                        />
+                                        <input 
+                                            type="text" 
+                                            name="tag"
+                                            placeholder="tag (latest)" 
+                                            className="w-24 bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:border-blue-500 text-center"
+                                            defaultValue="latest"
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr className="border-slate-800" />
+
+                        {/* SEÇÃO 2: RECURSOS E REDE */}
+                        <section>
+                            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <Cpu size={16} /> Configuração
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                
+                                {/* Porta Interna */}
+                                <div className="space-y-2">
+                                    <label className="text-sm text-slate-300 font-medium">Porta do Container</label>
+                                    <div className="relative">
+                                        <input 
+                                            type="number" 
+                                            name="port"
+                                            className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                                            defaultValue={80}
+                                            onChange={handleChange}
+                                        />
+                                        <div className="absolute left-3 top-3.5 text-slate-500">
+                                            <Layers size={16} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Réplicas */}
+                                <div className="space-y-2">
+                                    <label className="text-sm text-slate-300 font-medium">Réplicas (Pods)</label>
+                                    <div className="relative">
+                                        <input 
+                                            type="number" 
+                                            name="replicas"
+                                            min="1"
+                                            max="5"
+                                            className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                                            defaultValue={1}
+                                            onChange={handleChange}
+                                        />
+                                        <div className="absolute left-3 top-3.5 text-slate-500">
+                                            <Box size={16} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Memória (Fixo por enquanto) */}
+                                <div className="space-y-2 opacity-50 cursor-not-allowed">
+                                    <label className="text-sm text-slate-300 font-medium">Memória (Plano Free)</label>
+                                    <div className="relative">
+                                        <input 
+                                            disabled
+                                            value="512 MiB"
+                                            className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-slate-400"
+                                        />
+                                        <div className="absolute left-3 top-3.5 text-slate-500">
+                                            <HardDrive size={16} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <hr className="border-slate-800" />
+
+                        {/* SEÇÃO 3: ACESSO EXTERNO */}
+                        <section className="bg-slate-800/30 p-5 rounded-xl border border-slate-800/50">
+                            <div className="flex items-start gap-4">
+                                <div className="p-2 bg-purple-500/10 rounded-lg mt-1">
+                                    <Globe className="w-5 h-5 text-purple-400" />
+                                </div>
+                                <div className="flex-1 space-y-3">
+                                    <div>
+                                        <h3 className="text-white font-medium">Acesso Público (Ingress)</h3>
+                                        <p className="text-xs text-slate-400">Seu app ficará visível na internet.</p>
+                                    </div>
+                                    
+                                    <div className="flex items-center">
+                                        <span className="bg-slate-700 border border-slate-600 border-r-0 text-slate-300 px-3 py-2.5 rounded-l-lg text-sm">
+                                            https://
+                                        </span>
+                                        <input 
+                                            type="text" 
+                                            name="subdomain"
+                                            placeholder={form.name || "nome-do-app"}
+                                            className="flex-1 bg-slate-900 border border-slate-600 px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 text-sm"
+                                            onChange={handleChange}
+                                        />
+                                        <span className="bg-slate-700 border border-slate-600 border-l-0 text-slate-400 px-3 py-2.5 rounded-r-lg text-sm">
+                                            .orbitcloud.com.br
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Área de Logs (Só aparece se estiver deployando) */}
+                        {deploying && (
+                            <div className="mt-4 animate-in fade-in zoom-in duration-300">
+                                <label className="text-sm text-slate-400 mb-2 block">Logs da Operação</label>
+                                <CommandOutput /> 
+                            </div>
+                        )}
+
                     </form>
                 </div>
-                <div>
-                    <CommandOutput />
+
+                {/* Footer Fixo */}
+                <div className="p-6 border-t border-slate-800 bg-slate-900 flex justify-end gap-3">
+                    <button 
+                        onClick={() => onClose(false)}
+                        className="px-6 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition-colors font-medium"
+                    >
+                        Cancelar
+                    </button>
+                    <button 
+                        onClick={handleSubmit}
+                        className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-lg shadow-blue-600/20 transition-all transform hover:scale-105 space-x-1 justify-center flex items-center"
+                    >
+                        <i className="bi bi-rocket-fill"></i><p>Lançar Deploy</p>
+                    </button>
                 </div>
             </div>
         </div>

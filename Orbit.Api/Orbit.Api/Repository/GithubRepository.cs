@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LibGit2Sharp;
+using Microsoft.EntityFrameworkCore;
 using Orbit.Api.Data;
+using Orbit.Api.Dto.github;
 using Orbit.Api.Dto.Github;
 using Orbit.Api.Dto_s;
 using Orbit.Api.Model;
@@ -15,6 +17,7 @@ namespace Orbit.Api.Repository
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly string _basePath = Path.Combine(Directory.GetCurrentDirectory(), "storage", "repositories");
 
         public GithubRepository(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
@@ -135,6 +138,64 @@ namespace Orbit.Api.Repository
             {
                 throw new HttpRequestException($"Erro ao clonar repositório do GitHub. Status: {response.StatusCode}");
             }
+        }
+
+        public bool CloneRepository(DtoCloneRequest request)
+        {
+            try
+            {
+                // Caminho final: /app/storage/repositories/meu-app
+                var localPath = Path.Combine(_basePath, request.ProjectName);
+
+                // 1. Limpeza: Se a pasta já existe, deleta tudo para clonar do zero
+                // (Em produção, poderíamos fazer apenas um 'git pull', mas clone é mais seguro para builds)
+                if (Directory.Exists(localPath))
+                {
+                    DeleteDirectory(localPath);
+                }
+
+                // 2. Garante que a pasta pai existe
+                Directory.CreateDirectory(_basePath);
+
+                // 3. Opções do Clone
+                var cloneOptions = new CloneOptions
+                {
+                    BranchName = request.Branch,
+                    RecurseSubmodules = true
+                };
+
+                // 4. Clona!
+                Console.WriteLine($"🔄 Clonando {request.RepositoryUrl} em {localPath}...");
+                Repository.Clone(request.RepositoryUrl, localPath, cloneOptions);
+                Console.WriteLine("✅ Clone concluído!");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Erro ao clonar: {ex.Message}");
+                throw; // Repassa o erro pro Controller tratar
+            }
+        }
+
+        // Função auxiliar para deletar pastas recursivamente (o C# as vezes bloqueia arquivos .git)
+        private void DeleteDirectory(string targetDir)
+        {
+            string[] files = Directory.GetFiles(targetDir);
+            string[] dirs = Directory.GetDirectories(targetDir);
+
+            foreach (string file in files)
+            {
+                File.SetAttributes(file, FileAttributes.Normal);
+                File.Delete(file);
+            }
+
+            foreach (string dir in dirs)
+            {
+                DeleteDirectory(dir);
+            }
+
+            Directory.Delete(targetDir, false);
         }
         #endregion
 
