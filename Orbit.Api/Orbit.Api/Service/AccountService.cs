@@ -84,7 +84,7 @@ namespace Orbit.Api.Service
 
                 var namespaceRequest = new DtoNamespaceRequest
                 {
-                    Name = githubId
+                    Name = $"u-{githubId}"
                 };
 
                 await _kubernetesService.CreateNamespacesAsync(namespaceRequest);
