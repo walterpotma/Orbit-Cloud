@@ -14,3 +14,13 @@ export class Deployments {
         return axiosInstance.get(`${controller}/deployments/u-${namespace || ""}`, { withCredentials: true });
     }
 }
+
+export class Namespaces {
+    static List(namespace: string) {
+        return axiosInstance.get(`${controller}/namespaces/u-${namespace}`, { withCredentials: true });
+    }
+
+    static Metrics(namespace: string) {
+        return axiosInstance.get(`${controller}/namespaces/metrics/u-${namespace}`, { withCredentials: true });
+    }
+}

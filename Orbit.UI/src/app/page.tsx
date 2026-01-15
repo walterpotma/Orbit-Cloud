@@ -12,16 +12,46 @@ import Table1 from "@/components/ui/dashboard/table";
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import fileTree from "@/model/storage";
 import { useEffect, useState } from "react";
-import { Deployments, Pods } from "@/api/kubernetes";
+import { Deployments, Pods, Namespaces } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/components/deploy/table";
 
+// 1. Defina limites fictícios para calcular a porcentagem (Ex: Plano Free)
+const MAX_CPU_MILLICORES = 1000; // 1000m = 1 vCPU
+const MAX_MEMORY_BYTES = 512 * 1024 * 1024; // 512 MiB em Bytes
+
+// 2. Atualize a interface para bater com o JSON da API
+interface NamespaceMetric {
+    namespace: string;
+    podCount: number;
+    cpuUsage: string;      // "0m" (Texto para exibir)
+    memoryUsage: string;   // "18 MiB" (Texto para exibir)
+    rawCpu: number;        // 0 (Número para calcular %)
+    rawMemory: number;     // 18804736 (Número para calcular %)
+}
+
 export default function Home() {
     const { UserData, isLoading } = useUser();
+
     const [deployments, setDeployments] = useState<any[]>([]);
     const [succededDeployments, setSuccededDeployments] = useState<any[]>([]);
     const [failedDeployments, setFailedDeployments] = useState<any[]>([]);
     const [pendingDeployments, setPendingDeployments] = useState<any[]>([]);
+
+    const [namespaceMetrics, setNamespaceMetrics] = useState<NamespaceMetric | null>(null);
+
+    // Cálculos de segurança (evita divisão por zero ou nulos)
+    const rawCpu = namespaceMetrics?.rawCpu || 0;
+    const rawMem = namespaceMetrics?.rawMemory || 0;
+
+    // Regra de 3 para achar a porcentagem (Limitando a 100% para não quebrar layout)
+    const cpuPercent = Math.min((rawCpu / MAX_CPU_MILLICORES) * 100, 100);
+    const memPercent = Math.min((rawMem / MAX_MEMORY_BYTES) * 100, 100);
+
+    // Texto formatado para exibir embaixo da barra
+    const cpuLabel = namespaceMetrics?.cpuUsage || "0m";
+    const memLabel = namespaceMetrics?.memoryUsage || "0 MiB";
+
     const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
     console.log(repositorios);
     console.log("UserData:", UserData);
@@ -38,6 +68,14 @@ export default function Home() {
             })
             .catch((error: any) => {
                 console.error("Error fetching Deployments:", error);
+            });
+        Namespaces.Metrics(UserData.githubID)
+            .then((response: any) => {
+                console.log("Namespace Metrics:", response.data);
+                setNamespaceMetrics(response.data);
+            })
+            .catch((error: any) => {
+                console.error("Error fetching Namespace Metrics:", error);
             });
     }, [UserData, isLoading]);
 
@@ -63,8 +101,16 @@ export default function Home() {
                 </div>
             </div>
             <div className="w-full flex gap-5">
-                <CardList1 title="Uso de vCPU" metrics={[10]} />
-                <CardList1 title="Uso de RAM" metrics={[40]} />
+                <CardList1
+                    title="Uso de vCPU"
+                    metrics={[cpuPercent]} // Passamos a % calculada
+                    subTittle={`${cpuLabel} / 1000m`} // Mostramos o texto bonito
+                />
+                <CardList1
+                    title="Uso de RAM"
+                    metrics={[memPercent]} // Passamos a % calculada
+                    subTittle={`${memLabel} / 512 MiB`} // Mostramos o texto bonito
+                />
             </div>
             <div className="w-full mt-4">
                 <div className="w-full flex justify-between items-center">
