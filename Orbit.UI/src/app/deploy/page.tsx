@@ -6,8 +6,14 @@ import NewDeploy from "@/components/deploy/new-deploy";
 import EditDeploy from "@/components/deploy/edit-deploy";
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import SearchBar from "@/components/ui/table/search";
+import Table from "@/components/deploy/table";
+import { Deployments } from "@/api/kubernetes";
+import { useUser } from "@/context/user";
+import TableDeploy from "@/components/deploy/table";
 
 export default function Page() {
+    const { UserData, isLoading } = useUser();
+    const [deployments, setDeployments] = useState<any[]>([]);
     const [currentPageImage, setCurrentPageImage] = useState(1);
     const [currentPageDeploy, setCurrentPageDeploy] = useState(1);
     const itemsPerPageImage = 6;
@@ -102,67 +108,7 @@ export default function Page() {
                         <BtnRefresh />
                     </div>
                 </div>
-                <div className="w-full my-4 flex flex-col justify-between space-x-4">
-                    <SearchBar value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} filter={{ options: filterOptions, activeFilter: filter, onFilterChange: setFilter }} />
-                    <div className="w-full p-6 rounded-xl bg-slate-900">
-                        <h1 className="text-xl mb-6">Deploys</h1>
-                        <div className="w-full grid grid-cols-3 gap-3 space-y-2 justify-start items-start">
-                            {paginatedDeploy.map((deploy, index) => (
-                                <div key={index} className="w-full p-4 rounded-lg bg-slate-800 flex flex-col justify-between items-start space-y-3.5">
-                                    <div className="w-full flex justify-between items-center space-x-2">
-                                        <div className="flex justify-center items-center space-x-2">
-                                            <i className="devicon-javascript-plain p-2 rounded-full bg-blue-600 text-white text-xl"></i>
-                                            <p>{deploy.name}</p>
-                                            <p>{deploy.tag}</p>
-                                        </div>
-                                        <div className="flex justify-center items-center space-x-2">
-                                            <span>
-                                                {timeAgo(deploy.created)}
-                                            </span>
-                                            <span className="px-3 py-1 rounded-lg bg-green-500/10 text-green-700">
-                                                {deploy.status == 1 ? "Ativo" : "Inativo"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="w-full text-sm text-slate-500 flex justify-between items-center space-x-6">
-                                        <div className="flex space-x-5">
-                                            <span className="flex justify-center items-center space-x-2">
-                                                <i className="bi bi-git"></i>
-                                                <p>{deploy.repository}</p>
-                                            </span>
-                                            <span className="flex justify-center items-center space-x-1">
-                                                <GitBranch size={16} />
-                                                <p>{deploy.branch}</p>
-                                            </span>
-                                        </div>
-                                        <button onClick={() => setEditDeploy(true)} className="px-4 py-2 rounded-lg bg-blue-500 text-white flex items-center space-x-2 cursor-pointer hover:bg-blue-400 transition ease-in-out duration-200">
-                                            <i className="bi bi-pencil-fill"></i>
-                                            <p>Edit</p>
-                                        </button>
-                                    </div>
-                                    <span className="w-full p-2 rounded-lg bg-slate-900/50 text-slate-600">url: {deploy.url}</span>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="w-full flex justify-center items-center mt-6 space-x-4">
-                            <button
-                                onClick={() => setCurrentPageDeploy((prev) => Math.max(prev - 1, 1))}
-                                disabled={currentPageDeploy === 1}
-                                className="px-4 py-2 rounded bg-slate-700 text-white disabled:opacity-50 cursor-pointer"
-                            >
-                                Anterior
-                            </button>
-                            <span className="text-slate-400">Página {currentPageDeploy} de {totalPagesDeploy}</span>
-                            <button
-                                onClick={() => setCurrentPageDeploy((prev) => Math.min(prev + 1, totalPagesDeploy))}
-                                disabled={currentPageDeploy === totalPagesDeploy}
-                                className="px-4 py-2 rounded bg-slate-700 text-white disabled:opacity-50 cursor-pointer"
-                            >
-                                Próxima
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <TableDeploy deployments={deployments} />
             </div>
 
             {newDeploy && (

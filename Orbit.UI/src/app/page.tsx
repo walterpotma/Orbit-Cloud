@@ -14,6 +14,7 @@ import fileTree from "@/model/storage";
 import { useEffect, useState } from "react";
 import { Deployments, Pods } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
+import TableDeploy from "@/components/deploy/table";
 
 export default function Home() {
     const { UserData, isLoading } = useUser();
@@ -68,22 +69,11 @@ export default function Home() {
             <div className="w-full mt-4">
                 <div className="w-full flex justify-between items-center">
                     <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-app-indicator"></i><p>Aplicações Recentes</p></h1>
-                    <button className="px-4 py-2 rounded-lg border-1 border-blue-600 text-blue-600 text-sm">Ver Todos</button>
+                    {deployments.length > 0 && (
+                        <button className="px-4 py-2 rounded-lg border-1 border-blue-600 text-blue-600 text-sm">Ver Todos</button>
+                    )}
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                    {deployments.map(deploy => (
-                        <CardDeploy
-                            key={deploy.name}
-                            name={deploy.name}
-                            namespace={deploy.namespace}
-                            status={deploy.status}
-                            ready={deploy.replicasReady}
-                            desired={deploy.replicasDesired}
-                            age={deploy.age}
-                            tag={deploy.imageTag}
-                        />
-                    ))}
-                </div>
+                <TableDeploy deployments={deployments} />
             </div>
             <div className="w-full mt-4">
                 <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-box-seam-fill"></i><p>Repositorios Recentes</p></h1>
