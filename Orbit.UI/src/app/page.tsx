@@ -37,7 +37,7 @@ export default function Home() {
                 setDeployments(response.data);
             })
             .catch((error: any) => {
-                console.error("Error fetching pods:", error);
+                console.error("Error fetching Deployments:", error);
             });
     }, [UserData, isLoading]);
 

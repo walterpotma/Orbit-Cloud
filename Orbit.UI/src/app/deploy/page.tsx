@@ -14,6 +14,21 @@ import TableDeploy from "@/components/deploy/table";
 export default function Page() {
     const { UserData, isLoading } = useUser();
     const [deployments, setDeployments] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (isLoading || !UserData || !UserData.githubID) {
+            return;
+        }
+        Deployments.List(UserData.githubID)
+            .then((response: any) => {
+                console.log(response.data);
+                setDeployments(response.data);
+            })
+            .catch((error: any) => {
+                console.error("Error fetching Deployments:", error);
+            });
+    }, [UserData, isLoading]);
+
     const [currentPageImage, setCurrentPageImage] = useState(1);
     const [currentPageDeploy, setCurrentPageDeploy] = useState(1);
     const itemsPerPageImage = 6;
