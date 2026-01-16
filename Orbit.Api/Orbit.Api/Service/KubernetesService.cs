@@ -107,6 +107,7 @@ namespace Orbit.Api.Service
                     {
                         Name = request.Name,
                         Namespace = namespaces,
+                        Host = request.Subdomain + ".crion.dev",
                         // ... preencher o host ...
                     });
                     await _repository.CreateIngressAsync(ingressObj, namespaces);
