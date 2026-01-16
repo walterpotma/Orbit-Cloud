@@ -24,3 +24,15 @@ export class Namespaces {
         return axiosInstance.get(`${controller}/namespace/u-${namespace}/metrics`, { withCredentials: true });
     }
 }
+
+export class Services {
+    static List(namespace?: string) {
+        return axiosInstance.get(`${controller}/services/u-${namespace || "201145284"}`, { withCredentials: true });
+    }
+}
+
+export class Ingress {
+    static List(namespace?: string) {
+        return axiosInstance.get(`${controller}/ingress/u-${namespace || "201145284"}`, { withCredentials: true });
+    }
+}
