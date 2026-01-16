@@ -100,6 +100,37 @@ namespace Orbit.Api.Mappers
             {
                 ApiVersion = "v1",
                 Kind = "Service",
+                Metadata = new V1ObjectMeta
+                {
+                    Name = request.Name,
+                    // As Labels ajudam na organização visual
+                    Labels = new Dictionary<string, string>
+            {
+                { "app", request.Name }
+            }
+                },
+                Spec = new V1ServiceSpec
+                {
+                    // ⚠️ CRÍTICO: O Selector diz "Mande tráfego para os Pods que tenham a label app=nome".
+                    // Se isso não bater com o Deployment, o Service funciona mas não acha ninguém (Endpoints = <none>)
+                    Selector = new Dictionary<string, string>
+            {
+                { "app", request.Name }
+            },
+                    Ports = new List<V1ServicePort>
+            {
+                new V1ServicePort
+                {
+                    Name = "http",
+                    Protocol = "TCP",
+                    Port = request.Port, // A porta do Service (ex: 80)
+                    // A porta real do container. Se for nula, usa a mesma do Service.
+                    TargetPort = request.TargetPort ?? request.Port
+                }
+            },
+                    // Define se é interno (ClusterIP) ou externo via nó (NodePort). Padrão é ClusterIP.
+                    Type = request.Type ?? "ClusterIP"
+                }
             };
         }
         public DtoServiceResponse MapToDtoService(V1Service createdEntity)

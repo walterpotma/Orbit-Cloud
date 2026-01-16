@@ -23,8 +23,6 @@ namespace Orbit.Api.Repository
             }
             return await _kubernetesClient.AppsV1.ListNamespacedDeploymentAsync(namespaces);
         }
-        // Mude o retorno de V1DeploymentList para V1Deployment
-        // Mude o retorno de V1DeploymentList para V1Deployment
         public async Task<V1Deployment> CreateDeploymentAsync(V1Deployment deployment, string namespaces)
         {
             if (string.IsNullOrEmpty(namespaces))
@@ -32,8 +30,6 @@ namespace Orbit.Api.Repository
                 throw new ArgumentException("Namespace é obrigatório.");
             }
 
-            // O método do client oficial JÁ retorna o objeto criado. 
-            // Não precisa buscar a lista depois!
             return await _kubernetesClient.AppsV1.CreateNamespacedDeploymentAsync(deployment, namespaces);
         }
         #endregion

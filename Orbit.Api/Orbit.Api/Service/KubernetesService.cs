@@ -62,13 +62,62 @@ namespace Orbit.Api.Service
         }
         public async Task<DtoDeploymentResponse> CreateDeploymentAsync(DtoDeploymentRequest request, string namespaces)
         {
-            // Passamos o namespace para o mapper preencher o Metadata
+            // 1. CRIA O DEPLOYMENT (O App em si)
             var newDeployment = _mapper.BuildDeploymentObject(request, namespaces);
-
-            // Agora o repo retorna UM item, não uma lista
             var createdEntity = await _repository.CreateDeploymentAsync(newDeployment, namespaces);
 
-            // Mapeamos direto
+            // 2. CRIA O SERVICE (A Rede Interna) - Essencial para o Ingress funcionar depois
+            var serviceRequest = new DtoServiceRequest
+            {
+                Name = request.Name,
+                Port = 80, // Porta padrão do cluster
+                TargetPort = request.Port // Porta que o app roda (ex: 3000)
+            };
+
+            // Usamos try/catch para garantir que, se a rede falhar, o deploy não quebra totalmente
+            try
+            {
+                await CreateServicesAsync(serviceRequest, namespaces);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao criar Service: {ex.Message}");
+                // Decisão de projeto: O Deploy continua, mas sem rede.
+            }
+
+            // 3. CRIA O INGRESS (A URL Pública) - Opcional
+            // Só cria se o usuário mandou um subdomínio no Front
+            if (!string.IsNullOrWhiteSpace(request.Subdomain))
+            {
+                try
+                {
+                    var ingressRequest = new DtoIngressRequest
+                    {
+                        Name = request.Name,
+                        Namespace = namespaces,
+                        // Aqui assumimos que o host é subdomain + seu dominio
+                        // Você pode ajustar isso no Mapper ou passar o host completo aqui
+                    };
+
+                    // Você precisará adaptar seu CreateIngressAsync para aceitar o DTO ou criar o objeto aqui
+                    // await CreateIngressAsync(ingressRequest, namespaces); 
+
+                    // OU, se seu método CreateIngressAsync já espera o objeto pronto:
+                    var ingressObj = _mapper.BuildIngressObject(new DtoIngressRequest
+                    {
+                        Name = request.Name,
+                        Namespace = namespaces,
+                        // ... preencher o host ...
+                    });
+                    await _repository.CreateIngressAsync(ingressObj, namespaces);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao criar Ingress: {ex.Message}");
+                }
+            }
+
+            // Retorna o sucesso do Deploy
             return _mapper.MapToDtoDeployment(createdEntity);
         }
         #endregion
