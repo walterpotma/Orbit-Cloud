@@ -46,7 +46,7 @@ export default function NetworkPage() {
                         name: ing.name,
                         type: "External",
                         // Assumindo que seu DTO retorna o host ou montamos aqui
-                        address: `https://${ing.name}.orbitcloud.com.br`, 
+                        address: `${ing.rules.host}`, 
                         target: `${ing.name} (Service)`,
                         status: "Active"
                     });
