@@ -89,7 +89,7 @@ namespace Orbit.Api.Mappers
                 {
                     // Define o domínio (ex: meupp.orbitcloud.com.br)
                     // Se o DTO não tiver o host completo, montamos aqui
-                    Host = $"{request.Name}.orbitcloud.com.br",
+                    Host = $"{request.Host}.crion.dev",
                     Http = new V1HTTPIngressRuleValue
                     {
                         Paths = new List<V1HTTPIngressPath>
