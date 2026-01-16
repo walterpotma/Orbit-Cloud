@@ -27,17 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header />
-        <div className="w-full h-screen flex justify-between items-start">
-          <Navigation />
-          <UserProvider>
+      <UserProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Header />
+          <div className="w-full h-screen flex justify-between items-start">
+            <Navigation />
             {children}
-          </UserProvider>
-        </div>
-      </body>
+          </div>
+        </body>
+      </UserProvider>
     </html>
   );
 }
