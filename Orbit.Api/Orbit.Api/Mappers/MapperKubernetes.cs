@@ -66,17 +66,52 @@ namespace Orbit.Api.Mappers
         {
             return new V1Ingress
             {
-                ApiVersion = "v1",
+                // 1. CORREÇÃO DA VERSÃO (Crucial)
+                // De: "v1" -> Para: "networking.k8s.io/v1"
+                ApiVersion = "networking.k8s.io/v1",
                 Kind = "Ingress",
                 Metadata = new V1ObjectMeta
                 {
                     Name = request.Name,
                     NamespaceProperty = request.Namespace ?? "default",
                     Annotations = new Dictionary<string, string>
-                    {
-                        { "kubernetes.io/ingress.class", request.IngressClassName ?? "nginx" }
-                    }
+            {
+                // Define o Nginx como controlador
+                { "kubernetes.io/ingress.class", request.IngressClassName ?? "nginx" }
+            }
                 },
+                // 2. ADIÇÃO DO SPEC (As regras de roteamento)
+                Spec = new V1IngressSpec
+                {
+                    Rules = new List<V1IngressRule>
+            {
+                new V1IngressRule
+                {
+                    // Define o domínio (ex: meupp.orbitcloud.com.br)
+                    // Se o DTO não tiver o host completo, montamos aqui
+                    Host = $"{request.Name}.orbitcloud.com.br",
+                    Http = new V1HTTPIngressRuleValue
+                    {
+                        Paths = new List<V1HTTPIngressPath>
+                        {
+                            new V1HTTPIngressPath
+                            {
+                                Path = "/",
+                                PathType = "Prefix",
+                                Backend = new V1IngressBackend
+                                {
+                                    Service = new V1IngressServiceBackend
+                                    {
+                                        Name = request.Name, // Nome do Service que criamos antes
+                                        Port = new V1ServiceBackendPort { Number = 80 } // Porta do Service
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+                }
             };
         }
         public DtoIngressResponse MapToDtoIngress(V1Ingress createdEntity)
