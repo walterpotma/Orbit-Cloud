@@ -114,17 +114,24 @@ namespace Orbit.Api.Mappers
                 }
             };
         }
-        public DtoIngressResponse MapToDtoIngress(V1Ingress createdEntity)
+        public DtoIngressResponse MapToDtoIngress(V1Ingress entity)
         {
-            if (createdEntity == null)
-            {
-                return null;
-            }
+            if (entity == null) return null;
 
             return new DtoIngressResponse
             {
-                Name = createdEntity.Name(),
-                Namespace = createdEntity.Namespace()
+                Name = entity.Metadata.Name,
+                Namespace = entity.Metadata.NamespaceProperty,
+                CreationTimestamp = entity.Metadata.CreationTimestamp,
+                IngressClassName = entity.Spec?.IngressClassName,
+
+                // Mesma lógica do Service
+                Rules = entity.Spec?.Rules?.Select(r => new DtoIngressRuleResponse
+                {
+                    Host = r.Host,
+                    ServiceName = r.Http?.Paths?.FirstOrDefault()?.Backend?.Service?.Name,
+                    ServicePort = r.Http?.Paths?.FirstOrDefault()?.Backend?.Service?.Port?.Number ?? 0
+                }).ToList()
             };
         }
 

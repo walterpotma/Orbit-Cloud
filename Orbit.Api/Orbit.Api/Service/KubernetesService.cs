@@ -193,10 +193,23 @@ namespace Orbit.Api.Service
         public async Task<IEnumerable<DtoIngressResponse>> GetAllIngressAsync(string? namespaces = null)
         {
             var reponse = await _repository.ListIngressAsync(namespaces);
+
             return reponse.Select(s => new DtoIngressResponse
             {
                 Name = s.Metadata.Name,
                 Namespace = s.Metadata.NamespaceProperty,
+                CreationTimestamp = s.Metadata.CreationTimestamp,
+                IngressClassName = s.Spec.IngressClassName,
+
+                // AQUI ESTÁ A MÁGICA: Navegamos no objeto do Kubernetes para pegar o Host
+                Rules = s.Spec.Rules?.Select(r => new DtoIngressRuleResponse
+                {
+                    Host = r.Host, // O endereço que você quer (ex: sub.dominio.com)
+
+                    // Opcional: Pega para qual service ele aponta (útil para debug)
+                    ServiceName = r.Http?.Paths?.FirstOrDefault()?.Backend?.Service?.Name,
+                    ServicePort = r.Http?.Paths?.FirstOrDefault()?.Backend?.Service?.Port?.Number ?? 0
+                }).ToList()
             });
         }
         public async Task<DtoIngressResponse> GetIngressAsync(string name, string namespaces)
