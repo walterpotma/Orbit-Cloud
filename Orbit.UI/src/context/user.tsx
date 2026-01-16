@@ -6,9 +6,11 @@ import { Github } from "@/api/github";
 
 interface User {
     githubID: string;
-    name: string;
+    username: string;
     email: string;
     githubLogin: string;
+    avatar: string;
+    name: string;
 }
 
 interface UserContextType {

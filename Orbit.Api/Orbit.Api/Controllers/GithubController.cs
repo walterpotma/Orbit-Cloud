@@ -77,7 +77,7 @@ namespace Orbit.Api.Controllers
                 GithubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
                 Username = User.FindFirst("urn:github:login")?.Value,
                 Name = User.FindFirst(ClaimTypes.Name)?.Value,
-                Avatar = User.FindFirst("avatar_url")?.Value,
+                Avatar = User.FindFirst("urn:github:avatar")?.Value,
                 IsAuthenticated = true
             };
             return Ok(user);

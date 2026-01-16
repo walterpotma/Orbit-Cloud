@@ -62,7 +62,7 @@ export default function NetworkPage() {
                             id: `svc-${svc.name}`,
                             name: svc.name,
                             type: "Internal",
-                            address: `${svc.name}.${UserData?.githubID}.svc.cluster.local`, // DNS Interno do K8s
+                            address: `${svc.name}.u-${UserData?.githubID}.svc.cluster.local`, // DNS Interno do K8s
                             target: `Port: ${svc.ports?.[0] || 80}`,
                             status: "Active"
                         });
