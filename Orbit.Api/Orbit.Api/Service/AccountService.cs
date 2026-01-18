@@ -74,26 +74,43 @@ namespace Orbit.Api.Service
         public async Task<bool> CreateWorkspaceAsync(string githubId)
         {
             var userBasePath = Path.Combine("fast/clients/", githubId);
+            var namespaceName = $"u-{githubId}"; // Definimos o nome numa variável para reutilizar
+
             try
             {
+                // 1. CRIAÇÃO DE DIRETÓRIOS
+                // O Directory.CreateDirectory do C# já é seguro: se a pasta existe, ele não faz nada.
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
-
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
-
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "registry"));
 
-                var namespaceRequest = new DtoNamespaceRequest
+                // 2. CRIAÇÃO DO NAMESPACE (Lógica de Verificação)
+                try
                 {
-                    Name = $"u-{githubId}"
-                };
+                    // Tenta buscar o namespace. 
+                    // Se ele existir, vai passar direto e cair no Console.WriteLine abaixo.
+                    // Se NÃO existir, seu Service vai lançar um erro e cair no catch.
+                    await _kubernetesService.GetNamespacesAsync(namespaceName);
 
-                await _kubernetesService.CreateNamespacesAsync(namespaceRequest);
+                    Console.WriteLine($"[Info] Workspace (Namespace) '{namespaceName}' já existe. Pulando criação.");
+                }
+                catch
+                {
+                    // Se caiu aqui, é porque o GetNamespacesAsync falhou (não encontrou).
+                    // ENTÃO podemos criar com segurança.
+                    var namespaceRequest = new DtoNamespaceRequest
+                    {
+                        Name = namespaceName
+                    };
+                    await _kubernetesService.CreateNamespacesAsync(namespaceRequest);
+                    Console.WriteLine($"[Success] Namespace '{namespaceName}' criado com sucesso.");
+                }
 
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Error] Falha ao criar workspace: {ex.Message}");
+                Console.WriteLine($"[Error] Falha crítica ao criar workspace: {ex.Message}");
                 return false;
             }
         }
