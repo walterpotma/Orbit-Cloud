@@ -64,24 +64,28 @@ namespace Orbit.Api.Service
         {
             // 1. CRIA O DEPLOYMENT (O App em si)
             var newDeployment = _mapper.BuildDeploymentObject(request, namespaces);
+
+            // CORREÇÃO: Declaramos a variável AQUI FORA para ela existir no final do método
+            V1Deployment createdEntity;
+
             try
             {
-                var createdEntity = await _repository.CreateDeploymentAsync(newDeployment, namespaces);
+                createdEntity = await _repository.CreateDeploymentAsync(newDeployment, namespaces);
             }
             catch (Exception ex)
             {
+                // Se falhar aqui, o throw encerra o método, então não tem risco de createdEntity ser usada nula lá embaixo
                 throw new Exception($"Erro ao criar Deployment: {ex.Message}");
             }
 
-            // 2. CRIA O SERVICE (A Rede Interna) - Essencial para o Ingress funcionar depois
+            // 2. CRIA O SERVICE (A Rede Interna)
             var serviceRequest = new DtoServiceRequest
             {
                 Name = request.Name,
-                Port = 80, // Porta padrão do cluster
-                TargetPort = request.Port // Porta que o app roda (ex: 3000)
+                Port = 80,
+                TargetPort = request.Port
             };
 
-            // Usamos try/catch para garantir que, se a rede falhar, o deploy não quebra totalmente
             try
             {
                 await CreateServicesAsync(serviceRequest, namespaces);
@@ -89,34 +93,24 @@ namespace Orbit.Api.Service
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao criar Service: {ex.Message}");
-                // Decisão de projeto: O Deploy continua, mas sem rede.
             }
 
-            // 3. CRIA O INGRESS (A URL Pública) - Opcional
-            // Só cria se o usuário mandou um subdomínio no Front
+            // 3. CRIA O INGRESS (A URL Pública)
             if (!string.IsNullOrWhiteSpace(request.Subdomain))
             {
                 try
                 {
-                    var ingressRequest = new DtoIngressRequest
-                    {
-                        Name = request.Name,
-                        Namespace = namespaces,
-                        // Aqui assumimos que o host é subdomain + seu dominio
-                        // Você pode ajustar isso no Mapper ou passar o host completo aqui
-                    };
+                    // Ajuste do Host Completo (importante para funcionar)
+                    string fullHost = $"{request.Subdomain}.orbitcloud.com.br"; // Ajuste o domínio base se necessário
 
-                    // Você precisará adaptar seu CreateIngressAsync para aceitar o DTO ou criar o objeto aqui
-                    // await CreateIngressAsync(ingressRequest, namespaces); 
-
-                    // OU, se seu método CreateIngressAsync já espera o objeto pronto:
                     var ingressObj = _mapper.BuildIngressObject(new DtoIngressRequest
                     {
                         Name = request.Name,
                         Namespace = namespaces,
-                        Host = request.Subdomain,
-                        // ... preencher o host ...
+                        Host = fullHost,
+                        IngressClassName = "nginx"
                     });
+
                     await _repository.CreateIngressAsync(ingressObj, namespaces);
                 }
                 catch (Exception ex)
@@ -125,7 +119,7 @@ namespace Orbit.Api.Service
                 }
             }
 
-            // Retorna o sucesso do Deploy
+            // Agora o compilador consegue enxergar createdEntity!
             return _mapper.MapToDtoDeployment(createdEntity);
         }
         #endregion
