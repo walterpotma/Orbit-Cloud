@@ -8,22 +8,22 @@ export class Pods {
     }
 }
 
-export class Deployments {
-    static List(namespace?: string) {
-        console.log("Fetching deployments for namespace:", namespace);
-        return axiosInstance.get(`${controller}/deployments/u-${namespace || ""}`, { withCredentials: true });
+    export class Deployments {
+        static List(namespace?: string) {
+            console.log("Fetching deployments for namespace:", namespace);
+            return axiosInstance.get(`${controller}/deployments/u-${namespace || ""}`, { withCredentials: true });
+        }
+        static Create(namespace: string, deploymentData: any) {
+            return axiosInstance.post(`${controller}/deployments/u-${namespace}`, { 
+                name: deploymentData.name,
+                image: deploymentData.image,
+                tag: deploymentData.tag,
+                port: Number(deploymentData.port),
+                replicas: Number(deploymentData.replicas),
+                subdomain: deploymentData.subdomain
+            }, { withCredentials: true });
+        }
     }
-    static Create(namespace: string, deploymentData: any) {
-        return axiosInstance.post(`${controller}/deployments/u-${namespace}`, { 
-            name: deploymentData.name,
-            image: deploymentData.image,
-            tag: deploymentData.tag,
-            port: deploymentData.port,
-            replicas: deploymentData.replicas,
-            subdomain: deploymentData.subdomain
-        }, { withCredentials: true });
-    }
-}
 
 export class Namespaces {
     static List(namespace: string) {
