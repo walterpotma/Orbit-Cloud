@@ -38,6 +38,8 @@ export default function NetworkPage() {
 
             const formattedRules: NetworkRule[] = [];
 
+            console.log('Ingress Data:', ingressData);
+            
             // 1. Processa INGRESS (Externos)
             if (ingressData.data) {
                 ingressData.data.forEach((ing: any) => {
