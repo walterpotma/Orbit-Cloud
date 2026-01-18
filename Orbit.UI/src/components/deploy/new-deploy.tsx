@@ -1,9 +1,12 @@
 "use client"
 import { useState } from "react";
-import { X, Box, Globe, Cpu, Layers, HardDrive } from "lucide-react"; // Instale lucide-react se não tiver
+import { X, Box, Globe, Cpu, Layers, HardDrive } from "lucide-react";
 import CommandOutput from "@/components/deploy/command-output";
+import { Deployments } from "@/api/kubernetes"; // <--- Importante
+import { useUser } from "@/context/user";       // <--- Importante
 
 export default function NewDeployModal({ onClose }: { onClose: (value: boolean) => void }) {
+    const { UserData } = useUser(); // Pegamos o ID do usuário logado
     const [deploying, setDeploying] = useState(false);
     
     // Estado do Formulário
@@ -24,22 +27,50 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        
+        // 1. Validação Básica (Front-end)
+        if (!form.name || !form.image) {
+            alert("Por favor, preencha o Nome e a Imagem do container.");
+            return;
+        }
+
+        if (!UserData?.githubID) {
+            alert("Erro de sessão. Tente recarregar a página.");
+            return;
+        }
+
         setDeploying(true);
-        // Aqui chamaremos a API depois
-        console.log("Enviando deploy:", form);
-    };
 
-    const createDeploymentPayload = () => {
-        return {
-            name: form.name,
-            image: form.image,
-            tag: form.tag,
-            port: form.port,
-            replicas: form.replicas,
-            subdomain: form.subdomain
-        };
-    };
+        try {
+            // 2. Montando o Payload (Dados para a API)
+            // Convertendo números para garantir que o C# aceite
+            const payload = {
+                name: form.name,
+                image: form.image,
+                tag: form.tag || "latest",
+                port: Number(form.port),
+                replicas: Number(form.replicas),
+                subdomain: form.subdomain
+            };
 
+            console.log("🚀 Enviando para API...", payload);
+
+            // 3. Chamada Real para a API
+            await Deployments.Create(UserData.githubID, payload);
+
+            // 4. Sucesso!
+            alert("Deploy iniciado com sucesso!");
+            onClose(false);
+            window.location.reload(); // Recarrega para ver o novo deploy na tabela
+
+        } catch (error: any) {
+            console.error("❌ Erro no deploy:", error);
+            const msg = error.response?.data?.message || "Falha ao criar deploy. Verifique o console.";
+            alert(msg);
+        } finally {
+            setDeploying(false);
+        }
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -82,6 +113,7 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                                         placeholder="ex: minha-api-node" 
                                         className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                                         onChange={handleChange}
+                                        value={form.name}
                                     />
                                     <p className="text-xs text-slate-500">Apenas letras minúsculas e traços.</p>
                                 </div>
@@ -96,11 +128,12 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                                             placeholder="ex: nginx, node" 
                                             className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                                             onChange={handleChange}
+                                            value={form.image}
                                         />
                                         <input 
                                             type="text" 
                                             name="tag"
-                                            placeholder="tag (latest)" 
+                                            placeholder="tag" 
                                             className="w-24 bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:border-blue-500 text-center"
                                             defaultValue="latest"
                                             onChange={handleChange}
@@ -155,7 +188,7 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                                     </div>
                                 </div>
 
-                                {/* Memória (Fixo por enquanto) */}
+                                {/* Memória (Fixo) */}
                                 <div className="space-y-2 opacity-50 cursor-not-allowed">
                                     <label className="text-sm text-slate-300 font-medium">Memória (Plano Free)</label>
                                     <div className="relative">
@@ -205,10 +238,10 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                             </div>
                         </section>
 
-                        {/* Área de Logs (Só aparece se estiver deployando) */}
+                        {/* Área de Logs */}
                         {deploying && (
                             <div className="mt-4 animate-in fade-in zoom-in duration-300">
-                                <label className="text-sm text-slate-400 mb-2 block">Logs da Operação</label>
+                                <label className="text-sm text-slate-400 mb-2 block">Processando solicitação...</label>
                                 <CommandOutput /> 
                             </div>
                         )}
@@ -226,9 +259,20 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                     </button>
                     <button 
                         onClick={handleSubmit}
-                        className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-lg shadow-blue-600/20 transition-all transform hover:scale-105 space-x-1 justify-center flex items-center"
+                        disabled={deploying}
+                        className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-lg shadow-blue-600/20 transition-all transform hover:scale-105 space-x-1 justify-center flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <i className="bi bi-rocket-fill"></i><p>Lançar Deploy</p>
+                        {deploying ? (
+                            <>
+                                <i className="bi bi-arrow-repeat animate-spin"></i>
+                                <p>Enviando...</p>
+                            </>
+                        ) : (
+                            <>
+                                <i className="bi bi-rocket-fill"></i>
+                                <p>Lançar Deploy</p>
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
