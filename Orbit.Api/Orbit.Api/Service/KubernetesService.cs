@@ -64,7 +64,14 @@ namespace Orbit.Api.Service
         {
             // 1. CRIA O DEPLOYMENT (O App em si)
             var newDeployment = _mapper.BuildDeploymentObject(request, namespaces);
-            var createdEntity = await _repository.CreateDeploymentAsync(newDeployment, namespaces);
+            try
+            {
+                var createdEntity = await _repository.CreateDeploymentAsync(newDeployment, namespaces);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao criar Deployment: {ex.Message}");
+            }
 
             // 2. CRIA O SERVICE (A Rede Interna) - Essencial para o Ingress funcionar depois
             var serviceRequest = new DtoServiceRequest
