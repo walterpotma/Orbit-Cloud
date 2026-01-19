@@ -108,7 +108,7 @@ export default function NetworkPage() {
             ) : (
                 /* Tabela Unificada */
                 !loading && (
-                    <div className="w-full bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                    <div className="w-full bg-slate-900 border border-slate-800 rounded-xl shadow-xl">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-slate-800/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-700">

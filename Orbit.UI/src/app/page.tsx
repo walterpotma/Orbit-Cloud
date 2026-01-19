@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Deployments, Pods, Namespaces } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/components/deploy/table";
+import { useRouter } from "next/navigation";
 
 // 1. Defina limites fictícios para calcular a porcentagem (Ex: Plano Free)
 const MAX_CPU_MILLICORES = 1000; // 1000m = 1 vCPU
@@ -32,6 +33,7 @@ interface NamespaceMetric {
 
 export default function Home() {
     const { UserData, isLoading } = useUser();
+    const router = useRouter();
 
     const [deployments, setDeployments] = useState<any[]>([]);
     const [succededDeployments, setSuccededDeployments] = useState<any[]>([]);
@@ -116,7 +118,7 @@ export default function Home() {
                 <div className="w-full flex justify-between items-center">
                     <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-app-indicator"></i><p>Aplicações Recentes</p></h1>
                     {deployments.length > 0 && (
-                        <button className="px-4 py-2 rounded-lg border-1 border-blue-600 text-blue-600 text-sm">Ver Todos</button>
+                        <button onClick={() => {router.push('/deploy');}} className="px-4 py-2 rounded-lg border-1 border-blue-600 text-blue-600 text-smr cursor-pointer hover:bg-blue-600 hover:text-white transition ease-in-out duration-200">Ver Todos</button>
                     )}
                 </div>
                 <TableDeploy deployments={deployments} />

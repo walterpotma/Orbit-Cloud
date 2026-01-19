@@ -46,3 +46,9 @@ export class Ingress {
         return axiosInstance.get(`${controller}/ingress/u-${namespace || "201145284"}`, { withCredentials: true });
     }
 }
+
+export class Secrets {
+    static List(namespace?: string) {
+        return axiosInstance.get(`${controller}/secrets/${namespace || "orbitcloud"}`, { withCredentials: true });
+    }
+}
