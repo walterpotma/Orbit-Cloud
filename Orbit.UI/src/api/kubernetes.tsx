@@ -37,18 +37,18 @@ export class Namespaces {
 
 export class Services {
     static List(namespace?: string) {
-        return axiosInstance.get(`${controller}/services/u-${namespace || "201145284"}`, { withCredentials: true });
+        return axiosInstance.get(`${controller}/services/u-${namespace || ""}`, { withCredentials: true });
     }
 }
 
 export class Ingress {
     static List(namespace?: string) {
-        return axiosInstance.get(`${controller}/ingress/u-${namespace || "201145284"}`, { withCredentials: true });
+        return axiosInstance.get(`${controller}/ingress/u-${namespace || ""}`, { withCredentials: true });
     }
 }
 
 export class Secrets {
     static List(namespace?: string) {
-        return axiosInstance.get(`${controller}/secrets/${namespace || "orbitcloud"}`, { withCredentials: true });
+        return axiosInstance.get(`${controller}/secrets/u-${namespace || ""}`, { withCredentials: true });
     }
 }
