@@ -63,7 +63,7 @@ export default function Page() {
                     >
                         <Plus size={16} /> Nova Variável
                     </button>
-                    <BtnRefresh onClick={loadData} />
+                    <BtnRefresh/>
                 </div>
             </div>
             
