@@ -47,6 +47,8 @@ export default function Page() {
         return `${minutes}m atrás`;
     };
 
+    console.log("Rendering Page with secrets:", secrets);
+
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start gap-5 overflow-auto custom-scroll">
             
@@ -67,11 +69,11 @@ export default function Page() {
                 </div>
             </div>
             
-            {secrets.length === 0 && !loading ? (
+            {secrets.length === 0 ? (
                 <EmptyState
                     title="Nenhuma Variável de Ambiente"
                     description="Crie aqui suas variáveis de Ambiente e acesse de qualquer aplicação."
-                    icon="bi bi-intersect" // Ou use um ícone lucide aqui se preferir
+                    icon="bi bi-intersect"
                     actionLabel="Criar Variável"
                     onAction={() => window.location.href = '/variables/new'}
                 />

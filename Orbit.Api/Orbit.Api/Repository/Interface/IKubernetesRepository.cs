@@ -46,5 +46,10 @@ namespace Orbit.Api.Repository.Interface
         Task<V1Namespace> CreateNamespacesAsync(V1Namespace ns);
         Task DeleteNamespacesAsync(string name);
         #endregion
+
+        #region Kubernetes Quotas
+        Task<V1ResourceQuota> GetNamespaceQuotaAsync(string namespaces);
+        Task CreateNamespaceQuotaAsync(string namespaces, string cpuLimit, string memoryLimit);
+        #endregion
     }
 }

@@ -123,28 +123,6 @@ export default function Home() {
                 </div>
                 <TableDeploy deployments={deployments} />
             </div>
-            <div className="w-full mt-4">
-                <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-box-seam-fill"></i><p>Repositorios Recentes</p></h1>
-                <div className="grid grid-cols-3 gap-4">
-                    {repositorios.map(repos => {
-                        if (repos.type === 'file' && repos.branch == null) return null;
-                        return (
-                            <Card2 key={repos.name} data={{
-                                type: repos.type,
-                                icone: repos.language,
-                                title: repos.name,
-                                tecnologia: repos.language,
-                                nota: 3.9,
-                                branch: repos.branch
-                            }} />
-                        );
-                    })}
-                </div>
-            </div>
-            <div className="w-full mt-4">
-                <h1 className="my-4 text-2xl text-slate-300 mb-4 flex space-x-3"><i className="bi bi-layer-forward"></i><p>Ultimos Deploys</p></h1>
-                <Table1 />
-            </div>
         </div>
     );
 }

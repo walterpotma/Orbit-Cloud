@@ -178,5 +178,48 @@ namespace Orbit.Api.Repository
             await _kubernetesClient.CoreV1.DeleteNamespaceAsync(name);
         }
         #endregion
+
+        #region Resource Quotas
+        public async Task<V1ResourceQuota> GetNamespaceQuotaAsync(string namespaces)
+        {
+            try
+            {
+                // Tenta listar as quotas do namespace
+                var quotas = await _kubernetesClient.CoreV1.ListNamespacedResourceQuotaAsync(namespaces);
+
+                // Retorna a primeira que encontrar (geralmente só tem uma por namespace)
+                return quotas.Items.FirstOrDefault();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task CreateNamespaceQuotaAsync(string namespaces, string cpuLimit, string memoryLimit)
+        {
+            var quota = new V1ResourceQuota
+            {
+                Metadata = new V1ObjectMeta
+                {
+                    Name = "orbit-quota", // Nome padrão da regra
+                    NamespaceProperty = namespaces
+                },
+                Spec = new V1ResourceQuotaSpec
+                {
+                    Hard = new Dictionary<string, ResourceQuantity>
+            {
+                { "limits.cpu", new ResourceQuantity(cpuLimit) },      // Ex: "500m" (0.5 core)
+                { "limits.memory", new ResourceQuantity(memoryLimit) }, // Ex: "512Mi"
+                { "requests.cpu", new ResourceQuantity(cpuLimit) },    // Igualar request/limit é boa prática
+                { "requests.memory", new ResourceQuantity(memoryLimit) },
+                { "pods", new ResourceQuantity("10") } // Limite opcional de pods
+            }
+                }
+            };
+
+            await _kubernetesClient.CoreV1.CreateNamespacedResourceQuotaAsync(quota, namespaces);
+        }
+        #endregion
     }
 }

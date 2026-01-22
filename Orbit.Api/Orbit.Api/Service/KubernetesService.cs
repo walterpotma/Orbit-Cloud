@@ -309,6 +309,22 @@ namespace Orbit.Api.Service
 
             var newNs = _mapper.BuildNamespaceObject(request);
             var created = await _repository.CreateNamespacesAsync(newNs);
+
+            try
+            {
+                // Valores Padrão para novos Workspaces (Pode vir de um enum "Planos" futuramente)
+                string defaultCpu = "100m";
+                string defaultMem = "512Mi";
+
+                await _repository.CreateNamespaceQuotaAsync(request.Name, defaultCpu, defaultMem);
+                Console.WriteLine($"[Info] Quota aplicada ao namespace {request.Name}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Erro] Falha ao aplicar quota: {ex.Message}");
+                // Não impedimos a criação do namespace, apenas logamos o erro da quota
+            }
+
             return _mapper.MapToDtoNamespace(created);
         }
         public async Task DeleteNamespacesAsync(string name)
@@ -324,47 +340,63 @@ namespace Orbit.Api.Service
 
         public async Task<List<DtoNamespaceMetrics>> GetNamespaceMetricsAsync()
         {
-            try
+            // ... (Código anterior de pegar métricas de pods continua igual) ...
+            var rawMetrics = await _repository.GetPodMetricsAsync();
+
+            // Agrupa métricas por namespace
+            var grouped = rawMetrics.Items
+                .GroupBy(m => m.Metadata.Namespace())
+                .Select(g => new
+                {
+                    Name = g.Key,
+                    Count = g.Count(),
+                    TotalCpu = g.Sum(pod => pod.Containers.Sum(c => c.Usage["cpu"].ToDecimal())),
+                    TotalMem = g.Sum(pod => pod.Containers.Sum(c => c.Usage["memory"].ToDecimal()))
+                })
+                .ToList();
+
+            var resultList = new List<DtoNamespaceMetrics>();
+
+            foreach (var g in grouped)
             {
-                // 1. Busca dados brutos no Repo
-                var rawMetrics = await _repository.GetPodMetricsAsync();
+                // 1. Busca a Quota do Namespace
+                var quota = await _repository.GetNamespaceQuotaAsync(g.Name);
 
-                // 2. Agrupa e Soma (Lógica de Negócio)
-                var grouped = rawMetrics.Items
-                    .GroupBy(m => m.Metadata.Namespace()) // Use .Namespace() com parênteses se for extensão
-                    .Select(g => new
-                    {
-                        Name = g.Key,
-                        Count = g.Count(),
-                        // Soma a CPU de todos os containers de todos os pods desse namespace
-                        TotalCpu = g.Sum(pod => pod.Containers.Sum(c => c.Usage["cpu"].ToDecimal())),
-                        // Soma a Memória
-                        TotalMem = g.Sum(pod => pod.Containers.Sum(c => c.Usage["memory"].ToDecimal()))
-                    })
-                    .ToList();
+                decimal cpuLimit = 0;
+                long memLimit = 0;
 
-                // 3. Mapeia para DTO e Formata
-                return grouped.Select(g => new DtoNamespaceMetrics
+                // 2. Extrai os valores Hard (Limites definidos)
+                if (quota?.Status?.Hard != null)
+                {
+                    if (quota.Status.Hard.TryGetValue("limits.cpu", out var qCpu))
+                        cpuLimit = qCpu.ToDecimal();
+
+                    if (quota.Status.Hard.TryGetValue("limits.memory", out var qMem))
+                        memLimit = qMem.ToInt64();
+                }
+
+                // 3. Monta o DTO Completo
+                resultList.Add(new DtoNamespaceMetrics
                 {
                     Namespace = g.Name,
                     PodCount = g.Count,
+
+                    // Uso
                     RawCpu = g.TotalCpu,
                     RawMemory = (long)g.TotalMem,
                     CpuUsage = FormatCpu(g.TotalCpu),
-                    MemoryUsage = FormatMemory((long)g.TotalMem)
-                })
-                .OrderByDescending(x => x.RawMemory) // Ordena por quem gasta mais RAM
-                .ToList();
-            }
-            catch (Exception ex)
-            {
-                // Se o Metrics Server não estiver instalado no cluster, isso vai dar erro.
-                // Logar e retornar lista vazia é uma boa prática para não quebrar o dashboard.
-                Console.WriteLine($"Erro metrics: {ex.Message}");
-                return new List<DtoNamespaceMetrics>();
-            }
-        }
+                    MemoryUsage = FormatMemory((long)g.TotalMem),
 
+                    // Limites (Novos Campos)
+                    RawCpuLimit = cpuLimit,
+                    RawMemoryLimit = memLimit,
+                    CpuLimit = cpuLimit > 0 ? FormatCpu(cpuLimit) : "∞", // Infinito se não tiver quota
+                    MemoryLimit = memLimit > 0 ? FormatMemory(memLimit) : "∞"
+                });
+            }
+
+            return resultList.OrderByDescending(x => x.RawMemory).ToList();
+        }
         public async Task<DtoNamespaceMetrics> GetByNamespaceMetricsAsync(string namespaced)
         {
             var allMetrics = await GetNamespaceMetricsAsync();
