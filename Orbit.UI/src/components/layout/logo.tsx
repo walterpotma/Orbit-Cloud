@@ -7,9 +7,8 @@ type LogoProps = {
 
 export default function Logo ({className}: LogoProps) {
     return (
-        <div className={`px-4 flex justify-center items-center ${className}`}>
+        <div className={`flex justify-center items-center ${className}`}>
             <img src="/orbit3.png" alt="Logo" className="w-16"/>
-            <p className="text-3xl font-bold">Orbit</p>
         </div>
     );
 }

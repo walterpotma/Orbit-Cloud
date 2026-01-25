@@ -13,7 +13,8 @@ export default function Nav() {
     const pathUrl = usePathname();
     const [loading, setLoading] = useState(false);
     const [newApp, setNewApp] = useState(false);
-
+    const [open, setOpen] = useState(true);
+    const [width, setWidth] = useState(10);
 
     const navigationTo = (url: string) => {
         setLoading(true);
@@ -29,17 +30,23 @@ export default function Nav() {
         setLoading(false);
     }, [pathUrl]);
 
+    const toggleMenu = () => {
+        setOpen(!open);
+        setWidth(open ? 74 : 10 );
+    };
+
     return (
-        <nav className={`${pathUrl == "/login" || pathUrl == "/register" ? "hidden" : ""} w-74 pt-5 h-full bg-[var(--dark)]`}>
-            <h1 className="flex justify-center items-center space-x-2">
+        <nav className={`${pathUrl == "/login" || pathUrl == "/register" ? "hidden" : ""} w-${width} min-w-${width} pt-5 h-full bg-[var(--dark)] relative transition duration-300 ease-in-out`}>
+            <h1 className={`flex justify-center items-center ${open ? "space-x-2" : ""}`}>
                 <Logo />
-                <p className="text-blue-500 text-3xl font-bold transform -translate-x-5">Cloud</p>
+                <p className={`text-3xl font-bold ${open ? "hidden" : ""}`}>Orbit</p>
+                <p className={`text-blue-500 text-3xl font-bold transform -translate-x-5 ${open ? "hidden" : ""}`}>Cloud</p>
             </h1>
-            <Button text="Dashboard" icon="grid-1x2-fill" onClick={() => navigationTo('/')} active={pathUrl === '/'} />
+            <Button text="Dashboard" icon="grid-1x2-fill" open={open} onClick={() => navigationTo('/')} active={pathUrl === '/'} />
             {/* <Button text="Repositórios" icon="box-seam-fill" onClick={() => navigationTo('/repository')} active={pathUrl === '/repository'}/> */}
-            <Button text="Deploys" icon="rocket-takeoff-fill" onClick={() => navigationTo('/deploy')} active={pathUrl === '/deploy'} />
-            <Button text="Rede" icon="globe2" onClick={() => navigationTo('/network')} active={pathUrl === '/network'} />
-            <Button text="Variaveis" icon="intersect" onClick={() => navigationTo('/variables')} active={pathUrl === '/variables'} />
+            <Button text="Deploys" icon="rocket-takeoff-fill" open={open} onClick={() => navigationTo('/deploy')} active={pathUrl === '/deploy'} />
+            <Button text="Rede" icon="globe2" open={open} onClick={() => navigationTo('/network')} active={pathUrl === '/network'} />
+            <Button text="Variaveis" icon="intersect" open={open} onClick={() => navigationTo('/variables')} active={pathUrl === '/variables'} />
             {/* <Button text="Armazenamento" icon="folder-fill" onClick={() => navigationTo('/storage')} active={pathUrl === '/storage'}/> */}
             {/* <Button text="Planos" icon="award-fill" onClick={() => navigationTo('/subscriptions')} active={pathUrl === '/subscriptions'}/> */}
             {/* <Button text="Configurações" icon="gear-fill" onClick={() => navigationTo('/settings')} active={pathUrl === '/settings'}/> */}
@@ -62,8 +69,12 @@ export default function Nav() {
                     )}
                 </div>
             ) : (
-                <Button text="Login" icon="door-open" onClick={() => navigationTo('/login')} active={pathUrl === '/login'} />
+                <Button text="Login" icon="door-open" open={open} onClick={() => navigationTo('/login')} active={pathUrl === '/login'} />
             )}
+
+            <button className="text-2xl text-blue-500 cursor-pointer absolute -right-3" onClick={toggleMenu}>
+                <i className={`bi bi-arrow-${open ? "right" : "left"}-circle-fill`}></i>
+            </button>
 
             {loading && <div className="position fixed top-0 left-0"><Loading /></div>}
         </nav>
