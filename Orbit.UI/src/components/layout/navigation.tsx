@@ -61,7 +61,7 @@ export default function Nav() {
             ) : UserData ? (
                 // Usuário Logado
                 <div className="text-slate-500 flex items-center space-x-3 cursor-pointer hover:text-slate-300 transition-colors">
-                    <p className="font-bold text-white">{UserData.name || UserData.username || "Usuário"}</p>
+                    <p className={`font-bold ${open ? "hidden" : ""} text-white`}>{UserData.name || UserData.username || "Usuário"}</p>
                     {UserData.avatar ? (
                         <img src={UserData.avatar} alt="Avatar" className="w-9 h-9 rounded-full border border-slate-600" />
                     ) : (
