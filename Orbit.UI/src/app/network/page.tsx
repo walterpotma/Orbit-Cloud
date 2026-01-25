@@ -3,52 +3,45 @@
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import EmptyState from "@/components/ui/exception/EmptyState";
 import { useEffect, useState } from "react";
-import { Globe, Lock, Server, ArrowUpRight, Copy } from "lucide-react"; // Instale lucide-react
-import { Services, Ingress } from "@/api/kubernetes"; // Supondo que você já criou esses arquivos de API
+import { Services, Ingress } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
 import NetWorkTable from "@/components/network/table";
 
-// Interface unificada para a tabela
 interface NetworkRule {
     id: string;
     name: string;
-    type: "External" | "Internal"; // Ingress = External, Service = Internal
+    type: "External" | "Internal";
     address: string;
     target: string;
     status: string;
 }
 
 export default function NetworkPage() {
-    const { UserData } = useUser();
+    const { UserData, isLoading } = useUser();
     const [loading, setLoading] = useState(true);
-    const [rules, setRules] = useState<NetworkRule[]>([]);
+    const [network, setNetwork] = useState<NetworkRule[]>([]);
 
     useEffect(() => {
-        if (!UserData?.githubID) return;
+        if (isLoading || !UserData || !UserData.githubID) return;
         loadData();
     }, [UserData]);
 
     const loadData = async () => {
         setLoading(true);
         try {
-            // Buscamos Services e Ingress em paralelo
             const [servicesData, ingressData] = await Promise.all([
-                Services.List(UserData?.githubID), // Sua chamada API
-                Ingress.List(UserData?.githubID)   // Sua chamada API
+                Services.List(UserData?.githubID),
+                Ingress.List(UserData?.githubID)
             ]);
 
-            const formattedRules: NetworkRule[] = [];
+            const formattedNetwork: NetworkRule[] = [];
 
-            console.log('Ingress Data:', ingressData);
-
-            // 1. Processa INGRESS (Externos)
             if (ingressData.data) {
                 ingressData.data.forEach((ing: any) => {
-                    formattedRules.push({
+                    formattedNetwork.push({
                         id: `ing-${ing.name}`,
                         name: ing.name,
                         type: "External",
-                        // Assumindo que seu DTO retorna o host ou montamos aqui
                         address: `${ing.rules[0].host}`, 
                         target: `${ing.name} (Service)`,
                         status: "Active"
@@ -56,16 +49,14 @@ export default function NetworkPage() {
                 });
             }
 
-            // 2. Processa SERVICES (Internos)
             if (servicesData.data) {
                 servicesData.data.forEach((svc: any) => {
-                    // Filtramos o serviço padrão do kubernetes para não poluir
                     if (svc.name !== 'kubernetes') {
-                        formattedRules.push({
+                        formattedNetwork.push({
                             id: `svc-${svc.name}`,
                             name: svc.name,
                             type: "Internal",
-                            address: `${svc.name}.u-${UserData?.githubID}.svc.cluster.local`, // DNS Interno do K8s
+                            address: `${svc.name}.u-${UserData?.githubID}.svc.cluster.local`,
                             target: `Port: ${svc.ports?.[0] || 80}`,
                             status: "Active"
                         });
@@ -73,21 +64,17 @@ export default function NetworkPage() {
                 });
             }
 
-            setRules(formattedRules);
+            setNetwork(formattedNetwork);
         } catch (error) {
             console.error("Erro ao carregar rede:", error);
         } finally {
             setLoading(false);
         }
     };
-
-    // Função para copiar endereço
     
 
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start gap-5 overflow-auto custom-scroll">
-            
-            {/* Cabeçalho */}
             <div className="w-full flex justify-between items-center mb-4">
                 <div>
                     <h1 className="text-3xl font-bold text-white">Network</h1>
@@ -95,7 +82,7 @@ export default function NetworkPage() {
                 <BtnRefresh/>
             </div>
             
-            {rules.length === 0 ? (
+            {network.length === 0 ? (
                 <EmptyState
                     title="Nenhuma Regra de Rede"
                     description="Seus deploys ainda não possuem serviços ou rotas públicas configuradas."
@@ -104,7 +91,7 @@ export default function NetworkPage() {
                     onAction={() => window.location.href = '/deploy'}
                 />
             ) : (
-                <NetWorkTable rules={rules}/>
+                <NetWorkTable rules={network}/>
             )}
         </div>
     );

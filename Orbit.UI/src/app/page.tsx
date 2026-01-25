@@ -1,14 +1,9 @@
 "use client";
-import { RefreshCcw, User } from "lucide-react";
 import "./globals.css";
-import Image from "next/image";
 import 'devicon/devicon.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css"
 import Card1 from "@/components/ui/dashboard/card1";
-import Card2 from "@/components/ui/dashboard/card2";
-import CardDeploy from "@/components/ui/dashboard/card-deploy";
 import CardList1 from "@/components/ui/dashboard/card-list1";
-import Table1 from "@/components/ui/dashboard/table";
 import BtnRefresh from "@/components/ui/BtnRefresh";
 import fileTree from "@/model/storage";
 import { useEffect, useState } from "react";
@@ -17,18 +12,16 @@ import { useUser } from "@/context/user";
 import TableDeploy from "@/components/deploy/table";
 import { useRouter } from "next/navigation";
 
-// 1. Defina limites fictícios para calcular a porcentagem (Ex: Plano Free)
-const MAX_CPU_MILLICORES = 1000; // 1000m = 1 vCPU
-const MAX_MEMORY_BYTES = 512 * 1024 * 1024; // 512 MiB em Bytes
+const MAX_CPU_MILLICORES = 1000;
+const MAX_MEMORY_BYTES = 512 * 1024 * 1024;
 
-// 2. Atualize a interface para bater com o JSON da API
 interface NamespaceMetric {
     namespace: string;
     podCount: number;
-    cpuUsage: string;      // "0m" (Texto para exibir)
-    memoryUsage: string;   // "18 MiB" (Texto para exibir)
-    rawCpu: number;        // 0 (Número para calcular %)
-    rawMemory: number;     // 18804736 (Número para calcular %)
+    cpuUsage: string;
+    memoryUsage: string;
+    rawCpu: number;
+    rawMemory: number;
 }
 
 export default function Home() {
@@ -42,15 +35,12 @@ export default function Home() {
 
     const [namespaceMetrics, setNamespaceMetrics] = useState<NamespaceMetric | null>(null);
 
-    // Cálculos de segurança (evita divisão por zero ou nulos)
     const rawCpu = namespaceMetrics?.rawCpu || 0;
     const rawMem = namespaceMetrics?.rawMemory || 0;
 
-    // Regra de 3 para achar a porcentagem (Limitando a 100% para não quebrar layout)
     const cpuPercent = Math.min((rawCpu / MAX_CPU_MILLICORES) * 100, 100);
     const memPercent = Math.min((rawMem / MAX_MEMORY_BYTES) * 100, 100);
 
-    // Texto formatado para exibir embaixo da barra
     const cpuLabel = namespaceMetrics?.cpuUsage || "0m";
     const memLabel = namespaceMetrics?.memoryUsage || "0 MiB";
 
@@ -105,13 +95,13 @@ export default function Home() {
             <div className="w-full flex gap-5">
                 <CardList1
                     title="Uso de vCPU"
-                    metrics={[cpuPercent]} // Passamos a % calculada
-                    subTittle={`${cpuLabel} / 1000m`} // Mostramos o texto bonito
+                    metrics={[cpuPercent]}
+                    subTittle={`${cpuLabel} / 1000m`}
                 />
                 <CardList1
                     title="Uso de RAM"
-                    metrics={[memPercent]} // Passamos a % calculada
-                    subTittle={`${memLabel} / 512 MiB`} // Mostramos o texto bonito
+                    metrics={[memPercent]}
+                    subTittle={`${memLabel} / 512 MiB`}
                 />
             </div>
             <div className="w-full mt-4">
