@@ -79,7 +79,7 @@ export default function NetworkPage() {
                 <div>
                     <h1 className="text-3xl font-bold text-white">Network</h1>
                 </div>
-                <BtnRefresh/>
+                <BtnRefresh onClick={loadData}/>
             </div>
             
             {network.length === 0 ? (

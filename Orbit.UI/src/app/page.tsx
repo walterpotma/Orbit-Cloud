@@ -44,15 +44,15 @@ export default function Home() {
     const cpuLabel = namespaceMetrics?.cpuUsage || "0m";
     const memLabel = namespaceMetrics?.memoryUsage || "0 MiB";
 
-    const repositorios = fileTree.filter(node => node.type === 'deploy' || node.type === 'folder' && node.branch != null);
-    console.log(repositorios);
-    console.log("UserData:", UserData);
-    console.log("isLoading:", isLoading);
-
     useEffect(() => {
         if (isLoading || !UserData || !UserData.githubID) {
             return;
         }
+        loadData();
+    }, [UserData, isLoading]);
+
+    const loadData = async () => {
+        if (!UserData) return;
         Deployments.List(UserData.githubID)
             .then((response: any) => {
                 console.log(response.data);
@@ -69,7 +69,7 @@ export default function Home() {
             .catch((error: any) => {
                 console.error("Error fetching Namespace Metrics:", error);
             });
-    }, [UserData, isLoading]);
+    };
 
     useEffect(() => {
         setSuccededDeployments(deployments.filter(deploy => deploy.status.toLowerCase() === 'running'));
@@ -79,11 +79,11 @@ export default function Home() {
 
     console.log(deployments);
     return (
-        <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start gap-5 overflow-auto custom-scroll">
+        <div className="w-full h-full box-border px-8 py-8 flex flex-col justify-start items-start gap-5 overflow-auto custom-scroll">
             <div className="w-full">
                 <div className="w-full flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Dashboard</h1>
-                    <BtnRefresh />
+                    <BtnRefresh onClick={loadData} />
                 </div>
                 <div className="w-full flex justify-around space-x-5">
                     <Card1 title="Deploys" value={succededDeployments.length} analysis="Bem Sucedidos" className="" />

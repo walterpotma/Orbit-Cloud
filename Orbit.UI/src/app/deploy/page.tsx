@@ -19,6 +19,11 @@ export default function Page() {
         if (isLoading || !UserData || !UserData.githubID) {
             return;
         }
+        loadData();
+    }, [UserData, isLoading]);
+
+    const loadData = async () => {
+        if (!UserData) return;
         Deployments.List(UserData.githubID)
             .then((response: any) => {
                 console.log(response.data);
@@ -27,7 +32,7 @@ export default function Page() {
             .catch((error: any) => {
                 console.error("Error fetching Deployments:", error);
             });
-    }, [UserData, isLoading]);
+    }
 
     return (
         <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll">
