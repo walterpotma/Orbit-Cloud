@@ -12,7 +12,6 @@ export default function Nav() {
     const router = useRouter();
     const pathUrl = usePathname();
     const [loading, setLoading] = useState(false);
-    const [newApp, setNewApp] = useState(false);
     const [open, setOpen] = useState(true);
     const [width, setWidth] = useState(10);
 
@@ -32,15 +31,15 @@ export default function Nav() {
 
     const toggleMenu = () => {
         setOpen(!open);
-        setWidth(open ? 74 : 10 );
+        setWidth(open ? 96 : 10 );
     };
 
     return (
         <nav className={`${pathUrl == "/login" || pathUrl == "/register" ? "hidden" : ""} w-${width} min-w-${width} pt-5 h-full bg-[var(--dark)] relative transition duration-300 ease-in-out`}>
-            <h1 className={`flex justify-center items-center ${open ? "space-x-2" : ""}`}>
-                <Logo />
+            <h1 className={`w-full flex justify-center items-center`}>
+                <Logo />    
                 <p className={`text-3xl font-bold ${open ? "hidden" : ""}`}>Orbit</p>
-                <p className={`text-blue-500 text-3xl font-bold transform -translate-x-5 ${open ? "hidden" : ""}`}>Cloud</p>
+                <p className={`text-blue-500 text-3xl font-bold transform ${open ? "hidden" : ""}`}>Cloud</p>
             </h1>
             <Button text="Dashboard" icon="grid-1x2-fill" open={open} onClick={() => navigationTo('/')} active={pathUrl === '/'} />
             {/* <Button text="Repositórios" icon="box-seam-fill" onClick={() => navigationTo('/repository')} active={pathUrl === '/repository'}/> */}
@@ -60,7 +59,7 @@ export default function Nav() {
                 </div>
             ) : UserData ? (
                 // Usuário Logado
-                <div className="text-slate-500 flex items-center space-x-3 cursor-pointer hover:text-slate-300 transition-colors">
+                <div className="text-slate-500 flex justify-center items-center space-x-3 cursor-pointer hover:text-slate-300 transition-colors">
                     <p className={`font-bold ${open ? "hidden" : ""} text-white`}>{UserData.name || UserData.username || "Usuário"}</p>
                     {UserData.avatar ? (
                         <img src={UserData.avatar} alt="Avatar" className="w-9 h-9 rounded-full border border-slate-600" />
