@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: orbitcloud-ui
+  name: orbitcloud-ui-service
   namespace: orbitcloud
 spec:
   selector:
@@ -56,6 +56,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: orbitcloud-ui
+                name: orbitcloud-ui-service
                 port:
                   number: 3000
