@@ -16,7 +16,7 @@ if [ $? -ne 0 ]; then
     echo "[SH] Erro ao enviar a imagem Docker para o registro."
     exit 1
 fi
-kubectl apply -f ../$APP_NAME.yaml
+kubectl apply -f ../deployments/$APP_NAME.yaml
 if [ $? -eq 0 ]; then
     echo "[SH] Sucesso! Deploy aplicado para $APP_NAME"
     exit 0
