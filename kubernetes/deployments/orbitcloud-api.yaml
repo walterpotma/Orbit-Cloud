@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orbitcloud-api-deployment
+  namespace: orbitcloud
+  labels:
+    app: orbitcloud-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orbitcloud-api
+  template:
+    metadata:
+      labels:
+        app: orbitcloud-api
+    spec:
+      containers:
+      - name: orbitcloud-api-container
+        image: localhost:5000/orbitcloud-api:v0.0.30
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: orbit-storage
+          mountPath: /data/
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: orbit-storage
+        hostPath:
+          path: /data/
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orbitcloud-api-service
+  namespace: orbitcloud
+spec:
+  selector:
+    app: orbitcloud-api
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: orbitcloud-api-ingress
+  namespace: orbitcloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - api.orbitcloud.com.br
+      secretName: orbitnet-default-cert 
+  rules:
+    - host: api.orbitcloud.com.br
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: orbitcloud-api-service
+                port:
+                  number: 8080
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: orbit-api-admin-binding
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: orbitcloud
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
