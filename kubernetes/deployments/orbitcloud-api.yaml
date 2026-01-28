@@ -27,7 +27,6 @@ spec:
           mountPath: /var/run/docker.sock
         - name: nixpacks
           mountPath: /nixpacks.sh
-          subPath: nixpacks.sh
           readOnly: true
       volumes:
       - name: orbit-storage
