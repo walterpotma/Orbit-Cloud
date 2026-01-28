@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orbitcloud-api-container
-        image: localhost:5000/orbitcloud-api:v0.0.30
+        image: localhost:5000/orbitcloud-api:v0.0.31
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -25,6 +25,10 @@ spec:
           mountPath: /data/
         - name: docker-socket
           mountPath: /var/run/docker.sock
+        - name: nixpacks
+          mountPath: /nixpacks.sh
+          subPath: nixpacks.sh
+          readOnly: true
       volumes:
       - name: orbit-storage
         hostPath:
@@ -33,6 +37,10 @@ spec:
         hostPath:
           path: /var/run/docker.sock
           type: Socket
+      - name: nixpacks
+        hostPath:
+          path: /home/hayom/orbit-cloud/kubernetes/bash/nixpacks.sh
+          type: File
 ---
 apiVersion: v1
 kind: Service
