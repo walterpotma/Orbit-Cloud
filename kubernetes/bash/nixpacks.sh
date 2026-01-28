@@ -3,7 +3,7 @@
 GITHUB_ID=$1
 APP_NAME=$2
 
-PROJECT_PATH="./data/fast/clients/$GITHUB_ID/workspace/$APP_NAME"
+PROJECT_PATH="/data/fast/clients/$GITHUB_ID/workspace/$APP_NAME"
 
 echo "[SH] Iniciando gerador para: $PROJECT_PATH"
 
@@ -15,8 +15,11 @@ fi
 
 TEMP_OUT="$PROJECT_PATH/.temp_nixpacks"
 
+rm -rf $TEMP_OUT
+
 echo "[INFO] Analisando código..."
-nixpacks build $PROJECT_PATH --out $TEMP_OUT --name $APP_NAME > /dev/null
+
+nixpacks build $PROJECT_PATH --out $TEMP_OUT --name $APP_NAME --no-build > /dev/null
 
 if [ $? -ne 0 ]; then
     echo "[ERRO] Nixpacks falhou ao analisar o projeto."
@@ -24,18 +27,28 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-GENERATED_FILE="$TEMP_OUT/.nixpacks/Dockerfile"
-TARGET_FILE="$PROJECT_PATH/Dockerfile"
-
-if [ -f "$GENERATED_FILE" ]; then
-    mv "$GENERATED_FILE" "$TARGET_FILE"
-    echo "[SUCESSO] Dockerfile movido para a raiz do projeto."
-    
-    rm -rf $TEMP_OUT
-    
-    exit 0
+if [ -f "$TEMP_OUT/Dockerfile" ]; then
+    GENERATED_DOCKERFILE="$TEMP_OUT/Dockerfile"
+elif [ -f "$TEMP_OUT/.nixpacks/Dockerfile" ]; then
+    GENERATED_DOCKERFILE="$TEMP_OUT/.nixpacks/Dockerfile"
 else
-    echo "[ERRO] Dockerfile não foi gerado."
+    echo "[ERRO] Dockerfile não encontrado na saída do Nixpacks."
     rm -rf $TEMP_OUT
     exit 1
 fi
+
+mv "$GENERATED_DOCKERFILE" "$PROJECT_PATH/Dockerfile"
+echo "[SUCESSO] Dockerfile movido."
+
+if [ -d "$TEMP_OUT/.nixpacks" ]; then
+    rm -rf "$PROJECT_PATH/.nixpacks"
+    
+    mv "$TEMP_OUT/.nixpacks" "$PROJECT_PATH/.nixpacks"
+    echo "[SUCESSO] Pasta de dependências .nixpacks movida."
+else
+    echo "[AVISO] Pasta .nixpacks não foi gerada (alguns projetos não precisam)."
+fi
+
+rm -rf $TEMP_OUT
+
+exit 0
