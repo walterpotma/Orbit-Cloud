@@ -21,7 +21,12 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+RUN apt-get update && \
+    apt-get install -y curl git && \
+    rm -rf /var/lib/apt/lists/*
+
 VOLUME /app/FileSystem
+
 
 ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "Orbit.Api.dll"]
