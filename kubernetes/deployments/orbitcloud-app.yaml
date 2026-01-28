@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orbitcloud-app-container
-        image: localhost:5000/orbitcloud-app:v1.12
+        image: localhost:5000/orbitcloud-app:v0.0.12
         ports:
         - containerPort: 8080
         resources:
