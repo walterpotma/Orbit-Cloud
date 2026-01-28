@@ -1,4 +1,4 @@
-import { axiosInstance } from "./config";
+import { axiosInstance } from "../libs/axios";
 
 const controller = "/github";
 

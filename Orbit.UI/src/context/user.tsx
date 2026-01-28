@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { VARIABLE_API_URL } from "@/settings/variables";
+import { VARIABLE_API_URL } from "@/types/variables";
 import axios from "axios";
 import { Github } from "@/api/github";
 

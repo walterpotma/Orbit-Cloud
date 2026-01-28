@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import "bootstrap-icons/font/bootstrap-icons.css"
 import Loading from "@/components/layout/loading";
-import Button from "@/components/ui/layout/btn-navigation";
+import Button from "@/components/ui/btn-navigation";
 import Logo from "@/components/layout/logo";
 import { useUser } from "@/context/user";
 

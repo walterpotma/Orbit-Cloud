@@ -1,7 +1,7 @@
 "use client";
 
 import BtnRefresh from "@/components/ui/BtnRefresh";
-import EmptyState from "@/components/ui/exception/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
 import { useEffect, useState } from "react";
 import { Key, Lock, Clock, Shield, Plus } from "lucide-react"; 
 import { Secrets } from "@/api/kubernetes"; 

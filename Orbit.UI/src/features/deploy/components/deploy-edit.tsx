@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import CommandOutput from "@/components/deploy/command-output";
+import CommandOutput from "@/features/deploy/components/deploy-output";
 import Input2 from "@/components/ui/input";
 
 export default function Page({ onClose }: { onClose: (value: boolean) => void }) {

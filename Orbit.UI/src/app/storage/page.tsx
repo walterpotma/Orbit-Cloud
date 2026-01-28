@@ -3,8 +3,8 @@ import { Database, GitBranch, RefreshCcw } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import 'devicon/devicon.min.css';
 import BtnRefresh from "@/components/ui/BtnRefresh";
-import FileSystemItem from "@/components/storage/manage";
-import fileTree, { FileSystemNode } from "@/model/storage";
+import FileSystemItem from "@/features/storage/components/storage-view";
+import fileTree, { FileSystemNode } from "@/features/storage/types/storage";
 import Search from "@/components/ui/table/search";
 
 function filterTree(nodes: FileSystemNode[], searchTerm: string): FileSystemNode[] {

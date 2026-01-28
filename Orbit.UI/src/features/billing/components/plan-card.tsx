@@ -1,4 +1,4 @@
-import { cardProps } from "@/model/plans";
+import { cardProps } from "@/features/billing/types/plans";
 import { Check } from "lucide-react";
 
 export default function Card(cardProps: cardProps) {

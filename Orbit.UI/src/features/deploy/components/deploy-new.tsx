@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 import { X, Box, Globe, Cpu, Layers, HardDrive } from "lucide-react";
-import CommandOutput from "@/components/deploy/command-output";
+import CommandOutput from "@/features/deploy/components/deploy-output";
 import { Deployments } from "@/api/kubernetes"; // <--- Importante
 import { useUser } from "@/context/user";       // <--- Importante
 

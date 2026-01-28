@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FileSystemNode } from "@/model/storage";
+import { FileSystemNode } from "@/features/storage/types/storage";
 
 type FileSystemItemProps = {
     node: FileSystemNode & { isInitiallyExpanded?: boolean };

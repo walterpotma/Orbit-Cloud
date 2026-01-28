@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { VARIABLE_API_URL } from "@/settings/variables";
+import { VARIABLE_API_URL } from "@/types/variables";
 
 export default function Page() {
     useEffect(() => {

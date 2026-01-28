@@ -2,14 +2,14 @@
 import "./globals.css";
 import 'devicon/devicon.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css"
-import Card1 from "@/components/ui/dashboard/card1";
-import CardList1 from "@/components/ui/dashboard/card-list1";
+import Card1 from "@/features/dashboard/components/card1";
+import CardList1 from "@/features/dashboard/components/deploy-card-list";
 import BtnRefresh from "@/components/ui/BtnRefresh";
-import fileTree from "@/model/storage";
+import fileTree from "@/features/storage/types/storage";
 import { useEffect, useState } from "react";
 import { Deployments, Pods, Namespaces } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
-import TableDeploy from "@/components/deploy/table";
+import TableDeploy from "@/features/deploy/components/deploy-table";
 import { useRouter } from "next/navigation";
 
 const MAX_CPU_MILLICORES = 1000;
