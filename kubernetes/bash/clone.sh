@@ -4,7 +4,7 @@ GITHUB_ID=$1
 RAW_URL=$2
 TOKEN=$3
 
-BASE_DIR="fast/clients/$GITHUB_ID/workspace"
+BASE_DIR="/data/fast/clients/$GITHUB_ID/workspace"
 
 CLEAN_URL="${RAW_URL#https://}"
 
