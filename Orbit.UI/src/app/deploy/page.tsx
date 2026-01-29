@@ -1,11 +1,10 @@
 "use client"
-import { Database, GitBranch, RefreshCcw } from "lucide-react";
-import { useState, useEffect } from "react";
 import 'devicon/devicon.min.css';
+import { useState, useEffect } from "react";
 import NewDeploy from "@/features/deploy/components/deploy-new";
 import EditDeploy from "@/features/deploy/components/deploy-edit";
 import BtnRefresh from "@/components/ui/button-refresh";
-import { Deployments } from "@/api/kubernetes";
+import { Deployments } from "@/features/deploy/services/deployments";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/features/deploy/components/deploy-view";
 

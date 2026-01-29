@@ -1,23 +1,7 @@
 "use client";
 
-import BtnRefresh from "@/components/ui/button-refresh";
-import EmptyState from "@/components/ui/exception-state";
-import { useEffect, useState } from "react";
-import { Globe, Lock, Server, ArrowUpRight, Copy } from "lucide-react"; // Instale lucide-react
-import { Services, Ingress } from "@/api/kubernetes"; // Supondo que você já criou esses arquivos de API
-import { useUser } from "@/context/user";
-import NetWorkTable from "@/features/network/components/network-view";
-
-interface NetworkRuleProps {
-    rules: Array<{
-        id: string;
-        name: string;
-        type: "External" | "Internal"; // Ingress = External, Service = Internal
-        address: string;
-        target: string;
-        status: string;
-    }>;
-}
+import { Globe, Lock, Server, ArrowUpRight, Copy } from "lucide-react";
+import { NetworkRuleProps } from "../types/view";
 
 const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

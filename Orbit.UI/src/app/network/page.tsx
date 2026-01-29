@@ -3,18 +3,10 @@
 import BtnRefresh from "@/components/ui/button-refresh";
 import EmptyState from "@/components/ui/exception-state";
 import { useEffect, useState } from "react";
-import { Services, Ingress } from "@/api/kubernetes";
+import { Services, Ingress } from "@/features/network/services/network";
 import { useUser } from "@/context/user";
 import NetWorkTable from "@/features/network/components/network-view";
-
-interface NetworkRule {
-    id: string;
-    name: string;
-    type: "External" | "Internal";
-    address: string;
-    target: string;
-    status: string;
-}
+import { NetworkRule }from "@/features/network/types/view";
 
 export default function NetworkPage() {
     const { UserData, isLoading } = useUser();

@@ -6,22 +6,15 @@ import DeployCard from "@/features/dashboard/components/dash-deploy-card";
 import UsageCard from "@/features/dashboard/components/dash-usage-card";
 import ButtonRefresh from "@/components/ui/button-refresh";
 import { useEffect, useState } from "react";
-import { Deployments, Namespaces } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/features/deploy/components/deploy-view";
 import { useRouter } from "next/navigation";
+import { Deployments } from "@/features/deploy/services/deployments";
+import { Namespaces } from "@/features/dashboard/services/namespace";
+import { NamespaceMetric } from "@/features/dashboard/types/namespace-view";
 
 const MAX_CPU_MILLICORES = 1000;
 const MAX_MEMORY_BYTES = 512 * 1024 * 1024;
-
-interface NamespaceMetric {
-    namespace: string;
-    podCount: number;
-    cpuUsage: string;
-    memoryUsage: string;
-    rawCpu: number;
-    rawMemory: number;
-}
 
 export default function Home() {
     const { UserData, isLoading } = useUser();

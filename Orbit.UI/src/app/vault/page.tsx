@@ -4,7 +4,7 @@ import BtnRefresh from "@/components/ui/button-refresh";
 import EmptyState from "@/components/ui/exception-state";
 import { useEffect, useState } from "react";
 import { Key, Lock, Clock, Shield, Plus } from "lucide-react"; 
-import { Secrets } from "@/api/kubernetes"; 
+import { Secrets } from "@/features/vault/services/secrets"; 
 import { useUser } from "@/context/user";
 
 export default function Page() {
@@ -56,7 +56,6 @@ export default function Page() {
             <div className="w-full flex justify-between items-center mb-4">
                 <div>
                     <h1 className="text-3xl font-bold text-white">Environment Variables</h1>
-                    <p className="text-slate-400 text-sm mt-1">Gerencie chaves de API, segredos e certificados.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <button 

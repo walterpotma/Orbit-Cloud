@@ -5,7 +5,7 @@ import 'devicon/devicon.min.css';
 import BtnRefresh from "@/components/ui/button-refresh";
 import FileSystemItem from "@/features/storage/components/storage-view";
 import fileTree, { FileSystemNode } from "@/features/storage/types/storage";
-import Search from "@/components/ui/table/search";
+import Search from "@/components/ui/search";
 
 function filterTree(nodes: FileSystemNode[], searchTerm: string): FileSystemNode[] {
     const searchLower = searchTerm.toLowerCase();

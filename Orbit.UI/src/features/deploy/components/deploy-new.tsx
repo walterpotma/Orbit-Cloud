@@ -2,14 +2,13 @@
 import { useState } from "react";
 import { X, Box, Globe, Cpu, Layers, HardDrive } from "lucide-react";
 import CommandOutput from "@/features/deploy/components/deploy-output";
-import { Deployments } from "@/api/kubernetes"; // <--- Importante
-import { useUser } from "@/context/user";       // <--- Importante
+import { Deployments } from "@/features/deploy/services/deployments";
+import { useUser } from "@/context/user";
 
 export default function NewDeployModal({ onClose }: { onClose: (value: boolean) => void }) {
-    const { UserData } = useUser(); // Pegamos o ID do usuário logado
+    const { UserData } = useUser();
     const [deploying, setDeploying] = useState(false);
     
-    // Estado do Formulário
     const [form, setForm] = useState({
         name: "",
         image: "",
@@ -28,7 +27,6 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         
-        // 1. Validação Básica (Front-end)
         if (!form.name || !form.image) {
             alert("Por favor, preencha o Nome e a Imagem do container.");
             return;
@@ -42,8 +40,6 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
         setDeploying(true);
 
         try {
-            // 2. Montando o Payload (Dados para a API)
-            // Convertendo números para garantir que o C# aceite
             const payload = {
                 name: form.name,
                 image: form.image,
@@ -55,13 +51,12 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
 
             console.log("🚀 Enviando para API...", payload);
 
-            // 3. Chamada Real para a API
             await Deployments.Create(UserData.githubID, payload);
 
-            // 4. Sucesso!
+
             alert("Deploy iniciado com sucesso!");
             onClose(false);
-            window.location.reload(); // Recarrega para ver o novo deploy na tabela
+            window.location.reload();
 
         } catch (error: any) {
             console.error("❌ Erro no deploy:", error);

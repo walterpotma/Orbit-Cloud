@@ -1,10 +1,7 @@
 "use client";
 import EmptyState from "@/components/ui/exception-state";
 import CardDeploy from "@/features/dashboard/components/dash-card";
-
-interface TableProps {
-    deployments: any[];
-}
+import TableProps from "../types/view";
 
 export default function Table({ deployments }: TableProps) {
     return (
