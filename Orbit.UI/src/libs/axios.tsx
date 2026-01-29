@@ -1,7 +1,8 @@
 import axios from "axios";
+import { VARIABLE_API_URL } from "@/types/variables";
 
 export const axiosInstance = axios.create({
-    baseURL: "https://api.orbitcloud.com.br/",
+    baseURL: VARIABLE_API_URL,
     headers: {
         'Content-Type': 'application/json'
     }
