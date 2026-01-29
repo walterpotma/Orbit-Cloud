@@ -48,15 +48,3 @@ if [ $? -ne 0 ]; then
     echo "[ERRO] Falha ao enviar para o Registry."
     exit 1
 fi
-
-# 4. SAVE (Gera o arquivo físico na pasta do cliente - Seu requisito)
-echo "[SH] Gerando arquivo de backup (.tar)..."
-docker save -o "$TAR_FILE" $IMAGE_TAG
-
-# 5. Permissões Finais (Para você conseguir gerenciar o arquivo depois)
-if id "hayom" &>/dev/null; then
-    chown hayom:hayom "$TAR_FILE"
-fi
-
-echo "[SUCESSO] Imagem construída, publicada e salva em disco."
-exit 0
