@@ -3,6 +3,7 @@
 GITHUB_ID=$1
 RAW_URL=$2
 TOKEN=$3
+APP_NAME=$4
 
 BASE_DIR="/data/fast/clients/$GITHUB_ID/tmp"
 
