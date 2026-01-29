@@ -2,12 +2,11 @@
 import "./globals.css";
 import 'devicon/devicon.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css"
-import Card1 from "@/features/dashboard/components/dash-deploy-card";
-import CardList1 from "@/features/dashboard/components/dash-usage-card";
-import BtnRefresh from "@/components/ui/button-refresh";
-import fileTree from "@/features/storage/types/storage";
+import DeployCard from "@/features/dashboard/components/dash-deploy-card";
+import UsageCard from "@/features/dashboard/components/dash-usage-card";
+import ButtonRefresh from "@/components/ui/button-refresh";
 import { useEffect, useState } from "react";
-import { Deployments, Pods, Namespaces } from "@/api/kubernetes";
+import { Deployments, Namespaces } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/features/deploy/components/deploy-view";
 import { useRouter } from "next/navigation";
@@ -83,22 +82,22 @@ export default function Home() {
             <div className="w-full">
                 <div className="w-full flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Dashboard</h1>
-                    <BtnRefresh onClick={loadData} />
+                    <ButtonRefresh onClick={loadData} />
                 </div>
                 <div className="w-full flex justify-around space-x-5">
-                    <Card1 title="Deploys" value={succededDeployments.length} analysis="Bem Sucedidos" className="" />
-                    <Card1 title="Deploys" value={pendingDeployments.length} analysis="Pendentes" className="" />
-                    <Card1 title="Deploys" value={failedDeployments.length} analysis="Falhos" className="" />
-                    <Card1 title="Builds" value={0} analysis="Mensais" className="" />
+                    <DeployCard title="Deploys" value={succededDeployments.length} analysis="Bem Sucedidos" className="" />
+                    <DeployCard title="Deploys" value={pendingDeployments.length} analysis="Pendentes" className="" />
+                    <DeployCard title="Deploys" value={failedDeployments.length} analysis="Falhos" className="" />
+                    <DeployCard title="Builds" value={0} analysis="Mensais" className="" />
                 </div>
             </div>
             <div className="w-full flex gap-5">
-                <CardList1
+                <UsageCard
                     title="Uso de vCPU"
                     metrics={[cpuPercent]}
                     subTittle={`${cpuLabel} / 1000m`}
                 />
-                <CardList1
+                <UsageCard
                     title="Uso de RAM"
                     metrics={[memPercent]}
                     subTittle={`${memLabel} / 512 MiB`}

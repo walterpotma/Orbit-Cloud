@@ -43,9 +43,10 @@ export default function Nav() {
             </h1>
             <Button text="Dashboard" icon="grid-1x2-fill" open={open} onClick={() => navigationTo('/')} active={pathUrl === '/'} />
             {/* <Button text="Repositórios" icon="box-seam-fill" onClick={() => navigationTo('/repository')} active={pathUrl === '/repository'}/> */}
+            <Button text="Versões" icon="intersect" open={open} onClick={() => navigationTo('/variables')} active={pathUrl === '/variables'} />
             <Button text="Deploys" icon="rocket-takeoff-fill" open={open} onClick={() => navigationTo('/deploy')} active={pathUrl === '/deploy'} />
             <Button text="Rede" icon="globe2" open={open} onClick={() => navigationTo('/network')} active={pathUrl === '/network'} />
-            <Button text="Variaveis" icon="intersect" open={open} onClick={() => navigationTo('/variables')} active={pathUrl === '/variables'} />
+            <Button text="Variaveis" icon="command" open={open} onClick={() => navigationTo('/variables')} active={pathUrl === '/variables'} />
             {/* <Button text="Armazenamento" icon="folder-fill" onClick={() => navigationTo('/storage')} active={pathUrl === '/storage'}/> */}
             {/* <Button text="Planos" icon="award-fill" onClick={() => navigationTo('/subscriptions')} active={pathUrl === '/subscriptions'}/> */}
             {/* <Button text="Configurações" icon="gear-fill" onClick={() => navigationTo('/settings')} active={pathUrl === '/settings'}/> */}
