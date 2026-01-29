@@ -4,7 +4,7 @@ GITHUB_ID=$1
 APP_NAME=$2
 
 # Caminho absoluto
-PROJECT_PATH="/data/fast/clients/$GITHUB_ID/workspace/$APP_NAME"
+PROJECT_PATH="/data/fast/clients/$GITHUB_ID/tmp/$APP_NAME"
 
 echo "[SH] Gerando Dockerfile para: $PROJECT_PATH"
 
