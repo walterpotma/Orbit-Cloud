@@ -1,12 +1,12 @@
 "use client";
-import Private from "@/features/network/components/private";
-import BtnRefresh from "@/components/ui/BtnRefresh";
-import EmptyState from "@/components/ui/EmptyState";
+
+import BtnRefresh from "@/components/ui/button-refresh";
+import EmptyState from "@/components/ui/exception-state";
 import { useEffect, useState } from "react";
 import { Globe, Lock, Server, ArrowUpRight, Copy } from "lucide-react"; // Instale lucide-react
 import { Services, Ingress } from "@/api/kubernetes"; // Supondo que você já criou esses arquivos de API
 import { useUser } from "@/context/user";
-import NetWorkTable from "@/features/network/components/network-table";
+import NetWorkTable from "@/features/network/components/network-view";
 
 interface NetworkRuleProps {
     rules: Array<{

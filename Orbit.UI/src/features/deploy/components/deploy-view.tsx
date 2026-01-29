@@ -1,6 +1,6 @@
 "use client";
-import EmptyState from "@/components/ui/EmptyState";
-import CardDeploy from "@/features/dashboard/components/card-deploy";
+import EmptyState from "@/components/ui/exception-state";
+import CardDeploy from "@/features/dashboard/components/dash-card";
 
 interface TableProps {
     deployments: any[];

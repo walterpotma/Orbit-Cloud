@@ -2,7 +2,7 @@
 import { Database, GitBranch, RefreshCcw } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import 'devicon/devicon.min.css';
-import BtnRefresh from "@/components/ui/BtnRefresh";
+import BtnRefresh from "@/components/ui/button-refresh";
 import FileSystemItem from "@/features/storage/components/storage-view";
 import fileTree, { FileSystemNode } from "@/features/storage/types/storage";
 import Search from "@/components/ui/table/search";

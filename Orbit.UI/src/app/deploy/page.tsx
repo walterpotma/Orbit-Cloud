@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import 'devicon/devicon.min.css';
 import NewDeploy from "@/features/deploy/components/deploy-new";
 import EditDeploy from "@/features/deploy/components/deploy-edit";
-import BtnRefresh from "@/components/ui/BtnRefresh";
+import BtnRefresh from "@/components/ui/button-refresh";
 import { Deployments } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
-import TableDeploy from "@/features/deploy/components/deploy-table";
+import TableDeploy from "@/features/deploy/components/deploy-view";
 
 export default function Page() {
     const { UserData, isLoading } = useUser();

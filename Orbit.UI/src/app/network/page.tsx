@@ -1,11 +1,11 @@
 "use client";
 
-import BtnRefresh from "@/components/ui/BtnRefresh";
-import EmptyState from "@/components/ui/EmptyState";
+import BtnRefresh from "@/components/ui/button-refresh";
+import EmptyState from "@/components/ui/exception-state";
 import { useEffect, useState } from "react";
 import { Services, Ingress } from "@/api/kubernetes";
 import { useUser } from "@/context/user";
-import NetWorkTable from "@/features/network/components/network-table";
+import NetWorkTable from "@/features/network/components/network-view";
 
 interface NetworkRule {
     id: string;
