@@ -22,7 +22,7 @@ mkdir -p "/data/fast/clients/$GITHUB_ID"
 
 echo "[SH] Clonando repositório..."
 
-git clone "$AUTH_URL" "$BASE_DIR" --quiet
+git clone "$AUTH_URL" "$BASE_DIR/$APP_NAME" --quiet
 
 if [ $? -eq 0 ]; then
     echo "[SH] Sucesso! Repositório clonado em $BASE_DIR"
