@@ -48,5 +48,36 @@ namespace Orbit.Api.Service
                 throw new Exception($"Falha na geração do Dockerfile: {result.Error}");
             }
         }
+
+        public async Task GenerateImage(string githubId, string appName, string version, string appPath)
+        {
+            var scriptPath = _configuration["FileExplorer:BuildPack"];
+
+            if (string.IsNullOrEmpty(scriptPath))
+            {
+                throw new Exception("ERRO: A configuração 'FileExplorer:ScriptPath' não foi encontrada no appsettings.json.");
+            }
+
+            // Primeiro: Garante permissão de execução
+            await ShellHelper.MakeExecutableAsync(scriptPath);
+
+            // Segundo: Prepara os argumentos ($1 $2)
+            var args = $"{githubId} {appName}";
+
+            Console.WriteLine($"[API] construindo image para {appName} em {scriptPath}...");
+
+            // Terceiro: Executa
+            var result = await ShellHelper.RunScriptAsync(scriptPath, args);
+
+            if (result.ExitCode == 0)
+            {
+                Console.WriteLine("[API] image construida com sucesso!");
+            }
+            else
+            {
+                Console.WriteLine($"[API] Erro ao gerar: {result.Error}");
+                throw new Exception($"Falha na geração da image: {result.Error}");
+            }
+        }
     }
 }

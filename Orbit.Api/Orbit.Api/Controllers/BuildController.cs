@@ -56,5 +56,28 @@ namespace Orbit.Api.Controllers
                 return StatusCode(500, new { error = $"Erro ao gerar Dockerfile: {ex.Message}" });
             }
         }
+
+        // A rota final será: POST /api/docker/generate
+        [HttpPost("create-image")]
+        public async Task<IActionResult> GenerateImage([FromQuery] string githubId, [FromQuery] string appName, [FromQuery] string version, [FromQuery] string appPath)
+        {
+            if (string.IsNullOrEmpty(githubId) || string.IsNullOrEmpty(appName))
+            {
+                return BadRequest(new { error = "githubId e appName são obrigatórios." });
+            }
+
+            try
+            {
+                await _dockerService.GenerateImage(githubId, appName, version, appPath);
+
+                // Retornar um JSON é melhor para o frontend tratar
+                return Ok(new { message = "Image gerada com sucesso.", app = appName });
+            }
+            catch (Exception ex)
+            {
+                // Logar o erro aqui seria uma boa prática
+                return StatusCode(500, new { error = $"Erro ao gerar Image: {ex.Message}" });
+            }
+        }
     }
 }
