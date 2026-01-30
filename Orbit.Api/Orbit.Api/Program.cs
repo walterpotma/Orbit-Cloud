@@ -102,6 +102,7 @@ builder.Services.AddScoped<IRuleRepository, RuleRepository>();
 #region Github Scoped
 builder.Services.AddScoped<IGithubService, GithubService>();
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
+builder.Services.AddScoped<Orbit.Api.Service.GithubService>();
 #endregion
 
 #region Kubernetes Scoped
