@@ -26,7 +26,7 @@ COPY --from=publish /app/publish .
 
 # Mantendo nossa instalação do Git/Curl e garantindo o Bash
 RUN apt-get update && \
-    apt-get install -y curl git bash && \
+    apt-get install -y curl git bash docker.io && \
     rm -rf /var/lib/apt/lists/*
 
 VOLUME /app/FileSystem
