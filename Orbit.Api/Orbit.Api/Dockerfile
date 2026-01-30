@@ -24,9 +24,9 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Mantendo nossa instalação do Git/Curl
+# Mantendo nossa instalação do Git/Curl e garantindo o Bash
 RUN apt-get update && \
-    apt-get install -y curl git && \
+    apt-get install -y curl git bash && \
     rm -rf /var/lib/apt/lists/*
 
 VOLUME /app/FileSystem
