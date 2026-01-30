@@ -46,9 +46,6 @@ namespace Orbit.Api.Service
                 throw new Exception("ERRO: A configuração 'Clone.SH' não foi encontrada no appsettings.json.");
             }
 
-            // Primeiro: Garante permissão de execução
-            await ShellHelper.MakeExecutableAsync(scriptPath);
-
             // Segundo: Prepara os argumentos ($1 $2)
             var args = $"{githubId} {reposURL} {authToken} {appName}";
 
