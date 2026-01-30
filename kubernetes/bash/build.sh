@@ -13,8 +13,6 @@ IMAGE_TAG="$REGISTRY/$GITHUB_ID/$APP_NAME:v$VERSION"
 
 # Caminhos físicos
 CLIENT_ROOT="/data/fast/clients/$GITHUB_ID"
-IMAGES_DIR="$CLIENT_ROOT/images"
-TAR_FILE="$IMAGES_DIR/$APP_NAME-v$VERSION.tar"
 
 echo "[SH] -----------------------------------------------------------"
 echo "[SH] Iniciando Processo de Build"
@@ -22,18 +20,9 @@ echo "[SH] Imagem: $IMAGE_TAG"
 echo "[SH] Destino Físico: $TAR_FILE"
 echo "[SH] -----------------------------------------------------------"
 
-# 1. Garante que a pasta de imagens existe
-if [ ! -d "$IMAGES_DIR" ]; then
-    mkdir -p "$IMAGES_DIR"
-    # Se o script rodar como root, ajusta para seu usuário
-    if id "hayom" &>/dev/null; then
-        chown hayom:hayom "$IMAGES_DIR"
-    fi
-fi
-
 # 2. BUILD (Cria a imagem no Docker Engine)
 # Adicionei --progress=plain para o log ficar legível se você capturar no C#
-DOCKER_BUILDKIT=1 docker build --progress=plain -t $IMAGE_TAG $APP_PATH
+DOCKER_BUILDKIT=1 docker build --progress=plain -t $IMAGE_TAG $CLIENT_ROOT/tmp/$APP_PATH
 
 if [ $? -ne 0 ]; then
     echo "[ERRO] Falha ao construir a imagem Docker."
