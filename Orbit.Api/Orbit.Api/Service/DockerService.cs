@@ -62,7 +62,7 @@ namespace Orbit.Api.Service
             await ShellHelper.MakeExecutableAsync(scriptPath);
 
             // Segundo: Prepara os argumentos ($1 $2)
-            var args = $"{githubId} {appName}";
+            var args = $"{githubId} {appName} {version} {appPath}";
 
             Console.WriteLine($"[API] construindo image para {appName} em {scriptPath}...");
 
