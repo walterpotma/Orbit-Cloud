@@ -1,34 +1,76 @@
 "use client"
-import { useState } from "react";
-import { X, Box, Globe, Cpu, Layers, HardDrive } from "lucide-react";
+import { useState, useEffect } from "react";
+import { X, Box, Globe, Cpu, Layers, HardDrive, Tag, RefreshCw } from "lucide-react";
 import CommandOutput from "@/features/deploy/components/deploy-output";
 import { Deployments } from "@/features/deploy/services/deployments";
 import { useUser } from "@/context/user";
+
+// Tipo para os dados do Registry
+type RegistryImage = {
+    name: string;
+    tags: string[];
+};
 
 export default function NewDeployModal({ onClose }: { onClose: (value: boolean) => void }) {
     const { UserData } = useUser();
     const [deploying, setDeploying] = useState(false);
     
+    // Estados para o Registry
+    const [artifacts, setArtifacts] = useState<RegistryImage[]>([]);
+    const [isLoadingRegistry, setIsLoadingRegistry] = useState(true);
+    
     const [form, setForm] = useState({
         name: "",
         image: "",
-        tag: "latest",
+        tag: "", // Agora começa vazio para forçar seleção
         port: 80,
         replicas: 1,
         subdomain: "",
         isPublic: true
     });
 
+    // Busca as imagens ao abrir o modal
+    useEffect(() => {
+        fetchRegistry();
+    }, []);
+
+    const fetchRegistry = async () => {
+        setIsLoadingRegistry(true);
+        try {
+            // Ajuste a URL se necessário
+            const response = await fetch("https://api.orbitcloud.com.br/registry");
+            const data = await response.json();
+            setArtifacts(data);
+        } catch (error) {
+            console.error("Erro ao buscar registry:", error);
+        } finally {
+            setIsLoadingRegistry(false);
+        }
+    };
+
+    // Encontra a imagem selecionada atualmente para pegar as tags dela
+    const selectedArtifact = artifacts.find(a => a.name === form.image);
+
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setForm(prev => ({ ...prev, [name]: value }));
+        
+        // Se mudou a imagem, reseta a tag automaticamente para a mais recente (primeira da lista)
+        if (name === "image") {
+            const artifact = artifacts.find(a => a.name === value);
+            if (artifact && artifact.tags.length > 0) {
+                setForm(prev => ({ ...prev, tag: artifact.tags[0] }));
+            } else {
+                setForm(prev => ({ ...prev, tag: "latest" }));
+            }
+        }
     };
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         
         if (!form.name || !form.image) {
-            alert("Por favor, preencha o Nome e a Imagem do container.");
+            alert("Por favor, preencha o Nome e selecione uma Imagem.");
             return;
         }
 
@@ -50,9 +92,7 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
             };
 
             console.log("🚀 Enviando para API...", payload);
-
             await Deployments.Create(UserData.githubID, payload);
-
 
             alert("Deploy iniciado com sucesso!");
             onClose(false);
@@ -67,10 +107,17 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
         }
     };
 
+    // Função auxiliar para limpar o nome da imagem no visual (remove o ID do github)
+    const formatImageName = (fullName: string) => {
+        if (fullName.includes("/")) {
+            return fullName.split("/")[1];
+        }
+        return fullName;
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
             
-            {/* Container Principal */}
             <div className="w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                 
                 {/* Header */}
@@ -81,7 +128,7 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-white">Nova Aplicação</h1>
-                            <p className="text-sm text-slate-400">Configure os detalhes do seu container</p>
+                            <p className="text-sm text-slate-400">Lance um container a partir dos seus artefatos</p>
                         </div>
                     </div>
                     <button onClick={() => onClose(false)} className="text-slate-500 hover:text-white transition-colors">
@@ -89,7 +136,6 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                     </button>
                 </div>
 
-                {/* Corpo do Modal (Scrollável) */}
                 <div className="flex-1 overflow-y-auto custom-scroll p-8">
                     <form className="space-y-8" onSubmit={handleSubmit}>
                         
@@ -106,34 +152,75 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                                         type="text" 
                                         name="name"
                                         placeholder="ex: minha-api-node" 
-                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600"
                                         onChange={handleChange}
                                         value={form.name}
                                     />
                                     <p className="text-xs text-slate-500">Apenas letras minúsculas e traços.</p>
                                 </div>
 
-                                {/* Imagem Docker */}
+                                {/* Imagem Docker (Select) */}
                                 <div className="space-y-2">
-                                    <label className="text-sm text-slate-300 font-medium">Imagem Docker <span className="text-red-500">*</span></label>
-                                    <div className="flex gap-2">
-                                        <input 
-                                            type="text" 
-                                            name="image"
-                                            placeholder="ex: nginx, node" 
-                                            className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
-                                            onChange={handleChange}
-                                            value={form.image}
-                                        />
-                                        <input 
-                                            type="text" 
-                                            name="tag"
-                                            placeholder="tag" 
-                                            className="w-24 bg-slate-800 border border-slate-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:border-blue-500 text-center"
-                                            defaultValue="latest"
-                                            onChange={handleChange}
-                                        />
+                                    <div className="flex justify-between items-center">
+                                        <label className="text-sm text-slate-300 font-medium">Artefato (Imagem) <span className="text-red-500">*</span></label>
+                                        <button 
+                                            type="button" 
+                                            onClick={fetchRegistry} 
+                                            className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                                            disabled={isLoadingRegistry}
+                                        >
+                                            <RefreshCw size={12} className={isLoadingRegistry ? "animate-spin" : ""} />
+                                            Atualizar Lista
+                                        </button>
                                     </div>
+                                    
+                                    <div className="flex gap-2">
+                                        {/* Select de IMAGEM */}
+                                        <div className="relative flex-1">
+                                            <select 
+                                                name="image"
+                                                className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
+                                                onChange={handleChange}
+                                                value={form.image}
+                                                disabled={isLoadingRegistry}
+                                            >
+                                                <option value="" disabled>Selecione um artefato...</option>
+                                                {artifacts.map((artifact) => (
+                                                    <option key={artifact.name} value={artifact.name}>
+                                                        {formatImageName(artifact.name)}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <div className="absolute left-3 top-3.5 text-slate-500 pointer-events-none">
+                                                <Box size={16} />
+                                            </div>
+                                        </div>
+
+                                        {/* Select de TAG */}
+                                        <div className="relative w-1/3">
+                                            <select 
+                                                name="tag"
+                                                className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:border-blue-500 appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                                onChange={handleChange}
+                                                value={form.tag}
+                                                disabled={!form.image || isLoadingRegistry}
+                                            >
+                                                {selectedArtifact?.tags && selectedArtifact.tags.length > 0 ? (
+                                                    selectedArtifact.tags.map((tag) => (
+                                                        <option key={tag} value={tag}>{tag}</option>
+                                                    ))
+                                                ) : (
+                                                    <option value="latest">latest</option>
+                                                )}
+                                            </select>
+                                            <div className="absolute left-3 top-3.5 text-slate-500 pointer-events-none">
+                                                <Tag size={16} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-slate-500">
+                                        {isLoadingRegistry ? "Carregando artefatos..." : "Selecione a imagem e a versão."}
+                                    </p>
                                 </div>
                             </div>
                         </section>
@@ -233,7 +320,6 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                             </div>
                         </section>
 
-                        {/* Área de Logs */}
                         {deploying && (
                             <div className="mt-4 animate-in fade-in zoom-in duration-300">
                                 <label className="text-sm text-slate-400 mb-2 block">Processando solicitação...</label>
@@ -244,7 +330,6 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                     </form>
                 </div>
 
-                {/* Footer Fixo */}
                 <div className="p-6 border-t border-slate-800 bg-slate-900 flex justify-end gap-3">
                     <button 
                         onClick={() => onClose(false)}
@@ -259,12 +344,12 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
                     >
                         {deploying ? (
                             <>
-                                <i className="bi bi-arrow-repeat animate-spin"></i>
+                                <RefreshCw className="animate-spin w-4 h-4 mr-2" />
                                 <p>Enviando...</p>
                             </>
                         ) : (
                             <>
-                                <i className="bi bi-rocket-fill"></i>
+                                <Box className="w-4 h-4 mr-2" />
                                 <p>Lançar Deploy</p>
                             </>
                         )}
