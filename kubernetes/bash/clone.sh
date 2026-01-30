@@ -18,7 +18,7 @@ if [ -d "$BASE_DIR" ]; then
     rm -rf "$BASE_DIR"
 fi
 
-mkdir -p "/data/fast/clients/$GITHUB_ID"
+mkdir -p "/data/fast/clients/$GITHUB_ID/tmp"
 
 echo "[SH] Clonando repositório..."
 
