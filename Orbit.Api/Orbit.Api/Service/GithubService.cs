@@ -1,19 +1,22 @@
-﻿using Orbit.Api.Dto.Github;
+﻿using Microsoft.AspNetCore.Authentication;
+using Orbit.Api.Dto.Github;
+using Orbit.Api.Helpers;
 using Orbit.Api.Repository.Interface;
 using Orbit.Api.Service.Interface;
-using Microsoft.AspNetCore.Authentication;
 
 namespace Orbit.Api.Service
 {
     public class GithubService : IGithubService
     {
+        private readonly IConfiguration _configuration;
         private readonly IGithubRepository _githubRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GithubService(IGithubRepository githubRepository, IHttpContextAccessor httpContextAccessor)
+        public GithubService(IGithubRepository githubRepository, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _githubRepository = githubRepository;
             _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
 
         #region Github Repositories
@@ -31,6 +34,38 @@ namespace Orbit.Api.Service
         {
             var accessToken = await GetAccessTokenAsync();
             await _githubRepository.CloneReposByNameAsync(accessToken, owner, repoName);
+        }
+
+        public async Task CloneRepos(string githubId, string reposURL, string authToken, string appName)
+        {
+            var scriptPath = _configuration["FileExplorer:ClonePack"];
+
+            // Segurança: Verifica se achou o valor
+            if (string.IsNullOrEmpty(scriptPath))
+            {
+                throw new Exception("ERRO: A configuração 'Clone.SH' não foi encontrada no appsettings.json.");
+            }
+
+            // Primeiro: Garante permissão de execução
+            await ShellHelper.MakeExecutableAsync(scriptPath);
+
+            // Segundo: Prepara os argumentos ($1 $2)
+            var args = $"{githubId} {reposURL} {authToken} {appName}";
+
+            Console.WriteLine($"[API] Chamando clonador de repos para {appName} em {scriptPath}...");
+
+            // Terceiro: Executa
+            var result = await ShellHelper.RunScriptAsync(scriptPath, args);
+
+            if (result.ExitCode == 0)
+            {
+                Console.WriteLine("[API] Repos clonado com sucesso!");
+            }
+            else
+            {
+                Console.WriteLine($"[API] Erro ao clonar: {result.Error}");
+                throw new Exception($"Falha na clonagem: {result.Error}");
+            }
         }
         #endregion
 

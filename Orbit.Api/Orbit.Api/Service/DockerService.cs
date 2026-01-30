@@ -19,7 +19,7 @@ namespace Orbit.Api.Service
         public async Task GenerateDockerfile(string githubId, string appName)
         {
             // 3. A forma correta de ler do appsettings.json
-            var scriptPath = _configuration["FileExplorer:ScriptPath"];
+            var scriptPath = _configuration["FileExplorer:NixPack"];
 
             // Segurança: Verifica se achou o valor
             if (string.IsNullOrEmpty(scriptPath))
