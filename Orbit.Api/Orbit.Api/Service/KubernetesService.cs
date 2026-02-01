@@ -101,7 +101,7 @@ namespace Orbit.Api.Service
                 try
                 {
                     // Ajuste do Host Completo (importante para funcionar)
-                    string fullHost = $"{request.Subdomain}.orbitcloud.com.br"; // Ajuste o domínio base se necessário
+                    string fullHost = $"{request.Subdomain}"; // Ajuste o domínio base se necessário
 
                     var ingressObj = _mapper.BuildIngressObject(new DtoIngressRequest
                     {

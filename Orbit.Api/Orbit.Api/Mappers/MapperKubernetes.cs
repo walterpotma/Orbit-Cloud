@@ -258,14 +258,14 @@ namespace Orbit.Api.Mappers
                                 new V1ContainerPort { ContainerPort = request.Port }
                             },
                             // Define limite de recursos (opcional mas recomendado)
-                            Resources = new V1ResourceRequirements
-                            {
-                                Requests = new Dictionary<string, ResourceQuantity>
-                                {
-                                    { "memory", new ResourceQuantity("128Mi") },
-                                    { "cpu", new ResourceQuantity("100m") }
-                                }
-                            }
+                            //Resources = new V1ResourceRequirements
+                            //{
+                            //    Requests = new Dictionary<string, ResourceQuantity>
+                            //    {
+                            //        { "memory", new ResourceQuantity("128Mi") },
+                            //        { "cpu", new ResourceQuantity("100m") }
+                            //    }
+                            //}
                         }
                     }
                         }
