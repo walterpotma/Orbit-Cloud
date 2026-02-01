@@ -76,8 +76,7 @@ namespace Orbit.Api.Mappers
                     NamespaceProperty = request.Namespace ?? "default",
                     Annotations = new Dictionary<string, string>
             {
-                // Define o Nginx como controlador
-                { "kubernetes.io/ingress.class", request.IngressClassName ?? "nginx" }
+                { "kubernetes.io/ingress.class", "traefik" },
             }
                 },
                 // 2. ADIÇÃO DO SPEC (As regras de roteamento)
