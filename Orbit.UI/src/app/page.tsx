@@ -190,13 +190,13 @@ export default function Home() {
                         />
                     </div>
                     
-                    <div className="mt-6 pt-4 border-t border-zinc-800 flex justify-between items-center text-xs text-zinc-500">
+                    {/* <div className="mt-6 pt-4 border-t border-zinc-800 flex justify-between items-center text-xs text-zinc-500">
                         <span>Namespace: {UserData?.githubID || 'default'}</span>
                         <div className="flex items-center gap-1 text-emerald-500">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             Online
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
