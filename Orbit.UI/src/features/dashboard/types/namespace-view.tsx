@@ -5,4 +5,8 @@ export interface NamespaceMetric {
     memoryUsage: string;
     rawCpu: number;
     rawMemory: number;
+    cpuLimit: string;
+    memoryLimit: string;
+    rawCpuLimit: number;
+    rawMemoryLimit: number;
 }

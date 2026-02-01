@@ -41,6 +41,10 @@ export default function Home() {
     const memPercent = Math.min((rawMem / MAX_MEMORY_BYTES) * 100, 100);
     const cpuLabel = namespaceMetrics?.cpuUsage || "0m";
     const memLabel = namespaceMetrics?.memoryUsage || "0 MiB";
+    const cpuLabelLimits = namespaceMetrics?.cpuLimit || "0m";
+    const memLabelLimits = namespaceMetrics?.memoryLimit || "0 MiB";
+    const rawCpuLimits = namespaceMetrics?.rawCpuLimit || 0;
+    const rawMemLimits = namespaceMetrics?.rawMemoryLimit || 0;
 
     useEffect(() => {
         if (isLoading || !UserData || !UserData.githubID) return;
@@ -175,14 +179,14 @@ export default function Home() {
                             color="text-blue-500" 
                             icon={Cpu} 
                             label="CPU" 
-                            subLabel={`${cpuLabel} / 1000m`}
+                            subLabel={`${cpuLabel} / ${cpuLabelLimits}`}
                         />
                         <CircularProgress 
                             percentage={memPercent} 
                             color="text-violet-500" 
                             icon={Zap} 
                             label="Memória" 
-                            subLabel={`${memLabel} / 512MiB`}
+                            subLabel={`${memLabel} / ${memLabelLimits}`}
                         />
                     </div>
                     
