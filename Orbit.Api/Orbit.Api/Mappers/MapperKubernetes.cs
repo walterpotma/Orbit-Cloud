@@ -252,7 +252,7 @@ namespace Orbit.Api.Mappers
                         new V1Container
                         {
                             Name = request.Name,
-                            Image = request.Image + ":" + (request.Tag ?? "latest"),
+                            Image = "localhost:5000/" + request.Image + ":" + (request.Tag ?? "latest"),
                             Ports = new List<V1ContainerPort>
                             {
                                 new V1ContainerPort { ContainerPort = request.Port }
