@@ -89,7 +89,6 @@ export default function Home() {
         </div>
     );
 
-    // Componente Interno para o Gráfico Circular
     const CircularProgress = ({ percentage, color, icon: Icon, label, subLabel }: any) => {
         const radius = 30;
         const circumference = 2 * Math.PI * radius;
