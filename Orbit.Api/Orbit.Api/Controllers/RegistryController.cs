@@ -48,5 +48,13 @@ namespace Orbit.Api.Controllers
             }
             return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao deletar a tag");
         }
+        [HttpGet("/{githubId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ListImagesByUserAsync(string githubId)
+        {
+            var result = await _imageService.ListImagesByUserAsync(githubId);
+            return Ok(result);
+        }
     }
 }

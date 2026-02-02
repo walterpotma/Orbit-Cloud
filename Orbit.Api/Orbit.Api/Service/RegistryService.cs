@@ -58,5 +58,39 @@ namespace Orbit.Api.Service
             // Apenas repassa a chamada para a camada de repositório
             return await _registryRepository.DeleteTagAsync(repositoryName, tag);
         }
+        public async Task<IEnumerable<DtoImage>> ListImagesByUserAsync(string githubId)
+        {
+            // 1. Busca TODOS os repositórios do Registry
+            var allRepositories = await _registryRepository.GetRepositoriesAsync();
+
+            // 2. Define o prefixo que estamos procurando (Ex: "201145284/")
+            string prefixoUsuario = $"{githubId}/";
+
+            // 3. Filtra a lista na memória para pegar só os desse usuário
+            var userRepositories = allRepositories
+                                    .Where(r => r.StartsWith(prefixoUsuario))
+                                    .ToList();
+
+            var tasks = new List<Task<DtoImage>>();
+
+            // 4. Busca as tags apenas para os repositórios filtrados (Paralelismo para ser rápido)
+            foreach (var repoName in userRepositories)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    // repoName já é algo como "201145284/dg-studio"
+                    var tags = await _registryRepository.GetTagsAsync(repoName);
+                    
+                    return new DtoImage
+                    {
+                        Name = repoName, 
+                        Tags = tags
+                    };
+                }));
+            }
+
+            var results = await Task.WhenAll(tasks);
+            return results;
+        }
     }
 }
