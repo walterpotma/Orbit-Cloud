@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Api.Dto.Registry;
+using Orbit.Api.Service;
 using Orbit.Api.Service.Interface;
 
 namespace Orbit.Api.Controllers
@@ -48,13 +49,14 @@ namespace Orbit.Api.Controllers
             }
             return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao deletar a tag");
         }
-        [HttpGet("/{githubId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ListImagesByUserAsync(string githubId)
+        [HttpGet("{githubId}")]
+        public async Task<IActionResult> GetMyImages([FromQuery] string githubId)
         {
-            var result = await _imageService.ListImagesByUserAsync(githubId);
-            return Ok(result);
+            if (string.IsNullOrEmpty(githubId))
+                return BadRequest("Github ID é obrigatório");
+
+            var images = await _imageService.ListImagesByUserAsync(githubId);
+            return Ok(images);
         }
     }
 }
