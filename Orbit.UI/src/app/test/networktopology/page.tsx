@@ -35,7 +35,7 @@ const services = [
 
 export default function NetworkTopologyMap() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { width, height } = useContainerDimensions(containerRef);
+    const { width, height } = useContainerDimensions(containerRef as React.RefObject<HTMLDivElement>);
     const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
     // --- CONFIGURAÇÕES ---

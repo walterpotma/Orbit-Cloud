@@ -31,7 +31,7 @@ const rawData = [
 
 export default function DonutChart() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { width, height } = useContainerDimensions(containerRef);
+    const { width, height } = useContainerDimensions(containerRef as React.RefObject<HTMLDivElement>);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     // --- CONFIGURAÇÕES DE GEOMETRIA ---

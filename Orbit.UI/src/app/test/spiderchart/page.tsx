@@ -33,7 +33,7 @@ const metrics = [
 
 export default function ResourceRadarChart() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { width, height } = useContainerDimensions(containerRef);
+    const { width, height } = useContainerDimensions(containerRef as React.RefObject<HTMLDivElement>);
     
     // --- CONFIGURAÇÕES ---
     const safeWidth = width || 400;

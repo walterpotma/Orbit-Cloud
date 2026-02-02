@@ -49,7 +49,7 @@ namespace Orbit.Api.Controllers
             }
             return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao deletar a tag");
         }
-        [HttpGet("{githubId}")]
+        [HttpGet("user")]
         public async Task<IActionResult> GetMyImages([FromQuery] string githubId)
         {
             if (string.IsNullOrEmpty(githubId))

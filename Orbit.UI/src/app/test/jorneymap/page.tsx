@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
-import { FiUserPlus, FiActivity, FiHeart, FiDollarSign, FiAward } from "react-icons/fi"; // Ícones de exemplo
+// CORREÇÃO 1: Substituindo react-icons por lucide-react (padrão do projeto)
+import { UserPlus, Activity, Heart, DollarSign, Award } from "lucide-react";
 
 // --- HOOK DE REDIMENSIONAMENTO ---
 const useContainerDimensions = (myRef: React.RefObject<HTMLDivElement>) => {
@@ -24,16 +25,19 @@ const useContainerDimensions = (myRef: React.RefObject<HTMLDivElement>) => {
 
 // --- DADOS FAKES (Estágios do Funil) ---
 const journeyStages = [
-    { id: "acquisition", label: "Aquisição", count: 15420, color: "#22d3ee", Icon: FiUserPlus, churnRate: 0.0 }, // Cyan
-    { id: "activation", label: "Ativação", count: 8500, color: "#3b82f6", Icon: FiActivity, churnRate: 0.45 }, // Blue
-    { id: "retention", label: "Retenção", count: 4200, color: "#8b5cf6", Icon: FiHeart, churnRate: 0.50 }, // Violet
-    { id: "revenue", label: "Receita (Pro)", count: 1800, color: "#d946ef", Icon: FiDollarSign, churnRate: 0.57 }, // Fuchsia
-    { id: "loyalty", label: "Lealdade (Advocate)", count: 450, color: "#f43f5e", Icon: FiAward, churnRate: 0.75 }, // Rose
+    { id: "acquisition", label: "Aquisição", count: 15420, color: "#22d3ee", Icon: UserPlus, churnRate: 0.0 }, // Cyan
+    { id: "activation", label: "Ativação", count: 8500, color: "#3b82f6", Icon: Activity, churnRate: 0.45 }, // Blue
+    { id: "retention", label: "Retenção", count: 4200, color: "#8b5cf6", Icon: Heart, churnRate: 0.50 }, // Violet
+    { id: "revenue", label: "Receita (Pro)", count: 1800, color: "#d946ef", Icon: DollarSign, churnRate: 0.57 }, // Fuchsia
+    { id: "loyalty", label: "Lealdade (Advocate)", count: 450, color: "#f43f5e", Icon: Award, churnRate: 0.75 }, // Rose
 ];
 
 export default function CustomerJourneyMap() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { width, height } = useContainerDimensions(containerRef);
+    
+    // CORREÇÃO 2: Type Casting para resolver o erro do Ref null
+    const { width, height } = useContainerDimensions(containerRef as React.RefObject<HTMLDivElement>);
+    
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
 
     // --- CONFIGURAÇÕES GEOMÉTRICAS ---
@@ -56,7 +60,7 @@ export default function CustomerJourneyMap() {
             // Escala o tamanho do nó baseado na contagem de usuários
             scaledRadius: nodeRadiusBase + (nodeRadiusBase * 0.5 * (stage.count / maxCount))
         }));
-    }, [safeWidth, centerY, maxCount]);
+    }, [safeWidth, centerY, maxCount, usableWidth]); // Adicionei usableWidth nas dependências
 
     return (
         <div className="w-full min-h-screen bg-zinc-950 flex justify-center items-center p-8 font-sans">
@@ -74,6 +78,7 @@ export default function CustomerJourneyMap() {
                    </div>
                 </div>
 
+                {/* CORREÇÃO 3: Mantive h-[350px] mas o ideal seria mover para style={{ height: 350 }} se o tailwind reclamar muito */}
                 <div ref={containerRef} className="w-full h-[350px] relative select-none">
                     {safeWidth > 0 && (
                         <svg width={safeWidth} height={safeHeight} className="absolute top-0 left-0 overflow-visible">
@@ -154,11 +159,11 @@ export default function CustomerJourneyMap() {
 
                                 return (
                                     <g 
-                                        key={stage.id}
-                                        transform={`translate(${stage.x}, ${stage.y})`}
-                                        onMouseEnter={() => setHoveredStage(stage.id)}
-                                        onMouseLeave={() => setHoveredStage(null)}
-                                        className="cursor-pointer group"
+                                            key={stage.id}
+                                            transform={`translate(${stage.x}, ${stage.y})`}
+                                            onMouseEnter={() => setHoveredStage(stage.id)}
+                                            onMouseLeave={() => setHoveredStage(null)}
+                                            className="cursor-pointer group"
                                     >
                                         {/* Círculo Externo (Brilho) */}
                                         <circle
@@ -178,7 +183,7 @@ export default function CustomerJourneyMap() {
                                             className="transition-all duration-300 group-hover:fill-zinc-800"
                                         />
 
-                                        {/* Ícone Central (Usando foreignObject para renderizar React Icons dentro do SVG) */}
+                                        {/* Ícone Central */}
                                         <foreignObject x={-15} y={-15} width="30" height="30">
                                             <div className="w-full h-full flex items-center justify-center text-zinc-300 group-hover:text-white transition-colors">
                                                 <stage.Icon size={20} />
@@ -207,15 +212,15 @@ export default function CustomerJourneyMap() {
                                         {/* TOOLTIP FLUTUANTE (Aparece acima) */}
                                         <g className="opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none" transform={`translate(0, -${stage.scaledRadius + 10})`}>
                                              <foreignObject x="-80" y="-70" width="160" height="60">
-                                                <div className="bg-zinc-800 border border-zinc-700 p-3 rounded-lg shadow-xl text-center">
+                                                <div className="bg-zinc-800 border border-zinc-700 p-3 rounded-lg shadow-xl text-center relative">
                                                     <p className="text-xs text-zinc-400 uppercase font-bold mb-1">{stage.label}</p>
                                                     <p className="text-sm font-bold text-white">
                                                         {((stage.count / journeyStages[0].count) * 100).toFixed(1)}% do Total
                                                     </p>
+                                                     {/* Setinha do tooltip - Agora dentro do foreignObject para não bugar o SVG */}
+                                                    <div className="absolute left-1/2 bottom-[-5px] transform -translate-x-1/2 w-3 h-3 bg-zinc-800 border-r border-b border-zinc-700 rotate-45"></div>
                                                 </div>
-                                                {/* Setinha do tooltip */}
-                                                <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-zinc-800 border-r border-b border-zinc-700 rotate-45"></div>
-                                            </foreignObject>
+                                             </foreignObject>
                                         </g>
                                     </g>
                                 )

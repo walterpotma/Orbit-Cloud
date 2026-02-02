@@ -37,7 +37,7 @@ const adapters = [
 
 export default function HexagonalArchitectureView() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { width, height } = useContainerDimensions(containerRef);
+    const { width, height } = useContainerDimensions(containerRef as React.RefObject<HTMLDivElement>);
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     // --- CONFIGURAÇÕES GEOMÉTRICAS ---
