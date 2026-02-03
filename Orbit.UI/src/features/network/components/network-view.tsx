@@ -10,7 +10,7 @@ const copyToClipboard = (text: string) => {
 
 export default function Table({ rules }: NetworkRuleProps) {
     return (
-        <div className="w-full">
+        <div className="w-full ">
             {rules.length === 0 ? (
                 <EmptyState
                     title="Nenhuma Regra de Rede Definida"

@@ -69,7 +69,7 @@ export default function ProfessionalChartPage() {
     const gridTicks = [0, 25, 50, 75, 100];
 
     return (
-        <div className="w-full max-w-3xl bg-zinc-900 rounded-xl border border-zinc-800 p-6 shadow-2xl overflow-hidden">
+        <div className="w-full bg-zinc-900 rounded-xl border border-zinc-800 p-6 shadow-2xl overflow-hidden">
 
             <div className="mb-4">
                 <h2 className="text-lg font-bold text-zinc-100">Uso de CPU</h2>

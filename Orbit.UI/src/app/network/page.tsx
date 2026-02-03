@@ -136,7 +136,7 @@ export default function NetworkPage() {
             )}
 
             {/* Conteúdo Principal */}
-            <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col shadow-inner shadow-black/20">
+            <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col shadow-inner shadow-black/20 space-y-8">
                 
                 {/* Header da Tabela */}
                 <div className="px-6 py-3 bg-zinc-900/80 border-b border-zinc-800 flex items-center gap-2 backdrop-blur-sm shrink-0">

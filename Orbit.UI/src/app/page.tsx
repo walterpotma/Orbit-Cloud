@@ -42,7 +42,7 @@ export default function Home() {
     const rawMem = namespaceMetrics?.rawMemory || 0;
     const rawCpuLimits = namespaceMetrics?.rawCpuLimit || 0;
     const rawMemLimits = namespaceMetrics?.rawMemoryLimit || 0;
-    
+
     const cpuLabel = namespaceMetrics?.cpuUsage || "0m";
     const memLabel = namespaceMetrics?.memoryUsage || "0 MiB";
     const cpuLabelLimits = namespaceMetrics?.cpuLimit || "0m";
@@ -115,7 +115,7 @@ export default function Home() {
                     />
                     <StatusCard
                         title="Total Builds"
-                        value={0} // Placeholder, conecte ao real se tiver
+                        value={deployments.length}
                         icon={Layers}
                         color="text-purple-500"
                         sub="Builds mensais"

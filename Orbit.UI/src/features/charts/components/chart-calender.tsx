@@ -111,7 +111,7 @@ export default function MicroCalendarHeatmap() {
     return (
         <div className="w-full bg-zinc-950 flex justify-center items-start p-8 font-sans overflow-y-auto">
             
-            <div className="w-full max-w-7xl">
+            <div className="w-full">
                  <div className="mb-8">
                     <h2 className="text-xl font-bold text-zinc-100">Atividade Diária</h2>
                     <p className="text-xs text-zinc-500">Visualização detalhada</p>
