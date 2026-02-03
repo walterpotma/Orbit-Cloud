@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orbitcloud-ui-container
-        image: localhost:5000/orbitcloud-ui:v0.0.50
+        image: localhost:5000/orbitcloud-ui:v0.0.51
         ports:
         - containerPort: 3000
 ---
