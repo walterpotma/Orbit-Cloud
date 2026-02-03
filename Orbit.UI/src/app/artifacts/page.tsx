@@ -21,7 +21,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       // Usando a URL que apareceu no seu print (ajuste se for localhost)
-      const response = await fetch("https://api.orbitcloud.com.br/registry");
+      const response = await fetch(`https://api.orbitcloud.com.br/registry/user?githubId=${UserData?.githubID}`);
       const data = await response.json();
       setArtifacts(data);
     } catch (error) {
@@ -33,7 +33,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchRegistry();
-  }, []);
+  }, [UserData, isLoading]);
 
   return (
     <div className="w-full h-full px-8 py-8 flex flex-col justify-start items-start overflow-auto custom-scroll bg-zinc-950 text-zinc-100">
