@@ -40,14 +40,16 @@ export default function Home() {
 
     const rawCpu = namespaceMetrics?.rawCpu || 0;
     const rawMem = namespaceMetrics?.rawMemory || 0;
-    const cpuPercent = Math.min((rawCpu / MAX_CPU_MILLICORES) * 100, 100);
-    const memPercent = Math.min((rawMem / MAX_MEMORY_BYTES) * 100, 100);
+    const rawCpuLimits = namespaceMetrics?.rawCpuLimit || 0;
+    const rawMemLimits = namespaceMetrics?.rawMemoryLimit || 0;
+    
     const cpuLabel = namespaceMetrics?.cpuUsage || "0m";
     const memLabel = namespaceMetrics?.memoryUsage || "0 MiB";
     const cpuLabelLimits = namespaceMetrics?.cpuLimit || "0m";
     const memLabelLimits = namespaceMetrics?.memoryLimit || "0 MiB";
-    const rawCpuLimits = namespaceMetrics?.rawCpuLimit || 0;
-    const rawMemLimits = namespaceMetrics?.rawMemoryLimit || 0;
+    
+    const cpuPercent = Math.min((rawCpu / rawCpuLimits) * 100, 100);
+    const memPercent = Math.min((rawMem / rawMemLimits) * 100, 100);
 
     useEffect(() => {
         if (isLoading || !UserData || !UserData.githubID) return;
