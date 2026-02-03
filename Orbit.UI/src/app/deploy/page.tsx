@@ -8,6 +8,7 @@ import BtnRefresh from "@/components/ui/button-refresh";
 import { Deployments } from "@/features/deploy/services/deployments";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/features/deploy/components/deploy-view";
+import ChartCalender from '@/features/charts/components/chart-calender';
 
 export default function DeployPage() {
     const { UserData, isLoading } = useUser();
@@ -35,7 +36,7 @@ export default function DeployPage() {
     }
 
     return (
-        <div className="w-full h-full p-6 md:p-8 flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+        <div className="w-full p-6 md:p-8 flex flex-col bg-zinc-950 text-zinc-100">
             
             {/* Header */}
             <div className="flex justify-between items-end mb-8 shrink-0">
@@ -64,9 +65,13 @@ export default function DeployPage() {
                     </div>
                 </div>
             </div>
+            
+            <div>
+                <ChartCalender/>
+            </div>
 
             {/* Container da Tabela com Estilo Glass/Card */}
-            <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col shadow-inner shadow-black/20">
+            <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-2xl flex flex-col shadow-inner shadow-black/20">
                 
                 {/* Barra de Título da Tabela (Opcional, mas ajuda na organização) */}
                 <div className="px-6 py-3 bg-zinc-900/80 border-b border-zinc-800 flex items-center gap-2 backdrop-blur-sm shrink-0">

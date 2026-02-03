@@ -166,10 +166,7 @@ export default function Home() {
                         </button>
                     )}
                 </div>
-
-                <div className="p-2">
-                    <TableDeploy deployments={deployments} />
-                </div>
+                <TableDeploy deployments={deployments} />
             </div>
         </div>
     );

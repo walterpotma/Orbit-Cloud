@@ -15,6 +15,7 @@ import { Services, Ingress } from "@/features/network/services/network";
 import { useUser } from "@/context/user";
 import NetWorkTable from "@/features/network/components/network-view";
 import { NetworkRule } from "@/features/network/types/view";
+import ChartNetTraffic from "@/features/charts/components/chart-net-trafik";
 
 export default function NetworkPage() {
     const { UserData, isLoading: isUserLoading } = useUser();
@@ -90,7 +91,7 @@ export default function NetworkPage() {
     );
 
     return (
-        <div className="w-full h-full p-6 md:p-8 flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+        <div className="w-full p-6 md:p-8 flex flex-col bg-zinc-950 text-zinc-100">
             
             {/* Header */}
             <div className="flex justify-between items-center mb-8 shrink-0">
@@ -148,28 +149,13 @@ export default function NetworkPage() {
                     </span>
                 </div>
 
+                <div>
+                    <ChartNetTraffic />
+                </div>
+
                 {/* Tabela ou Loading ou Empty State */}
                 <div className="flex-1 overflow-auto custom-scroll p-1 relative">
-                    {loading ? (
-                        // Skeleton Loading Simples
-                        <div className="p-6 space-y-4">
-                            {[1, 2, 3].map(i => (
-                                <div key={i} className="h-12 bg-zinc-900/50 rounded-lg animate-pulse border border-zinc-800/50" />
-                            ))}
-                        </div>
-                    ) : network.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center">
-                            <EmptyState
-                                title="Nenhuma Rota Definida"
-                                description="Seus deploys ainda não expuseram serviços ou rotas públicas."
-                                icon="bi bi-hdd-network" // Mantendo seu ícone original ou troque se o componente suportar componente React
-                                actionLabel="Criar Deploy"
-                                onAction={() => window.location.href = '/deploy'}
-                            />
-                        </div>
-                    ) : (
-                        <NetWorkTable rules={network}/>
-                    )}
+                    <NetWorkTable rules={network}/>
                 </div>
             </div>
             

@@ -37,7 +37,7 @@ export default function RootLayout({
 
                         <Navigation />
 
-                        <main className="flex-1 h-full relative">
+                        <main className="flex-1 h-full relative overflow-auto custom-scroll">
                             {children}
                         </main>
 

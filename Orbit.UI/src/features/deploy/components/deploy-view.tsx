@@ -5,7 +5,7 @@ import TableProps from "../types/view";
 
 export default function Table({ deployments }: TableProps) {
     return (
-        <div className="w-full mt-4">
+        <div className="w-full">
             {deployments.length === 0 ? (
                 <EmptyState
                     title="Nenhuma Aplicação Rodando"
