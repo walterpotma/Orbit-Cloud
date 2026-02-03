@@ -13,16 +13,16 @@ import StatusCard from "@/features/dashboard/components/dash-status-card";
 import CircularProgress from "@/features/dashboard/components/dash-circular-progress";
 import ChartLine from "@/features/charts/components/chart-line";
 import ChartBar from "@/features/charts/components/chart-bar";
-import { 
-  Activity, 
-  CheckCircle2, 
-  AlertCircle, 
-  Clock, 
-  Layers, 
-  Cpu, 
-  Zap, 
-  Server,
-  ArrowRight
+import {
+    Activity,
+    CheckCircle2,
+    AlertCircle,
+    Clock,
+    Layers,
+    Cpu,
+    Zap,
+    Server,
+    ArrowRight
 } from "lucide-react";
 
 const MAX_CPU_MILLICORES = 1000;
@@ -73,7 +73,7 @@ export default function Home() {
 
     return (
         <div className="w-full h-full bg-zinc-950 text-zinc-100 p-6 md:p-8 overflow-y-auto custom-scroll space-y-8">
-            
+
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     {/* bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent */}
@@ -87,35 +87,35 @@ export default function Home() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
+            <div className="flex flex-col-reverse gap-6 lg:grid lg:grid-cols-3">
+
                 <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <StatusCard 
-                        title="Em Execução" 
-                        value={succededDeployments.length} 
-                        icon={CheckCircle2} 
-                        color="text-emerald-500" 
+                    <StatusCard
+                        title="Em Execução"
+                        value={succededDeployments.length}
+                        icon={CheckCircle2}
+                        color="text-emerald-500"
                         sub="Containers saudáveis"
                     />
-                    <StatusCard 
-                        title="Pendentes" 
-                        value={pendingDeployments.length} 
-                        icon={Clock} 
-                        color="text-amber-500" 
+                    <StatusCard
+                        title="Pendentes"
+                        value={pendingDeployments.length}
+                        icon={Clock}
+                        color="text-amber-500"
                         sub="Aguardando recursos"
                     />
-                    <StatusCard 
-                        title="Falhas" 
-                        value={failedDeployments.length} 
-                        icon={AlertCircle} 
-                        color="text-rose-500" 
+                    <StatusCard
+                        title="Falhas"
+                        value={failedDeployments.length}
+                        icon={AlertCircle}
+                        color="text-rose-500"
                         sub="Requer atenção"
                     />
-                    <StatusCard 
-                        title="Total Builds" 
+                    <StatusCard
+                        title="Total Builds"
                         value={0} // Placeholder, conecte ao real se tiver
-                        icon={Layers} 
-                        color="text-purple-500" 
+                        icon={Layers}
+                        color="text-purple-500"
                         sub="Builds mensais"
                     />
                 </div>
@@ -125,29 +125,29 @@ export default function Home() {
                         <Activity className="text-blue-500" size={20} />
                         <h2 className="font-semibold text-zinc-200">Saúde do Cluster</h2>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 h-full">
-                        <CircularProgress 
-                            percentage={cpuPercent} 
-                            color="text-blue-500" 
-                            icon={Cpu} 
-                            label="CPU" 
+                        <CircularProgress
+                            percentage={cpuPercent}
+                            color="text-blue-500"
+                            icon={Cpu}
+                            label="CPU"
                             subLabel={`${cpuLabel} / ${cpuLabelLimits}`}
                         />
-                        <CircularProgress 
-                            percentage={memPercent} 
-                            color="text-violet-500" 
-                            icon={Zap} 
-                            label="Memória" 
+                        <CircularProgress
+                            percentage={memPercent}
+                            color="text-violet-500"
+                            icon={Zap}
+                            label="Memória"
                             subLabel={`${memLabel} / ${memLabelLimits}`}
                         />
                     </div>
                 </div>
             </div>
 
-            <div className="w-full flex justify-between space-x-10">
-                <ChartLine/>
-                <ChartBar/>
+            <div className="w-full flex flex-col lg:flex-row justify-between gap-10">
+                <ChartLine />
+                <ChartBar />
             </div>
 
             <div className="w-full bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-hidden">
@@ -157,8 +157,8 @@ export default function Home() {
                         <h2 className="text-lg font-semibold text-zinc-200">Aplicações Recentes</h2>
                     </div>
                     {deployments.length > 0 && (
-                        <button 
-                            onClick={() => router.push('/deploy')} 
+                        <button
+                            onClick={() => router.push('/deploy')}
                             className="group flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
                         >
                             Ver Todos
@@ -166,7 +166,7 @@ export default function Home() {
                         </button>
                     )}
                 </div>
-                
+
                 <div className="p-2">
                     <TableDeploy deployments={deployments} />
                 </div>

@@ -33,7 +33,7 @@ export default function Nav() {
   const pathname = usePathname();
   
   // Controle de estado
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
 
   // Reseta o loading ao mudar de rota
@@ -60,9 +60,8 @@ export default function Nav() {
       {/* Loading Overlay Global */}
       {isNavigating && (
         <div className="fixed top-0 left-0 w-full h-1 z-[100]">
-           <div className="h-full bg-blue-500 animate-progress-indeterminate"></div>
            {/* Se quiser manter seu componente Loading antigo, descomente abaixo e remova a barra acima */}
-           {/* <div className="fixed inset-0 z-50"><Loading /></div> */}
+           <div className="fixed inset-0 z-50"><Loading /></div>
         </div>
       )}
 
