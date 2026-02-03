@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/libs/axios";
 
-const controller = "kubernetes/registry";
+const controller = "registry";
 
 export class Registry {
     static List(githubID: string) {
