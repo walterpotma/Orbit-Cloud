@@ -46,13 +46,11 @@ export default function StoragePage() {
 
     return (
         <div className="w-full h-full flex flex-col bg-zinc-950 text-zinc-100 p-6 md:p-8 overflow-hidden">
-            
-            {/* Header Principal */}
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-bold flex items-center gap-3">
                         <HardDrive className="text-purple-500" size={32} />
-                        <span className="bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">
+                        <span>
                             Armazenamento
                         </span>
                     </h1>

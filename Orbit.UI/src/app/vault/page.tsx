@@ -67,7 +67,7 @@ export default function VaultPage() {
                 <div>
                     <h1 className="text-3xl font-bold flex items-center gap-3">
                         <Shield className="text-yellow-500" size={32} />
-                        <span className="bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">
+                        <span>
                             Cofre & Variáveis
                         </span>
                     </h1>

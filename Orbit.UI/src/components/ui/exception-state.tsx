@@ -35,7 +35,6 @@ export default function EmptyState({
                     onClick={onAction}
                     className="group flex items-center gap-2 px-5 py-2.5 border-2 border-blue-700 hover:bg-blue-700 text-blue-500 hover:text-white rounded-lg text-sm font-medium transition-all shadow-md hover:shadow-blue-600/20 cursor-pointer"
                 >
-                    <i className="bi bi-plus-lg text-xs transition-transform"></i>
                     {actionLabel}
                 </button>
             )}

@@ -42,7 +42,7 @@ export default function DeployPage() {
                 <div>
                     <h1 className="text-3xl font-bold flex items-center gap-3">
                         <Rocket className="text-blue-500" size={32} />
-                        <span className="bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">
+                        <span>
                             Deploys
                         </span>
                     </h1>
