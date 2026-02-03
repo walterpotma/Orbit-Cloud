@@ -19,12 +19,12 @@ import {
 
 // Configuração dos itens de menu para fácil manutenção
 const NAV_ITEMS = [
-  { label: "Dashboard", href: "/", icon: LayoutGrid },
-  { label: "Artefatos", href: "/artifacts", icon: Layers },
-  { label: "Deploys", href: "/deploy", icon: Rocket },
-  { label: "Rede", href: "/network", icon: Globe },
-  { label: "Cofre", href: "/vault", icon: Shield },
-  { label: "Armazenamento", href: "/storage", icon: HardDrive },
+  { label: "Dashboard", href: "/", icon: LayoutGrid , color: "text-blue-500" },
+  { label: "Artefatos", href: "/artifacts", icon: Layers, color: "text-purple-500" },
+  { label: "Deploys", href: "/deploy", icon: Rocket, color: "text-blue-500" },
+  { label: "Rede", href: "/network", icon: Globe, color: "text-purple-500" },
+  { label: "Cofre", href: "/vault", icon: Shield, color: "text-yellow-500" },
+  { label: "Armazenamento", href: "/storage", icon: HardDrive, color: "text-green-500" }
 ];
 
 export default function Nav() {
@@ -90,6 +90,7 @@ export default function Nav() {
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
+            const Color = item.color;
 
             return (
               <button
@@ -99,8 +100,8 @@ export default function Nav() {
                 className={`
                   w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group
                   ${isActive 
-                    ? "bg-blue-600/10 text-blue-400 border border-blue-600/20 shadow-[0_0_15px_rgba(37,99,235,0.1)]" 
-                    : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 hover:border-zinc-800 border border-transparent"
+                    ? `bg-blue-600/10 ${Color} border ${Color}/20 shadow-[0_0_15px_rgba(37,99,235,0.1)]` 
+                    : `text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 hover:border-zinc-800 border border-transparent`
                   }
                   ${isCollapsed ? "justify-center" : "justify-start"}
                 `}
@@ -113,7 +114,7 @@ export default function Nav() {
                 
                 {/* Indicador Ativo (Bolinha) */}
                 {isActive && !isCollapsed && (
-                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                  <div className={`ml-auto w-1.5 h-1.5 rounded-full ${Color} shadow-[0_0_8px_rgba(96,165,250,0.8)]`}></div>
                 )}
               </button>
             );
