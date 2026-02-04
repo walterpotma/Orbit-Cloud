@@ -70,6 +70,7 @@ export default function Nav() {
           bg-zinc-950 border-r border-zinc-800 flex flex-row 
           transition-all duration-300 ease-in-out z-40
           w-full
+          sm:hidden
         `}
             >
                 {/* === HEADER (LOGO) === */}
