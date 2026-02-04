@@ -34,7 +34,7 @@ export default function RootLayout({
                 <body
                     className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950`}
                 >
-                    <div className="w-full h-screen flex flex-col-reverse lg:flex-row overflow-y-auto">
+                    <div className="w-full h-dvh flex flex-col-reverse lg:flex-row overflow-y-auto">
                         <NavigationResponsive />
                         <Navigation />
 
