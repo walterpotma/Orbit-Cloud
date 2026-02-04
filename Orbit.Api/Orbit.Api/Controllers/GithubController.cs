@@ -70,7 +70,7 @@ namespace Orbit.Api.Controllers
 
         [HttpGet("me")]
         [Authorize]
-        public IActionResult GetMe()
+        public async Task<IActionResult> GetMe()
         {
             var user = new
             {
@@ -78,7 +78,8 @@ namespace Orbit.Api.Controllers
                 Username = User.FindFirst("urn:github:login")?.Value,
                 Name = User.FindFirst(ClaimTypes.Name)?.Value,
                 Avatar = User.FindFirst("urn:github:avatar")?.Value,
-                IsAuthenticated = true
+                IsAuthenticated = true,
+                AuthenticationToken = await HttpContext.GetTokenAsync("access_token")
             };
             return Ok(user);
         }

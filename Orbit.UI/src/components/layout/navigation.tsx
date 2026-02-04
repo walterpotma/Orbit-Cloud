@@ -19,12 +19,12 @@ import {
 
 // Configuração dos itens de menu para fácil manutenção
 const NAV_ITEMS = [
-    { label: "Dashboard", href: "/", icon: LayoutGrid },
-    { label: "Artefatos", href: "/artifacts", icon: Layers },
-    { label: "Deploys", href: "/deploy", icon: Rocket },
-    { label: "Rede", href: "/network", icon: Globe },
-    { label: "Cofre", href: "/vault", icon: Shield },
-    { label: "Armazenamento", href: "/storage", icon: HardDrive },
+    { label: "Dashboard", href: "/", icon: LayoutGrid, color: "blue-500" },
+    { label: "Artefatos", href: "/artifacts", icon: Layers, color: "purple-500" },
+    { label: "Deploys", href: "/deploy", icon: Rocket, color: "blue-500" },
+    { label: "Rede", href: "/network", icon: Globe, color: "purple-500" },
+    { label: "Cofre", href: "/vault", icon: Shield, color: "amber-500" },
+    { label: "Armazenamento", href: "/storage", icon: HardDrive, color: "purple-500" }
 ];
 
 export default function Nav() {
@@ -66,8 +66,7 @@ export default function Nav() {
             )}
 
             <nav
-                className={`
-          relative h-full bg-zinc-950 border-r border-zinc-800 hidden sm:flex flex-col 
+                className={`relative h-full bg-zinc-950 border-r border-zinc-800 hidden sm:flex flex-col
           transition-all duration-300 ease-in-out z-40
           ${isCollapsed ? "w-20" : "w-64"}
         `}
@@ -90,30 +89,24 @@ export default function Nav() {
                     {NAV_ITEMS.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
+                        const Color = item.color;
 
                         return (
                             <button
                                 key={item.href}
                                 onClick={() => handleNavigation(item.href)}
                                 title={isCollapsed ? item.label : ""}
-                                className={`
-                  w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group
-                  ${isActive
-                                        ? "bg-blue-600/10 text-blue-400 border border-blue-600/20 shadow-[0_0_15px_rgba(37,99,235,0.1)]"
-                                        : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 hover:border-zinc-800 border border-transparent"
-                                    }
-                  ${isCollapsed ? "justify-center" : "justify-start"}
-                `}
+                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group ${isActive ? `bg-blue-600/10 text-${Color} border bg-${Color}/20 shadow-[0_0_15px_rgba(37,99,235,0.1)]` : `text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 hover:border-zinc-800 border border-transparent`} ${isCollapsed ? "justify-center" : "justify-start"} cursor-pointer`}
                             >
                                 <Icon size={20} className={`shrink-0 transition-transform duration-200 ${isActive ? "scale-110" : "group-hover:scale-110"}`} />
 
-                                <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"}`}>
+                                <span className={`text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? "hidden" : "w-auto opacity-100"}`}>
                                     {item.label}
                                 </span>
 
                                 {/* Indicador Ativo (Bolinha) */}
                                 {isActive && !isCollapsed && (
-                                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                                    <div className={`ml-auto w-1.5 h-1.5 rounded-full bg-${Color} shadow-[0_0_8px_rgba(96,165,250,0.8)]`}></div>
                                 )}
                             </button>
                         );

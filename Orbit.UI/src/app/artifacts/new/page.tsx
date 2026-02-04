@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 export default function PipelinePage() {
     const { UserData, isLoading } = useUser();
-    
+
     // Estado para armazenar os dados do formulário
     const [formData, setFormData] = useState({
         githubId: "",
@@ -23,10 +23,9 @@ export default function PipelinePage() {
         type: "" // 'success' | 'error' | ''
     });
 
-    // Atualiza o githubId assim que o UserData estiver disponível
     useEffect(() => {
         if (UserData?.githubID) {
-            setFormData(prev => ({ ...prev, githubId: UserData.githubID }));
+            setFormData(prev => ({ ...prev, githubId: UserData.githubID, authToken: UserData.authenticationToken }));
         }
     }, [UserData]);
 
@@ -39,7 +38,7 @@ export default function PipelinePage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // Validação básica antes de enviar
         if (!formData.githubId) {
             setStatus({ loading: false, message: "ID do usuário não identificado.", type: "error" });
@@ -51,7 +50,7 @@ export default function PipelinePage() {
         try {
             // Converte objeto para Query String (necessário para [FromQuery] no C#)
             const queryParams = new URLSearchParams(formData).toString();
-            
+
             // Endpoint alterado para /pipeline
             const response = await fetch(`https://api.orbitcloud.com.br/Build/pipeline?${queryParams}`, {
                 method: "POST",
@@ -89,7 +88,7 @@ export default function PipelinePage() {
     return (
         <div className="w-full min-h-screen flex items-center justify-center bg-zinc-950 text-zinc-100 p-6 md:p-8">
             <div className="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-xl p-8 shadow-2xl">
-                
+
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-white mb-2">Build Pipeline</h1>
                     <p className="text-zinc-400 text-sm">
@@ -100,7 +99,7 @@ export default function PipelinePage() {
                 <form onSubmit={handleSubmit} className="space-y-5">
 
                     {/* Github ID (Readonly - vem do contexto) */}
-                    <div className="flex flex-col gap-2 opacity-50">
+                    <div className="flex flex-col gap-2 opacity-50 hidden">
                         <label className="text-sm font-medium text-zinc-300">Github ID (Usuário)</label>
                         <input
                             type="text"
@@ -125,7 +124,7 @@ export default function PipelinePage() {
                         />
                     </div>
 
-                    {/* Auth Token */}
+                    {/*
                     <div className="flex flex-col gap-2">
                         <label htmlFor="authToken" className="text-sm font-medium text-zinc-300">Token de Acesso (PAT)</label>
                         <input
@@ -138,7 +137,7 @@ export default function PipelinePage() {
                             onChange={handleChange}
                             className="bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                         />
-                    </div>
+                    </div> */}
 
                     <div className="grid grid-cols-2 gap-4">
                         {/* App Name */}
@@ -193,8 +192,8 @@ export default function PipelinePage() {
                         type="submit"
                         disabled={status.loading}
                         className={`w-full font-semibold py-3 px-4 rounded-lg transition-colors mt-4
-                            ${status.loading 
-                                ? "bg-zinc-700 text-zinc-400 cursor-not-allowed" 
+                            ${status.loading
+                                ? "bg-zinc-700 text-zinc-400 cursor-not-allowed"
                                 : "bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20"
                             }`}
                     >
@@ -214,11 +213,10 @@ export default function PipelinePage() {
 
                 {/* Área de Feedback */}
                 {status.message && (
-                    <div className={`mt-6 p-4 rounded-lg border text-sm ${
-                        status.type === 'success' 
-                            ? 'bg-green-900/20 border-green-800 text-green-200' 
-                            : 'bg-red-900/20 border-red-800 text-red-200'
-                    }`}>
+                    <div className={`mt-6 p-4 rounded-lg border text-sm ${status.type === 'success'
+                        ? 'bg-green-900/20 border-green-800 text-green-200'
+                        : 'bg-red-900/20 border-red-800 text-red-200'
+                        }`}>
                         <p className="font-semibold flex items-center gap-2">
                             {status.type === 'success' ? '✅ Sucesso:' : '❌ Erro:'}
                             <span className="font-normal">{status.message}</span>

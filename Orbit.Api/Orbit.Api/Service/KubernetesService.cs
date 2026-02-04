@@ -313,8 +313,8 @@ namespace Orbit.Api.Service
             try
             {
                 // Valores Padrão para novos Workspaces (Pode vir de um enum "Planos" futuramente)
-                string defaultCpu = "100m";
-                string defaultMem = "512Mi";
+                string defaultCpu = "500m";
+                string defaultMem = "1024Mi";
 
                 await _repository.CreateNamespaceQuotaAsync(request.Name, defaultCpu, defaultMem);
                 Console.WriteLine($"[Info] Quota aplicada ao namespace {request.Name}");

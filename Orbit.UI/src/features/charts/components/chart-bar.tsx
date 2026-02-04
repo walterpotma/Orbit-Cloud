@@ -80,7 +80,7 @@ export default function BarChart() {
     const gridTicks = [0, 250, 500, 750, 1000]; // Pode ser calculado dinamicamente se quiser
 
     return (
-        <div className="w-full max-w-3xl bg-zinc-900 rounded-xl border border-zinc-800 p-6 shadow-2xl overflow-hidden">
+        <div className="w-full bg-zinc-900 rounded-xl border border-zinc-800 p-6 shadow-2xl overflow-hidden">
 
             <div className="mb-6 flex justify-between items-end">
                 <div>

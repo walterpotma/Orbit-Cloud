@@ -111,7 +111,7 @@ export default function NetworkTrafficChart() {
 
 
     return (
-        <div className="w-full bg-zinc-950 flex justify-center items-center p-8 font-sans">
+        <div className="w-full bg-zinc-950 flex justify-center items-center font-sans">
             
             <div className="w-full bg-zinc-900 rounded-xl border border-zinc-800 p-6 shadow-2xl overflow-hidden relative">
                 
