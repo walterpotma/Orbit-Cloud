@@ -73,7 +73,7 @@ namespace Orbit.Api.Service
 
         public async Task<bool> CreateWorkspaceAsync(string githubId)
         {
-            var userBasePath = Path.Combine("fast/clients/", githubId);
+            var userBasePath = Path.Combine("archive/clients/", githubId);
             var namespaceName = $"u-{githubId}"; // Definimos o nome numa variável para reutilizar
 
             try

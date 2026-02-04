@@ -5,7 +5,7 @@ RAW_URL=$2
 TOKEN=$3
 APP_NAME=$4
 
-BASE_DIR="/data/fast/clients/$GITHUB_ID/tmp"
+BASE_DIR="/data/archive/clients/$GITHUB_ID/tmp"
 
 CLEAN_URL="${RAW_URL#https://}"
 
@@ -18,7 +18,7 @@ if [ -d "$BASE_DIR" ]; then
     rm -rf "$BASE_DIR"
 fi
 
-mkdir -p "/data/fast/clients/$GITHUB_ID/tmp"
+mkdir -p "/data/archive/clients/$GITHUB_ID/tmp"
 
 echo "[SH] Clonando repositório..."
 

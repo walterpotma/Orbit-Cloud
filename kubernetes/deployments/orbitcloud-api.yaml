@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orbitcloud-api-container
-        image: localhost:5000/orbitcloud-api:v0.0.66
+        image: localhost:5000/orbitcloud-api:v0.0.67
         ports:
         - containerPort: 8080
         volumeMounts:

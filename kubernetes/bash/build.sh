@@ -4,7 +4,7 @@
 GITHUB_ID=$1       # Ex: 201145284
 APP_NAME=$2        # Ex: orbitcloud-app
 VERSION=$3         # Ex: 0.0.12
-APP_PATH=$4        # Onde está o Dockerfile (/data/fast/clients/...)
+APP_PATH=$4        # Onde está o Dockerfile
 
 # Configurações
 REGISTRY="localhost:5000"
@@ -12,7 +12,7 @@ REGISTRY="localhost:5000"
 IMAGE_TAG="$REGISTRY/$GITHUB_ID/$APP_NAME:v$VERSION"
 
 # Caminhos físicos
-CLIENT_ROOT="/data/fast/clients/$GITHUB_ID"
+CLIENT_ROOT="/data/archive/clients/$GITHUB_ID"
 
 echo "[SH] -----------------------------------------------------------"
 echo "[SH] Iniciando Processo de Build"
