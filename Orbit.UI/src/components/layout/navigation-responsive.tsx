@@ -67,13 +67,13 @@ export default function Nav() {
 
             <nav
                 className={`
-          relative h-full bg-zinc-950 border-r border-zinc-800 hidden sm:flex flex-col 
+          bg-zinc-950 border-r border-zinc-800 flex flex-row 
           transition-all duration-300 ease-in-out z-40
-          ${isCollapsed ? "w-20" : "w-64"}
+          w-full
         `}
             >
                 {/* === HEADER (LOGO) === */}
-                <div className="h-20 flex items-center justify-center border-b border-zinc-800/50">
+                <div className="h-20 hidden items-center justify-center border-b border-zinc-800/50">
                     <div className={`flex items-center gap-3 overflow-hidden whitespace-nowrap transition-all ${isCollapsed ? "px-0" : "px-4"}`}>
                         <div className="shrink-0">
                             <Logo />
@@ -86,7 +86,7 @@ export default function Nav() {
                 </div>
 
                 {/* === BODY (MENU ITEMS) === */}
-                <div className="flex-1 py-6 px-3 space-y-2 overflow-y-auto custom-scroll">
+                <div className="w-full flex justify-between py-6 px-3 space-y-2 overflow-y-auto custom-scroll">
                     {NAV_ITEMS.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
@@ -121,7 +121,7 @@ export default function Nav() {
                 </div>
 
                 {/* === FOOTER (USER & TOGGLE) === */}
-                <div className="p-3 border-t border-zinc-800 bg-zinc-900/30">
+                <div className="p-3 border-t border-zinc-800 bg-zinc-900/30 hidden">
 
                     {isLoading ? (
                         <div className="animate-pulse flex items-center gap-3 p-2">
@@ -173,7 +173,7 @@ export default function Nav() {
                     {/* Botão de Colapso */}
                     <button
                         onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="absolute -right-3 top-24 bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white p-1 rounded-full shadow-lg hover:scale-110 transition-all z-50"
+                        className="absolute hidden -right-3 top-24 bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white p-1 rounded-full shadow-lg hover:scale-110 transition-all z-50"
                     >
                         {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
                     </button>

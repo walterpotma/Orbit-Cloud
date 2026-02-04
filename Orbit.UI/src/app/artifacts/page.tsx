@@ -51,12 +51,6 @@ export default function Page() {
                     </div>
                 </div>
 
-                {/* {isLoading && (
-                    <div className="w-full flex justify-center py-20">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
-                    </div>
-                )} */}
-
                 {!isLoading && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {artifacts.map((repo) => (
