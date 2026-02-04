@@ -17,7 +17,7 @@ namespace Orbit.Api.Controllers
         private const string CF_TOKEN = "7DmK3dqhLKCwTs8m-UoxPMCuMlP1h9N1GoIQkE8b"; // Token com permissão de DNS e Tunnel
         private const string ZONE_ID = "a3cab6b5bb2a78bce56fcf1b2df71691"; // ID da zona orbitcloud.com.br
         private const string ACCOUNT_ID = "5574573b7748e7868bb3bcb236f36f81";
-        private const string TUNNEL_ID = "0e00cfd1-c368-4587-acd6-5a0a9f989e7b\r\n"; // ID do túnel k3s-hayom
+        private const string TUNNEL_ID = "0e00cfd1-c368-4587-acd6-5a0a9f989e7b"; // ID do túnel k3s-hayom
         private const string DOMAIN_BASE = "crion.dev";
         // =========================================================================
 
