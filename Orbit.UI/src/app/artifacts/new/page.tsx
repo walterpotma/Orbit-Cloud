@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 
 export default function PipelinePage() {
     const { UserData, isLoading } = useUser();
-    const [token, setToken] = useState("");
 
     // Estado para armazenar os dados do formulário
     const [formData, setFormData] = useState({
@@ -23,26 +22,10 @@ export default function PipelinePage() {
         message: "",
         type: "" // 'success' | 'error' | ''
     });
-    const getToken = async () => {
-        try {
-            const response = await fetch(`https://api.orbitcloud.com.br/github/token`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const data = await response.json();
-            setToken(data.accessToken);
-        }
-        catch (error: any) {
-            console.log(error);
-        }
-    }
 
     useEffect(() => {
         if (UserData?.githubID) {
-            getToken();
-            setFormData(prev => ({ ...prev, githubId: UserData.githubID, authToken: token}));
+            setFormData(prev => ({ ...prev, githubId: UserData.githubID, authToken: UserData.authenticationToken }));
         }
     }, [UserData]);
 

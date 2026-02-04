@@ -11,6 +11,7 @@ interface User {
     githubLogin: string;
     avatar: string;
     name: string;
+    authenticationToken: string;
 }
 
 interface UserContextType {
