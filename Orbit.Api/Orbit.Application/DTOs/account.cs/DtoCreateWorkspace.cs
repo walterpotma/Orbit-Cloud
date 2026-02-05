@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto.account.cs
+﻿namespace Orbit.Application.DTOs.account.cs
 {
     public class DtoCreateWorkspace
     {

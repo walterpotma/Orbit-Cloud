@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto.organization
+﻿namespace Orbit.Application.DTOs.organization
 {
     public class DtoOrganization
     {

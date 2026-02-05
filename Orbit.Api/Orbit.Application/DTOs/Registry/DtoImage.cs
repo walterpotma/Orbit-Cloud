@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto.Registry
+﻿namespace Orbit.Application.DTOs.Registry
 {
     public class DtoImage
     {

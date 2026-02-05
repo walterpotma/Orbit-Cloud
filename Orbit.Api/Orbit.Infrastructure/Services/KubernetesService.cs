@@ -1,11 +1,11 @@
 ﻿using k8s.Models;
-using Orbit.Api.Dto.kubernetes;
+using Orbit.Application.DTOs.Kubernetes;
 using Orbit.Api.Mappers;
-using Orbit.Api.Repository.Interface;
-using Orbit.Api.Service.Interface;
+using Orbit.Domain.Interfaces;
+using Orbit.Application.Interfaces;
 using YamlDotNet.Core.Tokens;
 
-namespace Orbit.Api.Service
+namespace Orbit.Infraestrutura.Services
 {
     public class KubernetesService : IKubernetesService
     {

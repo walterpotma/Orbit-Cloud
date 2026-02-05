@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Orbit.Api.Dto.kubernetes
+namespace Orbit.Application.DTOs.kubernetes
 {
     public class DtoNamespaceRequest
     {

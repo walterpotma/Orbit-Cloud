@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Orbit.Api.Dto.Registry
+namespace Orbit.Application.DTOs.Registry
 {
     public class DtoImageBuild
     {

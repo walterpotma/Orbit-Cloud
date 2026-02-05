@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Service.Interface
+﻿namespace Orbit.Application.DTOs.Interface
 {
     public interface IDockerService
     {

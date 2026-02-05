@@ -1,6 +1,6 @@
-﻿using Orbit.Api.Dto.Registry;
+﻿using Orbit.Application.DTOs.Registry;
 
-namespace Orbit.Api.Service.Interface
+namespace Orbit.Application.Interfaces
 {
     public interface IRegistryService
     {

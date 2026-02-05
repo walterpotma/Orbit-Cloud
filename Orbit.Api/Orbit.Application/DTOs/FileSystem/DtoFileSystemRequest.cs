@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto.FileSystem
+﻿namespace Orbit.Application.DTOs.FileSystem
 {
     public class DtoFilesystemRequest
     {

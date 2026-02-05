@@ -1,6 +1,6 @@
-﻿using Orbit.Api.Dto.account.cs;
+﻿using Orbit.Application.DTOs.account.cs;
 
-namespace Orbit.Api.Service.Interface
+namespace Orbit.Application.Interfaces
 {
     public interface IAccountService
     {

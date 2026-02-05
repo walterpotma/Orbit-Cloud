@@ -1,6 +1,6 @@
-﻿using Orbit.Api.Dto.FileSystem;
+﻿using Orbit.Application.DTOs.FileSystem;
 
-namespace Orbit.Api.Service.Interface
+namespace Orbit.Application.Interfaces
 {
     public interface IFileSystemService
     {

@@ -1,7 +1,7 @@
 ﻿using k8s.Models;
-using Orbit.Api.Dto.kubernetes;
+using Orbit.Application.DTOs.Kubernetes;
 
-namespace Orbit.Api.Mappers
+namespace Orbit.Application.Mappers
 {
     public class MapperKubernetes
     {

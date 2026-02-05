@@ -1,9 +1,9 @@
 ﻿using k8s;
 using k8s.Models;
-using Orbit.Api.Repository.Interface;
+using Orbit.Application.Interfaces;
 using System.Xml.Linq;
 
-namespace Orbit.Api.Repository
+namespace Orbit.Infraestrutura.Repositories
 {
     public class KubernetesRepository : IKubernetesRepository
     {

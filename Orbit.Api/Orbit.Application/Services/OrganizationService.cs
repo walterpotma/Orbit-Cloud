@@ -1,7 +1,7 @@
-﻿using Orbit.Api.Dto.organization;
-using Orbit.Api.Repository.Interface;
+﻿using Orbit.Application.DTOs.Organization;
+using Orbit.Domain.Interfaces;
 
-namespace Orbit.Api.Service
+namespace Orbit.Application.Services
 {
     public class OrganizationService
     {

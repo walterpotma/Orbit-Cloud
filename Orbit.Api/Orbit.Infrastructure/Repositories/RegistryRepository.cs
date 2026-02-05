@@ -1,9 +1,9 @@
-﻿using Orbit.Api.Repository.Interface;
+﻿using Orbit.Domain.Interfaces;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
-namespace Orbit.Api.Repository
+namespace Orbit.Infraestrutura.Repositories
 {
     public class RegistryRepository : IRegistryRepository
     {

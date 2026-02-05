@@ -1,6 +1,6 @@
-﻿using Orbit.Api.Dto.Github;
+﻿using Orbit.Application.DTOs.Github;
 
-namespace Orbit.Api.Service.Interface
+namespace Orbit.Application.Interfaces
 {
     public interface IGithubService
     {

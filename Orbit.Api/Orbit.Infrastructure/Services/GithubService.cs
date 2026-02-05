@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Orbit.Api.Dto.Github;
+using Orbit.Application.DTOs.Github;
 using Orbit.Api.Helpers;
-using Orbit.Api.Repository.Interface;
-using Orbit.Api.Service.Interface;
+using Orbit.Domain.Interfaces;
+using Orbit.Application.Interfaces;
 
-namespace Orbit.Api.Service
+namespace Orbit.Infraestrutura.Services
 {
     public class GithubService : IGithubService
     {

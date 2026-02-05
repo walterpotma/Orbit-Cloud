@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Orbit.Api.Data;
-using Orbit.Api.Model;
-using Orbit.Api.Repository.Interface;
+using Orbit.Infraestrutura.Persistence;
+using Orbit.Domain.Entities;
+using Orbit.Application.Interfaces;
 
-namespace Orbit.Api.Repository
+namespace Orbit.Infraestrutura.Repositories
 {
     public class RuleRepository : IRuleRepository
     {

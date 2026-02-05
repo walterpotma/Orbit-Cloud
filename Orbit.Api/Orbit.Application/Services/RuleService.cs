@@ -1,5 +1,5 @@
-﻿using Orbit.Api.Dto.organization;
-using Orbit.Api.Repository.Interface;
+﻿using Orbit.Application.DTOs.Rule;
+using Orbit.Domain.Interfaces;
 
 namespace Orbit.Api.Service
 {

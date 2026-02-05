@@ -1,9 +1,9 @@
-﻿using Orbit.Api.Dto.FileSystem;
-using Orbit.Api.Repository.Interface;
-using Orbit.Api.Service.Interface;
+﻿using Orbit.Application.DTOs.FileSystem;
+using Orbit.Infraestrutura.Repositories.Interface;
+using Orbit.Application.Interfaces;
 using Microsoft.Extensions.Configuration; // Necessário para IConfiguration
 
-namespace Orbit.Api.Service
+namespace Orbit.Infraestrutura.Services
 {
     public class FileSystemService : IFileSystemService
     {

@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto_s
+﻿namespace Orbit.Application.DTOs
 {
     public class CreateDeployRequest
     {

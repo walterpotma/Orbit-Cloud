@@ -1,6 +1,6 @@
-﻿using Orbit.Api.Dto.kubernetes;
+﻿using Orbit.Application.DTOs.kubernetes;
 
-namespace Orbit.Api.Service.Interface
+namespace Orbit.Application.Interfaces
 {
     public interface IKubernetesService
     {

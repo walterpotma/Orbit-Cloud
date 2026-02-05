@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto.github
+﻿namespace Orbit.Application.DTOs.github
 {
     public class DtoCloneRequest
     {

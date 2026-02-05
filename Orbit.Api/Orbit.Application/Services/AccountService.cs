@@ -1,11 +1,11 @@
 ﻿using k8s.KubeConfigModels;
-using Orbit.Api.Dto.account.cs;
-using Orbit.Api.Dto.kubernetes;
-using Orbit.Api.Model;
-using Orbit.Api.Repository.Interface;
-using Orbit.Api.Service.Interface;
+using Orbit.Application.DTOs.Account;
+using Orbit.Application.DTOs.Kubernetes;
+using Orbit.Domain.Model;
+using Orbit.Domain.Repository.Interface;
+using Orbit.Application.Interfaces;
 
-namespace Orbit.Api.Service
+namespace Orbit.Application.Services
 {
     public class AccountService : IAccountService
     {

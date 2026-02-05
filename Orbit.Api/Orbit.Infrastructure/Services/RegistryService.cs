@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
-using Orbit.Api.Dto.Registry;
-using Orbit.Api.Repository;
-using Orbit.Api.Repository.Interface;
-using Orbit.Api.Service.Interface;
+using Orbit.Application.DTOs.Registry;
+using Orbit.Infraestrutura.Repository;
+using Orbit.Domain.Interfaces;
+using Orbit.Application.Interfaces;
 
-namespace Orbit.Api.Service
+namespace Orbit.Infraestrutura.Services
 {
     public class RegistryService : IRegistryService
     {

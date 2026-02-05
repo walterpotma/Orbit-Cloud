@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Dto.subscription
+﻿namespace Orbit.Application.DTOs.subscription
 {
     public class DtoPlan
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Orbit.Api.Dto.Github
+namespace Orbit.Application.DTOs.Github
 {
     public class DtoWebhookRequest
     {
