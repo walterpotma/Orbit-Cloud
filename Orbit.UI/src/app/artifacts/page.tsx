@@ -7,10 +7,13 @@ import { Box, Tag, Rocket, Clock, Layers } from "lucide-react";
 import { RegistryImage } from "@/features/artifacts/types/registry-image";
 import { Registry } from "@/features/artifacts/services/registry";
 import EmptyState from "@/components/ui/exception-state";
-
+import { useRouter } from "next/navigation";
 
 export default function Page() {
     const { UserData } = useUser();
+    
+    const router = useRouter();
+    
     const [artifacts, setArtifacts] = useState<RegistryImage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -45,6 +48,9 @@ export default function Page() {
                         </p>
                     </div>
                     <div className="flex justify-center items-center space-x-3">
+                        <button className="px-4 py-2 text-sm rounded-lg border border-blue-500 text-white bg-blue-500 hover:bg-blue-600 cursor-pointer" onClick={() => router.push("/artifacts/new")}>
+                            Novo Artefato
+                        </button>
                         <div onClick={loadData}>
                             <ButtonRefresh />
                         </div>

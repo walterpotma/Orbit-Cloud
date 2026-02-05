@@ -97,6 +97,8 @@ builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<RuleService>();
 builder.Services.AddScoped<IRuleRepository, RuleRepository>();
 
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<PrometheusService>();
 // Novo modelo de arquitetura da api
 
 #region Github Scoped

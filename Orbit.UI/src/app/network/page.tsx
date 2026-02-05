@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { 
-  Globe, 
-  Network, 
-  ShieldCheck, 
-  Wifi, 
-  ArrowRightLeft,
-  Server
+import {
+    Globe,
+    Network,
+    ShieldCheck,
+    Wifi,
+    ArrowRightLeft,
+    Server
 } from "lucide-react";
 import BtnRefresh from "@/components/ui/button-refresh";
 import EmptyState from "@/components/ui/exception-state";
@@ -16,9 +16,11 @@ import { useUser } from "@/context/user";
 import NetWorkTable from "@/features/network/components/network-view";
 import { NetworkRule } from "@/features/network/types/view";
 import ChartNetTraffic from "@/features/charts/components/chart-net-trafik";
+import { useRouter } from "next/navigation";
 
 export default function NetworkPage() {
     const { UserData, isLoading: isUserLoading } = useUser();
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [network, setNetwork] = useState<NetworkRule[]>([]);
 
@@ -43,7 +45,7 @@ export default function NetworkPage() {
                         id: `ing-${ing.name}`,
                         name: ing.name,
                         type: "External",
-                        address: `${ing.rules[0].host}`, 
+                        address: `${ing.rules[0].host}`,
                         target: `${ing.name} (Service)`,
                         status: "Active"
                     });
@@ -92,7 +94,7 @@ export default function NetworkPage() {
 
     return (
         <div className="w-full p-6 md:p-8 flex flex-col bg-zinc-950 text-zinc-100">
-            
+
             {/* Header */}
             <div className="flex justify-between items-center mb-8 shrink-0">
                 <div>
@@ -106,38 +108,41 @@ export default function NetworkPage() {
                         Visualize rotas de entrada (Ingress) e serviços internos do cluster.
                     </p>
                 </div>
-                <div>
-                    <BtnRefresh onClick={loadData}/>
+                <div className="flex space-x-3">
+                    <button className="px-4 py-2 text-sm rounded-lg border border-blue-500 text-white bg-blue-500 hover:bg-blue-600 cursor-pointer" onClick={() => router.push("/network/new")}>
+                        Nova Regra
+                    </button>
+                    <BtnRefresh onClick={loadData} />
                 </div>
             </div>
 
             {/* Cards de Resumo */}
             {!loading && network.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 shrink-0">
-                    <StatCard 
-                        title="Total de Rotas" 
-                        value={network.length} 
-                        icon={Network} 
-                        color="text-purple-500" 
+                    <StatCard
+                        title="Total de Rotas"
+                        value={network.length}
+                        icon={Network}
+                        color="text-purple-500"
                     />
-                    <StatCard 
-                        title="Acesso Público (Ingress)" 
-                        value={externalCount} 
-                        icon={Wifi} 
-                        color="text-blue-400" 
+                    <StatCard
+                        title="Acesso Público (Ingress)"
+                        value={externalCount}
+                        icon={Wifi}
+                        color="text-blue-400"
                     />
-                    <StatCard 
-                        title="Interno (Cluster IP)" 
-                        value={internalCount} 
-                        icon={Server} 
-                        color="text-emerald-400" 
+                    <StatCard
+                        title="Interno (Cluster IP)"
+                        value={internalCount}
+                        icon={Server}
+                        color="text-emerald-400"
                     />
                 </div>
             )}
 
             {/* Conteúdo Principal */}
             <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col shadow-inner shadow-black/20 space-y-8">
-                
+
                 {/* Header da Tabela */}
                 <div className="px-6 py-3 bg-zinc-900/80 border-b border-zinc-800 flex items-center gap-2 backdrop-blur-sm shrink-0">
                     <ArrowRightLeft size={14} className="text-zinc-500" />
@@ -155,10 +160,10 @@ export default function NetworkPage() {
 
                 {/* Tabela ou Loading ou Empty State */}
                 <div className="flex-1 overflow-auto custom-scroll p-1 relative">
-                    <NetWorkTable rules={network}/>
+                    <NetWorkTable rules={network} />
                 </div>
             </div>
-            
+
             {/* Footer de Status */}
             {!loading && (
                 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-500 px-2">

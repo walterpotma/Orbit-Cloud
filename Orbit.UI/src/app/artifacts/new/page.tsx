@@ -3,8 +3,12 @@
 import { useUser } from "@/context/user";
 import { useState, useEffect } from "react";
 
+import { useRouter } from "next/navigation";
+
 export default function PipelinePage() {
     const { UserData, isLoading } = useUser();
+
+    const router = useRouter();
 
     // Estado para armazenar os dados do formulário
     const [formData, setFormData] = useState({

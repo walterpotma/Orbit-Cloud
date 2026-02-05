@@ -9,9 +9,11 @@ import { Deployments } from "@/features/deploy/services/deployments";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/features/deploy/components/deploy-view";
 import ChartCalender from '@/features/charts/components/chart-calender';
+import { useRouter } from "next/navigation";
 
 export default function DeployPage() {
     const { UserData, isLoading } = useUser();
+    const router = useRouter();
     const [deployments, setDeployments] = useState<any[]>([]);
     const [newDeploy, setNewDeploy] = useState(false);
     const [editDeploy, setEditDeploy] = useState(false);
@@ -54,7 +56,7 @@ export default function DeployPage() {
                 
                 <div className="flex items-center gap-3">
                     <button 
-                        onClick={() => setNewDeploy(true)} 
+                        onClick={() => router.push("/deploy/new")} 
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg shadow-lg shadow-blue-900/20 transition-all transform hover:scale-105 font-medium text-sm"
                     >
                         <Plus size={18} />
