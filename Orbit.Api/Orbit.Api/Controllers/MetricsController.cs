@@ -9,13 +9,11 @@ namespace Orbit.Api.Controllers
     {
         private readonly PrometheusService _prometheusService;
 
-        // Injeção de Dependência do Service que criamos antes
         public MetricsController(PrometheusService prometheusService)
         {
             _prometheusService = prometheusService;
         }
 
-        // GET: api/metrics/cpu/orbitcloud
         [HttpGet("cpu/{namespaceName}")]
         public async Task<IActionResult> GetCpuMetrics(string namespaceName)
         {
@@ -27,14 +25,12 @@ namespace Orbit.Api.Controllers
             return Ok(data);
         }
 
-        // GET: api/metrics/memory/orbitcloud
         [HttpGet("memory/{namespaceName}")]
         public async Task<IActionResult> GetMemoryMetrics(string namespaceName)
         {
             if (string.IsNullOrWhiteSpace(namespaceName))
                 return BadRequest("O namespace é obrigatório.");
 
-            // Nota: Você precisará duplicar o método no Service trocando a query para memória
             var data = await _prometheusService.GetMemoryUsageLast24h(namespaceName);
 
             return Ok(data);

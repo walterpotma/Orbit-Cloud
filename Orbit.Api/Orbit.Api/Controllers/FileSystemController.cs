@@ -16,10 +16,6 @@ namespace Orbit.Api.Controllers
             _fileSystemService = fileSystemService;
         }
 
-        /// <summary>
-        /// Lista o conteúdo de um diretório.
-        /// </summary>
-        /// <param name="path">O caminho relativo dentro do diretório raiz. Deixe em branco para a raiz.</param>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

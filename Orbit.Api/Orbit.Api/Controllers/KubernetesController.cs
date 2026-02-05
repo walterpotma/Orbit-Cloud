@@ -44,8 +44,6 @@ namespace Orbit.Api.Controllers
             {
                 var createdDeployment = await _kubernetesService.CreateDeploymentAsync(request, namespaces);
 
-                // Ajustei o CreatedAtAction para apontar para um Get específico (se tiver)
-                // Se não tiver get by name, pode deixar GetAllDeployments mesmo
                 return CreatedAtAction(
                     nameof(GetAllDeployments),
                     new { namespaces = namespaces },
@@ -54,7 +52,6 @@ namespace Orbit.Api.Controllers
             }
             catch (k8s.Autorest.HttpOperationException ex)
             {
-                // O erro real geralmente está em ex.Response.Content
                 return BadRequest($"Erro no Kubernetes: {ex.Message} - {ex.Response.Content}");
             }
         }
