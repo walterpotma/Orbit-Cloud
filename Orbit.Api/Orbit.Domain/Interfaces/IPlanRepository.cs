@@ -1,5 +1,5 @@
-﻿using Orbit.Api.Model;
-namespace Orbit.Api.Repository.Interface
+﻿using Orbit.Domain.Entities;
+namespace Orbit.Domain.Interfaces
 {
     public interface IPlanRepository
     {

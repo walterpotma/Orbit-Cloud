@@ -1,17 +1,17 @@
 ﻿using LibGit2Sharp;
 using Microsoft.EntityFrameworkCore;
-using Orbit.Api.Data;
-using Orbit.Api.Dto.github;
-using Orbit.Api.Dto.Github;
-using Orbit.Api.Dto_s;
-using Orbit.Api.Model;
-using Orbit.Api.Repository.Interface;
+using Orbit.Infraestructure.Persistence;
+using Orbit.Application.DTOs.Github;
+using Orbit.Application.DTOs.Github;
+using Orbit.Application.DTOs.Github;
+using Orbit.Domain.Entities;
+using Orbit.Domain.Interfaces;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
-namespace Orbit.Api.Repository
+namespace Orbit.Infraestructure.Repositories
 {
     public class GithubRepository : IGithubRepository
     {

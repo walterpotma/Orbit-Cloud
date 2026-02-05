@@ -1,6 +1,6 @@
-﻿using Orbit.Api.Repository.Interface;
+﻿using Orbit.Domain.Interfaces;
 
-namespace Orbit.Api.Repository
+namespace Orbit.Infraestructure.Repositories
 {
     public class FileSystemRepository : IFileSystemRepository
     {

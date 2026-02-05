@@ -1,4 +1,4 @@
-﻿namespace Orbit.Api.Repository.Interface
+﻿namespace Orbit.Domain.Interfaces
 {
     public interface IRegistryRepository
     {

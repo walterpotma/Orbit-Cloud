@@ -3,7 +3,7 @@ using k8s.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Orbit.Api.Repository.Interface
+namespace Orbit.Domain.Interfaces
 {
     public interface IKubernetesRepository
     {

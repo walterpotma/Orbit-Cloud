@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Orbit.Api.Data;
-using Orbit.Api.Model;
-using Orbit.Api.Repository.Interface;
+using Orbit.Infraestructure.Persistence;
+using Orbit.Domain.Entities;
+using Orbit.Domain.Interfaces;
 using System.Text.RegularExpressions;
 
-namespace Orbit.Api.Repository
+namespace Orbit.Infraestructure.Repositories
 {
     public class AccountRepository : IAccountRepository
     {

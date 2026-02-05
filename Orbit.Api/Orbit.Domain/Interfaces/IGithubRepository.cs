@@ -1,9 +1,9 @@
-﻿using Orbit.Api.Dto.github;
-using Orbit.Api.Dto.Github;
-using Orbit.Api.Model;
+﻿using Orbit.Application.DTOs.Github;
+using Orbit.Application.DTOs.Github;
+using Orbit.Application.Entities;
 using System.Security.Claims;
 
-namespace Orbit.Api.Repository.Interface
+namespace Orbit.Domain.Interfaces
 {
     public interface IGithubRepository
     {

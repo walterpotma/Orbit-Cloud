@@ -1,6 +1,6 @@
-﻿using Orbit.Api.Model;
+﻿using Orbit.Domain.Entities;
 
-namespace Orbit.Api.Repository.Interface
+namespace Orbit.Domain.Interfaces
 {
     public interface IOrganizationRepository
     {
