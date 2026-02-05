@@ -44,10 +44,10 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
-  # tls:
-  #   - hosts:
-  #       - orbitcloud.com.br
-  #     secretName: orbitnet-default-cert 
+  tls:
+    - hosts:
+        - orbitcloud.com.br
+      secretName: orbitcloud-tls-secret
   rules:
     - host: orbitcloud.com.br
       http:
