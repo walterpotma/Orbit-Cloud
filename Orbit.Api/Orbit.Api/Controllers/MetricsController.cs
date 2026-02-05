@@ -3,6 +3,8 @@ using Orbit.Api.Service;
 
 namespace Orbit.Api.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class MetricsController : ControllerBase
     {
         private readonly PrometheusService _prometheusService;
