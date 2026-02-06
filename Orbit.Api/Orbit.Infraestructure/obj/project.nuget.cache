@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "j8hgtLYSsLw=",
+  "dgSpecHash": "FuDF5O5sDa0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infraestructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\walte\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
     "C:\\Users\\walte\\.nuget\\packages\\kubernetesclient\\18.0.13\\kubernetesclient.18.0.13.nupkg.sha512",

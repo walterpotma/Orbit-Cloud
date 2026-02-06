@@ -13,7 +13,7 @@ WORKDIR /src
 COPY ["Orbit.Api/Orbit.Api.csproj", "Orbit.Api/"]
 COPY ["Orbit.Application/Orbit.Application.csproj", "Orbit.Application/"]
 COPY ["Orbit.Domain/Orbit.Domain.csproj", "Orbit.Domain/"]
-COPY ["Orbit.Infrastructure/Orbit.Infrastructure.csproj", "Orbit.Infrastructure/"]
+COPY ["Orbit.Infraestructure/Orbit.Infraestructure.csproj", "Orbit.Infraestructure/"]
 
 RUN dotnet restore "Orbit.Api/Orbit.Api.csproj"
 
