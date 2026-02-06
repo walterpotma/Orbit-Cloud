@@ -15,7 +15,7 @@ export default function Table({ deployments }: TableProps) {
                     onAction={() => window.location.href = '/deploy/new'}
                 />
             ) : (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-4 px-6 py-10">
                     {deployments.map(deploy => (
                         <CardDeploy
                             key={deploy.name}
