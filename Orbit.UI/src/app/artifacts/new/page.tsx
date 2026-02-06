@@ -53,6 +53,7 @@ export default function PipelinePage() {
 
         try {
             // Converte objeto para Query String (necessário para [FromQuery] no C#)
+            formData.appPath = formData.appName;
             const queryParams = new URLSearchParams(formData).toString();
 
             // Endpoint alterado para /pipeline
@@ -176,7 +177,7 @@ export default function PipelinePage() {
                     </div>
 
                     {/* App Path */}
-                    <div className="flex flex-col gap-2">
+                    {/* <div className="flex flex-col gap-2">
                         <label htmlFor="appPath" className="text-sm font-medium text-zinc-300">Caminho da App (Contexto)</label>
                         <input
                             type="text"
@@ -189,7 +190,7 @@ export default function PipelinePage() {
                             className="bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                         />
                         <span className="text-xs text-zinc-500">Deixe em branco ou "." se o Dockerfile estiver na raiz.</span>
-                    </div>
+                    </div> */}
 
                     {/* Botão de Submit */}
                     <button
