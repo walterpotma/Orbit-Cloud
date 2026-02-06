@@ -56,7 +56,7 @@ export default function PipelinePage() {
             const queryParams = new URLSearchParams(formData).toString();
 
             // Endpoint alterado para /pipeline
-            const response = await fetch(`https://api.orbitcloud.com.br/Build/pipeline?${queryParams}`, {
+            const response = await fetch(`https://api.orbitcloud.com.br/Build/artifact?${queryParams}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
