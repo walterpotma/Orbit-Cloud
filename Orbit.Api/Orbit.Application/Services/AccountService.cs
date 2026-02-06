@@ -25,7 +25,6 @@ namespace Orbit.Application.Services
             {
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
-                await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "registry"));
 
                 try
                 {
