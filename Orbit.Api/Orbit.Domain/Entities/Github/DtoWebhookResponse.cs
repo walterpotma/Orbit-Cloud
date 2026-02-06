@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Orbit.Application.DTOs.Github
+namespace Orbit.Domain.Entities.Github
 {
     public class DtoWebhookResponse
     {

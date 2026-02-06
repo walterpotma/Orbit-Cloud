@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Orbit.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d937b099f496012d7e0e6775d538fe5a1ad78eb4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a54f7db5fdeecfe0b6b62926407415853a181765")]
 [assembly: System.Reflection.AssemblyProductAttribute("Orbit.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Orbit.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
