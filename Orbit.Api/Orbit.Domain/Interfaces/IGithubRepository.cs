@@ -1,6 +1,5 @@
-﻿using Orbit.Application.DTOs.Github;
-using Orbit.Application.DTOs.Github;
-using Orbit.Application.Entities;
+﻿using Orbit.Domain.Entities;
+using Orbit.Domain.Entities.Github;
 using System.Security.Claims;
 
 namespace Orbit.Domain.Interfaces
