@@ -23,8 +23,8 @@ const NAV_ITEMS = [
     { label: "Artefatos", href: "/artifacts", icon: Layers },
     { label: "Deploys", href: "/deploy", icon: Rocket },
     { label: "Rede", href: "/network", icon: Globe },
-    { label: "Cofre", href: "/vault", icon: Shield },
-    { label: "Armazenamento", href: "/storage", icon: HardDrive },
+    // { label: "Cofre", href: "/vault", icon: Shield },
+    // { label: "Armazenamento", href: "/storage", icon: HardDrive },
 ];
 
 export default function Nav() {

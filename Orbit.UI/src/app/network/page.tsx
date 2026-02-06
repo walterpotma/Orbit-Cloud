@@ -154,9 +154,9 @@ export default function NetworkPage() {
                     </span>
                 </div>
 
-                <div>
+                {/* <div>
                     <ChartNetTraffic />
-                </div>
+                </div> */}
 
                 {/* Tabela ou Loading ou Empty State */}
                 <div className="flex-1 overflow-auto custom-scroll p-1 relative">

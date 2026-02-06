@@ -23,8 +23,8 @@ const NAV_ITEMS = [
     { label: "Artefatos", href: "/artifacts", icon: Layers, color: "purple-500" },
     { label: "Deploys", href: "/deploy", icon: Rocket, color: "blue-500" },
     { label: "Rede", href: "/network", icon: Globe, color: "purple-500" },
-    { label: "Cofre", href: "/vault", icon: Shield, color: "amber-500" },
-    { label: "Armazenamento", href: "/storage", icon: HardDrive, color: "purple-500" }
+    // { label: "Cofre", href: "/vault", icon: Shield, color: "amber-500" },
+    // { label: "Armazenamento", href: "/storage", icon: HardDrive, color: "purple-500" }
 ];
 
 export default function Nav() {

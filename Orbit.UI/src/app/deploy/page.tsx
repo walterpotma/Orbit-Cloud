@@ -67,10 +67,6 @@ export default function DeployPage() {
                     </div>
                 </div>
             </div>
-            
-            <div>
-                <ChartCalender/>
-            </div>
 
             {/* Container da Tabela com Estilo Glass/Card */}
             <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-2xl flex flex-col shadow-inner shadow-black/20">
@@ -91,6 +87,10 @@ export default function DeployPage() {
                     <TableDeploy deployments={deployments} />
                 </div>
             </div>
+
+            {/* <div>
+                <ChartCalender/>
+            </div> */}
 
             {/* Modals */}
             {newDeploy && (
