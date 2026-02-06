@@ -48,8 +48,8 @@ export default function Home() {
     const cpuLabelLimits = namespaceMetrics?.cpuLimit || "0m";
     const memLabelLimits = namespaceMetrics?.memoryLimit || "0 MiB";
 
-    const cpuPercent = Math.min((rawCpu / rawCpuLimits) * 100, 100);
-    const memPercent = Math.min((rawMem / rawMemLimits) * 100, 100);
+    const cpuPercent = rawCpuLimits > 0 ? Math.min((rawCpu / rawCpuLimits) * 100, 100) : 0;
+    const memPercent = rawMemLimits > 0 ? Math.min((rawMem / rawMemLimits) * 100, 100) : 0;
 
     useEffect(() => {
         if (isLoading || !UserData || !UserData.githubID) return;
@@ -70,7 +70,7 @@ export default function Home() {
             .then((res: any) => setCpuMetrics(res.data))
             .catch((err: any) => console.error("Error fetching Metrics CPU:", err));
 
-        Prometheus.CPU(UserData.githubID)
+        Prometheus.Memory(UserData.githubID)
             .then((res: any) => setMemMetrics(res.data))
             .catch((err: any) => console.error("Error fetching Metrics CPU:", err));
     };
