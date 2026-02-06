@@ -1,9 +1,9 @@
 ﻿using LibGit2Sharp;
-using Microsoft.EntityFrameworkCore;
 using Orbit.Domain.Entities.Github;
 using Orbit.Domain.Interfaces;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace Orbit.Infraestructure.Repositories
 {
