@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Orbit.Domain.Entities;
 
-namespace Orbit.Infraestructure.Persistence
+namespace Orbit.Infrastructure.Data
 {
     public class OrbitDbContext : DbContext
     {

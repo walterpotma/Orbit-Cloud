@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Orbit.Api.Dto.account.cs;
-using Orbit.Api.Dto.Github;
-using Orbit.Api.Service;
-using Orbit.Api.Service.Interface;
+using Orbit.Application.DTOs.account.cs;
+using Orbit.Application.DTOs.Github;
+using Orbit.Application.Services;
+using Orbit.Application.Interfaces;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;

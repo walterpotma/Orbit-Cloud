@@ -1,8 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "E7nB5qUlwPs=",
-  "success": true,
+  "dgSpecHash": "/LYxLB1S3Mw=",
+  "success": false,
   "projectFilePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1108",
+      "level": "Error",
+      "message": "Ciclo detectado. \r\n  Orbit.Domain -> Orbit.Api -> Orbit.Domain.",
+      "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
+      "filePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
+      "libraryId": "Orbit.Domain",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Orbit.Api.Dto.FileSystem;
-using Orbit.Api.Service.Interface;
+using Orbit.Application.DTOs.FileSystem;
+using Orbit.Application.Interfaces;
 
 namespace Orbit.Api.Controllers
 {

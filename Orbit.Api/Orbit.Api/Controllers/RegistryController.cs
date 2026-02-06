@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Orbit.Api.Dto.Registry;
-using Orbit.Api.Service;
-using Orbit.Api.Service.Interface;
+using Orbit.Application.DTOs.Registry;
+using Orbit.Application.Services;
+using Orbit.Application.Interfaces;
 
 namespace Orbit.Api.Controllers
 {
