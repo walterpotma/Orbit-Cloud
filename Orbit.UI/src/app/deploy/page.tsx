@@ -8,7 +8,7 @@ import BtnRefresh from "@/components/ui/button-refresh";
 import { Deployments } from "@/features/deploy/services/deployments";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/features/deploy/components/deploy-view";
-import ChartCalender from '@/features/charts/components/chart-calender';
+import ChartCalender from '@/components/charts/chart-calender';
 import { useRouter } from "next/navigation";
 
 export default function DeployPage() {

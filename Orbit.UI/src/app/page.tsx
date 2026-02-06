@@ -11,8 +11,8 @@ import TableDeploy from "@/features/deploy/components/deploy-view";
 import ButtonRefresh from "@/components/ui/button-refresh";
 import StatusCard from "@/features/dashboard/components/dash-status-card";
 import CircularProgress from "@/features/dashboard/components/dash-circular-progress";
-import ChartLine from "@/features/charts/components/chart-line";
-import ChartBar from "@/features/charts/components/chart-bar";
+import ChartLine from "@/components/charts/chart-line";
+import ChartBar from "@/components/charts/chart-bar";
 import {
     Activity,
     CheckCircle2,
@@ -148,7 +148,10 @@ export default function Home() {
             </div>
 
             <div className="w-full flex flex-col lg:flex-row justify-between gap-10">
-                <ChartLine />
+                <ChartLine 
+                    tittle="USO de CPU"
+                    subtittle="Ultima Hora"
+                />
                 <ChartBar />
             </div>
 

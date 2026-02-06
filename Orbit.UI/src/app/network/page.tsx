@@ -15,7 +15,7 @@ import { Services, Ingress } from "@/features/network/services/network";
 import { useUser } from "@/context/user";
 import NetWorkTable from "@/features/network/components/network-view";
 import { NetworkRule } from "@/features/network/types/view";
-import ChartNetTraffic from "@/features/charts/components/chart-net-trafik";
+import ChartNetTraffic from "@/components/charts/chart-net-trafik";
 import { useRouter } from "next/navigation";
 
 export default function NetworkPage() {
