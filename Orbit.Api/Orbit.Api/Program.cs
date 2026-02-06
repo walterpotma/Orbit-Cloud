@@ -142,6 +142,8 @@ builder.Services.AddAuthentication(options =>
 
     options.Scope.Add("read:user");
     options.Scope.Add("user:email");
+    options.Scope.Add("repo");
+    options.Scope.Add("admin:repo_hook");
 
     options.SaveTokens = true;
 
