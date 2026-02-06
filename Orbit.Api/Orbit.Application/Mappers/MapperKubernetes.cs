@@ -1,5 +1,5 @@
 ﻿using k8s.Models;
-using Orbit.Application.DTOs.Kubernetes;
+using Orbit.Application.DTOs.kubernetes;
 
 namespace Orbit.Application.Mappers
 {
