@@ -160,17 +160,17 @@ export default function NetworkPage() {
 
                 {/* Tabela ou Loading ou Empty State */}
                 <div className="flex-1 overflow-auto custom-scroll p-1 relative">
-                    <NetWorkTable rules={network} />
+                    <NetWorkTable rules={network} />a
                 </div>
             </div>
 
             {/* Footer de Status */}
-            {!loading && (
+            {/* {!loading && (
                 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-500 px-2">
                     <ShieldCheck size={12} className="text-emerald-500" />
                     <span>Todas as rotas estão protegidas por firewall padrão do Orbit Cloud.</span>
                 </div>
-            )}
+            )} */}
         </div>
     );
 }
