@@ -266,7 +266,7 @@ namespace Orbit.Application.Mappers
                                 },
                                 Limits = new Dictionary<string, ResourceQuantity>
                                 {
-                                    { "memory", new ResourceQuantity("512Mi") },
+                                    { "memory", new ResourceQuantity("256Mi") },
                                     { "cpu", new ResourceQuantity("100m") }
                                 }
                             }

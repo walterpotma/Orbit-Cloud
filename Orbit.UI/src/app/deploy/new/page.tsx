@@ -311,11 +311,11 @@ export default function NewDeployPage() {
                         </section>
 
                         {/* Logs de Deploy */}
-                        {deploying && (
+                        {/* {deploying && (
                             <div className="mt-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
                                 <CommandOutput />
                             </div>
-                        )}
+                        )} */}
                     </div>
 
                     {/* Footer de Ação */}
