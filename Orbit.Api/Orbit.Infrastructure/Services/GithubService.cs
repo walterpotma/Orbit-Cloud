@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Orbit.Application.Helpers;
 using Microsoft.AspNetCore.Authentication;
 
-namespace Orbit.Infraestrutura.Services
+namespace Orbit.Infraestructure.Services
 {
     public class GithubService : IGithubService
     {

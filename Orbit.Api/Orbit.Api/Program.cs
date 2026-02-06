@@ -3,15 +3,19 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
-using Orbit.Api.Data;
-using Orbit.Api.Mappers;
-using Orbit.Api.Repository;
-using Orbit.Api.Repository.Interface;
-using Orbit.Api.Service;
-using Orbit.Api.Service.Interface;
+using Orbit.Application.Interfaces;
+using Orbit.Application.Interfaces.Services;
+using Orbit.Application.Services;
+using Orbit.Application.Mappers;
+using Orbit.Domain.Interfaces;
+using Orbit.Infrastructure.Repositories;
+using Orbit.Infrastructure.Services;
+using Orbit.Infrastructure.Interfaces;
 using System.Security.Claims;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.HttpOverrides;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,42 +73,23 @@ builder.Services.AddSingleton<Docker.DotNet.IDockerClient>(sp =>
     
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     {
-        // Se você estiver rodando no Visual Studio no Windows
         dockerUri = new Uri("npipe://./pipe/docker_engine");
     }
     else
     {
-        // Se estiver rodando no K3s (Linux)
-        // Isso vai conectar no arquivo /var/run/docker.sock que montamos no deployment
         dockerUri = new Uri("unix:///var/run/docker.sock");
     }
     
     return new Docker.DotNet.DockerClientConfiguration(dockerUri).CreateClient();
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
-
-builder.Services.AddDbContext<OrbitDbContext>(options =>
-    options.UseNpgsql(connectionString));
-
-builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<OrganizationService>();
-builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-builder.Services.AddScoped<PlanService>();
-builder.Services.AddScoped<IPlanRepository, PlanRepository>();
-builder.Services.AddScoped<RuleService>();
-builder.Services.AddScoped<IRuleRepository, RuleRepository>();
 
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<PrometheusService>();
-// Novo modelo de arquitetura da api
-
+builder.Services.AddScoped<IPrometheusService, PrometheusService>();
 #region Github Scoped
 builder.Services.AddScoped<IGithubService, GithubService>();
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
-builder.Services.AddScoped<Orbit.Api.Service.GithubService>();
 #endregion
 
 #region Kubernetes Scoped
@@ -118,6 +103,9 @@ builder.Services.AddScoped<IFileSystemService, FileSystemService>();
 
 builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
 builder.Services.AddScoped<IRegistryService, RegistryService>();
+
+
+builder.Services.AddScoped<IDockerService, DockerService>();
 
 #region Authentication Github
 builder.Services.AddAuthentication(options =>
@@ -179,8 +167,6 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
-
-builder.Services.AddScoped<DockerService>();
 
 var app = builder.Build();
 

@@ -3,7 +3,7 @@ using Orbit.Application.Helpers;
 using System;
 using System.Threading.Tasks;
 
-namespace Orbit.Infraestrutura.Services
+namespace Orbit.Infraestructure.Services
 {
     public class DockerService
     {

@@ -5,7 +5,7 @@ using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
 using YamlDotNet.Core.Tokens;
 
-namespace Orbit.Infraestrutura.Services
+namespace Orbit.Infraestructure.Services
 {
     public class KubernetesService : IKubernetesService
     {

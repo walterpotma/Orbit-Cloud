@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Orbit.Application.DTOs; // <--- Importante: Usa o DTO da Application
+using Orbit.Application.DTOs;
 using Orbit.Application.Interfaces.Services;
 
-namespace Orbit.Infrastructure.Services // Padronizado para Infrastructure
+namespace Orbit.Infraestructure.Services
 {
     public class PrometheusService : IPrometheusService
     {

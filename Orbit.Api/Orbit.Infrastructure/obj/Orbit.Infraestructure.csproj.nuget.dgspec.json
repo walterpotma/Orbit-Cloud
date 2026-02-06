@@ -1,0 +1,258 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infraestructure.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
+        "projectName": "Orbit.Application",
+        "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
+        "packagesPath": "C:\\Users\\walte\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\walte\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj": {
+                "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
+        "projectName": "Orbit.Domain",
+        "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
+        "packagesPath": "C:\\Users\\walte\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\walte\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "KubernetesClient": {
+              "target": "Package",
+              "version": "[18.0.13, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infraestructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infraestructure.csproj",
+        "projectName": "Orbit.Infraestructure",
+        "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infraestructure.csproj",
+        "packagesPath": "C:\\Users\\walte\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\walte\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj": {
+                "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj"
+              },
+              "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj": {
+                "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "KubernetesClient": {
+              "target": "Package",
+              "version": "[18.0.13, )"
+            },
+            "LibGit2Sharp": {
+              "target": "Package",
+              "version": "[0.31.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Abstractions": {
+              "target": "Package",
+              "version": "[2.3.9, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.3.9, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[10.0.2, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[10.0.2, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[10.0.2, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

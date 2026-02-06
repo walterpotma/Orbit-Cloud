@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orbit.Domain", "Orbit.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orbit.Application", "Orbit.Application\Orbit.Application.csproj", "{8A207AC1-062C-4A83-8666-727C953379D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orbit.Infrastructure", "Orbit.Infrastructure\Orbit.Infrastructure.csproj", "{3134676C-6FCF-4AD9-8F10-07017927F47D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orbit.Infraestructure", "Orbit.Infrastructure\Orbit.Infraestructure.csproj", "{3134676C-6FCF-4AD9-8F10-07017927F47D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,7 +3,7 @@ using Orbit.Application.DTOs.Registry;
 using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
 
-namespace Orbit.Infraestrutura.Services
+namespace Orbit.Infraestructure.Services
 {
     public class RegistryService : IRegistryService
     {

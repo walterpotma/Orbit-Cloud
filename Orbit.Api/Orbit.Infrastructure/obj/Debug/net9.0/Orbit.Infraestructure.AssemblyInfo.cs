@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Orbit.Application")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Orbit.Infraestructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+106411f47f5b324fd1bbaf882cbcebba4fce0490")]
-[assembly: System.Reflection.AssemblyProductAttribute("Orbit.Application")]
-[assembly: System.Reflection.AssemblyTitleAttribute("Orbit.Application")]
+[assembly: System.Reflection.AssemblyProductAttribute("Orbit.Infraestructure")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Orbit.Infraestructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Gerado pela classe WriteCodeFragment do MSBuild.

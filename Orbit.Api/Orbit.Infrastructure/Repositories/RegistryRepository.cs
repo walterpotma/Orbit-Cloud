@@ -1,9 +1,10 @@
 ﻿using Orbit.Domain.Interfaces;
-using System.Net.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
-namespace Orbit.Infraestrutura.Repositories
+namespace Orbit.Infraestructure.Repositories
 {
     public class RegistryRepository : IRegistryRepository
     {
