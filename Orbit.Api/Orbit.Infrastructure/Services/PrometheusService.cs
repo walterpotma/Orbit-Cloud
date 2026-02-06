@@ -5,8 +5,8 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Orbit.Application.DTOs;
 using Orbit.Application.Interfaces.Services;
-
-namespace Orbit.Infraestructure.Services
+    
+namespace Orbit.Infrastructure.Services
 {
     public class PrometheusService : IPrometheusService
     {

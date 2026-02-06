@@ -1239,9 +1239,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infraestructure.csproj",
-      "projectName": "Orbit.Infraestructure",
-      "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infraestructure.csproj",
+      "projectUniqueName": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
+      "projectName": "Orbit.Infrastructure",
+      "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\walte\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",

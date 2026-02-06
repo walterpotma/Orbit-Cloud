@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration; // <--- Importante
 using Orbit.Application.Helpers;
+using Orbit.Application.Interfaces;
 using System;
 using System.Threading.Tasks;
 
-namespace Orbit.Infraestructure.Services
+namespace Orbit.Infrastructure.Services
 {
-    public class DockerService
+    public class DockerService : IDockerService
     {
         // 1. Variável para guardar a configuração
         private readonly IConfiguration _configuration;

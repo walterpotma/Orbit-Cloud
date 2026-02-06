@@ -1,6 +1,6 @@
 ﻿using Orbit.Domain.Interfaces;
 
-namespace Orbit.Infraestructure.Repositories
+namespace Orbit.Infrastructure.Repositories
 {
     public class FileSystemRepository : IFileSystemRepository
     {

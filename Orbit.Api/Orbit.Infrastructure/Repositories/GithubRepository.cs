@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
-namespace Orbit.Infraestructure.Repositories
+namespace Orbit.Infrastructure.Repositories
 {
     public class GithubRepository : IGithubRepository
     {

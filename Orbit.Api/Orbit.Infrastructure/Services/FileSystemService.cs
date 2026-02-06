@@ -3,7 +3,7 @@ using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
 using Microsoft.Extensions.Configuration; // Necessário para IConfiguration
 
-namespace Orbit.Infraestructure.Services
+namespace Orbit.Infrastructure.Services
 {
     public class FileSystemService : IFileSystemService
     {
