@@ -95,7 +95,7 @@ export default function PipelinePage() {
             <div className="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-xl p-8 shadow-2xl">
 
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-white mb-2">Build Pipeline</h1>
+                    <h1 className="text-3xl font-bold text-white mb-2">Build Artefato</h1>
                     <p className="text-zinc-400 text-sm">
                         Preencha os dados para clonar, gerar Dockerfile e publicar a imagem.
                     </p>
