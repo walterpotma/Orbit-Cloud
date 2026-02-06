@@ -1,20 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UGMy5+I+mUk=",
-  "success": false,
+  "dgSpecHash": "RZWDXmWSJsw=",
+  "success": true,
   "projectFilePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
   "expectedPackageFiles": [],
-  "logs": [
-    {
-      "code": "NU1108",
-      "level": "Error",
-      "message": "Ciclo detectado. \r\n  Orbit.Infrastructure -> Orbit.Api -> Orbit.Infrastructure.",
-      "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
-      "filePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
-      "libraryId": "Orbit.Infrastructure",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }

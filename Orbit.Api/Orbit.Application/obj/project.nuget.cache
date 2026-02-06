@@ -1,20 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aizjEZBCQOI=",
-  "success": false,
+  "dgSpecHash": "H7hI5DL/FFk=",
+  "success": true,
   "projectFilePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
   "expectedPackageFiles": [],
-  "logs": [
-    {
-      "code": "NU1108",
-      "level": "Error",
-      "message": "Ciclo detectado. \r\n  Orbit.Application -> Orbit.Api -> Orbit.Application.",
-      "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
-      "filePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
-      "libraryId": "Orbit.Application",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }

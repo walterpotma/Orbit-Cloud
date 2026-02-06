@@ -6,10 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Orbit.Application\Orbit.Application.csproj" />
-    <ProjectReference Include="..\Orbit.Infrastructure\Orbit.Infrastructure.csproj" />
-    <ProjectReference Include="..\Orbit.Api\Orbit.Api.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Orbit.Application\Orbit.Application.csproj" />
-    <ProjectReference Include="..\Orbit.Api\Orbit.Api.csproj" />
     <ProjectReference Include="..\Orbit.Domain\Orbit.Domain.csproj" />
   </ItemGroup>
 

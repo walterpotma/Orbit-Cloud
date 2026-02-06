@@ -2,28 +2,11 @@
   "version": 3,
   "targets": {
     "net10.0": {
-      "Orbit.Api/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
-        "dependencies": {
-          "Orbit.Application": "1.0.0",
-          "Orbit.Domain": "1.0.0",
-          "Orbit.Infrastructure": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/Orbit.Api.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Orbit.Api.dll": {}
-        }
-      },
       "Orbit.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "Orbit.Api": "1.0.0",
-          "Orbit.Domain": "1.0.0",
-          "Orbit.Infrastructure": "1.0.0"
+          "Orbit.Domain": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Orbit.Application.dll": {}
@@ -35,11 +18,6 @@
       "Orbit.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
-        "dependencies": {
-          "Orbit.Api": "1.0.0",
-          "Orbit.Application": "1.0.0",
-          "Orbit.Infrastructure": "1.0.0"
-        },
         "compile": {
           "bin/placeholder/Orbit.Domain.dll": {}
         },
@@ -50,11 +28,6 @@
     }
   },
   "libraries": {
-    "Orbit.Api/1.0.0": {
-      "type": "project",
-      "path": "../Orbit.Api/Orbit.Api.csproj",
-      "msbuildProject": "../Orbit.Api/Orbit.Api.csproj"
-    },
     "Orbit.Application/1.0.0": {
       "type": "project",
       "path": "../Orbit.Application/Orbit.Application.csproj",
@@ -68,7 +41,6 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Orbit.Api >= 1.0.0",
       "Orbit.Application >= 1.0.0",
       "Orbit.Domain >= 1.0.0"
     ]
@@ -105,9 +77,6 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Orbit.Api.csproj": {
-              "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Api\\Orbit.Api.csproj"
-            },
             "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj": {
               "projectPath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj"
             },
@@ -425,16 +394,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1108",
-      "level": "Error",
-      "message": "Ciclo detectado. \r\n  Orbit.Infrastructure -> Orbit.Api -> Orbit.Infrastructure.",
-      "libraryId": "Orbit.Infrastructure",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  }
 }
