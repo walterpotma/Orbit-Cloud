@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/libs/axios";
 
-const controller = "kubernetes/prometheus";
+const controller = "prometheus";
 
 export class Prometheus {
     static CPU(namespace: string) {

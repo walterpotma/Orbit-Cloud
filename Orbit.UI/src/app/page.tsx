@@ -26,13 +26,11 @@ import {
 } from "lucide-react";
 import { Prometheus } from "@/features/dashboard/services/prometheus";
 
-const MAX_CPU_MILLICORES = 1000;
-const MAX_MEMORY_BYTES = 512 * 1024 * 1024;
-
 export default function Home() {
     const { UserData, isLoading } = useUser();
     const router = useRouter();
     const [cpuMetrics, setCpuMetrics] = useState<any[]>([]);
+    const [memMetrics, setMemMetrics] = useState<any[]>([]);
 
     const [deployments, setDeployments] = useState<any[]>([]);
     const [succededDeployments, setSuccededDeployments] = useState<any[]>([]);
@@ -68,9 +66,12 @@ export default function Home() {
             .then((res: any) => setNamespaceMetrics(res.data))
             .catch((err: any) => console.error("Error fetching Metrics:", err));
 
-        
         Prometheus.CPU(UserData.githubID)
             .then((res: any) => setCpuMetrics(res.data))
+            .catch((err: any) => console.error("Error fetching Metrics CPU:", err));
+
+        Prometheus.CPU(UserData.githubID)
+            .then((res: any) => setMemMetrics(res.data))
             .catch((err: any) => console.error("Error fetching Metrics CPU:", err));
     };
 
@@ -160,7 +161,11 @@ export default function Home() {
                     subtittle="Monitoramento em Tempo Real"
                     data={cpuMetrics}
                 />
-                <ChartBar />
+                <ChartBar
+                    title="Consumo de Memória (Pod: Orbit-API)"
+                    subtitle="Métricas das últimas 24 horas"
+                    data={memMetrics}
+                />
             </div>
 
             <div className="w-full bg-zinc-900/30 border border-zinc-800 rounded-2xl overflow-hidden">
