@@ -1,13 +1,7 @@
 ﻿using LibGit2Sharp;
 using Microsoft.EntityFrameworkCore;
-using Orbit.Infraestructure.Persistence;
-using Orbit.Application.DTOs.Github;
-using Orbit.Application.DTOs.Github;
-using Orbit.Application.DTOs.Github;
-using Orbit.Domain.Entities;
+using Orbit.Domain.Entities.Github;
 using Orbit.Domain.Interfaces;
-using System.Configuration;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 

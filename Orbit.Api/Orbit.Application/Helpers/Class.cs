@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Text;
 
-namespace Orbit.Api.Helpers
+namespace Orbit.Application.Helpers
 {
     public static class ShellHelper
     {
