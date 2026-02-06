@@ -1,4 +1,4 @@
-﻿namespace Orbit.Domain.Entities.github
+﻿namespace Orbit.Domain.Entities.Github;
 {
     public class DtoCloneRequest
     {
