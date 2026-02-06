@@ -5,11 +5,11 @@ namespace Orbit.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class MetricsController : ControllerBase
+    public class PrometheusController : ControllerBase
     {
         private readonly IPrometheusService _prometheusService;
 
-        public MetricsController(IPrometheusService prometheusService)
+        public PrometheusController(IPrometheusService prometheusService)
         {
             _prometheusService = prometheusService;
         }

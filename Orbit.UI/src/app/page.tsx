@@ -24,6 +24,7 @@ import {
     Server,
     ArrowRight
 } from "lucide-react";
+import { Prometheus } from "@/features/dashboard/services/prometheus";
 
 const MAX_CPU_MILLICORES = 1000;
 const MAX_MEMORY_BYTES = 512 * 1024 * 1024;
@@ -31,6 +32,7 @@ const MAX_MEMORY_BYTES = 512 * 1024 * 1024;
 export default function Home() {
     const { UserData, isLoading } = useUser();
     const router = useRouter();
+    const [cpuMetrics, setCpuMetrics] = useState<any[]>([]);
 
     const [deployments, setDeployments] = useState<any[]>([]);
     const [succededDeployments, setSuccededDeployments] = useState<any[]>([]);
@@ -47,7 +49,7 @@ export default function Home() {
     const memLabel = namespaceMetrics?.memoryUsage || "0 MiB";
     const cpuLabelLimits = namespaceMetrics?.cpuLimit || "0m";
     const memLabelLimits = namespaceMetrics?.memoryLimit || "0 MiB";
-    
+
     const cpuPercent = Math.min((rawCpu / rawCpuLimits) * 100, 100);
     const memPercent = Math.min((rawMem / rawMemLimits) * 100, 100);
 
@@ -65,6 +67,11 @@ export default function Home() {
         Namespaces.Metrics(UserData.githubID)
             .then((res: any) => setNamespaceMetrics(res.data))
             .catch((err: any) => console.error("Error fetching Metrics:", err));
+
+        
+        Prometheus.CPU(UserData.githubID)
+            .then((res: any) => setCpuMetrics(res.data))
+            .catch((err: any) => console.error("Error fetching Metrics CPU:", err));
     };
 
     useEffect(() => {
@@ -148,9 +155,10 @@ export default function Home() {
             </div>
 
             <div className="w-full flex flex-col lg:flex-row justify-between gap-10">
-                <ChartLine 
-                    tittle="USO de CPU"
-                    subtittle="Ultima Hora"
+                <ChartLine
+                    tittle="Uso de CPU"
+                    subtittle="Monitoramento em Tempo Real"
+                    data={cpuMetrics}
                 />
                 <ChartBar />
             </div>
