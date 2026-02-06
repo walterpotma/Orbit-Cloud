@@ -160,7 +160,7 @@ export default function NetworkPage() {
 
                 {/* Tabela ou Loading ou Empty State */}
                 <div className="flex-1 overflow-auto custom-scroll p-1 relative">
-                    <NetWorkTable rules={network} />a
+                    <NetWorkTable rules={network} />
                 </div>
             </div>
 

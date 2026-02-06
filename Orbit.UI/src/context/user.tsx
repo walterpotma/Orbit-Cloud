@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { VARIABLE_API_URL } from "@/types/variables";
 import axios from "axios";
 import { Github } from "@/api/github";
+import { useRouter } from "next/navigation";
+
 
 interface User {
     githubID: string;
@@ -25,6 +27,7 @@ const UserContext = createContext<UserContextType>({} as UserContextType);
 export function UserProvider({ children }: { children: React.ReactNode }) {
     const [UserData, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         async function loadUser() {
@@ -36,6 +39,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             } catch (error) {
                 console.log("Usuário não logado");
                 setUser(null);
+                router.push("/login");
             } finally {
                 setIsLoading(false);
             }
