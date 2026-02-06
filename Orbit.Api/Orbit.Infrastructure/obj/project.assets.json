@@ -107,6 +107,24 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Authentication.Abstractions/2.3.9": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Abstractions": "2.3.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2",
+          "Microsoft.Extensions.Options": "8.0.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Abstractions.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Http.Abstractions/2.3.9": {
         "type": "package",
         "dependencies": {
@@ -580,6 +598,19 @@
         "runtimes/win-arm64/native/git2-3f4182d.dll",
         "runtimes/win-x64/native/git2-3f4182d.dll",
         "runtimes/win-x86/native/git2-3f4182d.dll"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.Abstractions/2.3.9": {
+      "sha512": "QSuA7EQB9nK9Hu3IwHH+K7RNRSwFXi4VzeHBaNtav1eXUFuuejZ4HGMXxRd1yo0HGA1ysIq99gg6ZNs0KdD2jA==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.abstractions/2.3.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Abstractions.xml",
+        "microsoft.aspnetcore.authentication.abstractions.2.3.9.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.abstractions.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Http.Abstractions/2.3.9": {
@@ -1191,6 +1222,7 @@
     "net9.0": [
       "KubernetesClient >= 18.0.13",
       "LibGit2Sharp >= 0.31.0",
+      "Microsoft.AspNetCore.Authentication.Abstractions >= 2.3.9",
       "Microsoft.AspNetCore.Http.Abstractions >= 2.3.9",
       "Microsoft.Extensions.Configuration.Abstractions >= 10.0.2",
       "Microsoft.Extensions.Http >= 10.0.2",
@@ -1264,6 +1296,10 @@
           "LibGit2Sharp": {
             "target": "Package",
             "version": "[0.31.0, )"
+          },
+          "Microsoft.AspNetCore.Authentication.Abstractions": {
+            "target": "Package",
+            "version": "[2.3.9, )"
           },
           "Microsoft.AspNetCore.Http.Abstractions": {
             "target": "Package",

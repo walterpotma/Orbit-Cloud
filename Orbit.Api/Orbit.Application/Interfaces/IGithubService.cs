@@ -1,9 +1,16 @@
-﻿using Orbit.Domain.Entities.Github;
+﻿using Orbit.Application.DTOs; // Se usar DTOs
+using Orbit.Domain.Entities.Github;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Orbit.Application.Interfaces
 {
     public interface IGithubService
     {
+        // --- Adicione este método que estava faltando ---
+        Task CloneRepos(string githubId, string reposURL, string authToken, string appName);
+        // ------------------------------------------------
+
         #region Github Repositories
         Task<IEnumerable<DtoReposResponse>> GetCurrentUserRepositoriesAsync();
         Task<DtoReposResponse> GetCurrentUserRepositoryAsync(string owner, string repoName);
@@ -14,7 +21,7 @@ namespace Orbit.Application.Interfaces
         Task<IEnumerable<DtoWebhookResponse>> GetCurrentUserRepoWebhooksAsync(string owner, string repoName);
         Task<DtoWebhookResponse> GetCurrentUserRepoWebhookIdAsync(string owner, string repoName, int hookId);
         Task<DtoWebhookResponse> CreateCurrentUserRepoWebhookAsync(string owner, string repoName, DtoWebhookRequest request);
-        Task DeleteWebhookAsync (string owner, string repoName, int hookId);
+        Task DeleteWebhookAsync(string owner, string repoName, int hookId);
         #endregion
     }
 }

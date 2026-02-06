@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Orbit.Application.DTOs.Registry;
-using Orbit.Infraestrutura.Repository;
 using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
 

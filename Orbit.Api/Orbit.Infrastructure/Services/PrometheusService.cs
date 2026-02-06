@@ -1,12 +1,16 @@
-﻿using System.Text.Json.Nodes;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+using Orbit.Application.DTOs; // <--- Importante: Usa o DTO da Application
+using Orbit.Application.Interfaces.Services;
 
-namespace Orbit.Infraestrutura.Services
+namespace Orbit.Infrastructure.Services // Padronizado para Infrastructure
 {
-    public class PrometheusService
+    public class PrometheusService : IPrometheusService
     {
         private readonly HttpClient _http;
-
-        // Se estiver testando localmente com port-forward, use: "http://localhost:9090"
         private const string PROMETHEUS_URL = "http://prometheus-server.monitoring.svc.cluster.local";
 
         public PrometheusService(IHttpClientFactory httpClientFactory)
@@ -14,51 +18,48 @@ namespace Orbit.Infraestrutura.Services
             _http = httpClientFactory.CreateClient();
         }
 
-        // --- MÉTODO DE CPU ---
         public async Task<List<MetricPoint>> GetCpuUsageLast24h(string namespaceName)
         {
             var end = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var start = DateTimeOffset.UtcNow.AddHours(-24).ToUnixTimeSeconds();
 
-            // Query CPU: sum(rate(container_cpu_usage_seconds_total...))
+            // Note as aspas escapadas corretamente para C#
             var promQl = $"sum(rate(container_cpu_usage_seconds_total{{namespace=\"{namespaceName}\", container!=\"\"}}[5m]))";
-
             var url = $"{PROMETHEUS_URL}/api/v1/query_range?query={promQl}&start={start}&end={end}&step=3600";
 
             return await FetchAndParse(url);
         }
 
-        // --- MÉTODO DE MEMÓRIA (O QUE FALTOU) ---
         public async Task<List<MetricPoint>> GetMemoryUsageLast24h(string namespaceName)
         {
             var end = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var start = DateTimeOffset.UtcNow.AddHours(-24).ToUnixTimeSeconds();
 
-            // Query RAM: sum(container_memory_working_set_bytes...)
             var promQl = $"sum(container_memory_working_set_bytes{{namespace=\"{namespaceName}\", container!=\"\"}})";
-
-            // step=3600 (1 hora). Se quiser mais detalhe, mude para 900 (15 min)
             var url = $"{PROMETHEUS_URL}/api/v1/query_range?query={promQl}&start={start}&end={end}&step=3600";
 
             return await FetchAndParse(url);
         }
 
-        // --- MÉTODO AUXILIAR PRIVADO (Para não repetir código) ---
         private async Task<List<MetricPoint>> FetchAndParse(string url)
         {
-            var response = await _http.GetAsync(url);
+            try
+            {
+                var response = await _http.GetAsync(url);
+                if (!response.IsSuccessStatusCode) return new List<MetricPoint>();
 
-            if (!response.IsSuccessStatusCode)
+                var jsonString = await response.Content.ReadAsStringAsync();
+                return ParsePrometheusResponse(jsonString);
+            }
+            catch
+            {
                 return new List<MetricPoint>();
-
-            var jsonString = await response.Content.ReadAsStringAsync();
-            return ParsePrometheusResponse(jsonString);
+            }
         }
 
         private List<MetricPoint> ParsePrometheusResponse(string json)
         {
             var result = new List<MetricPoint>();
-
             try
             {
                 var node = JsonNode.Parse(json);
@@ -83,16 +84,12 @@ namespace Orbit.Infraestrutura.Services
             }
             catch
             {
-                // Ignora erros de parse
+                // Ignora falhas de parse
             }
-
             return result;
         }
     }
 
-    public class MetricPoint
-    {
-        public DateTime Time { get; set; }
-        public double Value { get; set; }
-    }
+    // REMOVIDO: public class MetricPoint { ... } 
+    // (Já movemos para Orbit.Application/DTOs/MetricPoint.cs)
 }

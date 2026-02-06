@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Orbit.Application.DTOs.Github;
-using Orbit.Api.Helpers;
+﻿using Microsoft.AspNetCore.Http;
+using Orbit.Domain.Entities.Github;
 using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Orbit.Application.Helpers;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Orbit.Infraestrutura.Services
 {

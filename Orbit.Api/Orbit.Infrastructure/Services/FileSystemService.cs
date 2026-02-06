@@ -1,5 +1,5 @@
 ﻿using Orbit.Application.DTOs.FileSystem;
-using Orbit.Infraestrutura.Repositories.Interface;
+using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
 using Microsoft.Extensions.Configuration; // Necessário para IConfiguration
 

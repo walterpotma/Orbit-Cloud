@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Orbit.Application.Services;
+using Orbit.Application.Interfaces;
 
 namespace Orbit.Api.Controllers
 {
@@ -7,10 +7,10 @@ namespace Orbit.Api.Controllers
     [Route("[controller]")]
     public class BuildController : Controller
     {
-        private readonly GithubService _githubService;
-        private readonly DockerService _dockerService;
+        private readonly IGithubService _githubService;
+        private readonly IDockerService _dockerService;
 
-        public BuildController(GithubService githubService, DockerService dockerService)
+        public BuildController(IGithubService githubService, IDockerService dockerService)
         {
             _githubService = githubService;
             _dockerService = dockerService;

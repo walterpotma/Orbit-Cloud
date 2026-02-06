@@ -1,6 +1,6 @@
 ﻿using k8s.Models;
-using Orbit.Application.DTOs.Kubernetes;
-using Orbit.Api.Mappers;
+using Orbit.Application.DTOs.kubernetes;
+using Orbit.Application.Mappers;
 using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
 using YamlDotNet.Core.Tokens;

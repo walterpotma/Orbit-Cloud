@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Orbit.Application.Services;
+using Orbit.Application.Interfaces.Services;
 
 namespace Orbit.Api.Controllers
 {
@@ -7,9 +7,9 @@ namespace Orbit.Api.Controllers
     [Route("[controller]")]
     public class MetricsController : ControllerBase
     {
-        private readonly PrometheusService _prometheusService;
+        private readonly IPrometheusService _prometheusService;
 
-        public MetricsController(PrometheusService prometheusService)
+        public MetricsController(IPrometheusService prometheusService)
         {
             _prometheusService = prometheusService;
         }

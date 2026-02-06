@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.DTOs.account.cs;
-using Orbit.Application.DTOs.Github;
+using Orbit.Domain.Entities.Github;
 using Orbit.Application.Services;
 using Orbit.Application.Interfaces;
 using System.Linq;
