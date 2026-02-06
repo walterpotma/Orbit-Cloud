@@ -40,7 +40,6 @@ export default function DeployPage() {
     return (
         <div className="w-full p-6 md:p-8 flex flex-col bg-zinc-950 text-zinc-100">
             
-            {/* Header */}
             <div className="flex justify-between items-end mb-8 shrink-0">
                 <div>
                     <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -71,7 +70,6 @@ export default function DeployPage() {
             {/* Container da Tabela com Estilo Glass/Card */}
             <div className="flex-1 bg-zinc-900/30 border border-zinc-800 rounded-2xl flex flex-col shadow-inner shadow-black/20">
                 
-                {/* Barra de Título da Tabela (Opcional, mas ajuda na organização) */}
                 <div className="px-6 py-3 bg-zinc-900/80 border-b border-zinc-800 flex items-center gap-2 backdrop-blur-sm shrink-0">
                     <Layers size={14} className="text-zinc-500" />
                     <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">
