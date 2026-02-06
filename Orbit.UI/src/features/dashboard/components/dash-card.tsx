@@ -116,12 +116,12 @@ export default function CardDeploy({ name, namespace, status, ready, desired, ag
                     <Clock className="w-3.5 h-3.5" />
                     <span>Há {age}</span>
                 </div>
-                <div className="flex justify-center items-center gap-2">
+                {/* <div className="flex justify-center items-center gap-2">
                     <button className="px-2 py-1 rounded-lg border border-blue-500 text-blue-500 flex gap-1 cursor-pointer hover:bg-blue-500 hover:text-white transition-colors duration-300">
                         <i className="bi bi-gear-fill"></i>
-                        {/* <p>Editar</p> */}
+                        {/* <p>Editar</p>
                     </button>
-                </div>
+                </div> */}
             </div>
         </div>
     );

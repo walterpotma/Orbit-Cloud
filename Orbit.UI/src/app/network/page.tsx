@@ -109,9 +109,9 @@ export default function NetworkPage() {
                     </p>
                 </div>
                 <div className="flex space-x-3">
-                    <button className="px-4 py-2 text-sm rounded-lg border border-blue-500 text-white bg-blue-500 hover:bg-blue-600 cursor-pointer" onClick={() => router.push("/network/new")}>
+                    {/* <button className="px-4 py-2 text-sm rounded-lg border border-blue-500 text-white bg-blue-500 hover:bg-blue-600 cursor-pointer" onClick={() => router.push("/network/new")}>
                         Nova Regra
-                    </button>
+                    </button> */}
                     <BtnRefresh onClick={loadData} />
                 </div>
             </div>
