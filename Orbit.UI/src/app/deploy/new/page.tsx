@@ -304,7 +304,7 @@ export default function NewDeployPage() {
                                             className="flex-1 bg-zinc-900 border border-zinc-700 px-3 py-2.5 text-white focus:outline-none focus:border-purple-500 text-sm font-mono placeholder:text-zinc-700"
                                             onChange={handleChange}
                                         />
-                                        <span className="bg-zinc-800 border border-zinc-700 border-l-0 text-zinc-500 px-3 py-2.5 rounded-r-lg text-sm font-mono">.orbitcloud.com.br</span>
+                                        <span className="bg-zinc-800 border border-zinc-700 border-l-0 text-zinc-500 px-3 py-2.5 rounded-r-lg text-sm font-mono">.crion.dev</span>
                                     </div>
                                 </div>
                             </div>

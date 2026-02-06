@@ -101,12 +101,10 @@ export default function Page() {
                                                     </span>
                                                 </div>
 
-                                                {/* Ações (Placeholder para o Launch) */}
                                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    {/* Botão de Lançar - Conectaremos ao /launch/ignite depois */}
                                                     <button
                                                         className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium rounded-md transition-colors"
-                                                        onClick={() => console.log(`Lançar ${repo.name}:${tag}`)}
+                                                        onClick={() => router.push(`/deploy/new?image=${repo.name}:${tag}`)}
                                                     >
                                                         <Rocket size={12} />
                                                         Lançar
