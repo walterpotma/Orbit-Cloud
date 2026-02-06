@@ -12,6 +12,7 @@ interface BarChartProps {
   title: string;
   subtitle: string;
   data: MemoryMetric[];
+  maxValue: number;
 }
 
 // --- HOOK DE REDIMENSIONAMENTO ---
@@ -56,7 +57,7 @@ const toHour = (datetime: string) => {
   }
 };
 
-export default function MemoryBarChart({ title, subtitle, data = [] }: BarChartProps) {
+export default function MemoryBarChart({ title, subtitle, data = [], maxValue }: BarChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { width, height } = useContainerDimensions(containerRef);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -71,19 +72,17 @@ export default function MemoryBarChart({ title, subtitle, data = [] }: BarChartP
   // --- CÁLCULOS DINÂMICOS ---
 
   // 1. Acha o valor máximo para definir o teto do gráfico (+10% de respiro)
-  const maxValue = useMemo(() => {
-    if (data.length === 0) return 1;
-    const max = Math.max(...data.map((d) => d.value));
-    return max * 1.1; 
-  }, [data]);
+//   const maxValue = useMemo(() => {
+//     if (data.length === 0) return 1;
+//     const max = Math.max(...data.map((d) => d.value));
+//     return max * 1.1; 
+//   }, [data]);
 
   // 2. Gera 5 linhas de grade dinamicamente
   const gridTicks = useMemo(() => {
     return [0, 0.25, 0.5, 0.75, 1].map(p => p * maxValue);
   }, [maxValue]);
 
-  // 3. Geometria das barras
-  // gapRatio = 0.4 (40% de espaço vazio entre barras para ficar mais elegante se tiver muitos dados)
   const gapRatio = 0.4; 
   const barStep = data.length > 0 ? chartWidth / data.length : 0;
   const barWidth = Math.max(barStep * (1 - gapRatio), 2); // Garante largura mínima de 2px

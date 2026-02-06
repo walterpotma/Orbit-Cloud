@@ -160,11 +160,13 @@ export default function Home() {
                     tittle="Uso de CPU"
                     subtittle="Monitoramento em Tempo Real"
                     data={cpuMetrics}
+                    maxY={rawCpuLimits}
                 />
                 <ChartBar
                     title="Consumo de Memória (Pod: Orbit-API)"
                     subtitle="Métricas das últimas 24 horas"
                     data={memMetrics}
+                    maxValue={rawMemLimits}
                 />
             </div>
 

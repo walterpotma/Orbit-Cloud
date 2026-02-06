@@ -12,6 +12,7 @@ interface ChartProps {
     tittle: string;
     subtittle: string;
     data: ChartDataPoint[]; // Recebe o array da API
+    maxY: number;
 }
 
 // Hook para redimensionamento responsivo
@@ -37,7 +38,7 @@ const useContainerDimensions = (myRef: React.RefObject<HTMLDivElement | null>) =
     return dimensions;
 };
 
-export default function ProfessionalChartPage({ tittle, subtittle, data = [] }: ChartProps) {
+export default function ProfessionalChartPage({ tittle, subtittle, data = [], maxY }: ChartProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const { width, height } = useContainerDimensions(containerRef);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -51,11 +52,11 @@ export default function ProfessionalChartPage({ tittle, subtittle, data = [] }: 
 
     // 2. Cálculo do Max Y Dinâmico
     // Como os valores são pequenos (0.0005), calculamos o maior valor e adicionamos 10% de folga
-    const maxY = useMemo(() => {
-        if (data.length === 0) return 100;
-        const maxVal = Math.max(...data.map(d => d.value));
-        return maxVal === 0 ? 1 : maxVal * 1.1; 
-    }, [data]);
+    // const maxY = useMemo(() => {
+    //     if (data.length === 0) return 100;
+    //     const maxVal = Math.max(...data.map(d => d.value));
+    //     return maxVal === 0 ? 1 : maxVal * 1.1; 
+    // }, [data]);
 
     // Função para formatar hora (HH:mm) de forma segura para evitar Hydration Error
     const toHour = (datetime: string) => {
