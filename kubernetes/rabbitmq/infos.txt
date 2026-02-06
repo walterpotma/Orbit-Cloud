@@ -1,13 +1,1 @@
-helm install rabbitmq bitnami/rabbitmq \
-
-  --set auth.username=admin \
-
-  --set auth.password=0rb1tCl0UD \
-
-  --set replicaCount=1 \
-
-  --set resources.limits.memory=512Mi \
-
-  --set resources.limits.cpu=500m \
-
-  --set persistence.size=2Gi
+helm install rabbitmq bitnami/rabbitmq --set auth.username=admin --set auth.password=@rb1tCL0ud --set replicaCount=1 --set resources.limits.memory=512Mi --set resources.limits.cpu=500m --set persistence.size=2Gi
