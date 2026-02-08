@@ -1,18 +1,20 @@
 ﻿using k8s;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Orbit.Application.Interfaces;
 using Orbit.Application.Interfaces.Services;
-using Orbit.Application.Services;
 using Orbit.Application.Mappers;
+using Orbit.Application.Services;
 using Orbit.Domain.Interfaces;
 using Orbit.Infrastructure.Repositories;
 using Orbit.Infrastructure.Services;
-using System.Security.Claims;
 using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.HttpOverrides;
+using System.Security.Claims;
 
 
 
@@ -52,7 +54,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://app.orbitcloud.com.br", "https://orbitcloud.com.br", "https://admin.orbitcloud.com.br")
+        policy.WithOrigins("http://localhost:3000", "https://orbitcloud.com.br")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -167,6 +169,30 @@ builder.Services.AddAuthentication(options =>
 #endregion
 
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            // ... suas configurações de validação (Issuer, Audience, Key) ...
+        };
+
+        // O PULO DO GATO: Interceptar a chegada da mensagem para ler o Cookie
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                // Se não veio no Header padrão, tenta ler do Cookie
+                if (context.Request.Cookies.ContainsKey("access_token"))
+                {
+                    context.Token = context.Request.Cookies["access_token"];
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+
 builder.Services.AddControllers();
 
 var app = builder.Build();

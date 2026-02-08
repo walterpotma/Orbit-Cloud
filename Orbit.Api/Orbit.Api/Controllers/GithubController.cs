@@ -231,5 +231,13 @@ namespace Orbit.Api.Controllers
             }
         }
         #endregion
+
+        [Authorize]
+        [HttpGet("teste")]
+        public IActionResult Teste()
+        {
+            var gitId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return Ok(new { message = $"Teste bem-sucedido! Seu GitHub ID é: {gitId}" });
+        }
     }
 }

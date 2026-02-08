@@ -1,1 +1,68 @@
-helm install rabbitmq bitnami/rabbitmq --set auth.username=admin --set auth.password=@rb1tCL0ud --set replicaCount=1 --set resources.limits.memory=512Mi --set resources.limits.cpu=500m --set persistence.size=2Gi --set image.tag=4.1
+🗺️ Roadmap: Rumo à Orbit v0.2.0
+1. 🧹 Refatoração: Shell Scripts ➡️ C# Nativo (Prioridade Alta)
+Atualmente, depender de arquivos .sh (clone.sh, build.sh) é frágil. Se o servidor mudar, se as permissões de arquivo mudarem ou se der um erro no meio do script, sua API não fica sabendo direito.
+
+O Plano: Substituir chamadas de terminal soltas por código gerenciado.
+
+Como:
+
+Git Clone: Usar a biblioteca CliWrap para rodar o git clone de forma controlada ou LibGit2Sharp.
+
+Docker Build: Usar a Docker.DotNet (que você já adicionou) para comandar o build direto no socket do Docker, ou CliWrap para rodar docker build capturando o output linha a linha.
+
+K8s Apply: Parar de usar arquivos YAML temporários no disco. Criar os objetos (V1Deployment, V1Service) instanciados direto no C# e mandar pro cluster via KubernetesClient.
+
+Ganho: Você elimina a "sujeira" de arquivos temporários e consegue pegar try/catch de verdade se o build falhar.
+
+2. 🗑️ Implementar o DELETE (Faxina Completa)
+Para testar à vontade, você precisa conseguir apagar o que criou.
+
+O Desafio: Não é só apagar do banco de dados (SQL).
+
+O Fluxo Correto:
+
+Recebe ID do Deploy.
+
+Busca no Banco para pegar o GithubID (Namespace) e RepoName.
+
+K8s: Deleta o Deployment.
+
+K8s: Deleta o Service.
+
+K8s: Deleta o Ingress (Isso automaticamente remove a rota do Cloudflare Tunnel se estiver configurado certo).
+
+SQL: Deleta (ou marca como DeletedAt) o registro no banco.
+
+3. 🔄 Implementar o UPDATE (Redeploy)
+O usuário mudou o código no GitHub e quer atualizar o site.
+
+O Fluxo: É basicamente repetir o processo de Create, mas garantindo que você não crie conflito de nomes.
+
+Estratégia:
+
+Gerar uma nova tag de versão (ex: v2, v3 ou Timestamp).
+
+Fazer o Build.
+
+Atualizar a imagem no Deployment existente no K8s.
+
+O K8s faz o "Rolling Update" (sobe o novo, espera ficar saudável, mata o velho) sozinho.
+
+4. 💅 UX e Feedback (Polimento)
+Melhorar as mensagens de erro.
+
+Se o token do GitHub expirou, avisar o usuário.
+
+Se o nome do projeto é inválido (tem espaço ou acento), bloquear antes de tentar enviar.
+
+5. 🐇 A Grande Migração: Async com RabbitMQ
+SÓ DEPOIS de tudo acima estar limpo e testado em código síncrono (travando a tela mesmo), a gente move a lógica para o Worker.
+
+É muito mais fácil mover um código C# limpo ("Classe BuildService") para o Worker do que mover um monte de script .sh gambiarra.
+
+Qual o primeiro passo?
+Eu recomendo fortemente começar pelo Item 1 (Tirar os Scripts .sh).
+
+Por quê? Porque isso vai "sanear" o núcleo da sua aplicação. Quando você for fazer o Worker (RabbitMQ), vai ser só copiar e colar métodos C# limpos, em vez de ficar brigando com script bash em background.
+
+Quer começar matando qual script primeiro? O de Clone ou o de Deploy/YAML? 🛠️

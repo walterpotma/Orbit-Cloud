@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.Interfaces;
 
 namespace Orbit.Api.Controllers
@@ -70,6 +71,7 @@ namespace Orbit.Api.Controllers
 
 
         [HttpPost("clone-repos")]
+        [Authorize]
         public async Task<IActionResult> CloneRepository([FromQuery] string githubId, [FromQuery] string reposURL, [FromQuery] string authToken, [FromQuery] string appName)
         {
             try
