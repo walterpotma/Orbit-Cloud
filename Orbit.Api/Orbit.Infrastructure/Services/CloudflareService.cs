@@ -25,7 +25,6 @@ public class CloudflareService
 
     public async Task<bool> CreateTunnelHostname(string subdomain, string serviceUrl)
     {
-        // O Endpoint para gerenciar configurações do túnel
         var url = $"https://api.cloudflare.com/client/v4/accounts/{_accountId}/tunnels/{_tunnelId}/configurations";
 
         var dnsUrl = $"https://api.cloudflare.com/client/v4/zones/{GetZoneId()}/dns_records";

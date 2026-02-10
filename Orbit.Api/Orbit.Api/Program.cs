@@ -16,34 +16,16 @@ using Orbit.Infrastructure.Services;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
+#region Kubernetes Admin
 KubernetesClientConfiguration kubernetesConfig;
 
-if (KubernetesClientConfiguration.IsInCluster())
-{
-    Console.WriteLine("🚀 Iniciando em modo In-Cluster (Kubernetes)");
-    kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
-}
-else
-{
-    Console.WriteLine("💻 Iniciando em modo Local (Dev)");
-    var kubeConfigPath = "keys/kube/hayom.yaml";
-    
-    if (File.Exists(kubeConfigPath))
-    {
-        kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile(kubeConfigPath);
-    }
-    else
-    {
-        Console.WriteLine($"⚠️ Arquivo {kubeConfigPath} não encontrado. Tentando config padrão.");
-        kubernetesConfig = KubernetesClientConfiguration.BuildConfigFromConfigFile(); 
-    }
-}
+Console.WriteLine("🚀 Iniciando em modo In-Cluster (Kubernetes)");
+kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
 
 builder.Services.AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig));
+#endregion
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -54,7 +36,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://orbitcloud.com.br")
+        policy.WithOrigins("https://orbitcloud.com.br")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -68,36 +50,33 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<Docker.DotNet.IDockerClient>(sp =>
-{
-    Uri dockerUri;
+// builder.Services.AddSingleton<Docker.DotNet.IDockerClient>(sp =>
+// {
+//     Uri dockerUri;
     
-    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-    {
-        dockerUri = new Uri("npipe://./pipe/docker_engine");
-    }
-    else
-    {
-        dockerUri = new Uri("unix:///var/run/docker.sock");
-    }
+//     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+//     {
+//         dockerUri = new Uri("npipe://./pipe/docker_engine");
+//     }
+//     else
+//     {
+//         dockerUri = new Uri("unix:///var/run/docker.sock");
+//     }
     
-    return new Docker.DotNet.DockerClientConfiguration(dockerUri).CreateClient();
-});
+//     return new Docker.DotNet.DockerClientConfiguration(dockerUri).CreateClient();
+// });
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IPrometheusService, PrometheusService>();
-#region Github Scoped
+
 builder.Services.AddScoped<IGithubService, GithubService>();
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
-#endregion
 
-#region Kubernetes Scoped
 builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
 builder.Services.AddScoped<IKubernetesService, KubernetesService>();
 builder.Services.AddSingleton<MapperKubernetes>();
-#endregion
 
 builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
 builder.Services.AddScoped<IFileSystemService, FileSystemService>();
@@ -177,12 +156,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             // ... suas configurações de validação (Issuer, Audience, Key) ...
         };
 
-        // O PULO DO GATO: Interceptar a chegada da mensagem para ler o Cookie
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                // Se não veio no Header padrão, tenta ler do Cookie
                 if (context.Request.Cookies.ContainsKey("access_token"))
                 {
                     context.Token = context.Request.Cookies["access_token"];
@@ -212,8 +189,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-//app.UseHttpsRedirection();
 
 app.Use((context, next) =>
 {

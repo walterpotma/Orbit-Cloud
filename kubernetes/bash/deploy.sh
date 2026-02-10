@@ -6,9 +6,7 @@ APP_FILE=$3
 
 echo "[SH] Iniciando deploy para $APP_NAME"
 
-# --- MUDANÇA AQUI: Adicionei DOCKER_BUILDKIT=1 ---
 DOCKER_BUILDKIT=1 docker build -t localhost:5000/$APP_NAME:v$VERSION $APP_FILE
-# -------------------------------------------------
 
 if [ $? -ne 0 ]; then
     echo "[SH] Erro ao construir a imagem Docker."

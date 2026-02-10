@@ -60,7 +60,6 @@ namespace Orbit.Infrastructure.Repositories
 
         public async Task<PodMetricsList> GetPodMetricsAsync()
         {
-            // Essa extensão busca as métricas de todos os pods no cluster inteiro
             return await _kubernetesClient.GetKubernetesPodsMetricsAsync();
         }
         #endregion
@@ -184,10 +183,8 @@ namespace Orbit.Infrastructure.Repositories
         {
             try
             {
-                // Tenta listar as quotas do namespace
                 var quotas = await _kubernetesClient.CoreV1.ListNamespacedResourceQuotaAsync(namespaces);
 
-                // Retorna a primeira que encontrar (geralmente só tem uma por namespace)
                 return quotas.Items.FirstOrDefault();
             }
             catch
@@ -202,18 +199,18 @@ namespace Orbit.Infrastructure.Repositories
             {
                 Metadata = new V1ObjectMeta
                 {
-                    Name = "orbit-quota", // Nome padrão da regra
+                    Name = "orbit-quota",
                     NamespaceProperty = namespaces
                 },
                 Spec = new V1ResourceQuotaSpec
                 {
                     Hard = new Dictionary<string, ResourceQuantity>
             {
-                { "limits.cpu", new ResourceQuantity(cpuLimit) },      // Ex: "500m" (0.5 core)
-                { "limits.memory", new ResourceQuantity(memoryLimit) }, // Ex: "512Mi"
-                { "requests.cpu", new ResourceQuantity(cpuLimit) },    // Igualar request/limit é boa prática
+                { "limits.cpu", new ResourceQuantity(cpuLimit) },
+                { "limits.memory", new ResourceQuantity(memoryLimit) },
+                { "requests.cpu", new ResourceQuantity(cpuLimit) },
                 { "requests.memory", new ResourceQuantity(memoryLimit) },
-                { "pods", new ResourceQuantity("10") } // Limite opcional de pods
+                { "pods", new ResourceQuantity("10") }
             }
                 }
             };

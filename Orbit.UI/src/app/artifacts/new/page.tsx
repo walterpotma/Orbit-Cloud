@@ -10,7 +10,6 @@ export default function PipelinePage() {
 
     const router = useRouter();
 
-    // Estado para armazenar os dados do formulário
     const [formData, setFormData] = useState({
         githubId: "",
         reposURL: "",
@@ -20,7 +19,6 @@ export default function PipelinePage() {
         appPath: ""
     });
 
-    // Estado para feedback visual
     const [status, setStatus] = useState({
         loading: false,
         message: "",
@@ -43,7 +41,6 @@ export default function PipelinePage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validação básica antes de enviar
         if (!formData.githubId) {
             setStatus({ loading: false, message: "ID do usuário não identificado.", type: "error" });
             return;
@@ -52,11 +49,9 @@ export default function PipelinePage() {
         setStatus({ loading: true, message: "", type: "" });
 
         try {
-            // Converte objeto para Query String (necessário para [FromQuery] no C#)
             formData.appPath = formData.appName;
             const queryParams = new URLSearchParams(formData).toString();
 
-            // Endpoint alterado para /pipeline
             const response = await fetch(`https://api.orbitcloud.com.br/Build/artifact?${queryParams}`, {
                 method: "POST",
                 headers: {
@@ -85,7 +80,6 @@ export default function PipelinePage() {
         }
     };
 
-    // Se estiver carregando os dados do usuário, mostra um loading simples
     if (isLoading) {
         return <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-zinc-400">Carregando perfil...</div>;
     }
@@ -103,7 +97,6 @@ export default function PipelinePage() {
 
                 <form onSubmit={handleSubmit} className="space-y-5">
 
-                    {/* Github ID (Readonly - vem do contexto) */}
                     <div className="flex flex-col gap-2 opacity-50 hidden">
                         <label className="text-sm font-medium text-zinc-300">Github ID (Usuário)</label>
                         <input
@@ -175,24 +168,6 @@ export default function PipelinePage() {
                             />
                         </div>
                     </div>
-
-                    {/* App Path */}
-                    {/* <div className="flex flex-col gap-2">
-                        <label htmlFor="appPath" className="text-sm font-medium text-zinc-300">Caminho da App (Contexto)</label>
-                        <input
-                            type="text"
-                            name="appPath"
-                            id="appPath"
-                            required
-                            placeholder="./src ou ."
-                            value={formData.appPath}
-                            onChange={handleChange}
-                            className="bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                        />
-                        <span className="text-xs text-zinc-500">Deixe em branco ou "." se o Dockerfile estiver na raiz.</span>
-                    </div> */}
-
-                    {/* Botão de Submit */}
                     <button
                         type="submit"
                         disabled={status.loading}
@@ -216,7 +191,6 @@ export default function PipelinePage() {
                     </button>
                 </form>
 
-                {/* Área de Feedback */}
                 {status.message && (
                     <div className={`mt-6 p-4 rounded-lg border text-sm ${status.type === 'success'
                         ? 'bg-green-900/20 border-green-800 text-green-200'

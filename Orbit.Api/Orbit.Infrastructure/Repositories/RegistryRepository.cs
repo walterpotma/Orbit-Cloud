@@ -51,12 +51,8 @@ namespace Orbit.Infrastructure.Repositories
         {
             _logger.LogInformation("Iniciando delete da tag {tag} do repo {repo}", tag, repositoryName);
 
-            // <-- CORREÇÃO 2: Criar o cliente primeiro
             var client = _httpClientFactory.CreateClient("RegistryApiClient");
 
-            // ETAPA 1: Obter o Digest da Tag
-
-            // <-- CORREÇÃO 4: Montar a URL completa
             var request = new HttpRequestMessage(HttpMethod.Head, $"{_registryBaseUrl}/v2/{repositoryName}/manifests/{tag}");
             request.Headers.Accept.Clear();
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.docker.distribution.manifest.v2+json"));
@@ -64,7 +60,6 @@ namespace Orbit.Infrastructure.Repositories
             string digest;
             try
             {
-                // <-- CORREÇÃO 3: Usar 'client', não '_httpClient'
                 var response = await client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
@@ -81,11 +76,9 @@ namespace Orbit.Infrastructure.Repositories
                 return false;
             }
 
-            // ETAPA 2: Deletar o Manifesto usando o Digest
             _logger.LogInformation("Digest encontrado: {digest}. Tentando deletar...", digest);
             try
             {
-                // <-- CORREÇÃO 3 e 4: Usar 'client' e a URL completa
                 var deleteResponse = await client.DeleteAsync($"{_registryBaseUrl}/v2/{repositoryName}/manifests/{digest}");
 
                 if (deleteResponse.StatusCode == System.Net.HttpStatusCode.Accepted)

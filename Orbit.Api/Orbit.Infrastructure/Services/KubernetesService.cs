@@ -25,13 +25,10 @@ namespace Orbit.Infrastructure.Services
 
             var result = k8sDeployments.Items.Select(d =>
             {
-                // 1. Pega o primeiro container da lista (geralmente é o principal)
                 var container = d.Spec.Template.Spec.Containers.FirstOrDefault();
 
-                // 2. Pega a string da imagem (ou "-" se não achar)
                 string fullImage = container?.Image ?? "-";
 
-                // 3. Tenta extrair só a tag (tudo depois do último ":")
                 string tag = "latest";
                 if (fullImage.Contains(":"))
                 {
@@ -41,7 +38,7 @@ namespace Orbit.Infrastructure.Services
                 return new DtoDeploymentResponse
                 {
                     Name = d.Metadata.Name,
-                    Namespace = d.Metadata.Namespace(), // Lembra dos parênteses!
+                    Namespace = d.Metadata.Namespace(),
                     ReplicasDesired = d.Status.Replicas ?? 0,
                     ReplicasReady = d.Status.ReadyReplicas ?? 0,
                     Status = (d.Status.ReadyReplicas >= d.Status.Replicas) ? "Running" : "Pending",
@@ -50,22 +47,19 @@ namespace Orbit.Infrastructure.Services
                           ? (DateTime.UtcNow - d.Metadata.CreationTimestamp.Value).Days + "d"
                           : "-",
 
-                    // NOVOS CAMPOS PREENCHIDOS
                     Image = fullImage,
                     ImageTag = tag
                 };
             })
-            .Where(d => d.Namespace != "kube-system" && d.Namespace != "kube-public") // Filtro de sistema
+            .Where(d => d.Namespace != "kube-system" && d.Namespace != "kube-public")
             .ToList();
 
             return result;
         }
         public async Task<DtoDeploymentResponse> CreateDeploymentAsync(DtoDeploymentRequest request, string namespaces)
         {
-            // 1. CRIA O DEPLOYMENT (O App em si)
             var newDeployment = _mapper.BuildDeploymentObject(request, namespaces);
 
-            // CORREÇÃO: Declaramos a variável AQUI FORA para ela existir no final do método
             V1Deployment createdEntity;
 
             try
@@ -74,11 +68,9 @@ namespace Orbit.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                // Se falhar aqui, o throw encerra o método, então não tem risco de createdEntity ser usada nula lá embaixo
                 throw new Exception($"Erro ao criar Deployment: {ex.Message}");
             }
 
-            // 2. CRIA O SERVICE (A Rede Interna)
             var serviceRequest = new DtoServiceRequest
             {
                 Name = request.Name,
@@ -95,13 +87,11 @@ namespace Orbit.Infrastructure.Services
                 Console.WriteLine($"Erro ao criar Service: {ex.Message}");
             }
 
-            // 3. CRIA O INGRESS (A URL Pública)
             if (!string.IsNullOrWhiteSpace(request.Subdomain))
             {
                 try
                 {
-                    // Ajuste do Host Completo (importante para funcionar)
-                    string fullHost = $"{request.Subdomain}"; // Ajuste o domínio base se necessário
+                    string fullHost = $"{request.Subdomain}";
 
                     var ingressObj = _mapper.BuildIngressObject(new DtoIngressRequest
                     {
@@ -119,7 +109,6 @@ namespace Orbit.Infrastructure.Services
                 }
             }
 
-            // Agora o compilador consegue enxergar createdEntity!
             return _mapper.MapToDtoDeployment(createdEntity);
         }
         #endregion
@@ -202,12 +191,10 @@ namespace Orbit.Infrastructure.Services
                 CreationTimestamp = s.Metadata.CreationTimestamp,
                 IngressClassName = s.Spec.IngressClassName,
 
-                // AQUI ESTÁ A MÁGICA: Navegamos no objeto do Kubernetes para pegar o Host
                 Rules = s.Spec.Rules?.Select(r => new DtoIngressRuleResponse
                 {
-                    Host = r.Host, // O endereço que você quer (ex: sub.dominio.com)
+                    Host = r.Host,
 
-                    // Opcional: Pega para qual service ele aponta (útil para debug)
                     ServiceName = r.Http?.Paths?.FirstOrDefault()?.Backend?.Service?.Name,
                     ServicePort = r.Http?.Paths?.FirstOrDefault()?.Backend?.Service?.Port?.Number ?? 0
                 }).ToList()
@@ -312,7 +299,6 @@ namespace Orbit.Infrastructure.Services
 
             try
             {
-                // Valores Padrão para novos Workspaces (Pode vir de um enum "Planos" futuramente)
                 string defaultCpu = "500m";
                 string defaultMem = "1024Mi";
 
@@ -322,7 +308,6 @@ namespace Orbit.Infrastructure.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"[Erro] Falha ao aplicar quota: {ex.Message}");
-                // Não impedimos a criação do namespace, apenas logamos o erro da quota
             }
 
             return _mapper.MapToDtoNamespace(created);
@@ -340,10 +325,8 @@ namespace Orbit.Infrastructure.Services
 
         public async Task<List<DtoNamespaceMetrics>> GetNamespaceMetricsAsync()
         {
-            // ... (Código anterior de pegar métricas de pods continua igual) ...
             var rawMetrics = await _repository.GetPodMetricsAsync();
 
-            // Agrupa métricas por namespace
             var grouped = rawMetrics.Items
                 .GroupBy(m => m.Metadata.Namespace())
                 .Select(g => new
@@ -359,13 +342,11 @@ namespace Orbit.Infrastructure.Services
 
             foreach (var g in grouped)
             {
-                // 1. Busca a Quota do Namespace
                 var quota = await _repository.GetNamespaceQuotaAsync(g.Name);
 
                 decimal cpuLimit = 0;
                 long memLimit = 0;
 
-                // 2. Extrai os valores Hard (Limites definidos)
                 if (quota?.Status?.Hard != null)
                 {
                     if (quota.Status.Hard.TryGetValue("limits.cpu", out var qCpu))
@@ -375,22 +356,19 @@ namespace Orbit.Infrastructure.Services
                         memLimit = qMem.ToInt64();
                 }
 
-                // 3. Monta o DTO Completo
                 resultList.Add(new DtoNamespaceMetrics
                 {
                     Namespace = g.Name,
                     PodCount = g.Count,
 
-                    // Uso
                     RawCpu = g.TotalCpu,
                     RawMemory = (long)g.TotalMem,
                     CpuUsage = FormatCpu(g.TotalCpu),
                     MemoryUsage = FormatMemory((long)g.TotalMem),
 
-                    // Limites (Novos Campos)
                     RawCpuLimit = cpuLimit,
                     RawMemoryLimit = memLimit,
-                    CpuLimit = cpuLimit > 0 ? FormatCpu(cpuLimit) : "∞", // Infinito se não tiver quota
+                    CpuLimit = cpuLimit > 0 ? FormatCpu(cpuLimit) : "∞",
                     MemoryLimit = memLimit > 0 ? FormatMemory(memLimit) : "∞"
                 });
             }
@@ -403,11 +381,9 @@ namespace Orbit.Infrastructure.Services
             return allMetrics.FirstOrDefault(m => m.Namespace == namespaced);
         }
 
-        // --- Helpers Privados de Formatação ---
 
         private string FormatCpu(decimal value)
         {
-            // O K8s retorna CPU em cores decimais. 0.1 = 100m (millicores)
             if (value < 1)
                 return $"{(value * 1000):0}m";
             return $"{value:0.0} cpu";
@@ -415,7 +391,6 @@ namespace Orbit.Infrastructure.Services
 
         private string FormatMemory(long bytes)
         {
-            // 1 MiB = 1024 * 1024 bytes
             double mb = bytes / (1024.0 * 1024.0);
 
             if (mb > 1024)

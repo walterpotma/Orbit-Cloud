@@ -66,8 +66,6 @@ namespace Orbit.Application.Mappers
         {
             return new V1Ingress
             {
-                // 1. CORREÇÃO DA VERSÃO (Crucial)
-                // De: "v1" -> Para: "networking.k8s.io/v1"
                 ApiVersion = "networking.k8s.io/v1",
                 Kind = "Ingress",
                 Metadata = new V1ObjectMeta
@@ -79,15 +77,12 @@ namespace Orbit.Application.Mappers
                 { "kubernetes.io/ingress.class", "traefik" },
             }
                 },
-                // 2. ADIÇÃO DO SPEC (As regras de roteamento)
                 Spec = new V1IngressSpec
                 {
                     Rules = new List<V1IngressRule>
             {
                 new V1IngressRule
                 {
-                    // Define o domínio (ex: meupp.orbitcloud.com.br)
-                    // Se o DTO não tiver o host completo, montamos aqui
                     Host = $"{request.Host}.crion.dev",
                     Http = new V1HTTPIngressRuleValue
                     {
@@ -101,8 +96,8 @@ namespace Orbit.Application.Mappers
                                 {
                                     Service = new V1IngressServiceBackend
                                     {
-                                        Name = request.Name, // Nome do Service que criamos antes
-                                        Port = new V1ServiceBackendPort { Number = 80 } // Porta do Service
+                                        Name = request.Name,
+                                        Port = new V1ServiceBackendPort { Number = 80 }
                                     }
                                 }
                             }

@@ -7,9 +7,7 @@ namespace Orbit.Application.Interfaces
 {
     public interface IGithubService
     {
-        // --- Adicione este método que estava faltando ---
         Task CloneRepos(string githubId, string reposURL, string authToken, string appName);
-        // ------------------------------------------------
 
         #region Github Repositories
         Task<IEnumerable<DtoReposResponse>> GetCurrentUserRepositoriesAsync();

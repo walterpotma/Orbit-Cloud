@@ -2,12 +2,12 @@
 {
     public class CreateDirectoryRequest
     {
-        public string Path { get; set; } = string.Empty; // Ex: "pasta1/subpasta"
+        public string Path { get; set; } = string.Empty;
     }
 
     public class CreateFileRequest
     {
-        public string Path { get; set; } = string.Empty; // Ex: "pasta1/arquivo.txt"
+        public string Path { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
     }
 }

@@ -23,7 +23,6 @@ namespace Orbit.Infrastructure.Services
             var end = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var start = DateTimeOffset.UtcNow.AddHours(-24).ToUnixTimeSeconds();
 
-            // Note as aspas escapadas corretamente para C#
             var promQl = $"sum(rate(container_cpu_usage_seconds_total{{namespace=\"{namespaceName}\", container!=\"\"}}[5m]))";
             var url = $"{PROMETHEUS_URL}/api/v1/query_range?query={promQl}&start={start}&end={end}&step=3600";
 
@@ -82,14 +81,11 @@ namespace Orbit.Infrastructure.Services
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignora falhas de parse
+                System.Console.WriteLine($"Erro ao parsear resposta do Prometheus: {ex.Message}");
             }
             return result;
         }
     }
-
-    // REMOVIDO: public class MetricPoint { ... } 
-    // (Já movemos para Orbit.Application/DTOs/MetricPoint.cs)
 }

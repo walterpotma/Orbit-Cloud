@@ -8,10 +8,7 @@ namespace Orbit.Infrastructure.Services
 {
     public class DockerService : IDockerService
     {
-        // 1. Variável para guardar a configuração
         private readonly IConfiguration _configuration;
-
-        // 2. Injeção de Dependência no Construtor
         public DockerService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -19,24 +16,19 @@ namespace Orbit.Infrastructure.Services
 
         public async Task GenerateDockerfile(string githubId, string appName)
         {
-            // 3. A forma correta de ler do appsettings.json
             var scriptPath = _configuration["FileExplorer:NixPack"];
 
-            // Segurança: Verifica se achou o valor
             if (string.IsNullOrEmpty(scriptPath))
             {
                 throw new Exception("ERRO: A configuração 'FileExplorer:ScriptPath' não foi encontrada no appsettings.json.");
             }
 
-            // Primeiro: Garante permissão de execução
             await ShellHelper.MakeExecutableAsync(scriptPath);
 
-            // Segundo: Prepara os argumentos ($1 $2)
             var args = $"{githubId} {appName}";
 
             Console.WriteLine($"[API] Chamando gerador de Dockerfile para {appName} em {scriptPath}...");
 
-            // Terceiro: Executa
             var result = await ShellHelper.RunScriptAsync(scriptPath, args);
 
             if (result.ExitCode == 0)
@@ -59,15 +51,12 @@ namespace Orbit.Infrastructure.Services
                 throw new Exception("ERRO: A configuração 'FileExplorer:ScriptPath' não foi encontrada no appsettings.json.");
             }
 
-            // Primeiro: Garante permissão de execução
             await ShellHelper.MakeExecutableAsync(scriptPath);
 
-            // Segundo: Prepara os argumentos ($1 $2)
             var args = $"{githubId} {appName} {version} {appPath}";
 
             Console.WriteLine($"[API] construindo image para {appName} em {scriptPath}...");
 
-            // Terceiro: Executa
             var result = await ShellHelper.RunScriptAsync(scriptPath, args);
 
             if (result.ExitCode == 0)

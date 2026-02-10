@@ -42,18 +42,15 @@ namespace Orbit.Infrastructure.Services
         {
             var scriptPath = _configuration["FileExplorer:ClonePack"];
 
-            // Segurança: Verifica se achou o valor
             if (string.IsNullOrEmpty(scriptPath))
             {
                 throw new Exception("ERRO: A configuração 'Clone.SH' não foi encontrada no appsettings.json.");
             }
 
-            // Segundo: Prepara os argumentos ($1 $2)
             var args = $"{githubId} {reposURL} {authToken} {appName}";
 
             Console.WriteLine($"[API] Chamando clonador de repos para {appName} em {scriptPath}...");
 
-            // Terceiro: Executa
             var result = await ShellHelper.RunScriptAsync(scriptPath, args);
 
             if (result.ExitCode == 0)
