@@ -14,9 +14,7 @@ export default function PipelinePage() {
     const router = useRouter();
 
     const [formData, setFormData] = useState({
-        githubId: "",
         selectedRepository: "",
-        authToken: "",
         appName: "",
         version: "",
         appPath: ""
@@ -29,9 +27,6 @@ export default function PipelinePage() {
     });
 
     useEffect(() => {
-        if (UserData?.githubID) {
-            setFormData(prev => ({ ...prev, githubId: UserData.githubID }));
-        }
         Repository.List().then(response => {
             setRepositories(response.data);
         }).catch(error => {
@@ -49,11 +44,6 @@ export default function PipelinePage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (!formData.githubId) {
-            setStatus({ loading: false, message: "ID do usuário não identificado.", type: "error" });
-            return;
-        }
 
         setStatus({ loading: true, message: "", type: "" });
 
@@ -106,31 +96,6 @@ export default function PipelinePage() {
 
                 <form onSubmit={handleSubmit} className="space-y-5">
 
-                    <div className="flex flex-col gap-2 opacity-50 hidden">
-                        <label className="text-sm font-medium text-zinc-300">Github ID (Usuário)</label>
-                        <input
-                            type="text"
-                            value={formData.githubId}
-                            disabled
-                            className="bg-zinc-950 border border-zinc-700 text-zinc-500 rounded-lg p-3 cursor-not-allowed"
-                        />
-                    </div>
-
-                    {/* Repos URL */}
-                    {/* <div className="flex flex-col gap-2">
-                        <label htmlFor="reposURL" className="text-sm font-medium text-zinc-300">URL do Repositório (.git)</label>
-                        <input
-                            type="url"
-                            name="reposURL"
-                            id="reposURL"
-                            required
-                            placeholder="https://github.com/usuario/repo.git"
-                            value={formData.reposURL}
-                            onChange={handleChange}
-                            className="bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                        />
-                    </div> */}
-
                     {/* Repositories Dropdown */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="selectedRepository" className="text-sm font-medium text-zinc-300">Repositório</label>
@@ -144,7 +109,7 @@ export default function PipelinePage() {
                         >
                             <option value="">Selecione um repositório</option>
                             {repositories.map((repo: any) => (
-                                <option key={repo.id} value={repo.id}>{repo.name}</option>
+                                <option key={repo.id} value={`${repo.html_url}.git`}>{repo.name}</option>
                             ))}
                         </select>
                     </div>
