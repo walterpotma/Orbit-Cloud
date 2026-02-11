@@ -7,13 +7,12 @@ import { useRouter } from "next/navigation";
 
 
 interface User {
+    isAuthenticated: boolean;
     githubID: string;
     username: string;
     email: string;
-    githubLogin: string;
-    avatar: string;
+    avatarURL: string;
     name: string;
-    authenticationToken: string;
 }
 
 interface UserContextType {

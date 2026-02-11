@@ -125,8 +125,8 @@ export default function Nav() {
                         <div className={`flex items-center gap-3 p-2 rounded-xl bg-zinc-900 border border-zinc-800 ${isCollapsed ? "justify-center" : ""}`}>
                             {/* Avatar */}
                             <div className="shrink-0 relative group cursor-pointer">
-                                {UserData.avatar ? (
-                                    <img src={UserData.avatar} alt="User" className="w-8 h-8 rounded-full object-cover border border-zinc-700" />
+                                {UserData.avatarURL ? (
+                                    <img src={UserData.avatarURL} alt="User" className="w-8 h-8 rounded-full object-cover border border-zinc-700" />
                                 ) : (
                                     <UserCircle className="w-8 h-8 text-zinc-500" />
                                 )}
