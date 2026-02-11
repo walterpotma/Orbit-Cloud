@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.Interfaces;
+using System.Security.Claims;
 
 namespace Orbit.Api.Controllers
 {
@@ -20,25 +22,45 @@ namespace Orbit.Api.Controllers
         [Authorize]
         [HttpPost("artifact")]
         public async Task<IActionResult> RunFullBuild(
-            [FromQuery] string githubId,
-            [FromQuery] string reposURL,
-            [FromQuery] string authToken,
-            [FromQuery] string appName,
-            [FromQuery] string version,
-            [FromQuery] string appPath)
+    // Removemos githubId e authToken daqui, pois vamos pegar internamente
+    [FromQuery] string reposURL,
+    [FromQuery] string appName,
+    [FromQuery] string version,
+    [FromQuery] string? appPath) // appPath pode ser opcional
         {
-            if (string.IsNullOrEmpty(githubId) || string.IsNullOrEmpty(reposURL) ||
-                string.IsNullOrEmpty(authToken) || string.IsNullOrEmpty(appName) ||
-                string.IsNullOrEmpty(version))
+            // 1. Validar parâmetros de entrada básicos
+            if (string.IsNullOrEmpty(reposURL) || string.IsNullOrEmpty(appName) || string.IsNullOrEmpty(version))
             {
-                return BadRequest(new { error = "Todos os campos são obrigatórios: githubId, reposURL, authToken, appName, version." });
+                return BadRequest(new { error = "Campos obrigatórios: reposURL, appName, version." });
             }
 
+            // 2. Recuperar o ID do Usuário (GithubID) das Claims
+            // O ClaimTypes.NameIdentifier foi mapeado para o ID do GitHub no seu Program.cs
+            var githubId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(githubId))
+            {
+                return Unauthorized(new { error = "Não foi possível identificar o usuário logado." });
+            }
+
+            // 3. Recuperar o Token de Acesso (AuthToken) do Cookie
+            // Isso só funciona se "SaveTokens = true" estiver no Program.cs
+            var authToken = await HttpContext.GetTokenAsync("access_token");
+
+            if (string.IsNullOrEmpty(authToken))
+            {
+                return Unauthorized(new { error = "Token de acesso do GitHub não encontrado. Faça login novamente." });
+            }
+
+            // Define appPath padrão se não vier
             if (string.IsNullOrEmpty(appPath)) appPath = appName;
 
             try
             {
-                Console.WriteLine($"[ORBIT-PIPELINE] 1/3: Iniciando Clone de {appName}...");
+                Console.WriteLine($"[ORBIT-PIPELINE] Usuário: {githubId} | App: {appName}");
+
+                Console.WriteLine($"[ORBIT-PIPELINE] 1/3: Iniciando Clone...");
+                // Agora passamos o token seguro recuperado do contexto
                 await _githubService.CloneRepos(githubId, reposURL, authToken, appName);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 2/3: Gerando Dockerfile...");
