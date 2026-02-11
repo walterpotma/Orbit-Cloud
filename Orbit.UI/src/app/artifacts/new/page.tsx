@@ -4,15 +4,18 @@ import { useUser } from "@/context/user";
 import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
+import { Repository } from "@/features/artifacts/services/repository";
 
 export default function PipelinePage() {
     const { UserData, isLoading } = useUser();
+    const [repositories, setRepositories] = useState<any>([]);
+    const [selectedRepository, setSelectedRepository] = useState<any>(null);
 
     const router = useRouter();
 
     const [formData, setFormData] = useState({
         githubId: "",
-        reposURL: "",
+        selectedRepository: "",
         authToken: "",
         appName: "",
         version: "",
@@ -27,11 +30,17 @@ export default function PipelinePage() {
 
     useEffect(() => {
         if (UserData?.githubID) {
-            setFormData(prev => ({ ...prev, githubId: UserData.githubID, authToken: UserData.authenticationToken }));
+            setFormData(prev => ({ ...prev, githubId: UserData.githubID }));
         }
+        Repository.List().then(response => {
+            setRepositories(response.data);
+        }).catch(error => {
+            console.error("Erro ao buscar repositórios:", error);
+        });
     }, [UserData]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Adicione o | HTMLSelectElement aqui dentro
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -108,7 +117,7 @@ export default function PipelinePage() {
                     </div>
 
                     {/* Repos URL */}
-                    <div className="flex flex-col gap-2">
+                    {/* <div className="flex flex-col gap-2">
                         <label htmlFor="reposURL" className="text-sm font-medium text-zinc-300">URL do Repositório (.git)</label>
                         <input
                             type="url"
@@ -120,6 +129,24 @@ export default function PipelinePage() {
                             onChange={handleChange}
                             className="bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                         />
+                    </div> */}
+
+                    {/* Repositories Dropdown */}
+                    <div className="flex flex-col gap-2">
+                        <label htmlFor="selectedRepository" className="text-sm font-medium text-zinc-300">Repositório</label>
+                        <select
+                            name="selectedRepository"
+                            id="selectedRepository"
+                            required
+                            value={formData.selectedRepository}
+                            onChange={handleChange}
+                            className="bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                        >
+                            <option value="">Selecione um repositório</option>
+                            {repositories.map((repo: any) => (
+                                <option key={repo.id} value={repo.id}>{repo.name}</option>
+                            ))}
+                        </select>
                     </div>
 
                     {/*
