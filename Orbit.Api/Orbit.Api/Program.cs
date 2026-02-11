@@ -134,6 +134,12 @@ builder.Services.AddAuthentication(options =>
     options.ClaimActions.MapJsonKey("urn:github:login", "login");
     options.ClaimActions.MapJsonKey("urn:github:avatar", "avatar_url");
 
+    options.Scope.Add("read:user");
+    options.Scope.Add("user:email");
+
+    // ESTA É A LINHA QUE TRAZ OS PRIVADOS:
+    options.Scope.Add("repo");
+
     options.SaveTokens = true;
 
     options.Events = new OAuthEvents

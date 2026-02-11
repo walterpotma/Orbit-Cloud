@@ -68,24 +68,9 @@ namespace Orbit.Api.Controllers
             return Redirect("https://orbitcloud.com.br");
         }
 
-        //[Authorize]
-        //[HttpGet("me")]
-        //public async Task<IActionResult> GetMe()
-        //{
-        //    var user = new
-        //    {
-        //        GithubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-        //        Username = User.FindFirst("urn:github:login")?.Value,
-        //        Name = User.FindFirst(ClaimTypes.Name)?.Value,
-        //        Avatar = User.FindFirst("urn:github:avatar")?.Value,
-        //        IsAuthenticated = true,
-        //        AuthenticationToken = await HttpContext.GetTokenAsync("access_token")
-        //    };
-        //    return Ok(user);
-        //}
 
-        [HttpGet("me")]
         [Authorize]
+        [HttpGet("me")]
         public IActionResult GetMe()
         {
 
@@ -118,6 +103,7 @@ namespace Orbit.Api.Controllers
                 return Unauthorized(new { message = ex.Message });
             }
         }
+
         [Authorize]
         [HttpGet("repos/{owner}/{repoName}")]
         public async Task<IActionResult> GetRepositoryByName(
