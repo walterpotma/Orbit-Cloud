@@ -90,16 +90,30 @@ builder.Services.AddScoped<IDockerService, DockerService>();
 #region Authentication Github
 builder.Services.AddAuthentication(options =>
 {
+    // O padrão é Cookie (pois é o navegador que acessa)
     options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "GitHub";
+    options.DefaultSignInScheme = "Cookies";
+    options.DefaultChallengeScheme = "GitHub"; // Se não tiver logado, manda pro GitHub
 })
 .AddCookie("Cookies", options =>
 {
+    options.Cookie.Name = "orbit_session";
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
-    options.Cookie.Domain = ".orbitcloud.com.br";
+    options.Cookie.Domain = ".orbitcloud.com.br"; // Permite subdomínios
+
+    // Configurações de segurança para HTTPS
+    options.Cookie.SameSite = SameSiteMode.Lax; // Ou None se o front for outro dominio
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
     options.Events.OnRedirectToLogin = context =>
     {
-        context.Response.StatusCode = 401;
+        // Se a API (axios) chamar e não tiver logado, dá 401 em vez de tentar redirecionar HTML
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            context.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        }
+        context.Response.Redirect(context.RedirectUri);
         return Task.CompletedTask;
     };
 })
@@ -107,24 +121,18 @@ builder.Services.AddAuthentication(options =>
 {
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
+    options.CallbackPath = "/signin-github";
 
     options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
     options.UserInformationEndpoint = "https://api.github.com/user";
 
-    options.CallbackPath = "/signin-github";
-
+    // Mapeamento dos dados do JSON do GitHub para o User da API
     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
     options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
     options.ClaimActions.MapJsonKey("urn:github:login", "login");
     options.ClaimActions.MapJsonKey("urn:github:avatar", "avatar_url");
-    options.ClaimActions.MapJsonKey("urn:github:url", "html_url");
-
-    options.Scope.Add("read:user");
-    options.Scope.Add("user:email");
-    options.Scope.Add("repo");
-    options.Scope.Add("admin:repo_hook");
 
     options.SaveTokens = true;
 
@@ -135,7 +143,6 @@ builder.Services.AddAuthentication(options =>
             var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
             request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", context.AccessToken);
-            request.Headers.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Orbit-Cloud", "1.0"));
 
             var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
             response.EnsureSuccessStatusCode();
@@ -148,26 +155,6 @@ builder.Services.AddAuthentication(options =>
 #endregion
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            // ... suas configurações de validação (Issuer, Audience, Key) ...
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                if (context.Request.Cookies.ContainsKey("access_token"))
-                {
-                    context.Token = context.Request.Cookies["access_token"];
-                }
-                return Task.CompletedTask;
-            }
-        };
-    });
 
 
 builder.Services.AddControllers();
