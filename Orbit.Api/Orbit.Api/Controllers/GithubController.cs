@@ -68,40 +68,44 @@ namespace Orbit.Api.Controllers
             return Redirect("https://orbitcloud.com.br");
         }
 
+        //[Authorize]
+        //[HttpGet("me")]
+        //public async Task<IActionResult> GetMe()
+        //{
+        //    var user = new
+        //    {
+        //        GithubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+        //        Username = User.FindFirst("urn:github:login")?.Value,
+        //        Name = User.FindFirst(ClaimTypes.Name)?.Value,
+        //        Avatar = User.FindFirst("urn:github:avatar")?.Value,
+        //        IsAuthenticated = true,
+        //        AuthenticationToken = await HttpContext.GetTokenAsync("access_token")
+        //    };
+        //    return Ok(user);
+        //}
+
         [HttpGet("me")]
         [Authorize]
-        public async Task<IActionResult> GetMe()
+        public IActionResult GetMe()
         {
+
             var user = new
             {
-                GithubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-                Username = User.FindFirst("urn:github:login")?.Value,
-                Name = User.FindFirst(ClaimTypes.Name)?.Value,
-                Avatar = User.FindFirst("urn:github:avatar")?.Value,
-                IsAuthenticated = true,
-                AuthenticationToken = await HttpContext.GetTokenAsync("access_token")
+                IsAuthenticated = User.Identity?.IsAuthenticated,
+                Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value, // Seu ID do GitHub
+                Name = User.FindFirst(ClaimTypes.Name)?.Value,         // Nome
+                Email = User.FindFirst(ClaimTypes.Email)?.Value,       // Email
+                Username = User.FindFirst("urn:github:login")?.Value,  // Login do GitHub
+                AvatarUrl = User.FindFirst("urn:github:avatar")?.Value // Foto
             };
+
             return Ok(user);
-        }
-
-        [HttpGet("token")]
-        [Authorize]
-        public async Task<IActionResult> GetMyTokenForTesting()
-        {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                return NotFound("Token não encontrado. Faça o login primeiro.");
-            }
-
-            return Ok(new { AccessToken = accessToken });
         }
         #endregion
 
         #region Github Repositories
-        [HttpGet("repos")]
         [Authorize]
+        [HttpGet("repos")]
         public async Task<IActionResult> GetRepositories()
         {
             try
@@ -114,8 +118,8 @@ namespace Orbit.Api.Controllers
                 return Unauthorized(new { message = ex.Message });
             }
         }
-        [HttpGet("repos/{owner}/{repoName}")]
         [Authorize]
+        [HttpGet("repos/{owner}/{repoName}")]
         public async Task<IActionResult> GetRepositoryByName(
             [FromRoute] string owner,
             [FromRoute] string repoName)
@@ -131,6 +135,7 @@ namespace Orbit.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("repos/{owner}/{repoName}/clone")]
         [Authorize]
         public async Task<IActionResult> CloneRepository(
@@ -150,6 +155,7 @@ namespace Orbit.Api.Controllers
         #endregion
 
         #region Github Webhooks
+        [Authorize]
         [HttpGet("repos/{owner}/{repoName}/webhooks")]
         public async Task<IActionResult> GetWebhooks([FromRoute] string owner, [FromRoute] string repoName)
         {
@@ -164,6 +170,7 @@ namespace Orbit.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("repos/{owner}/{repoName}/webhooks/{hookId}")]
         public async Task<IActionResult> GetWebhookById(
             [FromRoute] string owner,
@@ -181,6 +188,7 @@ namespace Orbit.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("repos/{owner}/{repoName}/webhooks")]
         [Authorize]
         public async Task<IActionResult> CreateWebhook(
@@ -209,8 +217,8 @@ namespace Orbit.Api.Controllers
             }
         }
 
-        [HttpDelete("repos/{owner}/{repoName}/webhooks/{hookId}")]
         [Authorize]
+        [HttpDelete("repos/{owner}/{repoName}/webhooks/{hookId}")]
         public async Task<IActionResult> DeleteWebhook(
             [FromRoute] string owner,
             [FromRoute] string repoName,
@@ -231,13 +239,5 @@ namespace Orbit.Api.Controllers
             }
         }
         #endregion
-
-        [Authorize]
-        [HttpGet("teste")]
-        public IActionResult Teste()
-        {
-            var gitId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return Ok(new { message = $"Teste bem-sucedido! Seu GitHub ID é: {gitId}" });
-        }
     }
 }

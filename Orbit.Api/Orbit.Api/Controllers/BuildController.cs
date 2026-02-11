@@ -17,6 +17,7 @@ namespace Orbit.Api.Controllers
             _dockerService = dockerService;
         }
 
+        [Authorize]
         [HttpPost("artifact")]
         public async Task<IActionResult> RunFullBuild(
             [FromQuery] string githubId,
@@ -70,6 +71,7 @@ namespace Orbit.Api.Controllers
         }
 
 
+        [Authorize]
         [HttpPost("clone-repos")]
         [Authorize]
         public async Task<IActionResult> CloneRepository([FromQuery] string githubId, [FromQuery] string reposURL, [FromQuery] string authToken, [FromQuery] string appName)
