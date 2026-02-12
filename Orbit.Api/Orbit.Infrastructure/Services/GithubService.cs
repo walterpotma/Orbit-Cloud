@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿// Orbit.Infrastructure.Services/GithubService.cs
+using System.Security.Claims; // Necessário para ler o ID do usuário
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Orbit.Application.Interfaces;
 using Orbit.Domain.Entities.Github;
 using Orbit.Domain.Interfaces;
-using Orbit.Application.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Orbit.Application.Helpers;
-using Microsoft.AspNetCore.Authentication;
 
 namespace Orbit.Infrastructure.Services
 {
@@ -21,86 +22,41 @@ namespace Orbit.Infrastructure.Services
             _configuration = configuration;
         }
 
-        #region Github Repositories
-        public async Task<IEnumerable<DtoReposResponse>> GetCurrentUserRepositoriesAsync()
-        {
-            var accessToken = await GetAccessTokenAsync();
-            return await _githubRepository.GetUserRepositoriesAsync(accessToken);
-        }
-        public async Task<DtoReposResponse> GetCurrentUserRepositoryAsync(string owner, string repoName)
-        {
-            var accessToken = await GetAccessTokenAsync();
-            return await _githubRepository.GetRepositoryByNameAsync(accessToken, owner, repoName);
-        }
+        // ... (Seus métodos de GetRepositories e Webhooks continuam iguais) ...
+
+        // ============================================================
+        // CORREÇÃO AQUI: O método vira apenas um repassador (Proxy)
+        // ============================================================
         public async Task CloneReposByNameAsync(string owner, string repoName)
         {
+            // 1. O Service resolve a autenticação
             var accessToken = await GetAccessTokenAsync();
-            await _githubRepository.CloneReposByNameAsync(accessToken, owner, repoName);
+            
+            // 2. O Service resolve QUEM é o usuário
+            var githubId = GetCurrentGithubId();
+
+            // 3. O Service manda o Repository fazer o trabalho sujo
+            await _githubRepository.CloneReposByNameAsync(accessToken, owner, repoName, githubId);
         }
 
-        public async Task CloneRepos(string githubId, string reposURL, string authToken, string appName)
+        // Helper para pegar o ID do Claims
+        private string GetCurrentGithubId()
         {
-            var scriptPath = _configuration["FileExplorer:ClonePack"];
-
-            if (string.IsNullOrEmpty(scriptPath))
-            {
-                throw new Exception("ERRO: A configuração 'Clone.SH' não foi encontrada no appsettings.json.");
-            }
-
-            var args = $"{githubId} {reposURL} {authToken} {appName}";
-
-            Console.WriteLine($"[API] Chamando clonador de repos para {appName} em {scriptPath}...");
-
-            var result = await ShellHelper.RunScriptAsync(scriptPath, args);
-
-            if (result.ExitCode == 0)
-            {
-                Console.WriteLine("[API] Repos clonado com sucesso!");
-            }
-            else
-            {
-                Console.WriteLine($"[API] Erro ao clonar: {result.Error}");
-                throw new Exception($"Falha na clonagem: {result.Error}");
-            }
-        }
-        #endregion
-
-        #region Gtihub Webhooks
-        public async Task<IEnumerable<DtoWebhookResponse>> GetCurrentUserRepoWebhooksAsync(string owner, string repoName)
-        {
-            var accessToken = await GetAccessTokenAsync();
-            return await _githubRepository.GetRepositoryWebhooksAsync(accessToken, owner, repoName);
-        }
-
-        public async Task<DtoWebhookResponse> GetCurrentUserRepoWebhookIdAsync(string owner, string repoName, int hookId)
-        {
-            var accessToken = await GetAccessTokenAsync();
-            return await _githubRepository.GetRepositoryWebhookIdAsync(accessToken, owner, repoName, hookId);
+            var id = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(id))
+                throw new UnauthorizedAccessException("ID do usuário GitHub não encontrado no contexto.");
+            
+            return id;
         }
 
         private async Task<string> GetAccessTokenAsync()
         {
             var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
-
             if (string.IsNullOrEmpty(accessToken))
-            {
-                throw new System.Exception("Token de acesso não encontrado. O usuário está autenticado?");
-            }
+                throw new UnauthorizedAccessException("Token de acesso não encontrado.");
             return accessToken;
         }
 
-        public async Task<DtoWebhookResponse> CreateCurrentUserRepoWebhookAsync(string owner, string repoName, DtoWebhookRequest request)
-        {
-            var accessToken = await GetAccessTokenAsync();
-
-            return await _githubRepository.CreateRepositoryWebhookAsync(accessToken, owner, repoName, request);
-        }
-
-        public async Task DeleteWebhookAsync(string owner, string repoName, int hookId)
-        {
-            var accessToken = await GetAccessTokenAsync();
-            await _githubRepository.DeleteWebhookAsync(accessToken, owner, repoName, hookId);
-        }
-        #endregion
+        // ... (Pode remover o método antigo CloneRepos com ShellScript se não for mais usar) ...
     }
 }
