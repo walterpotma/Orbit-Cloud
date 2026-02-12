@@ -104,6 +104,8 @@ namespace Orbit.Api.Controllers
             }
         }
 
+
+
         [Authorize]
         [HttpGet("repos/{owner}/{repoName}")]
         public async Task<IActionResult> GetRepositoryByName(
@@ -225,5 +227,38 @@ namespace Orbit.Api.Controllers
             }
         }
         #endregion
+        [HttpPost("clone-by-name")]
+        public async Task<IActionResult> CloneRepositoryByName([FromBody] CloneByNameRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Owner) || string.IsNullOrEmpty(request.RepoName))
+            {
+                return BadRequest(new { error = "Owner e RepoName são obrigatórios." });
+            }
+
+            try
+            {
+                // Chama o método específico que você pediu
+                // O Service já cuida de pegar o Token do contexto automaticamente
+                await _githubService.CloneReposByNameAsync(request.Owner, request.RepoName);
+
+                return Ok(new
+                {
+                    message = $"Repositório {request.Owner}/{request.RepoName} clonado com sucesso!",
+                    status = "Cloned"
+                });
+            }
+            catch (Exception ex)
+            {
+                // Retorna 500 se der erro no Git (ex: repo não existe, erro de permissão)
+                return StatusCode(500, new { error = "Erro ao clonar repositório.", details = ex.Message });
+            }
+        }
+    }
+
+    // DTO para receber os dados do JSON
+    public class CloneByNameRequest
+    {
+        public string Owner { get; set; }    // Ex: "walterpotma"
+        public string RepoName { get; set; } // Ex: "Next-World-Front"
     }
 }
