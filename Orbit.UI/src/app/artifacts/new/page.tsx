@@ -48,15 +48,25 @@ export default function PipelinePage() {
         setStatus({ loading: true, message: "", type: "" });
 
         try {
-            formData.appPath = formData.appName;
-            const queryParams = new URLSearchParams(formData).toString();
+            // CORREÇÃO: Não altere o formData diretamente. Crie um objeto payload novo.
+            const payload = {
+                selectedRepository: formData.selectedRepository, // Garante que o nome bate com o Backend
+                appName: formData.appName,
+                version: formData.version,
+                appPath: formData.appName // Força o appPath ser igual ao appName (como você queria)
+            };
+
+            // Transforma o objeto limpo em Query String
+            // @ts-ignore (Ignora erro de tipagem se houver, pois payload é objeto simples)
+            const queryParams = new URLSearchParams(payload).toString();
 
             const response = await fetch(`https://api.orbitcloud.com.br/Build/artifact?${queryParams}`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    // Remover o Content-Type JSON pois não estamos mandando Body, só Query Params
+                    // "Content-Type": "application/json", 
                 },
-                credentials: "include"
+                credentials: "include" // Essencial para o Auth funcionar
             });
 
             const data = await response.json();
