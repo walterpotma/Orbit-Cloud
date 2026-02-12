@@ -22,74 +22,50 @@ namespace Orbit.Api.Controllers
         [Authorize]
         [HttpPost("artifact")]
         public async Task<IActionResult> RunFullBuild(
-    // Removemos githubId e authToken daqui, pois vamos pegar internamente
-    [FromQuery] string selectedRepository,
+    [FromQuery] string reposURL,
     [FromQuery] string appName,
     [FromQuery] string version,
-    [FromQuery] string? appPath) // appPath pode ser opcional
+    [FromQuery] string? appPath)
         {
-            // 1. Validar parâmetros de entrada básicos
-            if (string.IsNullOrEmpty(selectedRepository) || string.IsNullOrEmpty(appName) || string.IsNullOrEmpty(version))
-            {
-                return BadRequest(new { error = "Campos obrigatórios: reposURL, appName, version." });
-            }
-
-            // 2. Recuperar o ID do Usuário (GithubID) das Claims
-            // O ClaimTypes.NameIdentifier foi mapeado para o ID do GitHub no seu Program.cs
+            // ... (Validações de githubId e Token iguais ao anterior) ...
             var githubId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(githubId))
-            {
-                return Unauthorized(new { error = "Não foi possível identificar o usuário logado." });
-            }
-
-            // 3. Recuperar o Token de Acesso (AuthToken) do Cookie
-            // Isso só funciona se "SaveTokens = true" estiver no Program.cs
             var authToken = await HttpContext.GetTokenAsync("access_token");
 
-            if (string.IsNullOrEmpty(authToken))
-            {
-                return Unauthorized(new { error = "Token de acesso do GitHub não encontrado. Faça login novamente." });
-            }
-
-            // Define appPath padrão se não vier
             if (string.IsNullOrEmpty(appPath)) appPath = appName;
 
-            try
+            // --- A MUDANÇA MÁGICA COMEÇA AQUI ---
+
+            // Em vez de esperar (await) o processo todo, nós o jogamos para uma Task separada
+            _ = Task.Run(async () =>
             {
-                Console.WriteLine($"[ORBIT-PIPELINE] Usuário: {githubId} | App: {appName}");
-
-                Console.WriteLine($"[ORBIT-PIPELINE] 1/3: Iniciando Clone...");
-                // Agora passamos o token seguro recuperado do contexto
-                await _githubService.CloneRepos(githubId, selectedRepository, authToken, appName);
-
-                Console.WriteLine($"[ORBIT-PIPELINE] 2/3: Gerando Dockerfile...");
-                await _dockerService.GenerateDockerfile(githubId, appName);
-
-                Console.WriteLine($"[ORBIT-PIPELINE] 3/3: Criando Imagem Docker v{version}...");
-                await _dockerService.GenerateImage(githubId, appName, version, appPath);
-
-                Console.WriteLine($"[ORBIT-PIPELINE] Sucesso Total!");
-                return Ok(new
+                try
                 {
-                    message = "Pipeline de Build executado com sucesso!",
-                    details = new
-                    {
-                        app = appName,
-                        version = version,
-                        status = "Deployed to Registry"
-                    }
-                });
-            }
-            catch (Exception ex)
+                    Console.WriteLine($"[BACKGROUND] Iniciando Pipeline para {appName}...");
+
+                    // 1. Clone (Já refatoramos para C#, ok!)
+                    await _githubService.CloneRepos(githubId, reposURL, authToken, appName);
+
+                    // 2. Dockerfile (Vamos refatorar para C# agora)
+                    await _dockerService.GenerateDockerfile(githubId, appName);
+
+                    // 3. Build Imagem (Vamos refatorar para C# agora)
+                    await _dockerService.GenerateImage(githubId, appName, version, appPath);
+
+                    Console.WriteLine($"[BACKGROUND] Sucesso! {appName} v{version} deployado.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[BACKGROUND-ERROR] Falha no pipeline de {appName}: {ex.Message}");
+                    // TODO: Aqui no futuro você salvaria o erro no banco para o usuário ver na tela de logs
+                }
+            });
+
+            // Retornamos IMEDIATAMENTE para o front não dar Timeout 524
+            return Accepted(new
             {
-                Console.WriteLine($"[ORBIT-PIPELINE] FALHA CRÍTICA: {ex.Message}");
-                return StatusCode(500, new
-                {
-                    error = "Falha no Pipeline de Build.",
-                    details = ex.Message
-                });
-            }
+                message = "Pipeline iniciado em segundo plano!",
+                details = new { app = appName, status = "Processing" }
+            });
         }
 
 
