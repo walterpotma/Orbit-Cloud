@@ -14,7 +14,7 @@ namespace Orbit.Domain.Interfaces
         #region Github Repositories
         Task<IEnumerable<DtoReposResponse>> GetUserRepositoriesAsync(string accessToken);
         Task<DtoReposResponse> GetRepositoryByNameAsync(string accessToken, string owner, string repoName);
-        Task CloneReposByNameAsync(string accessToken, string owner, string repoName);
+        Task CloneReposByNameAsync(string accessToken, string owner, string repoName, string githubId);
         bool CloneRepository(DtoCloneRequest request);
         #endregion
 
