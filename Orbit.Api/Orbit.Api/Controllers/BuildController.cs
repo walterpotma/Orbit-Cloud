@@ -23,13 +23,13 @@ namespace Orbit.Api.Controllers
         [HttpPost("artifact")]
         public async Task<IActionResult> RunFullBuild(
     // Removemos githubId e authToken daqui, pois vamos pegar internamente
-    [FromQuery] string reposURL,
+    [FromQuery] string selectedRepository,
     [FromQuery] string appName,
     [FromQuery] string version,
     [FromQuery] string? appPath) // appPath pode ser opcional
         {
             // 1. Validar parâmetros de entrada básicos
-            if (string.IsNullOrEmpty(reposURL) || string.IsNullOrEmpty(appName) || string.IsNullOrEmpty(version))
+            if (string.IsNullOrEmpty(selectedRepository) || string.IsNullOrEmpty(appName) || string.IsNullOrEmpty(version))
             {
                 return BadRequest(new { error = "Campos obrigatórios: reposURL, appName, version." });
             }
@@ -61,7 +61,7 @@ namespace Orbit.Api.Controllers
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 1/3: Iniciando Clone...");
                 // Agora passamos o token seguro recuperado do contexto
-                await _githubService.CloneRepos(githubId, reposURL, authToken, appName);
+                await _githubService.CloneRepos(githubId, selectedRepository, authToken, appName);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 2/3: Gerando Dockerfile...");
                 await _dockerService.GenerateDockerfile(githubId, appName);
