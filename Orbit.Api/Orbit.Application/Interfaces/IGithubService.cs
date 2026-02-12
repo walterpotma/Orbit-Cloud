@@ -7,12 +7,10 @@ namespace Orbit.Application.Interfaces
 {
     public interface IGithubService
     {
-        Task CloneRepos(string githubId, string reposURL, string authToken, string appName);
-
         #region Github Repositories
         Task<IEnumerable<DtoReposResponse>> GetCurrentUserRepositoriesAsync();
         Task<DtoReposResponse> GetCurrentUserRepositoryAsync(string owner, string repoName);
-        Task CloneReposByNameAsync(string owner, string repoName);
+        Task CloneReposByNameAsync(string accessToken, string owner, string repoName, string githubId);
         #endregion
 
         #region Github Webhooks
