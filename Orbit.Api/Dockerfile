@@ -5,7 +5,8 @@ EXPOSE 8080
 
 RUN apt-get update && \
     apt-get install -y curl git bash docker.io && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    curl -sSL https://nixpacks.com/install.sh | bash
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src

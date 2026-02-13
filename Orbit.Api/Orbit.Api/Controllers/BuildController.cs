@@ -69,8 +69,8 @@ namespace Orbit.Api.Controllers
                 // Chama o novo método que já sabe pegar o token sozinho
                 await _githubService.CloneReposByNameAsync(owner, repoName);
 
-                Console.WriteLine($"[ORBIT-PIPELINE] 2/3: Gerando Dockerfile...");
-                await _dockerService.GenerateDockerfile(githubId, appName, repoName);
+                Console.WriteLine($"[ORBIT-PIPELINE] 2/3: Gerando Dockerfile com Nixpacks...");
+                await _dockerService.GenerateDockerfile(githubId, repoName, appName);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 3/3: Criando Imagem Docker v{version}...");
                 await _dockerService.GenerateImage(githubId, appName, version, appPath);
@@ -123,15 +123,15 @@ namespace Orbit.Api.Controllers
         //    catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
         //}
 
-        [HttpPost("create-image")]
-        public async Task<IActionResult> GenerateImage([FromQuery] string githubId, [FromQuery] string appName, [FromQuery] string version, [FromQuery] string appPath)
-        {
-            try
-            {
-                await _dockerService.GenerateImage(githubId, appName, version, appPath);
-                return Ok(new { message = "Imagem gerada.", app = appName });
-            }
-            catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
-        }
+        //[HttpPost("create-image")]
+        //public async Task<IActionResult> GenerateImage([FromQuery] string githubId, [FromQuery] string appName, [FromQuery] string version, [FromQuery] string appPath)
+        //{
+        //    try
+        //    {
+        //        await _dockerService.GenerateImage(githubId, appName, version, appPath);
+        //        return Ok(new { message = "Imagem gerada.", app = appName });
+        //    }
+        //    catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
+        //}
     }
 }

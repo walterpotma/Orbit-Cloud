@@ -4,7 +4,7 @@ namespace Orbit.Application.Interfaces
 {
     public interface IDockerService
     {
-        Task GenerateDockerfile(string githubId, string appName, string appPath);
+        Task GenerateDockerfile(string githubId, string repoName, string appName);
         Task GenerateImage(string githubId, string appName, string version, string appPath);
     }
 }
