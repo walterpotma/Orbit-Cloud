@@ -70,7 +70,7 @@ namespace Orbit.Api.Controllers
                 await _githubService.CloneReposByNameAsync(owner, repoName);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 2/3: Gerando Dockerfile...");
-                await _dockerService.GenerateDockerfile(githubId, appName);
+                await _dockerService.GenerateDockerfile(githubId, appName, repoName);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 3/3: Criando Imagem Docker v{version}...");
                 await _dockerService.GenerateImage(githubId, appName, version, appPath);

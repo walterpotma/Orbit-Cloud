@@ -14,7 +14,7 @@ namespace Orbit.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public async Task GenerateDockerfile(string githubId, string appName)
+        public async Task GenerateDockerfile(string githubId, string appName, string appPath)
         {
             var scriptPath = _configuration["FileExplorer:NixPack"];
 
@@ -25,7 +25,7 @@ namespace Orbit.Infrastructure.Services
 
             await ShellHelper.MakeExecutableAsync(scriptPath);
 
-            var args = $"{githubId} {appName}";
+            var args = $"{githubId} {appName} {appPath}";
 
             Console.WriteLine($"[API] Chamando gerador de Dockerfile para {appName} em {scriptPath}...");
 
