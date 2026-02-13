@@ -20,23 +20,19 @@ namespace Orbit.Infrastructure.Services
 
         public async Task GenerateDockerfile(string githubId, string repoName, string appName)
         {
-            // Caminho: /data/archive/clients/{id}/tmp/{repoName}
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", repoName);
 
             if (!Directory.Exists(sourcePath))
-            {
-                throw new DirectoryNotFoundException($"ERRO CRÍTICO: O diretório do código não existe: {sourcePath}.");
-            }
+                throw new DirectoryNotFoundException($"ERRO CRÍTICO: Pasta não encontrada: {sourcePath}");
 
-            Console.WriteLine($"[NIXPACKS] Gerando Dockerfile para {appName} na pasta {sourcePath}...");
+            Console.WriteLine($"[NIXPACKS] Gerando Dockerfile em {sourcePath}...");
 
-            // CORREÇÃO: Removemos '--no-build'. 
-            // O uso de '--out .' já instrui o Nixpacks a apenas salvar os arquivos e sair.
+            // MUDANÇA: Salvar em uma subpasta específica (.nixpacks) para evitar confusão
             var processInfo = new ProcessStartInfo
             {
                 FileName = "nixpacks",
-                Arguments = "build . --out .", // Gera o Dockerfile na raiz (.)
-                WorkingDirectory = sourcePath, // Roda DENTRO da pasta
+                Arguments = "build . --out .nixpacks", // <--- Salva na subpasta
+                WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -45,16 +41,8 @@ namespace Orbit.Infrastructure.Services
 
             using var process = new Process { StartInfo = processInfo };
 
-            // Logs para debug
-            process.OutputDataReceived += (sender, e) =>
-            {
-                if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[NIXPACKS-OUT] {e.Data}");
-            };
-
-            process.ErrorDataReceived += (sender, e) =>
-            {
-                if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[NIXPACKS-ERR] {e.Data}");
-            };
+            process.OutputDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[NIXPACKS-OUT] {e.Data}"); };
+            process.ErrorDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[NIXPACKS-ERR] {e.Data}"); };
 
             process.Start();
             process.BeginOutputReadLine();
@@ -63,12 +51,10 @@ namespace Orbit.Infrastructure.Services
             await process.WaitForExitAsync();
 
             if (process.ExitCode != 0)
-            {
-                throw new Exception($"Nixpacks falhou com código de saída {process.ExitCode}. Veja os logs acima.");
-            }
+                throw new Exception($"Nixpacks falhou (Exit Code {process.ExitCode}).");
 
-            // Verificação se o arquivo foi criado
-            var dockerfilePath = Path.Combine(sourcePath, "Dockerfile");
+            // Verifica se o arquivo existe dentro da subpasta
+            var dockerfilePath = Path.Combine(sourcePath, ".nixpacks", "Dockerfile");
 
             if (File.Exists(dockerfilePath))
             {
@@ -76,7 +62,12 @@ namespace Orbit.Infrastructure.Services
             }
             else
             {
-                throw new FileNotFoundException($"O Nixpacks rodou, mas nenhum 'Dockerfile' foi encontrado em {sourcePath}.");
+                // DEBUG: Se não achou, lista o que tem na pasta para entendermos o erro
+                Console.WriteLine($"[ERRO] Dockerfile não encontrado em {dockerfilePath}. Conteúdo da pasta {sourcePath}:");
+                var files = Directory.GetFileSystemEntries(sourcePath, "*", SearchOption.AllDirectories);
+                foreach (var file in files) Console.WriteLine($" - {file}");
+
+                throw new FileNotFoundException($"O Nixpacks rodou, mas o Dockerfile sumiu.");
             }
         }
         public async Task GenerateImage(string githubId, string appName, string version, string appPath)
