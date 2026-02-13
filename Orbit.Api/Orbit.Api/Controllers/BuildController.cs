@@ -112,16 +112,16 @@ namespace Orbit.Api.Controllers
         //    catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
         //}
 
-        [HttpPost("create-dockerfile")]
-        public async Task<IActionResult> GenerateDockerfile([FromQuery] string githubId, [FromQuery] string appName)
-        {
-            try
-            {
-                await _dockerService.GenerateDockerfile(githubId, appName);
-                return Ok(new { message = "Dockerfile gerado.", app = appName });
-            }
-            catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
-        }
+        //[HttpPost("create-dockerfile")]
+        //public async Task<IActionResult> GenerateDockerfile([FromQuery] string githubId, [FromQuery] string appName)
+        //{
+        //    try
+        //    {
+        //        await _dockerService.GenerateDockerfile(githubId, appName);
+        //        return Ok(new { message = "Dockerfile gerado.", app = appName });
+        //    }
+        //    catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
+        //}
 
         [HttpPost("create-image")]
         public async Task<IActionResult> GenerateImage([FromQuery] string githubId, [FromQuery] string appName, [FromQuery] string version, [FromQuery] string appPath)
