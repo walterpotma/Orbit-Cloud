@@ -20,11 +20,9 @@ namespace Orbit.Infrastructure.Services
 
         public async Task GenerateDockerfile(string githubId, string repoName, string appName)
         {
-            // 1. Define o caminho exato onde o código está
-            // Mantive o "tmp" que você adicionou no seu snippet
+            // Caminho: /data/archive/clients/{id}/tmp/{repoName}
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", repoName);
 
-            // Validação de segurança
             if (!Directory.Exists(sourcePath))
             {
                 throw new DirectoryNotFoundException($"ERRO CRÍTICO: O diretório do código não existe: {sourcePath}.");
@@ -32,16 +30,13 @@ namespace Orbit.Infrastructure.Services
 
             Console.WriteLine($"[NIXPACKS] Gerando Dockerfile para {appName} na pasta {sourcePath}...");
 
-            // 2. Configura o processo
-            // MUDANÇA FUNDAMENTAL:
-            // "build ."      -> Analisa o diretório atual
-            // "--out ."      -> Salva os arquivos gerados (Dockerfile, .nixpacks) no diretório atual
-            // "--no-build"   -> NÃO roda o docker build, apenas gera os arquivos
+            // CORREÇÃO: Removemos '--no-build'. 
+            // O uso de '--out .' já instrui o Nixpacks a apenas salvar os arquivos e sair.
             var processInfo = new ProcessStartInfo
             {
                 FileName = "nixpacks",
-                Arguments = "build . --out . --no-build",
-                WorkingDirectory = sourcePath, // Importante: O comando roda DENTRO da pasta
+                Arguments = "build . --out .", // Gera o Dockerfile na raiz (.)
+                WorkingDirectory = sourcePath, // Roda DENTRO da pasta
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -50,7 +45,7 @@ namespace Orbit.Infrastructure.Services
 
             using var process = new Process { StartInfo = processInfo };
 
-            // Capturamos os logs apenas para debug no console, não para salvar arquivo
+            // Logs para debug
             process.OutputDataReceived += (sender, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[NIXPACKS-OUT] {e.Data}");
@@ -69,24 +64,21 @@ namespace Orbit.Infrastructure.Services
 
             if (process.ExitCode != 0)
             {
-                throw new Exception($"Nixpacks falhou com código de saída {process.ExitCode}. Verifique os logs acima.");
+                throw new Exception($"Nixpacks falhou com código de saída {process.ExitCode}. Veja os logs acima.");
             }
 
-            // 3. Verificação
-            // Como usamos "--out .", o arquivo já deve estar lá fisicamente
+            // Verificação se o arquivo foi criado
             var dockerfilePath = Path.Combine(sourcePath, "Dockerfile");
 
             if (File.Exists(dockerfilePath))
             {
-                Console.WriteLine($"[NIXPACKS] Sucesso! Dockerfile criado fisicamente em: {dockerfilePath}");
+                Console.WriteLine($"[NIXPACKS] Sucesso! Dockerfile criado em: {dockerfilePath}");
             }
             else
             {
-                // Se o Nixpacks não gerou Dockerfile, pode ser que ele não tenha detectado a linguagem
                 throw new FileNotFoundException($"O Nixpacks rodou, mas nenhum 'Dockerfile' foi encontrado em {sourcePath}.");
             }
         }
-
         public async Task GenerateImage(string githubId, string appName, string version, string appPath)
         {
             var scriptPath = _configuration["FileExplorer:BuildPack"];
