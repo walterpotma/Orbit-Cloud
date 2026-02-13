@@ -67,7 +67,15 @@ namespace Orbit.Infrastructure.Repositories
 
             var options = new CloneOptions
             {
-                Credentials = new UsernamePasswordCredentials { Username = "oauth2", Password = accessToken },
+                // CORREÇÃO: As credenciais ficam dentro de FetchOptions -> CredentialsProvider
+                FetchOptions =
+                {
+                    CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
+                    {
+                        Username = "oauth2",
+                        Password = accessToken
+                    }
+                },
                 BranchName = "main",
                 RecurseSubmodules = true
             };
