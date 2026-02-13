@@ -61,7 +61,13 @@ namespace Orbit.Api.Controllers
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 1/3: Iniciando Clone...");
                 // Agora passamos o token seguro recuperado do contexto
-                await _githubService.CloneRepos(githubId, selectedRepository, authToken, appName);
+                var uri = new Uri(selectedRepository);
+                var segments = uri.AbsolutePath.Trim('/').Split('/');
+                var owner = segments[0];
+                var repoName = segments[1].Replace(".git", "");
+
+                // Chama o novo método que já sabe pegar o token sozinho
+                await _githubService.CloneReposByNameAsync(owner, repoName);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 2/3: Gerando Dockerfile...");
                 await _dockerService.GenerateDockerfile(githubId, appName);
@@ -93,18 +99,18 @@ namespace Orbit.Api.Controllers
         }
 
 
-        [Authorize]
-        [HttpPost("clone-repos")]
-        [Authorize]
-        public async Task<IActionResult> CloneRepository([FromQuery] string githubId, [FromQuery] string reposURL, [FromQuery] string authToken, [FromQuery] string appName)
-        {
-            try
-            {
-                await _githubService.CloneRepos(githubId, reposURL, authToken, appName);
-                return Ok(new { message = "Repositório clonado com sucesso.", app = appName });
-            }
-            catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
-        }
+        //[Authorize]
+        //[HttpPost("clone-repos")]
+        //[Authorize]
+        //public async Task<IActionResult> CloneRepository([FromQuery] string githubId, [FromQuery] string reposURL, [FromQuery] string authToken, [FromQuery] string appName)
+        //{
+        //    try
+        //    {
+        //        await _githubService.CloneRepos(githubId, reposURL, authToken, appName);
+        //        return Ok(new { message = "Repositório clonado com sucesso.", app = appName });
+        //    }
+        //    catch (Exception ex) { return StatusCode(500, new { error = ex.Message }); }
+        //}
 
         [HttpPost("create-dockerfile")]
         public async Task<IActionResult> GenerateDockerfile([FromQuery] string githubId, [FromQuery] string appName)
