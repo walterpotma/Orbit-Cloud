@@ -57,7 +57,7 @@ namespace Orbit.Infrastructure.Repositories
         public async Task CloneReposByNameAsync(string accessToken, string owner, string repoName, string githubId)
         {
             var cloneUrl = $"https://github.com/{owner}/{repoName}.git";
-            var userPath = Path.Combine(BaseStoragePath, githubId);
+            var userPath = Path.Combine("/data/archive/clients", githubId, "tmp");
             var targetPath = Path.Combine(userPath, repoName);
 
             Console.WriteLine($"[REPO] Clone: {repoName} -> {targetPath}");
