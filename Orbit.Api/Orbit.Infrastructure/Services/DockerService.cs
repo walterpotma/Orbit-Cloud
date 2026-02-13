@@ -36,7 +36,7 @@ namespace Orbit.Infrastructure.Services
             var processInfo = new ProcessStartInfo
             {
                 FileName = "nixpacks",
-                Arguments = $"plan . --dockerfile", // O ponto (.) indica o diretório atual (WorkingDirectory)
+                Arguments = $"plan \"{sourcePath}\" --format dockerfile",
                 WorkingDirectory = sourcePath,      // Define a pasta de execução
                 RedirectStandardOutput = true,      // Precisamos capturar o texto do Dockerfile
                 RedirectStandardError = true,       // Precisamos capturar erros
