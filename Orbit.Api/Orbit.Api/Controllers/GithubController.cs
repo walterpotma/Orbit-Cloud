@@ -142,91 +142,92 @@ namespace Orbit.Api.Controllers
         }
         #endregion
 
-        #region Github Webhooks
-        [Authorize]
-        [HttpGet("repos/{owner}/{repoName}/webhooks")]
-        public async Task<IActionResult> GetWebhooks([FromRoute] string owner, [FromRoute] string repoName)
-        {
-            try
-            {
-                var webhooks = await _githubService.GetCurrentUserRepoWebhooksAsync(owner, repoName);
-                return Ok(webhooks);
-            }
-            catch (System.Exception ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-        }
+        //#region Github Webhooks
+        //[Authorize]
+        //[HttpGet("repos/{owner}/{repoName}/webhooks")]
+        //public async Task<IActionResult> GetWebhooks([FromRoute] string owner, [FromRoute] string repoName)
+        //{
+        //    try
+        //    {
+        //        var webhooks = await _githubService.GetCurrentUserRepoWebhooksAsync(owner, repoName);
+        //        return Ok(webhooks);
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        return Unauthorized(new { message = ex.Message });
+        //    }
+        //}
 
-        [Authorize]
-        [HttpGet("repos/{owner}/{repoName}/webhooks/{hookId}")]
-        public async Task<IActionResult> GetWebhookById(
-            [FromRoute] string owner,
-            [FromRoute] string repoName,
-            [FromRoute] int hookId)
-        {
-            try
-            {
-                var webhook = await _githubService.GetCurrentUserRepoWebhookIdAsync(owner, repoName, hookId);
-                return Ok(webhook);
-            }
-            catch (System.Exception ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-        }
+        //[Authorize]
+        //[HttpGet("repos/{owner}/{repoName}/webhooks/{hookId}")]
+        //public async Task<IActionResult> GetWebhookById(
+        //    [FromRoute] string owner,
+        //    [FromRoute] string repoName,
+        //    [FromRoute] int hookId)
+        //{
+        //    try
+        //    {
+        //        var webhook = await _githubService.GetCurrentUserRepoWebhookIdAsync(owner, repoName, hookId);
+        //        return Ok(webhook);
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        return Unauthorized(new { message = ex.Message });
+        //    }
+        //}
 
-        [Authorize]
-        [HttpPost("repos/{owner}/{repoName}/webhooks")]
-        [Authorize]
-        public async Task<IActionResult> CreateWebhook(
-        [FromRoute] string owner,
-        [FromRoute] string repoName,
-        [FromBody] DtoWebhookRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[Authorize]
+        //[HttpPost("repos/{owner}/{repoName}/webhooks")]
+        //[Authorize]
+        //public async Task<IActionResult> CreateWebhook(
+        //[FromRoute] string owner,
+        //[FromRoute] string repoName,
+        //[FromBody] DtoWebhookRequest request)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            try
-            {
-                var createdWebhook = await _githubService.CreateCurrentUserRepoWebhookAsync(owner, repoName, request);
+        //    try
+        //    {
+        //        var createdWebhook = await _githubService.CreateCurrentUserRepoWebhookAsync(owner, repoName, request);
 
-                return Ok(createdWebhook);
-            }
-            catch (HttpRequestException ex)
-            {
-                return BadRequest(new { message = $"Falha na API do GitHub: {ex.Message}" });
-            }
-            catch (System.Exception ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-        }
+        //        return Ok(createdWebhook);
+        //    }
+        //    catch (HttpRequestException ex)
+        //    {
+        //        return BadRequest(new { message = $"Falha na API do GitHub: {ex.Message}" });
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        return Unauthorized(new { message = ex.Message });
+        //    }
+        //}
 
-        [Authorize]
-        [HttpDelete("repos/{owner}/{repoName}/webhooks/{hookId}")]
-        public async Task<IActionResult> DeleteWebhook(
-            [FromRoute] string owner,
-            [FromRoute] string repoName,
-            [FromRoute] int hookId)
-        {
-            try
-            {
-                await _githubService.DeleteWebhookAsync(owner, repoName, hookId);
-                return NoContent();
-            }
-            catch (HttpRequestException ex)
-            {
-                return BadRequest(new { message = $"Falha na API do GitHub: {ex.Message}" });
-            }
-            catch (System.Exception ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-        }
-        #endregion
+        //[Authorize]
+        //[HttpDelete("repos/{owner}/{repoName}/webhooks/{hookId}")]
+        //public async Task<IActionResult> DeleteWebhook(
+        //    [FromRoute] string owner,
+        //    [FromRoute] string repoName,
+        //    [FromRoute] int hookId)
+        //{
+        //    try
+        //    {
+        //        await _githubService.DeleteWebhookAsync(owner, repoName, hookId);
+        //        return NoContent();
+        //    }
+        //    catch (HttpRequestException ex)
+        //    {
+        //        return BadRequest(new { message = $"Falha na API do GitHub: {ex.Message}" });
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        return Unauthorized(new { message = ex.Message });
+        //    }
+        //}
+        //#endregion
+
         [HttpPost("clone-by-name")]
         public async Task<IActionResult> CloneRepositoryByName([FromBody] CloneByNameRequest request)
         {
