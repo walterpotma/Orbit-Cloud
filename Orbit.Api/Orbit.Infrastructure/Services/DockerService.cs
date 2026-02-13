@@ -21,50 +21,44 @@ namespace Orbit.Infrastructure.Services
         public async Task GenerateDockerfile(string githubId, string repoName, string appName)
         {
             // 1. Define o caminho exato onde o código está
+            // Mantive o "tmp" que você adicionou no seu snippet
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", repoName);
 
             // Validação de segurança
             if (!Directory.Exists(sourcePath))
             {
-                throw new DirectoryNotFoundException($"ERRO CRÍTICO: O diretório do código não existe: {sourcePath}. O clone falhou?");
+                throw new DirectoryNotFoundException($"ERRO CRÍTICO: O diretório do código não existe: {sourcePath}.");
             }
 
             Console.WriteLine($"[NIXPACKS] Gerando Dockerfile para {appName} na pasta {sourcePath}...");
 
-            // 2. Configura o processo para rodar o nixpacks
-            // Comando equivalente: nixpacks plan /caminho/do/app --dockerfile
+            // 2. Configura o processo
+            // MUDANÇA FUNDAMENTAL:
+            // "build ."      -> Analisa o diretório atual
+            // "--out ."      -> Salva os arquivos gerados (Dockerfile, .nixpacks) no diretório atual
+            // "--no-build"   -> NÃO roda o docker build, apenas gera os arquivos
             var processInfo = new ProcessStartInfo
             {
                 FileName = "nixpacks",
-                Arguments = $"plan \"{sourcePath}\" --format dockerfile",
-                WorkingDirectory = sourcePath,      // Define a pasta de execução
-                RedirectStandardOutput = true,      // Precisamos capturar o texto do Dockerfile
-                RedirectStandardError = true,       // Precisamos capturar erros
+                Arguments = "build . --out . --no-build",
+                WorkingDirectory = sourcePath, // Importante: O comando roda DENTRO da pasta
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
 
-            var dockerfileContent = new StringBuilder();
-
             using var process = new Process { StartInfo = processInfo };
 
-            // Captura a saída (que será o conteúdo do Dockerfile)
+            // Capturamos os logs apenas para debug no console, não para salvar arquivo
             process.OutputDataReceived += (sender, e) =>
             {
-                if (!string.IsNullOrEmpty(e.Data))
-                {
-                    dockerfileContent.AppendLine(e.Data);
-                }
+                if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[NIXPACKS-OUT] {e.Data}");
             };
 
-            // Captura erros ou logs informativos do nixpacks
             process.ErrorDataReceived += (sender, e) =>
             {
-                if (!string.IsNullOrEmpty(e.Data))
-                {
-                    // Nixpacks joga logs de "planning" no stderr, então só logamos, não jogamos exception
-                    Console.WriteLine($"[NIXPACKS-LOG] {e.Data}");
-                }
+                if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[NIXPACKS-ERR] {e.Data}");
             };
 
             process.Start();
@@ -78,11 +72,19 @@ namespace Orbit.Infrastructure.Services
                 throw new Exception($"Nixpacks falhou com código de saída {process.ExitCode}. Verifique os logs acima.");
             }
 
-            // 3. Salva o conteúdo capturado em um arquivo 'Dockerfile' na raiz do repo
+            // 3. Verificação
+            // Como usamos "--out .", o arquivo já deve estar lá fisicamente
             var dockerfilePath = Path.Combine(sourcePath, "Dockerfile");
-            await File.WriteAllTextAsync(dockerfilePath, dockerfileContent.ToString());
 
-            Console.WriteLine($"[NIXPACKS] Dockerfile salvo com sucesso em: {dockerfilePath}");
+            if (File.Exists(dockerfilePath))
+            {
+                Console.WriteLine($"[NIXPACKS] Sucesso! Dockerfile criado fisicamente em: {dockerfilePath}");
+            }
+            else
+            {
+                // Se o Nixpacks não gerou Dockerfile, pode ser que ele não tenha detectado a linguagem
+                throw new FileNotFoundException($"O Nixpacks rodou, mas nenhum 'Dockerfile' foi encontrado em {sourcePath}.");
+            }
         }
 
         public async Task GenerateImage(string githubId, string appName, string version, string appPath)
