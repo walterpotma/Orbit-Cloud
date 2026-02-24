@@ -22,8 +22,19 @@ namespace Orbit.Infrastructure.Services
             _configuration = configuration;
         }
 
-        // ... (Seus métodos de GetRepositories e Webhooks continuam iguais) ...
+        public async Task<IEnumerable<DtoReposResponse>> GetCurrentUserRepositoriesAsync()
+        {
+            // Pega o token do contexto
+            var accessToken = await GetAccessTokenAsync();
+            // Repassa para o repositório
+            return await _githubRepository.GetUserRepositoriesAsync(accessToken);
+        }
 
+        public async Task<DtoReposResponse> GetCurrentUserRepositoryAsync(string owner, string repoName)
+        {
+            var accessToken = await GetAccessTokenAsync();
+            return await _githubRepository.GetRepositoryByNameAsync(accessToken, owner, repoName);
+        }
         // ============================================================
         // CORREÇÃO AQUI: O método vira apenas um repassador (Proxy)
         // ============================================================

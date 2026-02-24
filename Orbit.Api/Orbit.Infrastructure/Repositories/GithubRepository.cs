@@ -1,5 +1,4 @@
-﻿// Orbit.Infrastructure.Repositories/GithubRepository.cs
-using LibGit2Sharp;
+﻿using LibGit2Sharp;
 using Microsoft.Extensions.Configuration;
 using Orbit.Domain.Entities.Github;
 using Orbit.Domain.Interfaces;
@@ -12,9 +11,7 @@ namespace Orbit.Infrastructure.Repositories
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-
-        // Defina um caminho padrão base
-        private const string BaseStoragePath = "/app/orbit-clones"; 
+        private const string BaseStoragePath = "/app/orbit-clones";
 
         public GithubRepository(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
@@ -22,61 +19,76 @@ namespace Orbit.Infrastructure.Repositories
             _configuration = configuration;
         }
 
-        // ... (Seus outros métodos de API HTTP continuam iguais) ...
+        // --- MÉTODOS OBRIGATÓRIOS PELA INTERFACE ---
 
-        // ============================================================
-        // A LÓGICA DE CLONE FICA SOMENTE AQUI
-        // ============================================================
+        public async Task<IEnumerable<DtoReposResponse>> GetUserRepositoriesAsync(string accessToken)
+        {
+            // ... (Seu código HTTP existente para listar repos) ...
+            // Se você não tiver o código aqui, o build vai falhar.
+            // Vou colocar um stub caso você tenha perdido:
+            var httpClient = _httpClientFactory.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user/repos?type=owner");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("Orbit-App", "1.0"));
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<IEnumerable<DtoReposResponse>>(stream);
+        }
+
+        public async Task<DtoReposResponse> GetRepositoryByNameAsync(string accessToken, string owner, string repoName)
+        {
+            // ... (Seu código HTTP existente para pegar 1 repo) ...
+            var httpClient = _httpClientFactory.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repoName}");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("Orbit-App", "1.0"));
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<DtoReposResponse>(stream);
+        }
+
+        // --- LÓGICA DO CLONE (PERFEITA) ---
         public async Task CloneReposByNameAsync(string accessToken, string owner, string repoName, string githubId)
         {
             var cloneUrl = $"https://github.com/{owner}/{repoName}.git";
-
-            // Caminho organizado: /app/orbit-clones/{ID}/{RepoName}
-            var userPath = Path.Combine(BaseStoragePath, githubId);
+            var userPath = Path.Combine("/data/archive/clients", githubId, "tmp");
             var targetPath = Path.Combine(userPath, repoName);
 
-            Console.WriteLine($"[REPO] Preparando clone de {repoName} para {targetPath}...");
+            Console.WriteLine($"[REPO] Clone: {repoName} -> {targetPath}");
 
-            // Lógica de limpeza de diretório
-            if (Directory.Exists(targetPath))
-            {
-                DeleteReadOnlyDirectory(targetPath);
-            }
-            else
-            {
-                // Garante que a pasta do usuário exista
-                Directory.CreateDirectory(userPath);
-            }
+            if (Directory.Exists(targetPath)) DeleteReadOnlyDirectory(targetPath);
+            else Directory.CreateDirectory(userPath);
 
             var options = new CloneOptions
             {
-                Credentials = new UsernamePasswordCredentials
+                // CORREÇÃO: As credenciais ficam dentro de FetchOptions -> CredentialsProvider
+                FetchOptions =
                 {
-                    Username = "oauth2", // Padrão
-                    Password = accessToken
+                    CredentialsProvider = (_url, _user, _cred) => new UsernamePasswordCredentials
+                    {
+                        Username = "oauth2",
+                        Password = accessToken
+                    }
                 },
-                BranchName = "main", // Idealmente isso viria parametrizado no futuro
+                BranchName = "main",
                 RecurseSubmodules = true
             };
 
-            // Executa o clone
-            // Envolvemos em Task.Run pois o LibGit2Sharp é síncrono e bloqueante
             await Task.Run(() => Repository.Clone(cloneUrl, targetPath, options));
-
-            Console.WriteLine($"[REPO] Sucesso! Clonado em: {targetPath}");
+            Console.WriteLine($"[REPO] Sucesso!");
         }
 
-        // Helper essencial para deletar arquivos .git (que são ReadOnly)
         private void DeleteReadOnlyDirectory(string targetDir)
         {
             var dir = new DirectoryInfo(targetDir);
             dir.Attributes = FileAttributes.Normal;
-
-            foreach (var info in dir.GetFileSystemInfos("*", SearchOption.AllDirectories))
-            {
-                info.Attributes = FileAttributes.Normal;
-            }
-
+            foreach (var info in dir.GetFileSystemInfos("*", SearchOption.AllDirectories)) info.Attributes = FileAttributes.Normal;
             dir.Delete(true);
         }
     }

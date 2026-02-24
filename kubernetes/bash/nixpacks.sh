@@ -2,8 +2,9 @@
 
 GITHUB_ID=$1
 APP_NAME=$2
+APP_PATH=$3
 
-PROJECT_PATH="/data/archive/clients/$GITHUB_ID/tmp/$APP_NAME"
+PROJECT_PATH="/data/archive/clients/$GITHUB_ID/tmp/$APP_PATH"
 
 echo "[SH] Gerando Dockerfile para: $PROJECT_PATH"
 

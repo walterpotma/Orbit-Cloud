@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "f8P9UB1zTvY=",
+=======
+  "dgSpecHash": "kzVWPa1VM6o=",
+>>>>>>> ed295a13760cd51bb86fed59fe12d43feafc8d44
   "success": true,
   "projectFilePath": "C:\\Users\\walterbrito\\Documents\\Walter\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
   "expectedPackageFiles": [
