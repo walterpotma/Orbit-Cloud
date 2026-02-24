@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrbitDB Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #09090b;       /* Fundo quase preto */
+            --bg-panel: #18181b;      /* Painéis laterais */
+            --border: #27272a;        /* Bordas sutis */
+            --accent: #8b5cf6;        /* Roxo Orbit */
+            --text-main: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --code-key: #f472b6;      /* Rosa para chaves JSON */
+            --code-str: #a78bfa;      /* Roxo claro para strings */
+            --code-num: #fbbf24;      /* Amarelo para números */
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR (Navegação) --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            padding: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand span { color: var(--accent); }
+
+        .nav-section {
+            padding: 15px;
+        }
+        .nav-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-bottom: 2px;
+        }
+        .nav-item:hover { background-color: #27272a; color: white; }
+        .nav-item.active { background-color: #2e1065; color: #d8b4fe; }
+        .icon-db { margin-right: 10px; opacity: 0.7; }
+
+        /* --- MAIN CONTENT --- */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Toolbar Superior */
+        .toolbar {
+            height: 60px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+            background-color: var(--bg-dark);
+        }
+
+        .query-bar {
+            flex: 1;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        .query-label { color: var(--accent); margin-right: 10px; font-weight: bold; }
+        .query-input { 
+            background: transparent; border: none; color: white; width: 100%; outline: none;
+            font-family: inherit;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+        .btn-outline:hover { border-color: var(--text-muted); color: white; }
+
+        /* Tabela de Dados */
+        .data-view {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-dark);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        tr:hover td { background-color: #121215; }
+
+        .key-cell { color: var(--accent); font-weight: bold; }
+        
+        /* Estilização do JSON falso */
+        .json-preview { white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5; color: #9ca3af; }
+        .j-key { color: var(--code-key); }
+        .j-str { color: var(--code-str); }
+        .j-num { color: var(--code-num); }
+        .j-bool { color: #f87171; }
+
+        /* Status Bar (Rodapé) */
+        .status-bar {
+            height: 30px;
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            justify-content: space-between;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dot { width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">
+            <span>◆</span> OrbitDB Studio
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-title">Connected: Localhost</div>
+            <div class="nav-item active">
+                <span class="icon-db">🗂</span> iam_users
+            </div>
+            <div class="nav-item">
+                <span class="icon-db">🗂</span> app_logs
+            </div>
+            <div class="nav-item">
+                <span class="icon-db">🗂</span> system_metrics
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-title">Management</div>
+            <div class="nav-item">
+                <span class="icon-db">⚙️</span> Settings
+            </div>
+            <div class="nav-item">
+                <span class="icon-db">🔐</span> API Keys
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="toolbar">
+            <div class="query-bar">
+                <span class="query-label">FILTER</span>
+                <input type="text" class="query-input" value='key.startsWith("user:")' spellcheck="false">
+            </div>
+            <button class="btn-outline">Refresh</button>
+            <button class="btn">+ New Document</button>
+        </div>
+
+        <div class="data-view">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 200px;">Key (_id)</th>
+                        <th>JSON Value</th>
+                        <th style="width: 100px;">Size</th>
+                        <th style="width: 80px;">Type</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr>
+                        <td class="key-cell">user:1001</td>
+                        <td>
+                            <div class="json-preview">{
+  <span class="j-key">"name"</span>: <span class="j-str">"Walter Brito"</span>,
+  <span class="j-key">"role"</span>: <span class="j-str">"Admin"</span>,
+  <span class="j-key">"active"</span>: <span class="j-bool">true</span>,
+  <span class="j-key">"last_login"</span>: <span class="j-num">1708794210</span>
+}</div>
+                        </td>
+                        <td>248 B</td>
+                        <td>Object</td>
+                    </tr>
+
+                    <tr>
+                        <td class="key-cell">config:theme</td>
+                        <td>
+                            <div class="json-preview">{
+  <span class="j-key">"mode"</span>: <span class="j-str">"dark"</span>,
+  <span class="j-key">"accent"</span>: <span class="j-str">"#8b5cf6"</span>
+}</div>
+                        </td>
+                        <td>84 B</td>
+                        <td>Object</td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="key-cell">log:error:505</td>
+                        <td>
+                            <div class="json-preview">{
+  <span class="j-key">"msg"</span>: <span class="j-str">"Connection Refused"</span>,
+  <span class="j-key">"module"</span>: <span class="j-str">"docker-engine"</span>,
+  <span class="j-key">"retries"</span>: <span class="j-num">3</span>
+}</div>
+                        </td>
+                        <td>120 B</td>
+                        <td>Log</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-indicator">
+                <div class="dot"></div>
+                Connected to OrbitDB v1.0.0 (Go)
+            </div>
+            <div>
+                Latency: 2ms | Documents: 3
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
