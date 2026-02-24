@@ -1,13 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "tVlMIvD03cI=",
+  "dgSpecHash": "f8P9UB1zTvY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\walte\\Documents\\GitHub\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
+  "projectFilePath": "C:\\Users\\walterbrito\\Documents\\Walter\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\walte\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
-    "C:\\Users\\walte\\.nuget\\packages\\kubernetesclient\\18.0.13\\kubernetesclient.18.0.13.nupkg.sha512",
-    "C:\\Users\\walte\\.nuget\\packages\\newtonsoft.json\\13.0.4\\newtonsoft.json.13.0.4.nupkg.sha512",
-    "C:\\Users\\walte\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512"
+    "C:\\Users\\walterbrito\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\kubernetesclient\\18.0.13\\kubernetesclient.18.0.13.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\newtonsoft.json\\13.0.4\\newtonsoft.json.13.0.4.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.12\\microsoft.netcore.app.ref.9.0.12.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.12\\microsoft.windowsdesktop.app.ref.9.0.12.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.12\\microsoft.aspnetcore.app.ref.9.0.12.nupkg.sha512"
   ],
   "logs": []
 }
