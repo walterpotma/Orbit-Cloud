@@ -20,7 +20,7 @@ spec:
         image: localhost:5000/orbitcloud-db:v0.0.0
         ports:
         - containerPort: 8080
-        volumesMounts:
+        volumeMounts:
         - name: db-data
           mountPath: /data
       volumes:
