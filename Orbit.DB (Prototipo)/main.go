@@ -19,12 +19,26 @@ func main() {
 	})
     http.HandleFunc("/api/get", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Requisição recebida em /api/get")
+
+        query := r.URL.Query()
+
+        user := query.Get("user")
+        key := query.Get("key")
+        geral := query.Get("geral") == "true"
+        
+        data, err := storage.GetItem(user, key, geral)
+        if err != nil {
+            http.Error(w, "Erro ao buscar item: " + err.Error(), http.StatusInternalServerError)
+            return
+        }
         w.Header().Set("Content-Type", "application/json")
-        w.Write([]byte(`{"data": "Dados de exemplo do OrbitDB"}`))
+        w.Write([]byte(`{"data": "` + data + `"}`))
 	})
+
     http.HandleFunc("/api/set", func(w http.ResponseWriter, r *http.Request) {
         query := r.URL.Query()
-    
+        
+        user := query.Get("user")
         key := query.Get("key")
         geral := query.Get("geral") == "true"
         value := query.Get("val")
@@ -36,7 +50,7 @@ func main() {
 
 		fmt.Println("Requisição recebida em /api/set")
         w.Header().Set("Content-Type", "application/json")
-        storage.CreateItem(key, value)
+        storage.CreateItem(user, key, geral, value)
         w.Write([]byte(`{"status": "Item salvo com sucesso"}`))
 	})
 
