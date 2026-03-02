@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 namespace Orbit.Application.Interfaces.Services
 {
     public interface IPrometheusService
-    {        Task<List<MetricPoint>> GetCpuUsageLast24h(string namespaceName);
-        Task<List<MetricPoint>> GetMemoryUsageLast24h(string namespaceName);
+    {
+        Task<DeploymentMetricsResponse> GetCpuUsageLast24h(string namespaceName);
+        Task<DeploymentMetricsResponse> GetMemoryUsageLast24h(string namespaceName);
     }
 }

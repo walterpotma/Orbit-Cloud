@@ -1,10 +1,11 @@
-﻿using System;
-
-namespace Orbit.Application.DTOs
+﻿public class DeploymentMetricsResponse
 {
-    public class MetricPoint
-    {
-        public DateTime Time { get; set; }
-        public double Value { get; set; }
-    }
+    public List<MetricPoint> TotalUsage { get; set; } = new();
+    public List<PodMetricGroup> PerPodUsage { get; set; } = new();
+}
+
+public class PodMetricGroup
+{
+    public string PodName { get; set; }
+    public List<MetricPoint> Data { get; set; } = new();
 }

@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Globalization;
 using Orbit.Application.DTOs;
 using Orbit.Application.Interfaces.Services;
-    
+
 namespace Orbit.Infrastructure.Services
 {
     public class PrometheusService : IPrometheusService
     {
         private readonly HttpClient _http;
+        // URL do serviço do Prometheus dentro do cluster K8s
         private const string PROMETHEUS_URL = "http://prometheus-server.monitoring.svc.cluster.local";
 
         public PrometheusService(IHttpClientFactory httpClientFactory)
@@ -18,74 +21,107 @@ namespace Orbit.Infrastructure.Services
             _http = httpClientFactory.CreateClient();
         }
 
-        public async Task<List<MetricPoint>> GetCpuUsageLast24h(string namespaceName)
+        public async Task<DeploymentMetricsResponse> GetCpuUsageLast24h(string namespaceName)
         {
             var end = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var start = DateTimeOffset.UtcNow.AddHours(-24).ToUnixTimeSeconds();
 
-            var promQl = $"sum(rate(container_cpu_usage_seconds_total{{namespace=\"{namespaceName}\", container!=\"\"}}[5m]))";
-            var url = $"{PROMETHEUS_URL}/api/v1/query_range?query={promQl}&start={start}&end={end}&step=3600";
+            // Query PromQL agrupada por pod: removemos o sum() global e usamos by(pod)
+            var promQl = $"sum(rate(container_cpu_usage_seconds_total{{namespace=\"{namespaceName}\", container!=\"\"}}[5m])) by (pod)";
+            var url = $"{PROMETHEUS_URL}/api/v1/query_range?query={Uri.EscapeDataString(promQl)}&start={start}&end={end}&step=3600";
 
             return await FetchAndParse(url);
         }
 
-        public async Task<List<MetricPoint>> GetMemoryUsageLast24h(string namespaceName)
+        public async Task<DeploymentMetricsResponse> GetMemoryUsageLast24h(string namespaceName)
         {
             var end = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var start = DateTimeOffset.UtcNow.AddHours(-24).ToUnixTimeSeconds();
 
-            var promQl = $"sum(container_memory_working_set_bytes{{namespace=\"{namespaceName}\", container!=\"\"}})";
-            var url = $"{PROMETHEUS_URL}/api/v1/query_range?query={promQl}&start={start}&end={end}&step=3600";
+            // Query PromQL de memória agrupada por pod
+            var promQl = $"sum(container_memory_working_set_bytes{{namespace=\"{namespaceName}\", container!=\"\"}}) by (pod)";
+            var url = $"{PROMETHEUS_URL}/api/v1/query_range?query={Uri.EscapeDataString(promQl)}&start={start}&end={end}&step=3600";
 
             return await FetchAndParse(url);
         }
 
-        private async Task<List<MetricPoint>> FetchAndParse(string url)
+        private async Task<DeploymentMetricsResponse> FetchAndParse(string url)
         {
             try
             {
                 var response = await _http.GetAsync(url);
-                if (!response.IsSuccessStatusCode) return new List<MetricPoint>();
+                if (!response.IsSuccessStatusCode) return new DeploymentMetricsResponse();
 
                 var jsonString = await response.Content.ReadAsStringAsync();
                 return ParsePrometheusResponse(jsonString);
             }
-            catch
+            catch (Exception ex)
             {
-                return new List<MetricPoint>();
+                Console.WriteLine($"Erro na requisição ao Prometheus: {ex.Message}");
+                return new DeploymentMetricsResponse();
             }
         }
 
-        private List<MetricPoint> ParsePrometheusResponse(string json)
+        private DeploymentMetricsResponse ParsePrometheusResponse(string json)
         {
-            var result = new List<MetricPoint>();
+            var response = new DeploymentMetricsResponse();
+            var totalsDict = new Dictionary<DateTime, double>();
+
             try
             {
                 var node = JsonNode.Parse(json);
-                var values = node?["data"]?["result"]?[0]?["values"]?.AsArray();
+                var resultsArray = node?["data"]?["result"]?.AsArray();
 
-                if (values == null) return result;
+                if (resultsArray == null) return response;
 
-                foreach (var item in values)
+                foreach (var series in resultsArray)
                 {
-                    var timestamp = (long)item[0];
-                    var valueStr = item[1].ToString();
+                    // Extrai o nome do pod da label 'pod' retornada pelo Prometheus
+                    var podName = series["metric"]?["pod"]?.ToString() ?? "unknown-pod";
+                    var values = series["values"]?.AsArray();
 
-                    if (double.TryParse(valueStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double val))
+                    if (values == null) continue;
+
+                    var podPoints = new List<MetricPoint>();
+
+                    foreach (var item in values)
                     {
-                        result.Add(new MetricPoint
+                        var timestamp = (long)item[0];
+                        var time = DateTimeOffset.FromUnixTimeSeconds(timestamp).DateTime;
+                        var valueStr = item[1]?.ToString();
+
+                        if (double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double val))
                         {
-                            Time = DateTimeOffset.FromUnixTimeSeconds(timestamp).DateTime,
-                            Value = val
-                        });
+                            var point = new MetricPoint { Time = time, Value = val };
+                            podPoints.Add(point);
+
+                            // Agregação para o TotalUsage (Soma dos pods no mesmo timestamp)
+                            if (totalsDict.ContainsKey(time))
+                                totalsDict[time] += val;
+                            else
+                                totalsDict[time] = val;
+                        }
                     }
+
+                    response.PerPodUsage.Add(new PodMetricGroup 
+                    { 
+                        PodName = podName, 
+                        Data = podPoints 
+                    });
                 }
+
+                // Converte o dicionário de somas para a lista TotalUsage, ordenada por tempo
+                response.TotalUsage = totalsDict
+                    .Select(x => new MetricPoint { Time = x.Key, Value = x.Value })
+                    .OrderBy(x => x.Time)
+                    .ToList();
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine($"Erro ao parsear resposta do Prometheus: {ex.Message}");
+                Console.WriteLine($"Erro ao parsear resposta do Prometheus: {ex.Message}");
             }
-            return result;
+
+            return response;
         }
     }
 }
