@@ -1,20 +1,23 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "X8ZrrR0udvI=",
-=======
-  "dgSpecHash": "qZvt4qTGKg4=",
->>>>>>> ed295a13760cd51bb86fed59fe12d43feafc8d44
+  "dgSpecHash": "NZXOP+v5Aw0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\walterbrito\\Documents\\Walter\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
+  "projectFilePath": "C:\\Users\\walte\\Documents\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\walterbrito\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
-    "C:\\Users\\walterbrito\\.nuget\\packages\\kubernetesclient\\18.0.13\\kubernetesclient.18.0.13.nupkg.sha512",
-    "C:\\Users\\walterbrito\\.nuget\\packages\\newtonsoft.json\\13.0.4\\newtonsoft.json.13.0.4.nupkg.sha512",
-    "C:\\Users\\walterbrito\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512",
-    "C:\\Users\\walterbrito\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.12\\microsoft.netcore.app.ref.9.0.12.nupkg.sha512",
-    "C:\\Users\\walterbrito\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.12\\microsoft.windowsdesktop.app.ref.9.0.12.nupkg.sha512",
-    "C:\\Users\\walterbrito\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.12\\microsoft.aspnetcore.app.ref.9.0.12.nupkg.sha512"
+    "C:\\Users\\walte\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
+    "C:\\Users\\walte\\.nuget\\packages\\kubernetesclient\\18.0.13\\kubernetesclient.18.0.13.nupkg.sha512",
+    "C:\\Users\\walte\\.nuget\\packages\\newtonsoft.json\\13.0.4\\newtonsoft.json.13.0.4.nupkg.sha512",
+    "C:\\Users\\walte\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\walte\\Documents\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\walte\\Documents\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\walte\\Documents\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Domain\\Orbit.Domain.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

@@ -1,5 +1,13 @@
 ﻿namespace Orbit.Application.DTOs.kubernetes
 {
+    public class DtoDeploymentMetrics
+    {
+        public string Namespace { get; set; } = string.Empty;
+        public int PodCount { get; set; }
+        public string CpuUsage { get; set; } = "0m";
+        public string MemoryUsage { get; set; } = "0 MiB";
+        // Adicione outros campos que você desejar aqui
+    }
     public class DtoPodInstantMetrics
     {
         public string PodName { get; set; } = string.Empty;
