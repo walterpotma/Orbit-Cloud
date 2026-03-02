@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Orbit.Application.Interfaces;
-using Orbit.Application.Interfaces.Services;
 using Orbit.Application.Mappers;
 using Orbit.Application.Services;
 using Orbit.Domain.Interfaces;
