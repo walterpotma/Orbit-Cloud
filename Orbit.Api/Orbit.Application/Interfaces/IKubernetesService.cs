@@ -1,4 +1,4 @@
-﻿using Orbit.Application.DTOs.kubernetes;
+﻿using Orbit.Application.DTOs.Kubernetes;
 
 namespace Orbit.Application.Interfaces
 {
