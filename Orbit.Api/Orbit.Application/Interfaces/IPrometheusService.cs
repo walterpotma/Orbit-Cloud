@@ -1,8 +1,7 @@
-﻿using Orbit.Application.DTOs; // Importe o DTO
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Orbit.Application.DTOs.Prometheus; // <--- ADICIONE ESTA LINHA ✅
 
-namespace Orbit.Application.Interfaces.Services
+namespace Orbit.Application.Interfaces
 {
     public interface IPrometheusService
     {
