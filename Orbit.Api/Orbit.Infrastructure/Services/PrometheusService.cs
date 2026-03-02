@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Globalization;
-using Orbit.Application.DTOs;
-using Orbit.Application.Interfaces.Services;
+using Orbit.Application.DTOs.Prometheus; // Para os DTOs
+using Orbit.Application.Interfaces;
 
 namespace Orbit.Infrastructure.Services
 {
