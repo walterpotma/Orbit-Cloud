@@ -1,4 +1,4 @@
-﻿namespace Orbit.Application.DTOs.Kubernetes
+﻿namespace Orbit.Application.DTOs.kubernetes
 {
     public class DtoPodInstantMetrics
     {
