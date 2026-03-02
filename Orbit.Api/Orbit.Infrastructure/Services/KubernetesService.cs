@@ -111,6 +111,12 @@ namespace Orbit.Infrastructure.Services
 
             return _mapper.MapToDtoDeployment(createdEntity);
         }
+
+        public async Task<DtoDeploymentMetrics> GetDeploymentMetricsAsync(string namespaces)
+        {
+            var allMetrics = await GetNamespaceMetricsAsync();
+            return allMetrics.FirstOrDefault(m => m.Namespace == namespaces);
+        }
         #endregion
 
         #region Kubernetes Pods

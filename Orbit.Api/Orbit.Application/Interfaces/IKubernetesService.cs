@@ -7,6 +7,7 @@ namespace Orbit.Application.Interfaces
         #region Kubernetes Deployments
         Task<List<DtoDeploymentResponse>> GetAllDeploymentsAsync(string? namespaces);
         Task<DtoDeploymentResponse> CreateDeploymentAsync(DtoDeploymentRequest request, string namespaces);
+        Task<DtoDeploymentMetrics> GetDeploymentMetricsAsync(string namespaces);
         #endregion
 
         #region Kubernetes Pods

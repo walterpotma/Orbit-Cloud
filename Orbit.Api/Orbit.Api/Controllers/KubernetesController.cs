@@ -55,6 +55,12 @@ namespace Orbit.Api.Controllers
                 return BadRequest($"Erro no Kubernetes: {ex.Message} - {ex.Response.Content}");
             }
         }
+        [HttpGet("deployment/{namespaces}/metrics")]
+        public async Task<IActionResult> GetDeploymentMetrics(string namespaces)
+        {
+            var result = await _kubernetesService.GetDeploymentMetricsAsync(namespaces);
+            return Ok(result);
+        }
         #endregion
 
         #region Kubernetes Pods
