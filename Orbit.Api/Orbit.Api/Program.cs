@@ -26,6 +26,18 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddControllers();
+
+builder.Services.AddOpenApi();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -51,6 +63,7 @@ app.Use((context, next) =>
 });
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
