@@ -1,5 +1,6 @@
 ﻿using LibGit2Sharp;
 using Orbit.Infrastucture.Entities.Github;
+using Orbit.Domain.Interfaces;
 
 namespace Orbit.Infrastructure.Repository
 {
