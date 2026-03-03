@@ -1,5 +1,5 @@
 using Orbit.Application.Interfaces;
-using Orbit.Application.DTOs.Github;
+using Orbit.Infrastucture.Entities.Github;
 
 namespace Orbit.Application.Interfaces
 {
