@@ -114,8 +114,25 @@ namespace Orbit.Infrastructure.Services
 
         public async Task<DtoDeploymentMetrics> GetDeploymentMetricsAsync(string namespaces)
         {
+            // 1. Busca todas as métricas (que retornam DtoNamespaceMetrics)
             var allMetrics = await GetNamespaceMetricsAsync();
-            return allMetrics.FirstOrDefault(m => m.Namespace == namespaces);
+
+            // 2. Localiza a métrica do namespace específico
+            var metrics = allMetrics.FirstOrDefault(m => m.Namespace == namespaces);
+
+            if (metrics == null) return new DtoDeploymentMetrics { Namespace = namespaces };
+
+            // 3. MAPEAMENTO MANUAL: Converte de DtoNamespaceMetrics para DtoDeploymentMetrics
+            return new DtoDeploymentMetrics
+            {
+                Namespace = metrics.Namespace,
+                CpuUsage = metrics.CpuUsage,
+                MemoryUsage = metrics.MemoryUsage,
+                CpuLimit = metrics.CpuLimit,
+                MemoryLimit = metrics.MemoryLimit,
+                PodCount = metrics.PodCount // Se o seu DTO tiver esse campo
+                                            // Adicione aqui outros campos que você criou no DtoDeploymentMetrics
+            };
         }
         #endregion
 

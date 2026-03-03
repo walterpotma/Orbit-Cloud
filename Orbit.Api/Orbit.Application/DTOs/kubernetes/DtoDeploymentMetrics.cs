@@ -5,7 +5,9 @@
         public string Namespace { get; set; } = string.Empty;
         public int PodCount { get; set; }
         public string CpuUsage { get; set; } = "0m";
+        public string CpuLimit { get; set; } = "0m";
         public string MemoryUsage { get; set; } = "0 MiB";
+        public string MemoryLimit { get; set; } = "0 MiB";
         // Adicione outros campos que você desejar aqui
     }
     public class DtoPodInstantMetrics
