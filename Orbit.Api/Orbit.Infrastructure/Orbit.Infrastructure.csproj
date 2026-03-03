@@ -1,19 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="19.0.2" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Orbit.Application\Orbit.Application.csproj" />
-    <ProjectReference Include="..\Orbit.Infrastructure\Orbit.Infrastructure.csproj" />
     <ProjectReference Include="..\Orbit.Domain\Orbit.Domain.csproj" />
   </ItemGroup>
   

@@ -6,3 +6,4 @@
 /Orbit.Api/Orbit.Api/obj/
 /Orbit.Api/Orbit.Api/bin/
 /services/Request.IA/.env
+*.env
