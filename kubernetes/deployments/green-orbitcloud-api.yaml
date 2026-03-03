@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: green-orbitcloud-api-container
-        image: localhost:5000/green-orbitcloud-api:v0.1.24
+        image: localhost:5000/green-orbitcloud-api:v0.1.25
         ports:
         - containerPort: 8080
         volumeMounts:
