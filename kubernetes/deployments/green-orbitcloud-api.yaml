@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orbitcloud-api-deployment
+  name: green-orbitcloud-api-deployment
   namespace: orbitcloud
   labels:
-    app: orbitcloud-api
+    app: green-orbitcloud-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: orbitcloud-api
+      app: green-orbitcloud-api
   template:
     metadata:
       labels:
-        app: orbitcloud-api
+        app: green-orbitcloud-api
     spec:
       containers:
-      - name: orbitcloud-api-container
-        image: localhost:5000/orbitcloud-api:v0.1.24
+      - name: green-orbitcloud-api-container
+        image: localhost:5000/green-orbitcloud-api:v0.1.24
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -58,11 +58,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: orbitcloud-api-service
+  name: green-orbitcloud-api-service
   namespace: orbitcloud
 spec:
   selector:
-    app: orbitcloud-api
+    app: green-orbitcloud-api
   ports:
   - protocol: TCP
     port: 8080
@@ -72,7 +72,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: orbitcloud-api-ingress
+  name: green-orbitcloud-api-ingress
   namespace: orbitcloud
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
@@ -90,7 +90,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: orbitcloud-api-service
+                name: green-orbitcloud-api-service
                 port:
                   number: 8080
 ---
