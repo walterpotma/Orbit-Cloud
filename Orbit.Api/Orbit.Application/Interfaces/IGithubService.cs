@@ -2,7 +2,7 @@ using Orbit.Infrastucture.Entities.Github;
 
 namespace Orbit.Application.Interfaces
 {
-    public class IGithubService
+    public interface IGithubService
     {
         Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync();
     }
