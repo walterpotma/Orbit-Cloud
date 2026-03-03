@@ -28,17 +28,17 @@ namespace Orbit.Infrastructure.Repository
 
             var content = await response.Content.ReadAsStringAsync();
 
-            return _mapper.MapToDto(content);
+            // return _mapper.MapToDto(content);
 
             return await JsonSerializer.DeserializeAsync<IEnumerable<DtoReposResponse>>(stream);
         }
-        public Task<DtoGithubReposResponse> GetRepositoryByNameAsync(string repoName)
-        {
+        // public Task<DtoGithubReposResponse> GetRepositoryByNameAsync(string repoName)
+        // {
 
-        }
-        public async Task<string> CloneRepositoryAsync(string repoName)
-        {
+        // }
+        // public async Task<string> CloneRepositoryAsync(string repoName)
+        // {
 
-        }
+        // }
     }
 }

@@ -3,8 +3,6 @@ using Orbit.Application.DTOs.Github;
 
 namespace Orbit.Application.Interfaces
 {
-    [Route("[controller]")]
-    [ApiController]
     public class GithubService : IGithubService
     {
         private readonly IGithubRepository _githubRepository;
@@ -14,7 +12,6 @@ namespace Orbit.Application.Interfaces
             _githubRepository = githubRepository;
         }
 
-        [HttpGet("repos")]
         public async Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync()
         {
             return await _githubRepository.GetUserRepositoriesAsync();
