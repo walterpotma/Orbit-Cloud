@@ -5,6 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Orbit.Application\Orbit.Application.csproj" />

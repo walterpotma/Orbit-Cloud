@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Orbit.Api.Controllers
 {
-    [ApiExplorerSettings(IgnoreApi = true)] // Oculta essas rotas do Swagger
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class FeedbackController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
