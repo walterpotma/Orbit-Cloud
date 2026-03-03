@@ -40,6 +40,10 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.UseStaticFiles(); 
+
+app.UseStatusCodePagesWithReExecute("/feedback/{0}");
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
