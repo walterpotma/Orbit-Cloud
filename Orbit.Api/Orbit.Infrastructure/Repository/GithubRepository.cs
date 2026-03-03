@@ -1,11 +1,19 @@
 ﻿using LibGit2Sharp;
 using Orbit.Infrastucture.Entities.Github;
 using Orbit.Domain.Interfaces;
+using Orbit.Application.Mappers;
+using Orbit.Application.Interfaces;
 
 namespace Orbit.Infrastructure.Repository
 {
     public class GithubRepository : IGithubRepository
     {
+        private readonly MapperGithub _mapper;
+
+        public GithubRepository(MapperGithub mapper)
+        {
+            _mapper = mapper;
+        }
         public async Task<IEnumerable<DtoGithubReposResponse>> GetUserRepositoriesAsync()
         {
             var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -29,9 +37,7 @@ namespace Orbit.Infrastructure.Repository
 
             var content = await response.Content.ReadAsStringAsync();
 
-            // return _mapper.MapToDto(content);
-
-            return await JsonSerializer.DeserializeAsync<IEnumerable<DtoReposResponse>>(stream);
+            return _mapper.MapToDto(content);
         }
         // public Task<DtoGithubReposResponse> GetRepositoryByNameAsync(string repoName)
         // {
