@@ -1,4 +1,4 @@
-using Orbit.Infrastructure.Entities.Github;
+using Orbit.Application.DTOs.Github;
 
 namespace Orbit.Application.Mappers
 {
