@@ -88,7 +88,7 @@ builder.Services.AddScoped<IRegistryService, RegistryService>();
 builder.Services.AddScoped<IDockerService, DockerService>();
 
 #region Authentication Github
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options => 
 {
     options.DefaultScheme = "Cookies";
     options.DefaultSignInScheme = "Cookies";
