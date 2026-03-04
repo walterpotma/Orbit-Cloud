@@ -4,6 +4,6 @@ namespace Orbit.Application.Interfaces
 {
     public interface IGithubService
     {
-        Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync();
+        // Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync();
     }
 }

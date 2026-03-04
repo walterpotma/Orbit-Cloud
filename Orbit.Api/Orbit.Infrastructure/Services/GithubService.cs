@@ -13,9 +13,9 @@ namespace Orbit.Application.Interfaces
             _githubRepository = githubRepository;
         }
 
-        public async Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync()
-        {
-            return await _githubRepository.GetUserRepositoriesAsync();
-        }
+        // public async Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync()
+        // {
+        //     return await _githubRepository.GetUserRepositoriesAsync();
+        // }
     }
 }
