@@ -4,7 +4,7 @@ namespace Orbit.Application.Mappers
 {
     public class MapperGithub
     {
-        public DtoGithubReposResponse MapToDto(GithubRepositoryEntity entity)
+        public DtoGithubReposResponse MapToDto(DtoGithubReposResponse entity)
         {
             return new DtoGithubReposResponse
             {
