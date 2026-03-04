@@ -1,7 +1,7 @@
 using Orbit.Application.Interfaces;
 using Orbit.Infrastucture.Entities.Github;
 
-namespace Orbit.Application.Interfaces
+namespace Orbit.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
