@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using System.Security.Claims;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
+using Orbit.Infrastructure.Repository;
+using Orbit.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,7 +104,7 @@ builder.Services.AddAuthentication(options =>
 #region Github App
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.Configure<GithubAppSettings>(builder.Configuration.GetSection("GithubApp"));
+// builder.Services.Configure<GithubAppSettings>(builder.Configuration.GetSection("GithubApp"));
 
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 builder.Services.AddScoped<IGithubService, GithubService>();
