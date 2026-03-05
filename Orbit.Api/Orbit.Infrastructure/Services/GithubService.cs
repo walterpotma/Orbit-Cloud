@@ -2,7 +2,7 @@ using Orbit.Application.Interfaces;
 using Orbit.Infrastucture.Entities.Github;
 using Orbit.Domain.Interfaces;
 
-namespace Orbit.Ifrastruture.Services
+namespace Orbit.Infrastruture.Services
 {
     public class GithubService : IGithubService
     {
