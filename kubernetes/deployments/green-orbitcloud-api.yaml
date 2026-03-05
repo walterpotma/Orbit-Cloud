@@ -44,15 +44,15 @@ spec:
           type: Socket
       - name: nixpacks
         hostPath:
-          path: /home/hayom/orbit-cloud/kubernetes/bash/nixpacks.sh
+          path: /home/hayom/Orbit-Cloud/kubernetes/bash/nixpacks.sh
           type: File
       - name: clonepack
         hostPath:
-          path: /home/hayom/orbit-cloud/kubernetes/bash/clone.sh
+          path: /home/hayom/Orbit-Cloud/kubernetes/bash/clone.sh
           type: File
       - name: buildpack
         hostPath:
-          path: /home/hayom/orbit-cloud/kubernetes/bash/build.sh
+          path: /home/hayom/Orbit-Cloud/kubernetes/bash/build.sh
           type: File
 ---
 apiVersion: v1
