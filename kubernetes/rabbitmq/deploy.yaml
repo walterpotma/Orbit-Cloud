@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: orbitcloud
   name: rabbitmq
   labels:
     app: rabbitmq
@@ -24,9 +25,9 @@ spec:
           name: management
         env:
         - name: RABBITMQ_DEFAULT_USER
-          value: "admin"
+          value: "orbit"
         - name: RABBITMQ_DEFAULT_PASS
-          value: "Orbit2024!"
+          value: "0rb1t!@#$"
         resources:
           limits:
             memory: "512Mi"
@@ -35,6 +36,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: orbitcloud
   name: rabbitmq
 spec:
   selector:
@@ -52,6 +54,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  namespace: orbitcloud
   name: rabbitmq-ingress
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"

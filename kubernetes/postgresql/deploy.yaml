@@ -85,7 +85,12 @@ spec:
   type: NodePort
   ports:
     - port: 5432
-      targetPort: 5432
-      nodePort: 30000
   selector:
     app: postgres
+
+# kubectl run psql-client --rm -it --image=postgres --namespace orbitcloud -- bash
+# psql -h postgres.orbitcloud.svc.cluster.local -U orbit -d orbitcloud
+
+# kubectl run redis-client --rm -it --image=redis --namespace orbitcloud -- bash
+# redis-cli -h redis-master
+# AUHT mIpkRphicN
