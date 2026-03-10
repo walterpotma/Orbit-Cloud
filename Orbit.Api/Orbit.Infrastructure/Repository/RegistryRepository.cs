@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
-namespace Orbit.Infrastructure.Repositories
+namespace Orbit.Infrastructure.Repository
 {
     public class RegistryRepository : IRegistryRepository
     {

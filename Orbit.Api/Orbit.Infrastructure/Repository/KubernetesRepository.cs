@@ -3,7 +3,7 @@ using k8s.Models;
 using Orbit.Domain.Interfaces;
 using System.Xml.Linq;
 
-namespace Orbit.Infrastructure.Repositories
+namespace Orbit.Infrastructure.Repository
 {
     public class KubernetesRepository : IKubernetesRepository
     {
