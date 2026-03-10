@@ -111,6 +111,7 @@ builder.Services.AddHttpContextAccessor();
 
 // builder.Services.Configure<GithubAppSettings>(builder.Configuration.GetSection("GithubApp"));
 
+builder.Services.AddScoped<MapperGithub>();
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 builder.Services.AddScoped<IGithubService, GithubService>();
 #endregion
