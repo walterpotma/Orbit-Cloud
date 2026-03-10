@@ -121,6 +121,28 @@ builder.Services.AddScoped<IGithubService, GithubService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 #endregion
 
+#region Prometheus
+builder.Services.AddScoped<IPrometheusService, PrometheusService>();
+#endregion
+
+#region Kubernetes
+builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
+builder.Services.AddScoped<IKubernetesService, KubernetesService>();
+builder.Services.AddSingleton<MapperKubernetes>();
+#endregion
+
+#region FileSystem
+builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
+builder.Services.AddScoped<IFileSystemService, FileSystemService>();
+#endregion
+
+#region Docker
+builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
+builder.Services.AddScoped<IRegistryService, RegistryService>();
+
+builder.Services.AddScoped<IDockerService, DockerService>();
+#endregion
+
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
