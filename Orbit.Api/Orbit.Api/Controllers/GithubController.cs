@@ -6,7 +6,7 @@ namespace Orbit.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class GithubService : IGithubService
+    public class GithubController : ControllerBase
     {
         private readonly IGithubService _githubService;
 

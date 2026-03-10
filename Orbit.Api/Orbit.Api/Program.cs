@@ -163,3 +163,8 @@ app.MapControllers();
 app.UseStaticFiles();
 
 app.Run();
+
+public class GithubAppSettings {
+    public string AppId { get; set; } = string.Empty;
+    public string PrivateKeyPath { get; set; } = string.Empty;
+}
