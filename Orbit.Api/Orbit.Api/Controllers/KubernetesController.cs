@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.DTOs.kubernetes;
-using Orbit.Application.Services;
 using Orbit.Application.Interfaces;
 using System.Xml.Linq;
 using k8s.Autorest;
