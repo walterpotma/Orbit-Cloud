@@ -10,7 +10,7 @@ namespace Orbit.Api.Controllers
     {
         private readonly IGithubService _githubService;
 
-        public GithubService(IGithubService githubService)
+        public GithubController(IGithubService githubService)
         {
             _githubService = githubService;
         }
