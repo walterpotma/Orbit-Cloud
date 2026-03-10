@@ -115,6 +115,10 @@ builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 builder.Services.AddScoped<IGithubService, GithubService>();
 #endregion
 
+#region Account
+builder.Services.AddScoped<IAccountService, AccountService>();
+#endregion
+
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
