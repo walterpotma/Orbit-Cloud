@@ -70,11 +70,10 @@ namespace Orbit.Api.Controllers
             var user = new
             {
                 IsAuthenticated = User.Identity?.IsAuthenticated,
-                githubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value, // Seu ID do GitHub
-                Name = User.FindFirst(ClaimTypes.Name)?.Value,         // Nome
-                Email = User.FindFirst(ClaimTypes.Email)?.Value,       // Email
-                Username = User.FindFirst("urn:github:login")?.Value,  // Login do GitHub
-                AvatarUrl = User.FindFirst("urn:github:avatar")?.Value // Foto
+                githubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                Email = User.FindFirst(ClaimTypes.Email)?.Value,
+                Username = User.FindFirst("urn:github:login")?.Value,
+                AvatarUrl = User.FindFirst("urn:github:avatar")?.Value
             };
 
             return Ok(user);
