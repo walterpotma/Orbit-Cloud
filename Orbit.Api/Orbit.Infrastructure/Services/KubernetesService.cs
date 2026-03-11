@@ -346,57 +346,48 @@ namespace Orbit.Infrastructure.Services
             await _repository.DeleteNamespacesAsync(name);
         }
 
-        public async Task<List<DtoNamespaceMetrics>> GetNamespaceMetricsAsync()
+        public async Task<DtoNamespaceMetrics> GetByNamespaceMetricsAsync(string namespaced)
         {
             var rawMetrics = await _repository.GetPodMetricsAsync();
 
-            var grouped = rawMetrics.Items
-                .GroupBy(m => m.Metadata.Namespace())
-                .Select(g => new
-                {
-                    Name = g.Key,
-                    Count = g.Count(),
-                    TotalCpu = g.Sum(pod => pod.Containers.Sum(c => c.Usage["cpu"].ToDecimal())),
-                    TotalMem = g.Sum(pod => pod.Containers.Sum(c => c.Usage["memory"].ToDecimal()))
-                })
+            var podsInNamespace = rawMetrics.Items
+                .Where(m => m.Metadata.Namespace() == namespaced)
                 .ToList();
 
-            var resultList = new List<DtoNamespaceMetrics>();
+            decimal totalCpu = podsInNamespace.Sum(pod => pod.Containers.Sum(c => c.Usage["cpu"].ToDecimal()));
+            decimal totalMem = podsInNamespace.Sum(pod => pod.Containers.Sum(c => c.Usage["memory"].ToDecimal()));
+            int podCount = podsInNamespace.Count;
 
-            foreach (var g in grouped)
+            var quota = await _repository.GetNamespaceQuotaAsync(namespaced);
+
+            decimal cpuLimit = 0;
+            long memLimit = 0;
+
+            if (quota?.Status?.Hard != null)
             {
-                var quota = await _repository.GetNamespaceQuotaAsync(g.Name);
+                if (quota.Status.Hard.TryGetValue("limits.cpu", out var qCpu))
+                    cpuLimit = qCpu.ToDecimal();
 
-                decimal cpuLimit = 0;
-                long memLimit = 0;
-
-                if (quota?.Status?.Hard != null)
-                {
-                    if (quota.Status.Hard.TryGetValue("limits.cpu", out var qCpu))
-                        cpuLimit = qCpu.ToDecimal();
-
-                    if (quota.Status.Hard.TryGetValue("limits.memory", out var qMem))
-                        memLimit = qMem.ToInt64();
-                }
-
-                resultList.Add(new DtoNamespaceMetrics
-                {
-                    Namespace = g.Name,
-                    PodCount = g.Count,
-
-                    RawCpu = g.TotalCpu,
-                    RawMemory = (long)g.TotalMem,
-                    CpuUsage = FormatCpu(g.TotalCpu),
-                    MemoryUsage = FormatMemory((long)g.TotalMem),
-
-                    RawCpuLimit = cpuLimit,
-                    RawMemoryLimit = memLimit,
-                    CpuLimit = cpuLimit > 0 ? FormatCpu(cpuLimit) : "∞",
-                    MemoryLimit = memLimit > 0 ? FormatMemory(memLimit) : "∞"
-                });
+                if (quota.Status.Hard.TryGetValue("limits.memory", out var qMem))
+                    memLimit = qMem.ToInt64();
             }
 
-            return resultList.OrderByDescending(x => x.RawMemory).ToList();
+            return new DtoNamespaceMetrics
+            {
+                Namespace = namespaced,
+                PodCount = podCount,
+
+                RawCpu = totalCpu,
+                RawMemory = (long)totalMem,
+                CpuUsage = FormatCpu(totalCpu),
+                MemoryUsage = FormatMemory((long)totalMem),
+
+                RawCpuLimit = cpuLimit,
+                RawMemoryLimit = memLimit,
+                
+                CpuLimit = cpuLimit > 0 ? FormatCpu(cpuLimit) : "∞",
+                MemoryLimit = memLimit > 0 ? FormatMemory(memLimit) : "∞"
+            };
         }
         public async Task<DtoNamespaceMetrics> GetByNamespaceMetricsAsync(string namespaced)
         {
