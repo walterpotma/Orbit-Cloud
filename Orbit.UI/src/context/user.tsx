@@ -38,7 +38,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             } catch (error) {
                 console.log("Usuário não logado");
                 setUser(null);
-                router.push("/login");
             } finally {
                 setIsLoading(false);
             }
@@ -46,11 +45,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
         loadUser();
     }, []);
-
-    function logout() {
-        setUser(null);
-        window.location.href = "/login";
-    }
 
     return (
         <UserContext.Provider value={{ UserData, isLoading, logout }}>
