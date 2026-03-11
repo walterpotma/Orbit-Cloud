@@ -12,10 +12,5 @@ namespace Orbit.Infrastructure.Services
         {
             _githubRepository = githubRepository;
         }
-
-        // public async Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync()
-        // {
-        //     return await _githubRepository.GetUserRepositoriesAsync();
-        // }
     }
 }
