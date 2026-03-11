@@ -80,13 +80,13 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - api.orbitcloud.com.br
+        - orbitcloud.com.br
       secretName: orbitnet-default-cert 
   rules:
-    - host: api.orbitcloud.com.br
+    - host: orbitcloud.com.br
       http:
         paths:
-          - path: /
+          - path: /api
             pathType: Prefix
             backend:
               service:

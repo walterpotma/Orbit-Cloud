@@ -89,12 +89,6 @@ builder.Services.AddAuthentication(options =>
 
     options.SaveTokens = true;
 
-    options.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    };
-
     options.Events = new OAuthEvents
     {
         OnCreatingTicket = async context =>
@@ -149,7 +143,10 @@ builder.Services.AddScoped<IRegistryService, RegistryService>();
 builder.Services.AddScoped<IDockerService, DockerService>();
 #endregion
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RoutePrefixConvention("api"));
+});
 
 builder.Services.AddOpenApi();
 
