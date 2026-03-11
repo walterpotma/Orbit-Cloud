@@ -46,6 +46,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         loadUser();
     }, []);
 
+    function logout() {
+        setUser(null);
+        window.location.href = "/login";
+    }
+
     return (
         <UserContext.Provider value={{ UserData, isLoading, logout }}>
             {children}
