@@ -73,13 +73,13 @@ export default function Nav() {
             >
                 {/* === HEADER (LOGO) === */}
                 <div className="h-20 flex items-center justify-center border-b border-zinc-800/50">
-                    <div className={`flex items-center gap-3 overflow-hidden whitespace-nowrap transition-all ${isCollapsed ? "px-0" : "px-4"}`}>
+                    <div className={`flex items-center overflow-hidden whitespace-nowrap transition-all ${isCollapsed ? "px-0" : "px-4"}`}>
                         <div className="shrink-0">
                             <Logo />
                         </div>
-                        <div className={`flex flex-col transition-opacity duration-200 ${isCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"}`}>
-                            <span className="font-bold text-lg text-zinc-100 leading-none">Orbit</span>
-                            <span className="font-bold text-lg text-blue-500 leading-none">Cloud</span>
+                        <div className={`flex space-x-1 transition-opacity duration-200 ${isCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"}`}>
+                            <span className="font-bold text-2xl text-zinc-100 leading-none">Orbit</span>
+                            <span className="font-bold text-2xl text-blue-500 leading-none">Cloud</span>
                         </div>
                     </div>
                 </div>
