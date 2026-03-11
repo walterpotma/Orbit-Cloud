@@ -60,31 +60,19 @@ export default function Home() {
         if (!UserData) return;
         Deployments.List(UserData.githubID)
             .then((res: any) => setDeployments(res.data))
-            .catch((err: any) => {
-                console.error("Error fetching Deploys:", err);
-                setDeployments([]);
-            });
+            .catch((err: any) => console.error("Error fetching Deploys:", err));
 
         Namespaces.Metrics(UserData.githubID)
             .then((res: any) => setNamespaceMetrics(res.data))
-            .catch((err: any) => {
-                console.error("Error fetching Metrics:", err);
-                setNamespaceMetrics([]);
-            });
+            .catch((err: any) => console.error("Error fetching Metrics:", err));
 
         Prometheus.CPU(UserData.githubID)
             .then((res: any) => setCpuMetrics(res.data))
-            .catch((err: any) => {
-                console.error("Error fetching Metrics CPU:", err)
-                setCpuMetrics([]);
-            });
+            .catch((err: any) => console.error("Error fetching Metrics CPU:", err)); 
 
         Prometheus.Memory(UserData.githubID)
             .then((res: any) => setMemMetrics(res.data))
-            .catch((err: any) => {
-                console.error("Error fetching Metrics CPU:", err)
-                setMemMetrics([]);
-            });
+            .catch((err: any) => console.error("Error fetching Metrics CPU:", err));
     };
 
     useEffect(() => {
