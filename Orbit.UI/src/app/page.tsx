@@ -76,6 +76,7 @@ export default function Home() {
     };
 
     useEffect(() => {
+        if (!Array.isArray(deployments)) return;
         setSuccededDeployments(deployments.filter(d => d.status.toLowerCase() === 'running'));
         setFailedDeployments(deployments.filter(d => ['failed', 'error', 'crashloopbackoff'].includes(d.status.toLowerCase())));
         setPendingDeployments(deployments.filter(d => ['pending', 'containercreating'].includes(d.status.toLowerCase())));
