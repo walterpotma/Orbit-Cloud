@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class GithubController : ControllerBase
     {

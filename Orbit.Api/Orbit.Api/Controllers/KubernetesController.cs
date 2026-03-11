@@ -8,7 +8,7 @@ using k8s.Autorest;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class KubernetesController : ControllerBase
     {

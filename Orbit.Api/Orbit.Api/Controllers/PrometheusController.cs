@@ -6,7 +6,7 @@ using Orbit.Application.DTOs.Prometheus; // <-- ADICIONADO para reconhecer o DTO
 namespace Orbit.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PrometheusController : ControllerBase
     {
         private readonly IPrometheusService _prometheusService;

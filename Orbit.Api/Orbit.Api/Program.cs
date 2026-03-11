@@ -88,7 +88,7 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("repo");
 
     options.SaveTokens = true;
-
+    
     options.Events = new OAuthEvents
     {
         OnCreatingTicket = async context =>
@@ -143,10 +143,7 @@ builder.Services.AddScoped<IRegistryService, RegistryService>();
 builder.Services.AddScoped<IDockerService, DockerService>();
 #endregion
 
-builder.Services.AddControllers(options =>
-{
-    options.Conventions.Add(new RoutePrefixConvention("api"));
-});
+builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 

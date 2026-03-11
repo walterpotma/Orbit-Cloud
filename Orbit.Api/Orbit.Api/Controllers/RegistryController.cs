@@ -5,7 +5,7 @@ using Orbit.Application.Interfaces;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class RegistryController : ControllerBase
     {
