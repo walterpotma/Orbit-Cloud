@@ -89,6 +89,12 @@ builder.Services.AddAuthentication(options =>
 
     options.SaveTokens = true;
 
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+
     options.Events = new OAuthEvents
     {
         OnCreatingTicket = async context =>
