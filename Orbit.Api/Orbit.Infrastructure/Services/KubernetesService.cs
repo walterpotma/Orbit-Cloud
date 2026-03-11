@@ -346,6 +346,58 @@ namespace Orbit.Infrastructure.Services
             await _repository.DeleteNamespacesAsync(name);
         }
 
+        public async Task<List<DtoNamespaceMetrics>> GetNamespaceMetricsAsync()
+        {
+            var rawMetrics = await _repository.GetPodMetricsAsync();
+
+            var grouped = rawMetrics.Items
+                .GroupBy(m => m.Metadata.Namespace())
+                .Select(g => new
+                {
+                    Name = g.Key,
+                    Count = g.Count(),
+                    TotalCpu = g.Sum(pod => pod.Containers.Sum(c => c.Usage["cpu"].ToDecimal())),
+                    TotalMem = g.Sum(pod => pod.Containers.Sum(c => c.Usage["memory"].ToDecimal()))
+                })
+                .ToList();
+
+            var resultList = new List<DtoNamespaceMetrics>();
+
+            foreach (var g in grouped)
+            {
+                var quota = await _repository.GetNamespaceQuotaAsync(g.Name);
+
+                decimal cpuLimit = 0;
+                long memLimit = 0;
+
+                if (quota?.Status?.Hard != null)
+                {
+                    if (quota.Status.Hard.TryGetValue("limits.cpu", out var qCpu))
+                        cpuLimit = qCpu.ToDecimal();
+
+                    if (quota.Status.Hard.TryGetValue("limits.memory", out var qMem))
+                        memLimit = qMem.ToInt64();
+                }
+
+                resultList.Add(new DtoNamespaceMetrics
+                {
+                    Namespace = g.Name,
+                    PodCount = g.Count,
+
+                    RawCpu = g.TotalCpu,
+                    RawMemory = (long)g.TotalMem,
+                    CpuUsage = FormatCpu(g.TotalCpu),
+                    MemoryUsage = FormatMemory((long)g.TotalMem),
+
+                    RawCpuLimit = cpuLimit,
+                    RawMemoryLimit = memLimit,
+                    CpuLimit = cpuLimit > 0 ? FormatCpu(cpuLimit) : "∞",
+                    MemoryLimit = memLimit > 0 ? FormatMemory(memLimit) : "∞"
+                });
+            }
+
+            return resultList.OrderByDescending(x => x.RawMemory).ToList();
+        }
         public async Task<DtoNamespaceMetrics> GetByNamespaceMetricsAsync(string namespaced)
         {
             var rawMetrics = await _repository.GetPodMetricsAsync();
@@ -384,15 +436,10 @@ namespace Orbit.Infrastructure.Services
 
                 RawCpuLimit = cpuLimit,
                 RawMemoryLimit = memLimit,
-                
+
                 CpuLimit = cpuLimit > 0 ? FormatCpu(cpuLimit) : "∞",
                 MemoryLimit = memLimit > 0 ? FormatMemory(memLimit) : "∞"
             };
-        }
-        public async Task<DtoNamespaceMetrics> GetByNamespaceMetricsAsync(string namespaced)
-        {
-            var allMetrics = await GetNamespaceMetricsAsync();
-            return allMetrics.FirstOrDefault(m => m.Namespace == namespaced);
         }
 
 
