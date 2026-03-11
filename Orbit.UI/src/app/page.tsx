@@ -60,7 +60,7 @@ export default function Home() {
         if (!UserData) return;
         Deployments.List(UserData.githubID)
             .then((res: any) => setDeployments(res.data))
-            .catch((err: any) => console.error("Error fetching Deploys:", err));
+            .catch((err: any) => console.error("Error fetching Deploys:", err)); setDeployments([]);
 
         Namespaces.Metrics(UserData.githubID)
             .then((res: any) => setNamespaceMetrics(res.data))
@@ -68,7 +68,7 @@ export default function Home() {
 
         Prometheus.CPU(UserData.githubID)
             .then((res: any) => setCpuMetrics(res.data))
-            .catch((err: any) => console.error("Error fetching Metrics CPU:", err));
+            .catch((err: any) => console.error("Error fetching Metrics CPU:", err)); 
 
         Prometheus.Memory(UserData.githubID)
             .then((res: any) => setMemMetrics(res.data))
