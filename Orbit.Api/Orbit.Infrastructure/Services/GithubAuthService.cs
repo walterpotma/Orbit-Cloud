@@ -8,12 +8,14 @@ namespace Orbit.Infrastructure.Service
         private readonly IConfiguration _config;
         public GithubAuthService(IConfiguration config) => _config = config;
 
+        public async Task<string> GetInstallationTokenAsync(string installationId)
+        {
+            return await Task.FromResult("token-temporario");
+        }
+
         public string GenerateJwt()
         {
-            var privateKeyPath = _config["GithubApp:PrivateKeyPath"];
-            string pemContent = File.ReadAllText(privateKeyPath);
-            
-            return "JWT_ASSINADO";
+            return "jwt-temporario";
         }
     }
 }

@@ -1,5 +1,5 @@
 using Orbit.Application.Interfaces;
-using Orbit.Infrastucture.Entities.Github;
+using Orbit.Infrastructure.Entities.Github;
 using Orbit.Domain.Interfaces;
 
 namespace Orbit.Infrastructure.Services
@@ -11,6 +11,11 @@ namespace Orbit.Infrastructure.Services
         public GithubService(IGithubRepository githubRepository)
         {
             _githubRepository = githubRepository;
+        }
+
+        public async Task RegisterInstallationAsync(string installationId, string githubId)
+        {
+            await Task.CompletedTask;
         }
     }
 }
