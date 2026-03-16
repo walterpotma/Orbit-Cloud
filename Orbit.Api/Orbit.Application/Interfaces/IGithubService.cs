@@ -1,4 +1,4 @@
-using Orbit.Infrastucture.Entities.Github;
+using Orbit.Infrastructure.Entities.Github;
 
 namespace Orbit.Application.Interfaces
 {
