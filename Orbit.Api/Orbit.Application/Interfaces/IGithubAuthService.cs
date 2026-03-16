@@ -4,6 +4,7 @@ namespace Orbit.Application.Interfaces
 {
     public interface IGithubAuthService
     {
-        Task RegisterInstallationAsync(string installationId, string githubId);
+        string GenerateJwt();
+        Task<string> GetInstallationTokenAsync(string installationId);
     }
 }
