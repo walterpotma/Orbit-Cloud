@@ -1,5 +1,5 @@
 using Orbit.Application.Interfaces;
-using Orbit.Infrastructure.Entities.Github;
+using Orbit.Domain.Entities.Github;
 using Orbit.Domain.Interfaces;
 
 namespace Orbit.Infrastructure.Services
