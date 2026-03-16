@@ -14,7 +14,6 @@ namespace Orbit.Infrastructure.Repository
         {
             _mapper = mapper;
         }
-<<<<<<< HEAD
 
         public async Task<string> GetInstallationTokenAsync(string installationId)
         {
@@ -27,7 +26,5 @@ namespace Orbit.Infrastructure.Repository
             var content = await response.Content.ReadFromJsonAsync<GithubTokenResponse>();
             return content.Token;
         }
-=======
->>>>>>> 46e200e59dada911405be8864f060538c2e51027
     }
 }
