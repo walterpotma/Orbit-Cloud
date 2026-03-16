@@ -15,7 +15,7 @@ namespace Orbit.Api.Controllers
             _githubService = githubService;
         }
 
-        #region Authentication
+        #region Github oAtuh
         [HttpGet("login")]
         public IActionResult Login()
         {
@@ -58,10 +58,18 @@ namespace Orbit.Api.Controllers
         }
         #endregion
 
-        // [HttpGet("repos")]
-        // public async Task<IEnumerable<DtoGithubReposResponse>> GetCurrentUserRepositoriesAsync()
-        // {
-        //     return await _githubRepository.GetCurrentUserRepositoriesAsync();
-        // }
+        #region Github App
+        [HttpGet("install-callback")]
+        public async Task<IActionResult> InstallCallback([FromQuery] string installation_id)
+        {
+            var githubId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(githubId)) return Unauthorized();
+
+            await _githubService.RegisterInstallationAsync(installation_id, githubId);
+
+            return Redirect("https://orbitcloud.com.br/dashboard?install=success");
+        }
+        #endregion
     }
 }
