@@ -4,9 +4,11 @@ import CardDeploy from "@/features/dashboard/components/dash-card";
 import TableProps from "../types/view";
 
 export default function Table({ deployments }: TableProps) {
+    const safeDeployments = Array.isArray(deployments) ? deployments : [];
+
     return (
         <div className="w-full">
-            {deployments.length === 0 ? (
+            {safeDeployments.length === 0 ? (
                 <EmptyState
                     title="Nenhuma Aplicação Rodando"
                     description="Seu ambiente está limpo. Que tal fazer o deploy do seu primeiro projeto agora mesmo?"
@@ -15,8 +17,8 @@ export default function Table({ deployments }: TableProps) {
                     onAction={() => window.location.href = '/deploy/new'}
                 />
             ) : (
-                <div className="grid grid-cols-3 gap-4 px-6 py-10">
-                    {deployments.map(deploy => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-6 py-10">
+                    {safeDeployments.map(deploy => (
                         <CardDeploy
                             key={deploy.name}
                             name={deploy.name}

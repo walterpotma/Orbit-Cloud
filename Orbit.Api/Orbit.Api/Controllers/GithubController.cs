@@ -1,18 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.Interfaces;
 using Orbit.Infrastucture.Entities.Github;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Orbit.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Orbit.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class GithubService : IGithubService
+    public class GithubController : ControllerBase
     {
         private readonly IGithubService _githubService;
+        private readonly IAccountService _accountService;
 
-        public GithubService(IGithubService githubService)
+        public GithubController(IGithubService githubService, IAccountService accountService)
         {
             _githubService = githubService;
+            _accountService = accountService;
         }
 
         #region Github oAtuh
@@ -55,6 +61,22 @@ namespace Orbit.Api.Controllers
             await _accountService.CreateWorkspaceAsync(GithubID ?? "");
 
             return Redirect("https://orbitcloud.com.br");
+        }
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult GetMe()
+        {
+
+            var user = new
+            {
+                IsAuthenticated = User.Identity?.IsAuthenticated,
+                githubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                Email = User.FindFirst(ClaimTypes.Email)?.Value,
+                Username = User.FindFirst("urn:github:login")?.Value,
+                AvatarUrl = User.FindFirst("urn:github:avatar")?.Value
+            };
+
+            return Ok(user);
         }
         #endregion
 

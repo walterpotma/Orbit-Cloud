@@ -1,1 +1,1 @@
-export const VARIABLE_API_URL = "https://api.orbitcloud.com.br";
+export const VARIABLE_API_URL = "https://orbitcloud.com.br/api";

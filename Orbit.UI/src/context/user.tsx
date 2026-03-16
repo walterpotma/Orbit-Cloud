@@ -38,7 +38,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             } catch (error) {
                 console.log("Usuário não logado");
                 setUser(null);
-                router.push("/login");
             } finally {
                 setIsLoading(false);
             }

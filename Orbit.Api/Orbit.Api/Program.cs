@@ -1,4 +1,9 @@
 ﻿using k8s;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using System.Security.Claims;
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +13,7 @@ using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
 using Orbit.Infrastructure.Repository;
 using Orbit.Infrastructure.Services;
+using Orbit.Application.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +50,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.Cookie.Name = "orbit_session";
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
-    options.Cookie.Domain = ".orbitcloud.com.br";
+    options.Cookie.Domain = "orbitcloud.com.br";
 
     options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -64,7 +70,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
-    options.CallbackPath = "/signin-github";
+    options.CallbackPath = "/api/signin-github";
 
     options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
@@ -82,7 +88,7 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("repo");
 
     options.SaveTokens = true;
-
+    
     options.Events = new OAuthEvents
     {
         OnCreatingTicket = async context =>
@@ -103,8 +109,41 @@ builder.Services.AddAuthentication(options =>
 
 #region Github App
 builder.Services.AddHttpContextAccessor();
+<<<<<<< HEAD
+=======
+
+// builder.Services.Configure<GithubAppSettings>(builder.Configuration.GetSection("GithubApp"));
+
+builder.Services.AddScoped<MapperGithub>();
+>>>>>>> 46e200e59dada911405be8864f060538c2e51027
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 builder.Services.AddScoped<IGithubService, GithubService>();
+#endregion
+
+#region Account
+builder.Services.AddScoped<IAccountService, AccountService>();
+#endregion
+
+#region Prometheus
+builder.Services.AddScoped<IPrometheusService, PrometheusService>();
+#endregion
+
+#region Kubernetes
+builder.Services.AddScoped<IKubernetesRepository, KubernetesRepository>();
+builder.Services.AddScoped<IKubernetesService, KubernetesService>();
+builder.Services.AddSingleton<MapperKubernetes>();
+#endregion
+
+#region FileSystem
+builder.Services.AddScoped<IFileSystemRepository, FileSystemRepository>();
+builder.Services.AddScoped<IFileSystemService, FileSystemService>();
+#endregion
+
+#region Docker
+builder.Services.AddScoped<IRegistryRepository, RegistryRepository>();
+builder.Services.AddScoped<IRegistryService, RegistryService>();
+
+builder.Services.AddScoped<IDockerService, DockerService>();
 #endregion
 
 builder.Services.AddControllers();
@@ -155,3 +194,8 @@ app.MapControllers();
 app.UseStaticFiles();
 
 app.Run();
+
+public class GithubAppSettings {
+    public string AppId { get; set; } = string.Empty;
+    public string PrivateKeyPath { get; set; } = string.Empty;
+}
