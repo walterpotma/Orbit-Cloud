@@ -3,6 +3,7 @@ using Orbit.Infrastructure.Entities.Github;
 using Orbit.Domain.Interfaces;
 using Orbit.Application.Mappers;
 using Orbit.Application.Interfaces;
+using System.Net.Http.Headers;
 
 namespace Orbit.Infrastructure.Repository
 {
