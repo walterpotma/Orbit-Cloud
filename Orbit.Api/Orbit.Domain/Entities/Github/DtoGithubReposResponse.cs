@@ -1,4 +1,4 @@
-namespace Orbit.Infrastructure.Entities.Github
+namespace Orbit.Domain.Entities.Github
 {
     public class DtoGithubReposResponse
     {
