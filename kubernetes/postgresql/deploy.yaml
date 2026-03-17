@@ -19,13 +19,13 @@ metadata:
     type: local
     app: postgres
 spec:
-  storageClassName: local-path
+  storageClassName: cloudflare-r2
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /mnt/orbitcloud-r2
+    path: /mnt/orbit-r2
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -35,7 +35,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  storageClassName: local-path
+  storageClassName: cloudflare-r2
   accessModes:
     - ReadWriteMany
   resources:
@@ -68,13 +68,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: postgres-secret
-          # env:
-            # - name: PGDATA
-              # value: /var/lib/postgresql/data/pgdata
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgresdata
-              # subPath: pgdata
+              subPath: pgdata
       volumes:
         - name: postgresdata
           persistentVolumeClaim:
