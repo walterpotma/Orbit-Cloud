@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit Cloud | Messaging Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans min-h-screen">
+
+    <div class="max-w-7xl mx-auto p-6 md:p-10 space-y-8">
+        
+        <header class="flex justify-between items-end">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight">Comunicações</h1>
+                <p class="text-zinc-500 text-sm mt-1">Gerencie interações de usuários e tickets de suporte da Orbit.</p>
+            </div>
+            <div class="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800">
+                <button onclick="switchTab('inbox')" id="btn-inbox" class="px-4 py-2 text-sm font-medium rounded-md bg-zinc-800 text-white shadow-sm transition-all">
+                    <i class="bi bi-chat-left-text mr-2"></i>Mensagens
+                </button>
+                <button onclick="switchTab('board')" id="btn-board" class="px-4 py-2 text-sm font-medium rounded-md text-zinc-500 hover:text-zinc-300 transition-all">
+                    <i class="bi bi-kanban mr-2"></i>Support Board
+                </button>
+            </div>
+        </header>
+
+        <section id="tab-inbox" class="block">
+            <div class="flex h-[700px] bg-zinc-900/50 border border-zinc-800 rounded-3xl overflow-hidden backdrop-blur-sm">
+                <div class="w-80 border-r border-zinc-800 flex flex-col">
+                    <div class="p-4 border-b border-zinc-800 bg-zinc-900/80">
+                        <input type="text" placeholder="Buscar conversa..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500/50">
+                    </div>
+                    <div class="flex-1 overflow-y-auto">
+                        <div class="p-4 bg-blue-500/10 border-r-2 border-blue-500 transition-all cursor-pointer">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-bold">Walter Potma</span>
+                                <span class="text-[10px] text-zinc-500">14:20</span>
+                            </div>
+                            <p class="text-xs text-zinc-400 line-clamp-1">O RabbitMQ está com delay nas filas...</p>
+                        </div>
+                        <div class="p-4 hover:bg-zinc-800/40 border-b border-zinc-800/30 cursor-pointer transition-all">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-zinc-300">User_Alpha_99</span>
+                                <span class="text-[10px] text-zinc-500">10:05</span>
+                            </div>
+                            <p class="text-xs text-zinc-500 line-clamp-1">Aumentar limites de CPU do namespace.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 flex flex-col bg-zinc-950/20">
+                    <div class="p-5 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/30">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-violet-600 flex items-center justify-center font-bold text-sm">WP</div>
+                            <div>
+                                <h2 class="text-sm font-bold">Walter Potma</h2>
+                                <span class="flex items-center gap-1 text-[10px] text-emerald-500"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Online agora</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="p-2 hover:bg-zinc-800 rounded-lg text-zinc-400"><i class="bi bi-telephone"></i></button>
+                            <button class="p-2 hover:bg-zinc-800 rounded-lg text-zinc-400"><i class="bi bi-three-dots-vertical"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 p-8 overflow-y-auto space-y-6">
+                        <div class="flex flex-col items-start space-y-1 max-w-[70%]">
+                            <div class="bg-zinc-800 px-4 py-3 rounded-2xl rounded-tl-none text-sm text-zinc-200">
+                                Olá pessoal da Orbit! Percebi que as métricas do Prometheus estão demorando 2 minutos para atualizar. É normal?
+                            </div>
+                            <span class="text-[10px] text-zinc-600 ml-1">14:20</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-zinc-900/50 border-t border-zinc-800">
+                        <div class="relative flex items-center">
+                            <input type="text" placeholder="Digite sua resposta..." class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-5 py-3 pr-12 text-sm focus:outline-none focus:border-blue-500/50 transition-all">
+                            <button class="absolute right-3 p-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-white transition-colors">
+                                <i class="bi bi-send-fill text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-board" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="flex flex-col gap-4">
+                    <div class="flex justify-between items-center px-2 py-1">
+                        <h3 class="text-sm font-bold text-zinc-400 flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div> Entrada (Email Worker)
+                        </h3>
+                        <span class="text-[10px] bg-zinc-800 px-2 py-0.5 rounded text-zinc-500">03</span>
+                    </div>
+
+                    <div class="group bg-zinc-900 border border-zinc-800 p-5 rounded-3xl hover:border-zinc-700 hover:shadow-xl hover:shadow-blue-500/5 transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2 py-1 bg-rose-500/10 text-rose-500 text-[9px] font-black uppercase tracking-wider rounded">Emergência</span>
+                            <i class="bi bi-paperclip text-zinc-600"></i>
+                        </div>
+                        <h4 class="text-sm font-bold mb-2 group-hover:text-blue-400 transition-colors leading-snug">Erro Crítico: Ingress 502 no subdomínio api.*</h4>
+                        <p class="text-xs text-zinc-500 line-clamp-2 mb-4 italic">"O certificado SSL parece ter expirado e o Traefik não está aceitando..."</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-zinc-800/50">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[10px]">JD</div>
+                                <span class="text-[10px] text-zinc-400">John Doe</span>
+                            </div>
+                            <span class="text-[10px] text-zinc-600 italic">2h atrás</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <div class="flex justify-between items-center px-2 py-1 border-b border-amber-500/20 pb-2">
+                        <h3 class="text-sm font-bold text-zinc-400 flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></div> Em Execução
+                        </h3>
+                    </div>
+                    <div class="h-full rounded-3xl border-2 border-dashed border-zinc-800/50 flex items-center justify-center text-zinc-700 text-xs">
+                        Arraste para aqui
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <div class="flex justify-between items-center px-2 py-1">
+                        <h3 class="text-sm font-bold text-zinc-400 flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div> Resolvido
+                        </h3>
+                    </div>
+                    <div class="bg-zinc-900/40 border border-zinc-800/50 p-4 rounded-3xl opacity-60">
+                        <h4 class="text-xs font-semibold line-through text-zinc-600">Upgrade de plano concluído</h4>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const inbox = document.getElementById('tab-inbox');
+            const board = document.getElementById('tab-board');
+            const btnInbox = document.getElementById('btn-inbox');
+            const btnBoard = document.getElementById('btn-board');
+
+            if (tab === 'inbox') {
+                inbox.classList.remove('hidden');
+                board.classList.add('hidden');
+                btnInbox.classList.add('bg-zinc-800', 'text-white');
+                btnInbox.classList.remove('text-zinc-500');
+                btnBoard.classList.remove('bg-zinc-800', 'text-white');
+                btnBoard.classList.add('text-zinc-500');
+            } else {
+                board.classList.remove('hidden');
+                inbox.classList.add('hidden');
+                btnBoard.classList.add('bg-zinc-800', 'text-white');
+                btnBoard.classList.remove('text-zinc-500');
+                btnInbox.classList.remove('bg-zinc-800', 'text-white');
+                btnInbox.classList.add('text-zinc-500');
+            }
+        }
+    </script>
+
+</body>
+</html>
