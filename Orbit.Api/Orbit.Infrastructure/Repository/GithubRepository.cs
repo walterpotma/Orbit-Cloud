@@ -2,7 +2,7 @@
 using System.Net.Http.Json; 
 using System.Text.Json;
 using Orbit.Domain.Interfaces;
-// using Orbit.Application.DTOs.Github; // Pode comentar se der erro de namespace não encontrado
+using Orbit.Application.DTOs.Github; // Pode comentar se der erro de namespace não encontrado
 
 namespace Orbit.Infrastructure.Repository
 {
