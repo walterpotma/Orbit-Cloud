@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.Interfaces;
-using Orbit.Infrastructure.Entities.Github;
+using Orbit.Domain.Entities.Github;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Orbit.Application.Interfaces;
