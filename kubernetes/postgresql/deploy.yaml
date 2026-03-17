@@ -1,43 +1,25 @@
 apiVersion: v1
-kind: ConfigMap
+kind: Secret # Trocado de ConfigMap para Secret por segurança
 metadata:
   namespace: orbitcloud
   name: postgres-secret
-  labels:
-    app: postgres
-data:
+type: Opaque
+stringData: # Use stringData para não precisar converter pra base64 manualmente
   POSTGRES_DB: orbitcloud
   POSTGRES_USER: orbit
-  POSTGRES_PASSWORD: 0rb1t!@#$
+  POSTGRES_PASSWORD: "0rb1t!@#$"
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  namespace: orbitcloud
-  name: postgres-volume
-  labels:
-    type: local
-    app: postgres
-spec:
-  storageClassName: local-path
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: /data/postgresql
+# Removido o PersistentVolume manual para deixar a StorageClass trabalhar
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   namespace: orbitcloud
   name: postgres-volume-claim
-  labels:
-    app: postgres
 spec:
-  storageClassName: local-path
+  storageClassName: cloudflare-r2 # Aqui ele vai chamar o driver do R2
   accessModes:
-    - ReadWriteMany
+    - ReadWriteMany # R2 permite isso, mas o Postgres precisa de cuidado
   resources:
     requests:
       storage: 10Gi
@@ -48,7 +30,7 @@ metadata:
   namespace: orbitcloud
   name: postgres
 spec:
-  replicas: 3
+  replicas: 1 # MANTENHA EM 1 para evitar corrupção de dados
   selector:
     matchLabels:
       app: postgres
@@ -60,15 +42,16 @@ spec:
       containers:
         - name: postgres
           image: 'postgres:14'
-          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef: # Trocado para secretRef
+                name: postgres-secret
           ports:
             - containerPort: 5432
-          envFrom:
-            - configMapRef:
-                name: postgres-secret
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgresdata
+              # DICA: Postgres no S3/R2 às vezes exige um subPath para permissões
+              subPath: pgdata 
       volumes:
         - name: postgresdata
           persistentVolumeClaim:
@@ -79,18 +62,10 @@ kind: Service
 metadata:
   namespace: orbitcloud
   name: postgres
-  labels:
-    app: postgres
 spec:
-  type: NodePort
+  type: ClusterIP # Use ClusterIP para segurança interna, mude para NodePort só se precisar acessar de fora do cluster
   ports:
     - port: 5432
+      targetPort: 5432
   selector:
     app: postgres
-
-# kubectl run psql-client --rm -it --image=postgres --namespace orbitcloud -- bash
-# psql -h postgres.orbitcloud.svc.cluster.local -U orbit -d orbitcloud
-
-# kubectl run redis-client --rm -it --image=redis --namespace orbitcloud -- bash
-# redis-cli -h redis-master
-# AUHT mIpkRphicN
