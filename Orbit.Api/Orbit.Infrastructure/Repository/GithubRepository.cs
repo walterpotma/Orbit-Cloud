@@ -1,5 +1,5 @@
 ﻿using LibGit2Sharp;
-using Orbit.Infrastucture.Entities.Github;
+using Orbit.Infrastructure.Entities.Github;
 using Orbit.Domain.Interfaces;
 using Orbit.Application.Mappers;
 using Orbit.Application.Interfaces;
