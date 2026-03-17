@@ -4,6 +4,7 @@ using Orbit.Domain.Interfaces;
 using Orbit.Application.Mappers;
 using Orbit.Application.Interfaces;
 using System.Net.Http.Headers;
+using Orbit.Application.DTOs.Github;
 
 namespace Orbit.Infrastructure.Repository
 {
