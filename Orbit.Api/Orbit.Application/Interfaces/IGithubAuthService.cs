@@ -1,5 +1,3 @@
-using Orbit.Infrastructure.Entities.Github;
-
 namespace Orbit.Application.Interfaces
 {
     public interface IGithubAuthService
