@@ -1,4 +1,4 @@
-using Orbit.Application.DTOs.Github; // Certifique-se que o DTO está acessível aqui
+using Orbit.Domain.Entities.Github; // Certifique-se que o DTO está acessível aqui
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
