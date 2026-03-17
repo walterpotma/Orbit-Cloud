@@ -1,36 +1,47 @@
-﻿using LibGit2Sharp;
-using Orbit.Infrastructure.Entities.Github;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json; // Resolve o ReadFromJsonAsync
+using System.Text.Json;
 using Orbit.Domain.Interfaces;
-using Orbit.Application.Mappers;
-using Orbit.Application.Interfaces;
-using System.Net.Http.Headers;
-using Orbit.Application.DTOs.Github;
+using Orbit.Application.DTOs.Github; 
 
 namespace Orbit.Infrastructure.Repository
 {
     public class GithubRepository : IGithubRepository
     {
-        private readonly MapperGithub _mapper;
         private readonly HttpClient _httpClient;
         private readonly IGithubAuthService _authService;
 
-        public GithubRepository(MapperGithub mapper, HttpClient httpClient, IGithubAuthService authService)
+        public GithubRepository(HttpClient httpClient, IGithubAuthService authService)
         {
-            _mapper = mapper;
             _httpClient = httpClient;
             _authService = authService;
         }
 
-        public async Task<string> GetInstallationTokenAsync(string installationId)
+        public async Task<IEnumerable<DtoGithubReposResponse>> GetRepositoriesAsync(string installationId)
         {
-            var jwt = _authService.GenerateJwt();
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            var token = await _authService.GetInstallationToken(installationId);
 
-            var response = await _httpClient.PostAsync(
-                $"https://api.github.com/app/installations/{installationId}/access_tokens", null);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("OrbitCloud-App");
 
-            var content = await response.Content.ReadFromJsonAsync<GithubTokenResponse>();
-            return content.Token;
+            // Chamada para o GitHub
+            var response = await _httpClient.GetAsync("https://api.github.com/installation/repositories");
+            response.EnsureSuccessStatusCode();
+
+            // Usando o ReadFromJsonAsync com a classe de lista correta
+            var data = await response.Content.ReadFromJsonAsync<GithubRepoListResponse>();
+
+            return data?.repositories ?? Enumerable.Empty<DtoGithubReposResponse>();
         }
+    }
+
+    // Classes auxiliares para o parse do JSON do GitHub
+    public class GithubRepoListResponse
+    {
+        public List<DtoGithubReposResponse> repositories { get; set; } = new();
+    }
+    public class GithubTokenResponse
+    {
+        public string token { get; set; } = string.Empty;
     }
 }
