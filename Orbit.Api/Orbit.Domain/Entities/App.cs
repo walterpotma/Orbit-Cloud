@@ -4,7 +4,6 @@ public class App : Entity
 {
     public long GithubId { get; private set; }
     public AppSettings Settings { get; private set; } 
-    public SettingsType Settings { get; private set; }
 
     // public void Deploy(string branch) 
     // {
