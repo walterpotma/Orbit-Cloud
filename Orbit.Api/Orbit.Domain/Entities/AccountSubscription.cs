@@ -1,3 +1,5 @@
+using Orbit.Domain.Entities;
+
 public class AccountSubscription : Entity
 {
     public long GithubId { get; private set; }
