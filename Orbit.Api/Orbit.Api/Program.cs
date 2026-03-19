@@ -121,6 +121,7 @@ builder.Services.AddAuthentication(options =>
 #region Github App
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<MapperGithub>();
+builder.Services.AddScoped<IGithubAuthService, GithubAuthService>();
 builder.Services.AddScoped<IGithubRepository, GithubRepository>();
 builder.Services.AddScoped<IGithubService, GithubService>();
 #endregion
