@@ -43,7 +43,7 @@ public class OrbitContext : DbContext
             entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApplicationId).HasColumnName("app_id");
+            entity.Property(e => e.AppId).HasColumnName("app_id");
             entity.Property(e => e.Content).HasColumnName("logs").HasColumnType("jsonb");
             // entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             // entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
