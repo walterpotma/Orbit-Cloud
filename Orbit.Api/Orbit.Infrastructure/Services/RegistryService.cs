@@ -2,6 +2,7 @@
 using Orbit.Application.DTOs.Registry;
 using Orbit.Domain.Interfaces;
 using Orbit.Application.Interfaces;
+using System.Net.Http;
 
 namespace Orbit.Infrastructure.Services
 {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.Interfaces; // <-- CORRIGIDO (sem .Services)
 using Orbit.Application.DTOs.Prometheus; // <-- ADICIONADO para reconhecer o DTO
+using System.Net.Http;
 
 namespace Orbit.Api.Controllers
 {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.DTOs.Registry;
 using Orbit.Application.Interfaces;
+using System.Net.Http;
 
 namespace Orbit.Api.Controllers
 {
