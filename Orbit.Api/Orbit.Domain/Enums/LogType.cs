@@ -1,4 +1,4 @@
-namespace Orbit.Domain.Entities; // Ou Orbit.Domain.Enums
+namespace Orbit.Domain.Enums;
 
 public enum LogType
 {
