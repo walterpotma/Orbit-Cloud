@@ -12,13 +12,11 @@ public class OrbitContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // 1. Tabela Account
         modelBuilder.Entity<Account>(entity =>
         {
             entity.ToTable("account");
             entity.HasKey(e => e.Id);
 
-            // Mapeando para bater com o banco snake_case
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GithubId).HasColumnName("github_id").IsRequired();
             entity.Property(e => e.GithubUser).HasColumnName("github_user");
@@ -27,8 +25,7 @@ public class OrbitContext : DbContext
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
         });
 
-        // 2. Tabela Application (Note o singular "application" conforme seu print)
-        modelBuilder.Entity<Orbit.Domain.Entities.Application>(entity =>
+        modelBuilder.Entity<App>(entity =>
         {
             entity.ToTable("app");
             entity.HasKey(e => e.Id);
@@ -40,8 +37,7 @@ public class OrbitContext : DbContext
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
         });
 
-        // 3. Tabela Application Logs
-        modelBuilder.Entity<ApplicationLogs>(entity =>
+        modelBuilder.Entity<AppLogs>(entity =>
         {
             entity.ToTable("app_logs");
             entity.HasKey(e => e.Id);
