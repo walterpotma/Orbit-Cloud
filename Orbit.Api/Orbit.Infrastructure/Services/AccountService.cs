@@ -25,7 +25,7 @@ namespace Orbit.Infrastructure.Services
 
         public async Task<bool> CreateWorkspaceAsync(long githubId, string userName, string email)
         {
-            var userBasePath = Path.Combine("archive/clients/", githubId);
+            var userBasePath = Path.Combine("archive/clients/", githubId.ToString());
             var namespaceName = $"u-{githubId}";
 
             try
