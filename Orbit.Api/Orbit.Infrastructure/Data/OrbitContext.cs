@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Orbit.Domain.Entities;
-// Alias para evitar conflito com namespace
-using AppEntity = Orbit.Domain.Entities.Application;
-
 namespace Orbit.Infrastructure.Data;
 
 public class OrbitContext : DbContext
