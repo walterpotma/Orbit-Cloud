@@ -1,4 +1,4 @@
-namespace Orbit.Domain.Entities.Account
+namespace Orbit.Domain.Entities
 {
     public class Workspace
     {
