@@ -21,8 +21,8 @@ public class OrbitContext : DbContext
             entity.Property(e => e.GithubId).HasColumnName("github_id").IsRequired();
             entity.Property(e => e.GithubUser).HasColumnName("github_user");
             entity.Property(e => e.Email).HasColumnName("email");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            // entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            // entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
         });
 
         modelBuilder.Entity<App>(entity =>
@@ -33,8 +33,8 @@ public class OrbitContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GithubId).HasColumnName("github_id");
             entity.Property(e => e.Settings).HasColumnName("settings").HasColumnType("jsonb");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            // entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            // entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
         });
 
         modelBuilder.Entity<AppLogs>(entity =>
@@ -45,8 +45,8 @@ public class OrbitContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ApplicationId).HasColumnName("app_id");
             entity.Property(e => e.Content).HasColumnName("logs").HasColumnType("jsonb");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+            // entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            // entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
         });
 
         base.OnModelCreating(modelBuilder);
