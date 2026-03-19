@@ -1,22 +1,28 @@
-﻿using Orbit.Application.DTOs.kubernetes;
+﻿using System.Diagnostics;
+using Microsoft.VisualBasic;
+using Orbit.Application.DTOs.kubernetes;
 using Orbit.Application.Interfaces;
+using Orbit.Domain.Interfaces;
 
 namespace Orbit.Infrastructure.Services
 {
     public class AccountService : IAccountService
     {
         private readonly IFileSystemService _fileSystemService;
+        private readonly IAccountRepository _accountRepository;
         private readonly IKubernetesService _kubernetesService;
 
         public AccountService(
             IFileSystemService fileSystemService,
-            IKubernetesService kubernetesService)
+            IKubernetesService kubernetesService,
+            IAccountRepository accountRepository)
         {
             _fileSystemService = fileSystemService;
             _kubernetesService = kubernetesService;
+            _accountRepository = accountRepository;
         }
 
-        public async Task<bool> CreateWorkspaceAsync(string githubId)
+        public async Task<bool> CreateWorkspaceAsync(string githubId, string userName, string email)
         {
             var userBasePath = Path.Combine("archive/clients/", githubId);
             var namespaceName = $"u-{githubId}";
@@ -39,6 +45,29 @@ namespace Orbit.Infrastructure.Services
                     };
                     await _kubernetesService.CreateNamespacesAsync(namespaceRequest);
                     Console.WriteLine($"[Success] Namespace '{namespaceName}' criado com sucesso.");
+                }
+
+                try
+                {
+                    var existingAccount = await _accountRepository.GetByGithubIdAsync(githubId);
+
+                    if (existingAccount == null)
+                    {
+                        var newAccount = new Account(githubId, userName, email);
+
+                        await _accountRepository.AddAsync(newAccount);
+                        Console.WriteLine($"[Success] Nova conta criada para {userName} (GitHub: {githubId}).");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[Info] Conta já registrada no banco de dados.");
+                    }
+
+                    await _accountRepository.SaveChangesAsync();
+                }
+                catch (Exception error)
+                {
+                    Console.WriteLine($"[FAIL] Erro ao persistir conta no banco: {error.Message}");
                 }
 
                 return true;

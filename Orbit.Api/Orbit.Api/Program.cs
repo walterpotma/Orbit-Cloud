@@ -26,6 +26,14 @@ kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
 builder.Services.AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig));
 #endregion
 
+#region ConnectionStrings
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<OrbitContext>(options =>
+    options.UseNpgsql(connectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+);
+#endregion
+
 #region Cors Conffig
 builder.Services.AddCors(options =>
 {
@@ -115,6 +123,7 @@ builder.Services.AddScoped<IGithubService, GithubService>();
 #endregion
 
 #region Account
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 #endregion
 
