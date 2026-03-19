@@ -14,6 +14,9 @@ using Orbit.Domain.Interfaces;
 using Orbit.Infrastructure.Repository;
 using Orbit.Infrastructure.Services;
 using Orbit.Application.Mappers;
+using Microsoft.EntityFrameworkCore;         // Para o UseNpgsql funcionar
+using Orbit.Infrastructure.Data;            // Para encontrar o OrbitContext
+using Orbit.Domain.Entities;                // Para as entidades (Account, etc)
 
 var builder = WebApplication.CreateBuilder(args);
 
