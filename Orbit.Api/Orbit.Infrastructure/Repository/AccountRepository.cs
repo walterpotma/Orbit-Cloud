@@ -3,7 +3,7 @@ using Orbit.Domain.Entities;
 using Orbit.Domain.Interfaces;
 using Orbit.Infrastructure.Data;
 
-namespace Orbit.Infrastructure.Repositories;
+namespace Orbit.Infrastructure.Repository;
 
 public class AccountRepository : IAccountRepository
 {

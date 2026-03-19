@@ -58,7 +58,7 @@ namespace Orbit.Api.Controllers
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
 
-            await _accountService.CreateWorkspaceAsync(GithubID ?? "", username ?? "", email ?? "");
+            await _accountService.CreateWorkspaceAsync(long.Parse(dto.GithubID) ?? "", username ?? "", email ?? "");
 
             return Redirect("https://orbitcloud.com.br");
         }
