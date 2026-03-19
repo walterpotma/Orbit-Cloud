@@ -1,6 +1,6 @@
 namespace Orbit.Domain.Entities;
 
-public class Application : Entity
+public class App : Entity
 {
     public long AccountId { get; private set; }
     

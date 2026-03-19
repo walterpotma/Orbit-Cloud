@@ -10,8 +10,8 @@ public class OrbitContext : DbContext
     public OrbitContext(DbContextOptions<OrbitContext> options) : base(options) { }
 
     public DbSet<Account> Accounts => Set<Account>();
-    public DbSet<AppEntity> Applications => Set<AppEntity>();
-    public DbSet<ApplicationLogs> ApplicationLogs => Set<ApplicationLogs>();
+    public DbSet<App> Apps => Set<App>();
+    public DbSet<AppLogs> AppLogs => Set<AppLogs>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,12 +33,12 @@ public class OrbitContext : DbContext
         // 2. Tabela Application (Note o singular "application" conforme seu print)
         modelBuilder.Entity<Orbit.Domain.Entities.Application>(entity =>
         {
-            entity.ToTable("application");
+            entity.ToTable("app");
             entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GithubId).HasColumnName("github_id");
-            entity.Property(e => e.Settings).HasColumnName("application").HasColumnType("jsonb");
+            entity.Property(e => e.Settings).HasColumnName("settings").HasColumnType("jsonb");
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
         });
@@ -46,11 +46,11 @@ public class OrbitContext : DbContext
         // 3. Tabela Application Logs
         modelBuilder.Entity<ApplicationLogs>(entity =>
         {
-            entity.ToTable("application_logs");
+            entity.ToTable("app_logs");
             entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ApplicationId).HasColumnName("application_id");
+            entity.Property(e => e.ApplicationId).HasColumnName("app_id");
             entity.Property(e => e.Content).HasColumnName("logs").HasColumnType("jsonb");
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
