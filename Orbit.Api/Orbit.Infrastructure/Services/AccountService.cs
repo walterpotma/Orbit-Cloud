@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using Orbit.Application.DTOs.kubernetes;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
+using Orbit.Domain.Entities;
 
 namespace Orbit.Infrastructure.Services
 {
@@ -54,20 +55,16 @@ namespace Orbit.Infrastructure.Services
                     if (existingAccount == null)
                     {
                         var newAccount = new Account(githubId, userName, email);
-
                         await _accountRepository.AddAsync(newAccount);
-                        Console.WriteLine($"[Success] Nova conta criada para {userName} (GitHub: {githubId}).");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[Info] Conta já registrada no banco de dados.");
                     }
 
                     await _accountRepository.SaveChangesAsync();
+                    return true;
                 }
                 catch (Exception error)
                 {
-                    Console.WriteLine($"[FAIL] Erro ao persistir conta no banco: {error.Message}");
+                    Console.WriteLine($"[FAIL] Erro no banco: {error.Message}");
+                    return false;
                 }
 
                 return true;
