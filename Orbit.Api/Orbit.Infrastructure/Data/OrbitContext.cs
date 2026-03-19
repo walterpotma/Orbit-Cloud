@@ -21,7 +21,7 @@ public class OrbitContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.ToTable("accounts");
+            entity.ToTable("account");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.GithubId).IsRequired();
         });
