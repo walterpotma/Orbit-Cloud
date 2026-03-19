@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration; // Para o IConfiguration
 using Orbit.Application.Interfaces;      // Onde você criou a interface
 
-namespace Orbit.Infrastructure.Service
+namespace Orbit.Infrastructure.Services
 {
     public class GithubAuthService : IGithubAuthService
     {
