@@ -3,6 +3,7 @@ using Orbit.Application.Interfaces;
 using Orbit.Domain.Entities.Github;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Orbit.Api.Controllers
 {
