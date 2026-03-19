@@ -1,9 +1,9 @@
 ﻿using Orbit.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Net.Http;
 
 namespace Orbit.Infrastructure.Repository
 {

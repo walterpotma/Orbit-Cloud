@@ -1,7 +1,7 @@
 using Orbit.Domain.Enums; // <--- ADICIONE ISSO
 using Orbit.Domain.Entities;
 
-public class ApplicationLog : Entity
+public class ApplicationLogs : Entity
 {
     public long ApplicationId { get; private set; }
     public string Content { get; private set; }
