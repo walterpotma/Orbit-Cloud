@@ -4,6 +4,6 @@ namespace Orbit.Application.Interfaces
 {
     public interface IAccountService
     {
-        Task <bool> CreateWorkspaceAsync(string githubId);
+        Task <bool> CreateWorkspaceAsync(string githubId, string userName, string email);
     }
 }
