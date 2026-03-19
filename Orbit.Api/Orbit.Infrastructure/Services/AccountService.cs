@@ -23,7 +23,7 @@ namespace Orbit.Infrastructure.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<bool> CreateWorkspaceAsync(string githubId, string userName, string email)
+        public async Task<bool> CreateWorkspaceAsync(long githubId, string userName, string email)
         {
             var userBasePath = Path.Combine("archive/clients/", githubId);
             var namespaceName = $"u-{githubId}";
