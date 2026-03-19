@@ -31,7 +31,7 @@ public class OrbitContext : DbContext
         });
 
         // 2. Tabela Application (Note o singular "application" conforme seu print)
-        modelBuilder.Entity<AppEntity>(entity =>
+        modelBuilder.Entity<Orbit.Domain.Entities.Application>(entity =>
         {
             entity.ToTable("application");
             entity.HasKey(e => e.Id);
