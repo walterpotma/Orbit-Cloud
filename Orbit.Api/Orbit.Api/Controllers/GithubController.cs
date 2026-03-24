@@ -98,16 +98,6 @@ namespace Orbit.Api.Controllers
 
             return Redirect("https://orbitcloud.com.br/artifact");
         }
-
-        [HttpGet("installation-url")]
-        public IActionResult GetInstallationUrl()
-        {
-            // O ideal é que o "slug" (nome) do app esteja no teu appsettings.json
-            var appSlug = _configuration["Github:AppSlug"]; // Ex: "orbit-cloud-walter"
-            var url = $"https://github.com/apps/{appSlug}/installations/new";
-
-            return Ok(new { url });
-        }
         #endregion
     }
 }
