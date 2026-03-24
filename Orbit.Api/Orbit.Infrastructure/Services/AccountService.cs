@@ -79,7 +79,7 @@ namespace Orbit.Infrastructure.Services
         {
             if (string.IsNullOrEmpty(githubId)) return null;
 
-            var existingAccount = await _accountRepository.GetByGithubIdAsync(githubId);
+            var existingAccount = await _accountRepository.GetByGithubIdAsync(githubId.ToString());
 
             return existingAccount;
         }
