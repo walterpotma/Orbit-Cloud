@@ -1,4 +1,0 @@
-services:
-  ui:
-    context: "../../Orbit.UI/"
-    dockerfile: 

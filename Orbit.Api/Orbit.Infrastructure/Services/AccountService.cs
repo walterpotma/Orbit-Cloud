@@ -64,9 +64,17 @@ namespace Orbit.Infrastructure.Services
                 catch (Exception error)
                 {
                     Console.WriteLine($"[FAIL] Erro no banco: {error.Message}");
-                    return false;
                 }
 
+                try
+                {
+                    await _githubService.RegisterInstallationAsync(installation_id, githubId);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[FAIL] Erro na instalação do GithubAPP para o cliente: {error.Message}");
+                }
                 return true;
             }
             catch (Exception ex)

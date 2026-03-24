@@ -57,6 +57,9 @@ namespace Orbit.Api.Controllers
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
 
+            var appSlug = _configuration["Github:AppSlug"]; // Ex: "orbit-cloud-walter"
+            var url = $"https://github.com/apps/{appSlug}/installations/new";
+
             await _accountService.CreateWorkspaceAsync(long.Parse(GithubID), username ?? "", email ?? "");
 
             return Redirect("https://orbitcloud.com.br");
@@ -65,7 +68,7 @@ namespace Orbit.Api.Controllers
         [HttpGet("me")]
         public IActionResult GetMe()
         {
-
+            // var response = _accountService.Get
             var user = new
             {
                 IsAuthenticated = User.Identity?.IsAuthenticated,
@@ -90,6 +93,16 @@ namespace Orbit.Api.Controllers
             await _githubService.RegisterInstallationAsync(installation_id, githubId);
 
             return Redirect("https://orbitcloud.com.br/artifact");
+        }
+
+        [HttpGet("installation-url")]
+        public IActionResult GetInstallationUrl()
+        {
+            // O ideal é que o "slug" (nome) do app esteja no teu appsettings.json
+            var appSlug = _configuration["Github:AppSlug"]; // Ex: "orbit-cloud-walter"
+            var url = $"https://github.com/apps/{appSlug}/installations/new";
+
+            return Ok(new { url });
         }
         #endregion
     }
