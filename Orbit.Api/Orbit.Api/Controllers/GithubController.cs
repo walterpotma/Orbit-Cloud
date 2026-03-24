@@ -12,11 +12,13 @@ namespace Orbit.Api.Controllers
     [ApiController]
     public class GithubController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly IGithubService _githubService;
         private readonly IAccountService _accountService;
 
-        public GithubController(IGithubService githubService, IAccountService accountService)
+        public GithubController(IConfiguration configuration, IGithubService githubService, IAccountService accountService)
         {
+            _configuration = configuration;
             _githubService = githubService;
             _accountService = accountService;
         }
