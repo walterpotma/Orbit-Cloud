@@ -60,12 +60,13 @@ namespace Orbit.Api.Controllers
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
 
-            var appSlug = _configuration["Github:AppSlug"]; // Ex: "orbit-cloud-walter"
-            var url = $"https://github.com/apps/{appSlug}/installations/new";
-
             await _accountService.CreateWorkspaceAsync(long.Parse(GithubID), username ?? "", email ?? "");
 
-            return Redirect("https://orbitcloud.com.br");
+            var appSlug = _configuration["Github:AppSlug"]; // Ex: "orbit-cloud-walter"
+
+            return Redirect($"https://github.com/apps/{appSlug}/installations/new");
+
+            // return Redirect("https://orbitcloud.com.br");
         }
         [Authorize]
         [HttpGet("me")]
