@@ -66,15 +66,15 @@ namespace Orbit.Infrastructure.Services
                     Console.WriteLine($"[FAIL] Erro no banco: {error.Message}");
                 }
 
-                try
-                {
-                    await _githubService.RegisterInstallationAsync(installation_id, githubId);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[FAIL] Erro na instalação do GithubAPP para o cliente: {error.Message}");
-                }
+                // try
+                // {
+                //     await _githubService.RegisterInstallationAsync(installation_id, githubId);
+                //     return true;
+                // }
+                // catch (Exception ex)
+                // {
+                //     Console.WriteLine($"[FAIL] Erro na instalação do GithubAPP para o cliente: {error.Message}");
+                // }
                 return true;
             }
             catch (Exception ex)
