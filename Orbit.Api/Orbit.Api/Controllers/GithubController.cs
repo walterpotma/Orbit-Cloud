@@ -56,26 +56,33 @@ namespace Orbit.Api.Controllers
             {
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
-            
+
             await _accountService.CreateWorkspaceAsync(long.Parse(GithubID), username ?? "", email ?? "");
 
             return Redirect("https://orbitcloud.com.br");
         }
         [Authorize]
         [HttpGet("me")]
-        public IActionResult GetMe()
+        public async Task<IActionResult> GetMe()
         {
-            // var response = _accountService.Get
-            var user = new
+            var githubId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(githubId)) return Unauthorized();
+
+            var account = await _accountService.GetAccountByGithubIdAsync(githubId);
+
+            var userProfile = new
             {
                 IsAuthenticated = User.Identity?.IsAuthenticated,
-                githubID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                GithubID = githubId,
                 Email = User.FindFirst(ClaimTypes.Email)?.Value,
                 Username = User.FindFirst("urn:github:login")?.Value,
-                AvatarUrl = User.FindFirst("urn:github:avatar")?.Value
+                AvatarUrl = User.FindFirst("urn:github:avatar")?.Value,
+
+                AccountInfo = account
             };
 
-            return Ok(user);
+            return Ok(userProfile);
         }
         #endregion
     }
