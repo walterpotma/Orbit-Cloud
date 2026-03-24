@@ -77,7 +77,7 @@ namespace Orbit.Infrastructure.Services
 
         public async Task<Account?> GetAccountByGithubIdAsync(long githubId)
         {
-            if (string.IsNullOrEmpty(githubId.ToString)) return null;
+            if (string.IsNullOrEmpty(githubId.ToString())) return null;
 
             var existingAccount = await _accountRepository.GetByGithubIdAsync(githubId);
 
