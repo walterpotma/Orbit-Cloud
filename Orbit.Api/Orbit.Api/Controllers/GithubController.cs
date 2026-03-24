@@ -4,6 +4,7 @@ using Orbit.Domain.Entities.Github;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace Orbit.Api.Controllers
 {
