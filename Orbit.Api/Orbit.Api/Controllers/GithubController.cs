@@ -65,7 +65,7 @@ namespace Orbit.Api.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> GetMe()
         {
-            var githubId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            long githubId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(githubId)) return Unauthorized();
 
