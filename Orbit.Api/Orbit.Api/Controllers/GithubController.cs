@@ -4,7 +4,6 @@ using Orbit.Domain.Entities.Github;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
 
 namespace Orbit.Api.Controllers
 {
@@ -12,13 +11,11 @@ namespace Orbit.Api.Controllers
     [ApiController]
     public class GithubController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IGithubService _githubService;
         private readonly IAccountService _accountService;
 
-        public GithubController(IConfiguration configuration, IGithubService githubService, IAccountService accountService)
+        public GithubController(IGithubService githubService, IAccountService accountService)
         {
-            _configuration = configuration;
             _githubService = githubService;
             _accountService = accountService;
         }
@@ -59,14 +56,10 @@ namespace Orbit.Api.Controllers
             {
                 Console.WriteLine($"[Login Error] {ex.Message}");
             }
-
+            
             await _accountService.CreateWorkspaceAsync(long.Parse(GithubID), username ?? "", email ?? "");
 
-            var appSlug = _configuration["Github:AppSlug"]; // Ex: "orbit-cloud-walter"
-
-            return Redirect($"https://github.com/apps/{appSlug}/installations/new");
-
-            // return Redirect("https://orbitcloud.com.br");
+            return Redirect("https://orbitcloud.com.br");
         }
         [Authorize]
         [HttpGet("me")]
@@ -83,20 +76,6 @@ namespace Orbit.Api.Controllers
             };
 
             return Ok(user);
-        }
-        #endregion
-
-        #region Github App
-        [HttpGet("install-callback")]
-        public async Task<IActionResult> InstallCallback([FromQuery] string installation_id)
-        {
-            var githubId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(githubId)) return Unauthorized();
-
-            await _githubService.RegisterInstallationAsync(installation_id, githubId);
-
-            return Redirect("https://orbitcloud.com.br/artifact");
         }
         #endregion
     }
