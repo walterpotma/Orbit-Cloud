@@ -69,7 +69,7 @@ namespace Orbit.Api.Controllers
 
             if (string.IsNullOrEmpty(githubId)) return Unauthorized();
 
-            var account = await _accountService.GetAccountByGithubIdAsync(githubId);
+            var account = await _accountService.GetAccountByGithubIdAsync(long.Parse(githubId));
 
             var userProfile = new
             {
