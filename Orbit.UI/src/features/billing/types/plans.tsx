@@ -10,6 +10,11 @@ type resourcesProps = {
     description: string;
 }
 
+export type PlanProps = {
+    cpu: String;
+    ram: String;
+}
+
 export const standardPlans = [
     {
         name: 'Nano',
