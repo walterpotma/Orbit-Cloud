@@ -11,8 +11,8 @@ type resourcesProps = {
 }
 
 export type PlanProps = {
-    cpu: String;
-    ram: String;
+    cpu: number;
+    ram: number;
 }
 
 export const standardPlans = [

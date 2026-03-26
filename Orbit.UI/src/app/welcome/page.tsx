@@ -35,6 +35,7 @@ export default function Page() {
         };
 
         const onSelectPlan = (plan: PlanProps) => {
+            console.log(plan);
             try {
                 if (!UserData) return;
                 const response = Welcome.CreateNamespace(UserData.githubID, plan);
@@ -69,7 +70,7 @@ export default function Page() {
                                 {calculatePrice(plan)} <span className="text-sm font-normal text-neutral-500">/mês</span>
                             </div>
 
-                            <button className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold transition-colors">
+                            <button onClick={() => onSelectPlan(plan)} className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold transition-colors">
                                 Selecionar Plano
                             </button>
                         </div>
