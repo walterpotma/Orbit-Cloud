@@ -33,20 +33,20 @@ namespace Orbit.Infrastructure.Services
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "workspace"));
                 await _fileSystemService.CreateDirectoryAsync(Path.Combine(userBasePath, "data"));
 
-                try
-                {
-                    await _kubernetesService.GetNamespacesAsync(namespaceName);
-                    Console.WriteLine($"[Info] Workspace (Namespace) '{namespaceName}' já existe. Pulando criação.");
-                }
-                catch
-                {
-                    var namespaceRequest = new DtoNamespaceRequest
-                    {
-                        Name = namespaceName
-                    };
-                    await _kubernetesService.CreateNamespacesAsync(namespaceRequest);
-                    Console.WriteLine($"[Success] Namespace '{namespaceName}' criado com sucesso.");
-                }
+                // try
+                // {
+                //     await _kubernetesService.GetNamespacesAsync(namespaceName);
+                //     Console.WriteLine($"[Info] Workspace (Namespace) '{namespaceName}' já existe. Pulando criação.");
+                // }
+                // catch
+                // {
+                //     var namespaceRequest = new DtoNamespaceRequest
+                //     {
+                //         Name = namespaceName
+                //     };
+                //     await _kubernetesService.CreateNamespacesAsync(namespaceRequest);
+                //     Console.WriteLine($"[Success] Namespace '{namespaceName}' criado com sucesso.");
+                // }
 
                 try
                 {

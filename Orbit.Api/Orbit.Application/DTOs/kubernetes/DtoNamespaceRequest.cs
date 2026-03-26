@@ -6,5 +6,7 @@ namespace Orbit.Application.DTOs.kubernetes
     {
         [Required]
         public string Name { get; set; } = string.Empty;
+        public string cpu { get; set; } = string.Empty;
+        public string ram { get; set; } = string.Empty;
     }
 }
