@@ -9,7 +9,7 @@ const controller = "kubernetes";
 export class Welcome {
     static CreateNamespace(githubId: string, plan: PlanProps) {
         return axiosInstance.post(`${controller}/namespaces`, {
-            name: githubId,
+            name: `u-${githubId}`,
             cpu: `${plan.cpu}m`,
             ram: `${plan.ram}Mi`
         }, 
