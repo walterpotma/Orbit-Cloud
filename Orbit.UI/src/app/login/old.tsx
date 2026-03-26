@@ -1,9 +1,9 @@
 "use client"
 import { useState, useEffect } from "react"
-import Form from "@/components/ui/form"
-import Button1 from "@/components/ui/button"
-import Logo from "@/components/layout/logo"
-import Input1 from "@/components/ui/input"
+import Form from "@/shared/ui/form"
+import Button1 from "@/shared/ui/button"
+import Logo from "@/shared/layout/logo"
+import Input1 from "@/shared/ui/input"
 import { Github } from "@/api/github"
 
 export default function Page() {

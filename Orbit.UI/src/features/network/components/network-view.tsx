@@ -2,7 +2,7 @@
 
 import { Globe, Lock, Server, ArrowUpRight, Copy } from "lucide-react";
 import { NetworkRuleProps } from "../types/view";
-import EmptyState from "@/components/ui/exception-state";
+import EmptyState from "@/shared/ui/exception-state";
 
 const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

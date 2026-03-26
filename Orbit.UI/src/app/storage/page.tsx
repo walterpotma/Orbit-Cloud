@@ -8,10 +8,10 @@ import {
   Search as SearchIcon,
   Filter
 } from "lucide-react";
-import BtnRefresh from "@/components/ui/button-refresh";
+import BtnRefresh from "@/shared/ui/button-refresh";
 import FileSystemItem from "@/features/storage/components/storage-view";
 import fileTree, { FileSystemNode } from "@/features/storage/types/storage";
-import Search from "@/components/ui/search";
+import Search from "@/shared/ui/search";
 
 // Função de filtro mantida (lógica original)
 function filterTree(nodes: FileSystemNode[], searchTerm: string): FileSystemNode[] {

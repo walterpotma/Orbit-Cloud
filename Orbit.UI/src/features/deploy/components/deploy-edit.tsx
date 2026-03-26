@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CommandOutput from "@/features/deploy/components/deploy-output";
-import Input2 from "@/components/ui/input";
+import Input2 from "@/shared/ui/input";
 
 export default function Page({ onClose }: { onClose: (value: boolean) => void }) {
     return (

@@ -1,9 +1,9 @@
 "use client"
 import { useState, useEffect } from "react";
-import Logo from "@/components/layout/logo";
+import Logo from "@/shared/layout/logo";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { usePathname, useRouter } from "next/navigation";
-import Loading from "@/components/layout/loading";
+import Loading from "@/shared/layout/loading";
 import { useUser } from "@/context/user";
 
 // Componentes React devem ser PascalCase (Header, não header)

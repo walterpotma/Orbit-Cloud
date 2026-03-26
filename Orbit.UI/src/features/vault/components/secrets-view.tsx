@@ -1,6 +1,6 @@
 "use client";
 
-import EmptyState from "@/components/ui/exception-state";
+import EmptyState from "@/shared/ui/exception-state";
 import { useRouter } from "next/navigation";
 import { 
   Shield, 

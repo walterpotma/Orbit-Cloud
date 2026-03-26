@@ -8,11 +8,11 @@ import { Deployments } from "@/features/deploy/services/deployments";
 import { Namespaces } from "@/features/dashboard/services/namespace";
 import { NamespaceMetric } from "@/features/dashboard/types/namespace-view";
 import TableDeploy from "@/features/deploy/components/deploy-view";
-import ButtonRefresh from "@/components/ui/button-refresh";
+import ButtonRefresh from "@/shared/ui/button-refresh";
 import StatusCard from "@/features/dashboard/components/dash-status-card";
 import CircularProgress from "@/features/dashboard/components/dash-circular-progress";
-import ChartLine from "@/components/charts/chart-line";
-import ChartBar from "@/components/charts/chart-bar";
+import ChartLine from "@/shared/charts/chart-line";
+import ChartBar from "@/shared/charts/chart-bar";
 import {
     Activity,
     CheckCircle2,

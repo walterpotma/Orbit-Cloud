@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { Rocket, Plus, Layers } from "lucide-react"; // Novos ícones
 import NewDeploy from "@/features/deploy/components/deploy-new";
 import EditDeploy from "@/features/deploy/components/deploy-edit";
-import BtnRefresh from "@/components/ui/button-refresh";
+import BtnRefresh from "@/shared/ui/button-refresh";
 import { Deployments } from "@/features/deploy/services/deployments";
 import { useUser } from "@/context/user";
 import TableDeploy from "@/features/deploy/components/deploy-view";
-import ChartCalender from '@/components/charts/chart-calender';
+import ChartCalender from '@/shared/charts/chart-calender';
 import { useRouter } from "next/navigation";
 
 export default function DeployPage() {

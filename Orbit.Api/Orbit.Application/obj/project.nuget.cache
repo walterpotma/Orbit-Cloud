@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "1eXBGaeza5U=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\walterbrito\\Documents\\Walter\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Application\\Orbit.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\walterbrito\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\kubernetesclient\\19.0.2\\kubernetesclient.19.0.2.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

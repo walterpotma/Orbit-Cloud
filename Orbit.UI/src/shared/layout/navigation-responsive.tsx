@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@/context/user";
-import Logo from "@/components/layout/logo";
-import Loading from "@/components/layout/loading";
+import Logo from "@/shared/layout/logo";
+import Loading from "@/shared/layout/loading";
 import {
     LayoutGrid,
     Layers,
@@ -53,7 +53,7 @@ export default function Nav() {
     };
 
     // Se estiver nas rotas de auth, esconde a nav
-    if (pathname === "/login" || pathname === "/register") return null;
+    if (pathname === "/login" || pathname === "/register" || pathname === "/welcome") return null;
 
     return (
         <>

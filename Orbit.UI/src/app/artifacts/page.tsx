@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ButtonRefresh from "@/components/ui/button-refresh";
+import ButtonRefresh from "@/shared/ui/button-refresh";
 import { useUser } from "@/context/user";
 import { Box, Tag, Rocket, Clock, Layers } from "lucide-react";
 import { RegistryImage } from "@/features/artifacts/types/registry-image";
 import { Registry } from "@/features/artifacts/services/registry";
-import EmptyState from "@/components/ui/exception-state";
+import EmptyState from "@/shared/ui/exception-state";
 import { useRouter } from "next/navigation";
 
 export default function Page() {

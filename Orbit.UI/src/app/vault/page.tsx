@@ -13,8 +13,8 @@ import {
     Trash2,
     FileKey
 } from "lucide-react";
-import BtnRefresh from "@/components/ui/button-refresh";
-import EmptyState from "@/components/ui/exception-state";
+import BtnRefresh from "@/shared/ui/button-refresh";
+import EmptyState from "@/shared/ui/exception-state";
 import { Secrets } from "@/features/vault/services/secrets";
 import { useUser } from "@/context/user";
 import TableSecrets from "@/features/vault/components/secrets-view";

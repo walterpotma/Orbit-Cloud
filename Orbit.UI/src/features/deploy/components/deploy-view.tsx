@@ -1,5 +1,5 @@
 "use client";
-import EmptyState from "@/components/ui/exception-state";
+import EmptyState from "@/shared/ui/exception-state";
 import CardDeploy from "@/features/dashboard/components/dash-card";
 import TableProps from "../types/view";
 

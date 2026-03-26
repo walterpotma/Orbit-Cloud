@@ -9,13 +9,13 @@ import {
     ArrowRightLeft,
     Server
 } from "lucide-react";
-import BtnRefresh from "@/components/ui/button-refresh";
-import EmptyState from "@/components/ui/exception-state";
+import BtnRefresh from "@/shared/ui/button-refresh";
+import EmptyState from "@/shared/ui/exception-state";
 import { Services, Ingress } from "@/features/network/services/network";
 import { useUser } from "@/context/user";
 import NetWorkTable from "@/features/network/components/network-view";
 import { NetworkRule } from "@/features/network/types/view";
-import ChartNetTraffic from "@/components/charts/chart-net-trafik";
+import ChartNetTraffic from "@/shared/charts/chart-net-trafik";
 import { useRouter } from "next/navigation";
 
 export default function NetworkPage() {
