@@ -322,8 +322,8 @@ namespace Orbit.Infrastructure.Services
 
             try
             {
-                string defaultCpu = request.cpu || "100m";
-                string defaultMem = request.ram || "256Mi";
+                string defaultCpu = !string.IsNullOrWhiteSpace(request.cpu) ? request.cpu : "100m";
+                string defaultMem = !string.IsNullOrWhiteSpace(request.ram) ? request.ram : "256Mi";
 
                 await _repository.CreateNamespaceQuotaAsync(request.Name, defaultCpu, defaultMem);
                 Console.WriteLine($"[Info] Quota aplicada ao namespace {request.Name}");
