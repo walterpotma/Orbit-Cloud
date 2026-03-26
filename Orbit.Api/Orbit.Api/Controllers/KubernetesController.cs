@@ -350,7 +350,7 @@ namespace Orbit.Api.Controllers
 
             return CreatedAtAction(
                 nameof(GetNamespaceByName),
-                new { name = created.Name, cpu = created.cpu, ram = created.ram },
+                new { name = created },
                 created
             );
         }
