@@ -91,8 +91,34 @@ namespace Orbit.Api.Controllers
         [HttpGet("app/callback")]
         public static void Callback()
         {
-            
+
+        }
+
+        [Authorize]
+        [HttpGet("repos/{installationId}")]
+        public async Task<IActionResult> GetRepos(long installationId)
+        {
+            try
+            {
+                var repos = await _githubService.GetRepositoriesAsync(installationId);
+
+                // Retorna apenas o que o Front precisa (Nome e URL) para não poluir
+                var result = repos.Select(r => new
+                {
+                    r.Id,
+                    r.Name,
+                    r.FullName,
+                    r.HtmlUrl,
+                    r.Description
+                });
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao buscar repositórios: {ex.Message}");
+            }
         }
         #endregion
     }
-} 
+}
