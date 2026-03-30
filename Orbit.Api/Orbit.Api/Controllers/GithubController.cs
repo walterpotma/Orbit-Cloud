@@ -85,5 +85,14 @@ namespace Orbit.Api.Controllers
             return Ok(userProfile);
         }
         #endregion
+
+        #region Github APP
+        [Authorize]
+        [HttpGet("app/callback")]
+        public static void Callback()
+        {
+            
+        }
+        #endregion
     }
-}
+} 
