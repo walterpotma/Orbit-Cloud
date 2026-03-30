@@ -3,6 +3,7 @@ import { useUser } from "@/context/user";
 import { Welcome } from "@/features/welcome/services/welcome";
 import { PlanProps } from "@/features/billing/types/plans";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const pricing = {
     cpuUnit: 2,  // a cada 100m
@@ -21,6 +22,7 @@ const planos = [
 
 export default function Page() {
     const { UserData, isLoading: isUserLoading } = useUser();
+    const router = useRouter();
 
     useEffect(() => {
         if (isUserLoading || !UserData?.githubID) return;
@@ -45,6 +47,9 @@ export default function Page() {
         try {
             const response = await Welcome.CreateNamespace(UserData.githubID, plan);
             console.log("[Success] Namespace criado:", response);
+            alert("Por favor instale esse app para que a Orbti Cloud funcione corretamente, sem esse app ela não funciona!!!!");
+
+            router.push("https://github.com/apps/orbit-ci-cd")
         }
         catch (error) {
             console.error("[Fail] Erro na API:", error);
