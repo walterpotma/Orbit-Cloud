@@ -1,4 +1,4 @@
-﻿using Orbit.Application.DTOs.account.cs;
+﻿using Orbit.Application.DTOs.Account;
 using Orbit.Domain.Entities;
 
 namespace Orbit.Application.Interfaces
