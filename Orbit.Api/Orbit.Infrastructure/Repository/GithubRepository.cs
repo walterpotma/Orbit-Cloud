@@ -1,10 +1,13 @@
 ﻿using System.Net.Http.Headers;
-using System.Net.Http.Json; 
+using System.Net.Http.Json;
 using System.Text.Json;
 using Orbit.Domain.Interfaces;
 using Orbit.Domain.Entities.Github; // DTO mora aqui agora
-using Orbit.Application.Interfaces; // Interface do AuthService mora aqui
-
+using Orbit.Application.Interfaces;
+using k8s.KubeConfigModels;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using LibGit2Sharp;
 namespace Orbit.Infrastructure.Repository
 {
     public class GithubRepository : IGithubRepository
@@ -33,6 +36,7 @@ namespace Orbit.Infrastructure.Repository
 
             return data?.repositories ?? Enumerable.Empty<DtoGithubReposResponse>();
         }
+
     }
 
     public class GithubRepoListResponse

@@ -6,5 +6,7 @@ namespace Orbit.Application.Interfaces
     {
         Task RegisterInstallationAsync(string installationId, string githubId);
         Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId);
+        Task<string> CloneRepositoryAsync(string cloneUrl, string accessToken, string appName);
+        Task<string> GetInstallationTokenAsync(long installationId);
     }
 }

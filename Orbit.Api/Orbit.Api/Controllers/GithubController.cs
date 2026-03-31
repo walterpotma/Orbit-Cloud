@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Entities.Github;
+using Orbit.Application.DTOs.Github;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -116,6 +117,35 @@ namespace Orbit.Api.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Erro ao buscar repositórios: {ex.Message}");
+            }
+        }
+
+        [HttpPost("clone")]
+        public async Task<IActionResult> Clone([FromBody] DtoCloneRequest request)
+        {
+            try
+            {
+                // 1. Pega o Token necessário para acessar o repo privado do cliente
+                // Você precisará desse método no seu GithubService
+                var accessToken = await _githubService.GetInstallationTokenAsync(request.InstallationId);
+
+                // 2. Executa a clonagem para: /data/archive/clients/{id}/tmp/{appName}
+                var localPath = await _githubService.CloneRepositoryAsync(
+                    request.CloneUrl,
+                    accessToken,
+                    request.AppName
+                );
+
+                // Retorna o caminho para o seu Front-end saber onde o código está
+                return Ok(new
+                {
+                    message = "Repositório clonado com sucesso!",
+                    path = localPath
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = $"Erro na clonagem: {ex.Message}" });
             }
         }
         #endregion

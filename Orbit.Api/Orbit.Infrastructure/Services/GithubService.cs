@@ -68,5 +68,55 @@ namespace Orbit.Infrastructure.Services
             var reposResponse = await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
             return reposResponse.Repositories;
         }
+
+        public async Task<string> GetInstallationTokenAsync(long installationId)
+        {
+            // Usa aquela lógica do JWT que fizemos com RSA para pedir um token de instalação ao GitHub
+            var jwt = GenerateJwt(); // Sua função de geração de JWT manual
+            var appClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
+            {
+                Credentials = new Credentials(jwt, AuthenticationType.Bearer)
+            };
+
+            var response = await appClient.GitHubApps.CreateInstallationToken(installationId);
+            return response.Token;
+        }
+        
+        public async Task<string> CloneRepositoryAsync(string cloneUrl, string accessToken, string appName)
+        {
+            // 1. Pegar o ID do usuário de forma segura via Claims
+            var githubId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(githubId))
+                throw new Exception("Usuário não autenticado.");
+
+            // 2. Definir o caminho absoluto
+            var localPath = Path.Combine("/data/archive/clients", githubId, "tmp", appName);
+
+            // 3. Limpeza Preventiva: Se a pasta já existe (deploy anterior que falhou), apaga
+            if (Directory.Exists(localPath))
+            {
+                Directory.Delete(localPath, true);
+            }
+
+            // Garante que a estrutura /data/archive/clients/{id}/tmp existe
+            Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
+
+            var options = new CloneOptions
+            {
+                Checkout = true,
+                // Dica de SRE: Clone apenas o que é necessário (Shallow Clone)
+                FetchOptions = { Depth = 1 },
+                CredentialsProvider = (_url, _user, _cred) =>
+                    new UsernamePasswordCredentials
+                    {
+                        Username = "x-access-token", // Padrão do GitHub para Apps
+                        Password = accessToken
+                    }
+            };
+
+            // 4. Executa a clonagem em uma Thread separada para não travar a API
+            return await Task.Run(() => Repository.Clone(cloneUrl, localPath, options));
+        }
     }
 }

@@ -23,6 +23,11 @@ RUN dotnet publish "Orbit.Api.csproj" -c Release -o /app/publish /p:UseAppHost=f
 
 FROM base AS final
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y curl && \
+    curl -sLS https://nixpacks.com/install.sh | bash && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 COPY --from=publish /app/publish .
 
 ENV ASPNETCORE_URLS=http://+:8080
