@@ -13,7 +13,7 @@ public class Account : Entity
         GithubId = githubId;
         GithubUser = githubUser;
         Email = email;
-        GithubAppId = githubAppId ?? long.Empty;
+        GithubAppId = githubAppId ?? null;
         CreatedAt = DateTime.UtcNow;
     }
 
