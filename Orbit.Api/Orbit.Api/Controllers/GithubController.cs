@@ -91,11 +91,7 @@ namespace Orbit.Api.Controllers
         #region Github APP
         [Authorize]
         [HttpGet("app/callback")]
-        public async Task<IActionResult> CallbackApp(
-            [FromQuery(Name = "installation_id")] long installationId,
-            [FromQuery(Name = "setup_action")] string setupAction,
-            [FromQuery] AccountUpdate updatedAccount
-        )
+        public async Task<IActionResult> CallbackApp([FromQuery(Name = "installation_id")] long installationId)
         {
             if (installationId == 0)
             {
