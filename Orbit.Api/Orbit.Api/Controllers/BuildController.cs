@@ -45,7 +45,7 @@ namespace Orbit.Api.Controllers
                 await _dockerService.GenerateDockerfile(githubId.ToString(), request.RepoName, request.AppName);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] 3/3: Criando Imagem Docker v{request.Version}...");
-                await _dockerService.GenerateImage(githubId.ToString(), request.AppName, request.Version, localPath);
+                await _dockerService.GenerateImage(githubId.ToString(), request.AppName, request.Version);
 
                 Console.WriteLine($"[ORBIT-PIPELINE] Sucesso Total!");
                 return Ok(new
