@@ -91,32 +91,27 @@ namespace Orbit.Api.Controllers
         #region Github APP
         [Authorize]
         [HttpGet("app/callback")]
+        // ✅ O ASP.NET só valida o que o GitHub realmente envia
         public async Task<IActionResult> CallbackApp([FromQuery(Name = "installation_id")] long installationId)
         {
-            if (installationId == 0)
+            var githubId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            // Agora você busca os dados atuais para não perder o Email/User original
+            var current = await _accountService.GetAccountByGithubIdAsync(githubId);
+
+            // Aqui você monta o objeto que o seu Service espera
+            var updateData = new AccountUpdate
             {
-                return BadRequest("O GitHub não enviou um Installation ID válido.");
-            }
+                GithubAppId = installationId,
+                Email = current.Email,        // Preenche o "vazio" com o que já tem no banco
+                GithubUser = current.GithubUser
+            };
 
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userIdClaim))
-            {
-                return Unauthorized("Usuário não identificado no sistema.");
-            }
-
-            var userId = long.Parse(userIdClaim);
-
-            var success = await _accountService.UpdateByGithubIdAsync(userId, updatedAccount);
-
-            if (success == null)
-            {
-                return StatusCode(500, "Erro ao vincular a instalação do GitHub ao seu Workspace.");
-            }
+            // AGORA SIM o seu Service vai brilhar!
+            await _accountService.UpdateByGithubIdAsync(githubId, updateData);
 
             return Redirect("https://orbitcloud.com.br/");
         }
-
         [Authorize]
         [HttpGet("repos/{installationId}")]
         public async Task<IActionResult> GetRepos(long installationId)
