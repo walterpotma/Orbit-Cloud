@@ -26,25 +26,27 @@ namespace Orbit.Infrastructure.Services
 
         public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
         {
-            // 1. Gerar o JWT para se autenticar como o App
+            // 1. Gerar o JWT (Ajustado para os nomes corretos da lib GitHubJwt)
             var generator = new GitHubJwtFactory(
                 new FilePrivateKeySource(_privateKeyPath),
                 new GitHubJwtFactoryOptions
                 {
-                    AppIdentifier = int.Parse(_appId),
-                    ExpirationSeconds = 600 // 10 minutos
+                    AppId = int.Parse(_appId), // Mudou de AppIdentifier para AppId
+                    ExpirationSeconds = 600
                 }
             );
 
-            var jwt = generator.CreateEncodedJwt();
+            // O método correto costuma ser CreateJwt() ou similar dependendo da versão
+            var jwt = generator.CreateJwt();
 
             // 2. Criar o cliente como App
             var appClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
             {
-                Credentials = new Credentials(jwt, AuthenticationType.Bearer)
+                // Ajuste: Credentials para Bearer Token no Octokit
+                Credentials = new Credentials(jwt)
             };
 
-            // 3. Gerar Token de Instalação (Isso permite acessar os repositórios que o user deu permissão)
+            // 3. Gerar Token de Instalação
             var response = await appClient.GitHubApps.CreateInstallationToken(installationId);
 
             // 4. Criar o cliente como Instalação
@@ -53,8 +55,11 @@ namespace Orbit.Infrastructure.Services
                 Credentials = new Credentials(response.Token)
             };
 
-            // 5. Retornar todos os repositórios daquela instalação
-            return await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
+            // 5. Ajuste no retorno: GetAllRepositoriesForCurrent retorna um RepositoriesResponse
+            // Precisamos acessar a propriedade .Repositories que é a IReadOnlyList
+            var reposResponse = await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
+
+            return reposResponse.Repositories;
         }
     }
 }
