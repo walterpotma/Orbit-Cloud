@@ -7,6 +7,6 @@ namespace Orbit.Application.DTOs.Account
         public string Email { get; set; }
         public long GithubAppId { get; set; }
 
-        public TimeZone UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
