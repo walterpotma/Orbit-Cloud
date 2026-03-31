@@ -28,8 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="orbit-ci-cd.private-key.pem">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="orbit-ci-cd.2026-03-30.private-key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   
