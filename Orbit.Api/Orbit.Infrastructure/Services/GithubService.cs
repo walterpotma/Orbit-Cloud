@@ -12,7 +12,7 @@ namespace Orbit.Infrastructure.Services
     public class GithubService : IGithubService
     {
         private readonly string _appId = "1981006";
-        private readonly string _privateKeyPath = Path.Combine(AppContext.BaseDirectory, "orbit-ci-cd.private-key.pem");
+        private readonly string _privateKeyPath = Path.Combine(AppContext.BaseDirectory, "orbit-ci-cd.2026-03-30.private-key.pem");
         private readonly IGithubRepository _githubRepository;
 
         public GithubService(IGithubRepository githubRepository)
