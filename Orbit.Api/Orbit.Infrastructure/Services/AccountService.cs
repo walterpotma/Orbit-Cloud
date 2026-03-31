@@ -40,7 +40,7 @@ namespace Orbit.Infrastructure.Services
 
                     if (existingAccount == null)
                     {
-                        var newAccount = new Account(githubId, userName, email);
+                        var newAccount = new Account(githubId, userName, email, null);
                         await _accountRepository.AddAsync(newAccount);
                     }
 
