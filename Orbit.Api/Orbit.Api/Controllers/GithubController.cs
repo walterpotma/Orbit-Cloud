@@ -113,7 +113,7 @@ namespace Orbit.Api.Controllers
 
             var success = await _accountService.UpdateByGithubIdAsync(userId, updatedAccount);
 
-            if (!success)
+            if (success == null)
             {
                 return StatusCode(500, "Erro ao vincular a instalação do GitHub ao seu Workspace.");
             }
