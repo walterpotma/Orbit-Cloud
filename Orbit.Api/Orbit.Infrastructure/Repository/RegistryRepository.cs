@@ -17,7 +17,7 @@ namespace Orbit.Infrastructure.Repository
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
-            _registryBaseUrl = configuration["DockerRegistry:Url"]
+            _registryBaseUrl = configuration["Docker:Registry"]
                 ?? throw new InvalidOperationException("URL do Docker Registry não configurada");
         }
 
