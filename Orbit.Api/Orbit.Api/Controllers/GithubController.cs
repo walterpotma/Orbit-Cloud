@@ -90,9 +90,33 @@ namespace Orbit.Api.Controllers
         #region Github APP
         [Authorize]
         [HttpGet("app/callback")]
-        public static void CallbackApp()
+        public async Task<IActionResult> CallbackApp(
+            [FromQuery(Name = "installation_id")] long installationId,
+            [FromQuery(Name = "setup_action")] string setupAction
+        )
         {
+            if (installationId == 0)
+            {
+                return BadRequest("O GitHub não enviou um Installation ID válido.");
+            }
 
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("Usuário não identificado no sistema.");
+            }
+
+            // var userId = long.Parse(userIdClaim);
+
+            // var success = await workspaceRepository.UpdateGithubInstallationIdAsync(userId, installationId);
+
+            // if (!success)
+            // {
+            //     return StatusCode(500, "Erro ao vincular a instalação do GitHub ao seu Workspace.");
+            // }
+
+            return Redirect("https://orbitcloud.com.br/");
         }
 
         [Authorize]
