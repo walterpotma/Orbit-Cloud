@@ -21,6 +21,7 @@ public class OrbitContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GithubId).HasColumnName("github_id").IsRequired();
             entity.Property(e => e.GithubUser).HasColumnName("github_user");
+            entity.Property(e => e.GithubAppId).HasColumnName("github_app_id");
             entity.Property(e => e.Email).HasColumnName("email");
             
             // MAPEA PARA O NOME REAL DA COLUNA NO POSTGRES

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Entities.Github;
 using Orbit.Application.DTOs.Github;
+using Orbit.Application.DTOs.Account;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -92,7 +93,8 @@ namespace Orbit.Api.Controllers
         [HttpGet("app/callback")]
         public async Task<IActionResult> CallbackApp(
             [FromQuery(Name = "installation_id")] long installationId,
-            [FromQuery(Name = "setup_action")] string setupAction
+            [FromQuery(Name = "setup_action")] string setupAction,
+            [FromQuery] AccountUpdate updatedAccount
         )
         {
             if (installationId == 0)
@@ -107,14 +109,14 @@ namespace Orbit.Api.Controllers
                 return Unauthorized("Usuário não identificado no sistema.");
             }
 
-            // var userId = long.Parse(userIdClaim);
+            var userId = long.Parse(userIdClaim);
 
-            // var success = await workspaceRepository.UpdateGithubInstallationIdAsync(userId, installationId);
+            var success = await _accountService.UpdateByGithubIdAsync(userId, updatedAccount);
 
-            // if (!success)
-            // {
-            //     return StatusCode(500, "Erro ao vincular a instalação do GitHub ao seu Workspace.");
-            // }
+            if (!success)
+            {
+                return StatusCode(500, "Erro ao vincular a instalação do GitHub ao seu Workspace.");
+            }
 
             return Redirect("https://orbitcloud.com.br/");
         }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.VisualBasic;
 using Orbit.Application.DTOs.kubernetes;
+using Orbit.Application.DTOs.Account;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
 using Orbit.Domain.Entities;
@@ -65,6 +66,25 @@ namespace Orbit.Infrastructure.Services
             if (string.IsNullOrEmpty(githubId.ToString())) return null;
 
             var existingAccount = await _accountRepository.GetByGithubIdAsync(githubId);
+
+            return existingAccount;
+        }
+
+        public async Task<Account?> UpdateByGithubIdAsync(long githubId, AccountUpdate account)
+        {
+            var existingAccount = await _accountRepository.GetByGithubIdAsync(githubId);
+
+            if (existingAccount == null) return null;
+
+            existingAccount.GithubUser = account.GithubUser;
+            existingAccount.Email = account.Email;
+
+            existingAccount.GithubAppId = account.GithubAppId;
+
+            existingAccount.UpdatedAt = DateTime.UtcNow;
+
+            await _accountRepository.UpdateAsync(existingAccount);
+            await _accountRepository.SaveChangesAsync();
 
             return existingAccount;
         }
