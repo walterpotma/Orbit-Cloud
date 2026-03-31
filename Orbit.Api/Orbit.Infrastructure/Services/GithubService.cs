@@ -25,23 +25,23 @@ namespace Orbit.Infrastructure.Services
         public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
         {
             // 1. Gerar o JWT 
-            // Se 'AppId' ou 'AppIdentifier' falharem, use 'AppIdentifier' (nome mais comum em versões estáveis)
+            // Na sua versão, a propriedade é 'AppId' e o método é 'CreateJwt'
             var generator = new GitHubJwtFactory(
                 new FilePrivateKeySource(_privateKeyPath),
                 new GitHubJwtFactoryOptions
                 {
-                    AppIdentifier = int.Parse(_appId), // Volte para AppIdentifier
+                    AppId = int.Parse(_appId), // Alterado de AppIdentifier para AppId
                     ExpirationSeconds = 600
                 }
             );
 
-            // Se 'CreateJwt()' não existir, o nome correto na sua versão deve ser 'CreateEncodedJwt()'
-            var jwt = generator.CreateEncodedJwt();
+            var jwt = generator.CreateJwt(); // Alterado de CreateEncodedJwt para CreateJwt
 
             // 2. Criar o cliente como App
             var appClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
             {
-                Credentials = new Credentials(jwt, AuthenticationType.Bearer)
+                // Alterado: Passamos o JWT direto no Credentials, o Octokit cuida do Bearer
+                Credentials = new Credentials(jwt)
             };
 
             // 3. Gerar Token de Instalação
@@ -53,7 +53,7 @@ namespace Orbit.Infrastructure.Services
                 Credentials = new Credentials(response.Token)
             };
 
-            // 5. Retornar a lista de repositórios do envelope de resposta
+            // 5. Retornar a lista de repositórios
             var reposResponse = await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
 
             return reposResponse.Repositories;
