@@ -26,8 +26,8 @@ export default function PipelinePage() {
     useEffect(() => {
         // Busca a lista de repositórios do usuário
         if (!UserData) return;
-        console.log("Buscando repositórios para instalaçãoId:", UserData.accountInfo.installationId);
-        Repository.List(UserData.accountInfo.installationId).then(response => {
+        console.log("Buscando repositórios para instalaçãoId:", UserData.accountInfo.githubAppId);
+        Repository.List(UserData.accountInfo.githubAppId).then(response => {
             setRepositories(response.data);
         }).catch(error => {
             console.error("Erro ao buscar repositórios:", error);

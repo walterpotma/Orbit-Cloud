@@ -14,7 +14,7 @@ interface User {
     avatarURL: string;
     name: string;
     accountInfo: {
-        installationId: number;
+        githubAppId: string;
     };
 }
 
