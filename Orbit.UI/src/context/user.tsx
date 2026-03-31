@@ -13,6 +13,9 @@ interface User {
     email: string;
     avatarURL: string;
     name: string;
+    accountInfo: {
+        installationId: number;
+    };
 }
 
 interface UserContextType {
