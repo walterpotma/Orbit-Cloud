@@ -70,60 +70,42 @@ namespace Orbit.Infrastructure.Services
         }
         public async Task GenerateImage(string githubId, string appName, string version)
         {
-            // 1. Monta o caminho automaticamente baseado na sua estrutura do Xeon
-            // /data/archive/clients/{githubId}/tmp/{appName}
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
+            var tag = $"{appName.ToLower()}:{version}";
 
             if (!Directory.Exists(sourcePath))
-                throw new DirectoryNotFoundException($"[ERRO] Pasta do projeto não encontrada para build: {sourcePath}");
+                throw new DirectoryNotFoundException($"Caminho não encontrado: {sourcePath}");
 
-            using var config = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock"));
-            using var client = config.CreateClient();
+            Console.WriteLine($"[DOCKER-CLI] Iniciando build da imagem {tag}...");
 
-            Console.WriteLine($"[DOCKER] Iniciando build da imagem: {appName.ToLower()}:{version}");
-
-            // Usamos o Path.GetTempPath() para não sujar a pasta do cliente com o arquivo .tar
-            var tarContextPath = Path.Combine(Path.GetTempPath(), $"{githubId}_{appName}_{version}.tar");
-
-            try
+            // O comando aponta para o Dockerfile que o Nixpacks gerou em .nixpacks/Dockerfile
+            var processInfo = new ProcessStartInfo
             {
-                // 2. Empacota a pasta tmp do cliente
-                await CreateTarball(sourcePath, tarContextPath);
+                FileName = "docker",
+                Arguments = $"build -t {tag} -f .nixpacks/Dockerfile .",
+                WorkingDirectory = sourcePath,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
 
-                using var tarStream = File.OpenRead(tarContextPath);
+            using var process = new Process { StartInfo = processInfo };
 
-                var buildParams = new ImageBuildParameters
-                {
-                    Tags = new List<string> { $"{appName.ToLower()}:{version}" },
-                    // O Dockerfile gerado pelo Nixpacks está dentro da pasta oculta .nixpacks
-                    Dockerfile = ".nixpacks/Dockerfile",
-                    Remove = true,
-                    ForceRemove = true
-                };
+            // Captura os logs do Docker em tempo real para o console do Hayom
+            process.OutputDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[DOCKER-OUT] {e.Data}"); };
+            process.ErrorDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[DOCKER-ERR] {e.Data}"); };
 
-                /// Crie a variável de progresso antes da chamada
-                var progress = new Progress<JSONMessage>(msg =>
-                {
-                    if (!string.IsNullOrEmpty(msg.Stream))
-                        Console.Write($"[DOCKER-BUILD] {msg.Stream}");
-                });
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
 
-                // Use o método de extensão correto da versão 3.125.15
-                await ImageOperationsExtensions.BuildImageFromCallbackContextAsync(
-                    client.Images,
-                    tarStream,
-                    buildParams,
-                    progress,
-                    CancellationToken.None
-                );
+            await process.WaitForExitAsync();
 
-                Console.WriteLine($"[API] Imagem {appName.ToLower()}:{version} construída com sucesso no Hayom!");
-            }
-            finally
-            {
-                // Limpeza do arquivo temporário
-                if (File.Exists(tarContextPath)) File.Delete(tarContextPath);
-            }
+            if (process.ExitCode != 0)
+                throw new Exception($"Docker build falhou com código {process.ExitCode}");
+
+            Console.WriteLine($"[API] Imagem {tag} gerada com sucesso via CLI!");
         }
 
         private async Task CreateTarball(string sourceDir, string tarFilePath)
