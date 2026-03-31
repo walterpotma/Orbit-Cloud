@@ -14,7 +14,7 @@ interface User {
     avatarURL: string;
     name: string;
     accountInfo: {
-        githubAppId: string;
+        githubAppId: number;
     };
 }
 
