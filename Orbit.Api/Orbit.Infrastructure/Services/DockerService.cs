@@ -101,9 +101,21 @@ namespace Orbit.Infrastructure.Services
                     ForceRemove = true
                 };
 
-                // 3. Dispara o Build nativo
-                // Em algumas versões do SDK, o método de extensão chama-se apenas:
-                await client.Images.BuildImageFromBuildContextAsync(tarStream, buildParams, progress, CancellationToken.None);
+                /// Crie a variável de progresso antes da chamada
+                var progress = new Progress<JSONMessage>(msg =>
+                {
+                    if (!string.IsNullOrEmpty(msg.Stream))
+                        Console.Write($"[DOCKER-BUILD] {msg.Stream}");
+                });
+
+                // Use o método de extensão correto da versão 3.125.15
+                await ImageOperationsExtensions.BuildImageFromCallbackContextAsync(
+                    client.Images,
+                    tarStream,
+                    buildParams,
+                    progress,
+                    CancellationToken.None
+                );
 
                 Console.WriteLine($"[API] Imagem {appName.ToLower()}:{version} construída com sucesso no Hayom!");
             }

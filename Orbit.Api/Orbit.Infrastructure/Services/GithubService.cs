@@ -1,28 +1,37 @@
-using Octokit;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.JsonWebTokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
-using Repository = Octokit.Repository;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Octokit;
 using LibGit2Sharp;
-using Orbit.Infrastructure.Repository; // Se você moveu o Clone para lá
 
 namespace Orbit.Infrastructure.Services
 {
     public class GithubService : IGithubService
     {
-        private readonly string _appId = "1981006";
-        private readonly string _privateKeyPath = Path.Combine(AppContext.BaseDirectory, "orbit-ci-cd.2026-03-30.private-key.pem");
+        private readonly IConfiguration _configuration;
         private readonly IGithubRepository _githubRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GithubService(IGithubRepository githubRepository, IHttpContextAccessor httpContextAccessor)
+        // IDs e Caminhos pegos do Config para evitar erros de Hardcode
+        private readonly string _appId;
+        private readonly string _privateKeyPath;
+
+        public GithubService(
+            IGithubRepository githubRepository, 
+            IHttpContextAccessor httpContextAccessor, 
+            IConfiguration configuration)
         {
             _githubRepository = githubRepository;
             _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
+            
+            _appId = _configuration["Github:AppId"] ?? "1981006";
+            _privateKeyPath = Path.Combine(AppContext.BaseDirectory, "orbit-ci-cd.2026-03-30.private-key.pem");
         }
 
         public async Task RegisterInstallationAsync(string installationId, string githubId)
@@ -30,44 +39,53 @@ namespace Orbit.Infrastructure.Services
             await Task.CompletedTask;
         }
 
-        public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
+        private string GenerateJwt()
         {
-            // 1. Gerar o JWT usando bibliotecas padrão da Microsoft
-            var pemContent = await File.ReadAllTextAsync(_privateKeyPath);
+            // Tenta pegar a chave do arquivo ou da configuração direta
+            string pemContent;
+            if (File.Exists(_privateKeyPath))
+            {
+                pemContent = File.ReadAllText(_privateKeyPath);
+            }
+            else
+            {
+                pemContent = _configuration["Github:PrivateKey"] 
+                    ?? throw new Exception("Chave Privada do GitHub não encontrada.");
+            }
+
             using var rsa = RSA.Create();
-            // Remove as tags BEGIN/END para importar a chave
-            var base64Key = pemContent
-                .Replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                .Replace("-----END RSA PRIVATE KEY-----", "")
-                .Replace("-----BEGIN PRIVATE KEY-----", "")
-                .Replace("-----END PRIVATE KEY-----", "")
-                .Replace("\n", "").Replace("\r", "").Trim();
+            rsa.ImportFromPem(pemContent.ToCharArray());
 
-            rsa.ImportRSAPrivateKey(Convert.FromBase64String(base64Key), out _);
-
-            var handler = new JsonWebTokenHandler();
-            var now = DateTimeOffset.UtcNow;
-
-            var jwt = handler.CreateToken(new SecurityTokenDescriptor
+            var handler = new JwtSecurityTokenHandler();
+            var descriptor = new SecurityTokenDescriptor
             {
                 Issuer = _appId,
-                IssuedAt = now.AddSeconds(-60).UtcDateTime,
-                Expires = now.AddMinutes(10).UtcDateTime,
-                SigningCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256)
-            });
-
-            // 2. Criar o cliente Octokit
-            var appClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
-            {
-                Credentials = new Credentials(jwt, AuthenticationType.Bearer)
+                IssuedAt = DateTime.UtcNow.AddSeconds(-60),
+                Expires = DateTime.UtcNow.AddMinutes(9),
+                SigningCredentials = new SigningCredentials(
+                    new RsaSecurityKey(rsa),
+                    SecurityAlgorithms.RsaSha256
+                )
             };
 
-            // 3. Token de Instalação e Repositórios
+            var token = handler.CreateToken(descriptor);
+            return handler.WriteToken(token);
+        }
+
+        public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
+        {
+            var jwt = GenerateJwt();
+
+            var appClient = new GitHubClient(new Octokit.ProductHeaderValue("OrbitCloud"))
+            {
+                Credentials = new Octokit.Credentials(jwt, Octokit.AuthenticationType.Bearer)
+            };
+
             var response = await appClient.GitHubApps.CreateInstallationToken(installationId);
 
-            var installationClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
+            var installationClient = new GitHubClient(new Octokit.ProductHeaderValue("OrbitCloud"))
             {
-                Credentials = new Credentials(response.Token)
+                Credentials = new Octokit.Credentials(response.Token)
             };
 
             var reposResponse = await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
@@ -76,52 +94,49 @@ namespace Orbit.Infrastructure.Services
 
         public async Task<string> GetInstallationTokenAsync(long installationId)
         {
-            // Usa aquela lógica do JWT que fizemos com RSA para pedir um token de instalação ao GitHub
-            var jwt = GenerateJwt(); // Sua função de geração de JWT manual
-            var appClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
+            var jwt = GenerateJwt();
+            var appClient = new GitHubClient(new Octokit.ProductHeaderValue("OrbitCloud"))
             {
-                Credentials = new Credentials(jwt, AuthenticationType.Bearer)
+                Credentials = new Octokit.Credentials(jwt, Octokit.AuthenticationType.Bearer)
             };
 
             var response = await appClient.GitHubApps.CreateInstallationToken(installationId);
             return response.Token;
         }
-        
+
         public async Task<string> CloneRepositoryAsync(string cloneUrl, string accessToken, string appName)
         {
-            // 1. Pegar o ID do usuário de forma segura via Claims
             var githubId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(githubId))
                 throw new Exception("Usuário não autenticado.");
 
-            // 2. Definir o caminho absoluto
             var localPath = Path.Combine("/data/archive/clients", githubId, "tmp", appName);
 
-            // 3. Limpeza Preventiva: Se a pasta já existe (deploy anterior que falhou), apaga
             if (Directory.Exists(localPath))
             {
-                Directory.Delete(localPath, true);
+                // LibGit2Sharp trava arquivos, as vezes Directory.Delete falha se não for recursivo/forçado
+                await Task.Run(() => Directory.Delete(localPath, true));
             }
 
-            // Garante que a estrutura /data/archive/clients/{id}/tmp existe
             Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
 
-            var options = new CloneOptions
+            var options = new LibGit2Sharp.CloneOptions
             {
-                Checkout = true,
-                // Dica de SRE: Clone apenas o que é necessário (Shallow Clone)
-                FetchOptions = { Depth = 1 },
-                CredentialsProvider = (_url, _user, _cred) =>
-                    new UsernamePasswordCredentials
-                    {
-                        Username = "x-access-token", // Padrão do GitHub para Apps
-                        Password = accessToken
-                    }
+                FetchOptions =
+                {
+                    CredentialsProvider = (_url, _user, _cred) =>
+                        new LibGit2Sharp.UsernamePasswordCredentials
+                        {
+                            Username = "x-access-token",
+                            Password = accessToken
+                        }
+                }
             };
 
-            // 4. Executa a clonagem em uma Thread separada para não travar a API
-            return await Task.Run(() => Repository.Clone(cloneUrl, localPath, options));
+            await Task.Run(() => LibGit2Sharp.Repository.Clone(cloneUrl, localPath, options));
+
+            return localPath;
         }
     }
 }
