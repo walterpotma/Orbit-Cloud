@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/libs/axios";
 
-const controller = "github/";
+const controller = "github";
 
 export class Repository {
     static List() {
