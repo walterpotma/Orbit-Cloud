@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "a8ya086BByQ=",
+  "dgSpecHash": "98R+I9cRvPo=",
   "success": true,
   "projectFilePath": "C:\\Users\\walterbrito\\Documents\\Walter\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -49,6 +49,7 @@
     "C:\\Users\\walterbrito\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\10.0.1\\npgsql.entityframeworkcore.postgresql.10.0.1.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql.nettopologysuite\\10.0.1\\npgsql.entityframeworkcore.postgresql.nettopologysuite.10.0.1.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\npgsql.nettopologysuite\\10.0.2\\npgsql.nettopologysuite.10.0.2.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\octokit\\14.0.0\\octokit.14.0.0.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\system.composition\\9.0.0\\system.composition.9.0.0.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\system.composition.attributedmodel\\9.0.0\\system.composition.attributedmodel.9.0.0.nupkg.sha512",
