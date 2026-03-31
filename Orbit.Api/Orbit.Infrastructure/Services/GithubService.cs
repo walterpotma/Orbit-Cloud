@@ -1,4 +1,8 @@
 using Octokit;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
 using Repository = Octokit.Repository;
