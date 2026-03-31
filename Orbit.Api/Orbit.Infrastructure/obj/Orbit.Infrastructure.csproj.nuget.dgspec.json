@@ -751,10 +751,6 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
-            "GitHubJwt": {
-              "target": "Package",
-              "version": "[0.0.6, )"
-            },
             "KubernetesClient": {
               "target": "Package",
               "version": "[19.0.2, )"
@@ -792,6 +788,10 @@
             "Microsoft.Extensions.Logging.Abstractions": {
               "target": "Package",
               "version": "[10.0.5, )"
+            },
+            "Microsoft.IdentityModel.JsonWebTokens": {
+              "target": "Package",
+              "version": "[8.17.0, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",

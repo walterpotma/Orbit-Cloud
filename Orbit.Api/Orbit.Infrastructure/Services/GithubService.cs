@@ -24,39 +24,45 @@ namespace Orbit.Infrastructure.Services
 
         public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
         {
-            // 1. Gerar o JWT (Sintaxe exata para a v0.0.6)
-            var generator = new GitHubJwtFactory(
-                new FilePrivateKeySource(_privateKeyPath),
-                new GitHubJwtFactoryOptions
-                {
-                    AppId = int.Parse(_appId), // v0.0.6 usa AppId, não AppIdentifier
-                    ExpirationSeconds = 600
-                }
-            );
+            // 1. Gerar o JWT usando bibliotecas padrão da Microsoft
+            var pemContent = await File.ReadAllTextAsync(_privateKeyPath);
+            using var rsa = RSA.Create();
+            // Remove as tags BEGIN/END para importar a chave
+            var base64Key = pemContent
+                .Replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .Replace("-----END RSA PRIVATE KEY-----", "")
+                .Replace("-----BEGIN PRIVATE KEY-----", "")
+                .Replace("-----END PRIVATE KEY-----", "")
+                .Replace("\n", "").Replace("\r", "").Trim();
 
-            // Na v0.0.6 o método é CreateJwt()
-            var jwt = generator.CreateJwt();
+            rsa.ImportRSAPrivateKey(Convert.FromBase64String(base64Key), out _);
 
-            // 2. Criar o cliente como App
+            var handler = new JsonWebTokenHandler();
+            var now = DateTimeOffset.UtcNow;
+
+            var jwt = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = _appId,
+                IssuedAt = now.AddSeconds(-60).UtcDateTime,
+                Expires = now.AddMinutes(10).UtcDateTime,
+                SigningCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256)
+            });
+
+            // 2. Criar o cliente Octokit
             var appClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
             {
-                // Passando apenas o jwt, o Octokit assume a autenticação correta
-                Credentials = new Credentials(jwt)
+                Credentials = new Credentials(jwt, AuthenticationType.Bearer)
             };
 
-            // 3. Gerar Token de Instalação
+            // 3. Token de Instalação e Repositórios
             var response = await appClient.GitHubApps.CreateInstallationToken(installationId);
 
-            // 4. Criar o cliente como Instalação
             var installationClient = new GitHubClient(new ProductHeaderValue("OrbitCloud"))
             {
                 Credentials = new Credentials(response.Token)
             };
 
-            // 5. Retornar a lista de repositórios
-            // GetAllRepositoriesForCurrent retorna um RepositoriesResponse, pegamos a propriedade .Repositories
             var reposResponse = await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
-
             return reposResponse.Repositories;
         }
     }
