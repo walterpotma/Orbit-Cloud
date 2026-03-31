@@ -89,7 +89,7 @@ namespace Orbit.Api.Controllers
         #region Github APP
         [Authorize]
         [HttpGet("app/callback")]
-        public static void Callback()
+        public static void CallbackApp()
         {
 
         }
