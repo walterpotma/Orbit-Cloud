@@ -6,6 +6,9 @@ using System.Security.Cryptography;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
 using Repository = Octokit.Repository;
+using Microsoft.AspNetCore.Http;
+using LibGit2Sharp;
+using Orbit.Infrastructure.Repository; // Se você moveu o Clone para lá
 
 namespace Orbit.Infrastructure.Services
 {
@@ -14,10 +17,12 @@ namespace Orbit.Infrastructure.Services
         private readonly string _appId = "1981006";
         private readonly string _privateKeyPath = Path.Combine(AppContext.BaseDirectory, "orbit-ci-cd.2026-03-30.private-key.pem");
         private readonly IGithubRepository _githubRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GithubService(IGithubRepository githubRepository)
+        public GithubService(IGithubRepository githubRepository, IHttpContextAccessor httpContextAccessor)
         {
             _githubRepository = githubRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task RegisterInstallationAsync(string installationId, string githubId)

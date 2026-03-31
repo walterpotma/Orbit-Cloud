@@ -102,19 +102,8 @@ namespace Orbit.Infrastructure.Services
                 };
 
                 // 3. Dispara o Build nativo
-                await client.Images.BuildImageFromCallbackContextAsync(
-                    tarStream,
-                    buildParams,
-                    new Progress<JSONMessage>(msg =>
-                    {
-                        if (!string.IsNullOrEmpty(msg.Stream))
-                            Console.Write($"[DOCKER-BUILD] {msg.Stream}");
-
-                        if (!string.IsNullOrEmpty(msg.ErrorMessage))
-                            throw new Exception($"Erro no Docker Build: {msg.ErrorMessage}");
-                    }),
-                    CancellationToken.None
-                );
+                // Em algumas versões do SDK, o método de extensão chama-se apenas:
+                await client.Images.BuildImageFromBuildContextAsync(tarStream, buildParams, progress, CancellationToken.None);
 
                 Console.WriteLine($"[API] Imagem {appName.ToLower()}:{version} construída com sucesso no Hayom!");
             }
