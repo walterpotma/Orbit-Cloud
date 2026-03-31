@@ -5,6 +5,10 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using Docker.DotNet;
+using Docker.DotNet.Models;
+using System.Formats.Tar;
+using System.Threading;
 
 namespace Orbit.Infrastructure.Services
 {
@@ -23,16 +27,14 @@ namespace Orbit.Infrastructure.Services
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", repoName);
 
             if (!Directory.Exists(sourcePath))
-                throw new DirectoryNotFoundException($"ERRO CRÍTICO: Pasta não encontrada: {sourcePath}");
+                throw new DirectoryNotFoundException($"ERRO CRÍTICO: Pasta do repositório não encontrada: {sourcePath}");
 
-            Console.WriteLine($"[NIXPACKS] Gerando Dockerfile em {sourcePath}...");
-
-            var outputDir = "docker-build";
+            Console.WriteLine($"[NIXPACKS] Detectando stack e gerando Dockerfile em {sourcePath}...");
 
             var processInfo = new ProcessStartInfo
             {
                 FileName = "nixpacks",
-                Arguments = $"build . --out {outputDir}",
+                Arguments = "generate .",
                 WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -52,48 +54,81 @@ namespace Orbit.Infrastructure.Services
             await process.WaitForExitAsync();
 
             if (process.ExitCode != 0)
-                throw new Exception($"Nixpacks falhou (Exit Code {process.ExitCode}).");
+                throw new Exception($"Nixpacks falhou ao gerar plano (Exit Code {process.ExitCode}).");
 
-            // CORREÇÃO: O arquivo fica dentro de .nixpacks
-            var dockerfilePath = Path.Combine(sourcePath, outputDir, ".nixpacks", "Dockerfile");
+            var dockerfilePath = Path.Combine(sourcePath, ".nixpacks", "Dockerfile");
 
             if (File.Exists(dockerfilePath))
             {
-                Console.WriteLine($"[NIXPACKS] Sucesso! Dockerfile encontrado em: {dockerfilePath}");
+                Console.WriteLine($"[NIXPACKS] Sucesso! Dockerfile gerado em: {dockerfilePath}");
             }
             else
             {
-                // Debug
-                Console.WriteLine($"[ERRO] Dockerfile não encontrado em {dockerfilePath}.");
-                throw new FileNotFoundException($"O Nixpacks rodou, mas o Dockerfile não estava onde esperávamos.");
+                Console.WriteLine($"[ERRO] Dockerfile não foi encontrado em {dockerfilePath}. Verifique as permissões de escrita.");
+                throw new FileNotFoundException("O Nixpacks terminou, mas o arquivo Dockerfile não foi gerado.");
             }
         }
-        public async Task GenerateImage(string githubId, string appName, string version, string appPath)
+        public async Task GenerateImage(string githubId, string appName, string version)
         {
-            var scriptPath = _configuration["FileExplorer:BuildPack"];
+            // 1. Monta o caminho automaticamente baseado na sua estrutura do Xeon
+            // /data/archive/clients/{githubId}/tmp/{appName}
+            var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
 
-            if (string.IsNullOrEmpty(scriptPath))
+            if (!Directory.Exists(sourcePath))
+                throw new DirectoryNotFoundException($"[ERRO] Pasta do projeto não encontrada para build: {sourcePath}");
+
+            using var config = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock"));
+            using var client = config.CreateClient();
+
+            Console.WriteLine($"[DOCKER] Iniciando build da imagem: {appName.ToLower()}:{version}");
+
+            // Usamos o Path.GetTempPath() para não sujar a pasta do cliente com o arquivo .tar
+            var tarContextPath = Path.Combine(Path.GetTempPath(), $"{githubId}_{appName}_{version}.tar");
+
+            try
             {
-                throw new Exception("ERRO: A configuração 'FileExplorer:ScriptPath' não foi encontrada no appsettings.json.");
+                // 2. Empacota a pasta tmp do cliente
+                await CreateTarball(sourcePath, tarContextPath);
+
+                using var tarStream = File.OpenRead(tarContextPath);
+
+                var buildParams = new ImageBuildParameters
+                {
+                    Tags = new List<string> { $"{appName.ToLower()}:{version}" },
+                    // O Dockerfile gerado pelo Nixpacks está dentro da pasta oculta .nixpacks
+                    Dockerfile = ".nixpacks/Dockerfile",
+                    Remove = true,
+                    ForceRemove = true
+                };
+
+                // 3. Dispara o Build nativo
+                await client.Images.BuildImageFromCallbackContextAsync(
+                    tarStream,
+                    buildParams,
+                    new Progress<JSONMessage>(msg =>
+                    {
+                        if (!string.IsNullOrEmpty(msg.Stream))
+                            Console.Write($"[DOCKER-BUILD] {msg.Stream}");
+
+                        if (!string.IsNullOrEmpty(msg.ErrorMessage))
+                            throw new Exception($"Erro no Docker Build: {msg.ErrorMessage}");
+                    }),
+                    CancellationToken.None
+                );
+
+                Console.WriteLine($"[API] Imagem {appName.ToLower()}:{version} construída com sucesso no Hayom!");
             }
-
-            await ShellHelper.MakeExecutableAsync(scriptPath);
-
-            var args = $"{githubId} {appName} {version} {appPath}";
-
-            Console.WriteLine($"[API] construindo image para {appName} em {scriptPath}...");
-
-            var result = await ShellHelper.RunScriptAsync(scriptPath, args);
-
-            if (result.ExitCode == 0)
+            finally
             {
-                Console.WriteLine("[API] image construida com sucesso!");
+                // Limpeza do arquivo temporário
+                if (File.Exists(tarContextPath)) File.Delete(tarContextPath);
             }
-            else
-            {
-                Console.WriteLine($"[API] Erro ao gerar: {result.Error}");
-                throw new Exception($"Falha na geração da image: {result.Error}");
-            }
+        }
+
+        private async Task CreateTarball(string sourceDir, string tarFilePath)
+        {
+            if (File.Exists(tarFilePath)) File.Delete(tarFilePath);
+            await Task.Run(() => TarFile.CreateFromDirectory(sourceDir, tarFilePath, false));
         }
     }
 }

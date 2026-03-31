@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "V/s89xhS1I4=",
+  "dgSpecHash": "TxGARo88oF8=",
   "success": true,
   "projectFilePath": "C:\\Users\\walterbrito\\Documents\\Walter\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\walterbrito\\.nuget\\packages\\docker.dotnet\\3.125.15\\docker.dotnet.3.125.15.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\kubernetesclient\\19.0.2\\kubernetesclient.19.0.2.nupkg.sha512",

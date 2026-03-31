@@ -125,18 +125,14 @@ namespace Orbit.Api.Controllers
         {
             try
             {
-                // 1. Pega o Token necessário para acessar o repo privado do cliente
-                // Você precisará desse método no seu GithubService
                 var accessToken = await _githubService.GetInstallationTokenAsync(request.InstallationId);
 
-                // 2. Executa a clonagem para: /data/archive/clients/{id}/tmp/{appName}
                 var localPath = await _githubService.CloneRepositoryAsync(
                     request.CloneUrl,
                     accessToken,
                     request.AppName
                 );
 
-                // Retorna o caminho para o seu Front-end saber onde o código está
                 return Ok(new
                 {
                     message = "Repositório clonado com sucesso!",
