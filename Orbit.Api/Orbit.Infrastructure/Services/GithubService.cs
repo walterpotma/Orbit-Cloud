@@ -2,6 +2,7 @@ using Octokit;
 using GitHubJwt;
 using Orbit.Application.Interfaces;
 using Orbit.Domain.Interfaces;
+using Repository = Octokit.Repository;
 
 namespace Orbit.Infrastructure.Services
 {

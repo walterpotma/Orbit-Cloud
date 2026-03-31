@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "98R+I9cRvPo=",
+  "dgSpecHash": "iu/QbSbq2x8=",
   "success": true,
   "projectFilePath": "C:\\Users\\walterbrito\\Documents\\Walter\\Github\\Orbit-Cloud\\Orbit.Api\\Orbit.Infrastructure\\Orbit.Infrastructure.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\walterbrito\\.nuget\\packages\\bouncycastle.netcore\\1.9.0\\bouncycastle.netcore.1.9.0.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\fractions\\7.3.0\\fractions.7.3.0.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\githubjwt\\0.0.6\\githubjwt.0.0.6.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\walterbrito\\.nuget\\packages\\jose-jwt\\4.1.0\\jose-jwt.4.1.0.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\kubernetesclient\\19.0.2\\kubernetesclient.19.0.2.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\libgit2sharp\\0.31.0\\libgit2sharp.0.31.0.nupkg.sha512",
     "C:\\Users\\walterbrito\\.nuget\\packages\\libgit2sharp.nativebinaries\\2.0.323\\libgit2sharp.nativebinaries.2.0.323.nupkg.sha512",

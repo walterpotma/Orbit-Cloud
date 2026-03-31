@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net10.0": {
+      "BouncyCastle.NetCore/1.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Fractions/7.3.0": {
         "type": "package",
         "compile": {
@@ -15,6 +28,19 @@
           }
         }
       },
+      "GitHubJwt/0.0.6": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle.NetCore": "1.9.0",
+          "jose-jwt": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/GitHubJwt.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/GitHubJwt.dll": {}
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -26,6 +52,15 @@
           "lib/net6.0/Humanizer.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "jose-jwt/4.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/jose-jwt.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/jose-jwt.dll": {}
         }
       },
       "KubernetesClient/19.0.2": {
@@ -1228,6 +1263,21 @@
     }
   },
   "libraries": {
+    "BouncyCastle.NetCore/1.9.0": {
+      "sha512": "FpWfsqjMp+RNavLqMlviDPlbdf7q4j/pr9SHfc1LKcZz5PRjciuYo59nFnw+eJi+H8cm0eH5uVZStwAv1LRdCw==",
+      "type": "package",
+      "path": "bouncycastle.netcore/1.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bouncycastle.netcore.1.9.0.nupkg.sha512",
+        "bouncycastle.netcore.nuspec",
+        "lib/net20/BouncyCastle.Crypto.dll",
+        "lib/net20/BouncyCastle.Crypto.xml",
+        "lib/netstandard2.0/BouncyCastle.Crypto.dll",
+        "lib/netstandard2.0/BouncyCastle.Crypto.xml"
+      ]
+    },
     "Fractions/7.3.0": {
       "sha512": "2bETFWLBc8b7Ut2SVi+bxhGVwiSpknHYGBh2PADyGWONLkTxT7bKyDRhF8ao+XUv90tq8Fl7GTPxSI5bacIRJw==",
       "type": "package",
@@ -1246,6 +1296,18 @@
         "license.txt"
       ]
     },
+    "GitHubJwt/0.0.6": {
+      "sha512": "CL+BSb8JM2l98UB/Yw3R3p549gcxzXxQoida6SMGcT2cnHmqs79PBT8chwNB34tbB3cVpZGiCWV6vnB1taJpIw==",
+      "type": "package",
+      "path": "githubjwt/0.0.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "githubjwt.0.0.6.nupkg.sha512",
+        "githubjwt.nuspec",
+        "lib/netstandard2.0/GitHubJwt.dll"
+      ]
+    },
     "Humanizer.Core/2.14.1": {
       "sha512": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "type": "package",
@@ -1262,6 +1324,22 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "jose-jwt/4.1.0": {
+      "sha512": "cU/qb/P3n0LM1TwxZmYiVQjsRsVPS7GTZq9GLSqrwVwAOkuvm6EaMJyFCXEa/qzCGFCoWT8f8uRHB/9m5kpavg==",
+      "type": "package",
+      "path": "jose-jwt/4.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "jose-jwt.4.1.0.nupkg.sha512",
+        "jose-jwt.nuspec",
+        "lib/net40/jose-jwt.dll",
+        "lib/net461/jose-jwt.dll",
+        "lib/net472/jose-jwt.dll",
+        "lib/netstandard1.4/jose-jwt.dll",
+        "lib/netstandard2.1/jose-jwt.dll"
       ]
     },
     "KubernetesClient/19.0.2": {
@@ -3466,6 +3544,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "GitHubJwt >= 0.0.6",
       "KubernetesClient >= 19.0.2",
       "LibGit2Sharp >= 0.31.0",
       "Microsoft.AspNetCore.Authentication.Abstractions >= 2.3.9",
@@ -3478,6 +3557,7 @@
       "Newtonsoft.Json >= 13.0.4",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.1",
       "Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite >= 10.0.1",
+      "Octokit >= 14.0.0",
       "Orbit.Application >= 1.0.0",
       "Orbit.Domain >= 1.0.0"
     ]
@@ -3539,6 +3619,10 @@
       "net10.0": {
         "targetAlias": "net10.0",
         "dependencies": {
+          "GitHubJwt": {
+            "target": "Package",
+            "version": "[0.0.6, )"
+          },
           "KubernetesClient": {
             "target": "Package",
             "version": "[19.0.2, )"
@@ -3588,6 +3672,10 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite": {
             "target": "Package",
             "version": "[10.0.1, )"
+          },
+          "Octokit": {
+            "target": "Package",
+            "version": "[14.0.0, )"
           }
         },
         "imports": [
