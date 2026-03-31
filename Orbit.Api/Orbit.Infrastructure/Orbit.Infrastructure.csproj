@@ -26,6 +26,12 @@
     <PackageReference Include="Octokit" Version="14.0.0" />
     <PackageReference Include="GitHubJwt" Version="0.0.6" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="orbit-ci-cd.private-key.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Orbit.Application\Orbit.Application.csproj" />
