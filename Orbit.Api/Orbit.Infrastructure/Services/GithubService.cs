@@ -24,7 +24,7 @@ namespace Orbit.Infrastructure.Services
             await Task.CompletedTask;
         }
 
-        public async Task<IReadOnlyList<Repository>> GetRepositoriesAsync(long installationId)
+        public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
         {
             // 1. Gerar o JWT para se autenticar como o App
             var generator = new GitHubJwtFactory(

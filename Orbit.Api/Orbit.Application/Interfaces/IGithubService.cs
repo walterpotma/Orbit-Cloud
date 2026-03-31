@@ -5,6 +5,6 @@ namespace Orbit.Application.Interfaces
     public interface IGithubService
     {
         Task RegisterInstallationAsync(string installationId, string githubId);
-        Task<IReadOnlyList<Repository>> GetRepositoriesAsync(long installationId);
+        Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId);
     }
 }
