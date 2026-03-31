@@ -1,0 +1,46 @@
+Essa ideia de separar a responsabilidade do erro (Aplicação vs. Cliente) é o "pulo do gato" para um SRE. Se o erro for um 400 Bad Request, o cliente resolve; se for um 500 Internal Server Error, você acorda para corrigir.
+
+Como você já domina TypeScript, ele é a escolha perfeita por três motivos:
+
+Ecossistema de IA: O ecossistema para agentes de IA em TS (como LangChain.js ou Vercel AI SDK) é fortíssimo.
+
+Performance de I/O: Um Worker que fica "ouvindo" logs se beneficia muito do modelo assíncrono do Node.js.
+
+Facilidade de Integração: Como sua UI é em Next.js, você pode compartilhar tipos (interfaces) entre o agente e o seu dashboard da Orbit.
+
+🏗️ Arquitetura do seu Agente (IA Log-Triager)
+O agente funcionaria como um fluxo lógico inteligente:
+
+🛠️ Como eu estruturaria essa API Worker:
+1. A Entrada (Logs):
+Você pode configurar o agente para receber webhooks do seu cluster ou simplesmente ler o stream do Docker/Kubernetes.
+
+2. A "Mente" do Agente (Ollama + Prompt):
+No TypeScript, você faria uma chamada para o Ollama local passando o log bruto. O segredo está no System Prompt:
+
+"Aja como um analista SRE. Analise o log abaixo.
+Se for um erro de validação, falta de campos ou erro 4xx, responda apenas: 'CLIENTE'.
+Se for erro de banco de dados, falha de build, NullReference ou 5xx, responda: 'SUPORTE'.
+Justifique sua decisão em uma frase curta."
+
+3. O Despacho (Email):
+
+Se 'SUPORTE': Dispara para o seu e-mail (usando o Orbit.MailBox que mencionamos antes).
+
+Se 'CLIENTE': Dispara para o e-mail do usuário vinculado à InstallationId do log.
+
+🤖 Qual modelo rodar no Ollama para isso?
+Como você quer rodar no Hayom (seu servidor local), use o Llama 3.2 3B. Ele é minúsculo, mas para classificação de texto e análise de erros estruturados, ele é extremamente preciso.
+
+Por que não usar um modelo maior? Porque você quer que a resposta seja rápida. Um modelo de 3B vai classificar o log em milissegundos, permitindo que o e-mail chegue quase em tempo real.
+
+💡 Próximo Passo Sugerido:
+Já que você está confortável com TS, você pode criar esse Agente dentro da sua estrutura Orbit-Cloud.
+
+Crie uma pasta Orbit.Agent (ou use a que vi na foto).
+
+Inicie um projeto Node.js com zod para validar a estrutura dos logs.
+
+Use a biblioteca @langchain/ollama para conectar no seu serviço local.
+
+Walter, essa ferramenta vai te poupar horas de debug manual. Em vez de ler logs sujos no terminal, você vai receber um e-mail dizendo: "Walter, o build falhou porque a lib GitHubJwt v0.0.6 não tem o método X. Sugiro trocar para Y".

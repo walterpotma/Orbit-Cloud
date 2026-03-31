@@ -1,0 +1,62 @@
+O Gemini disse
+O Orbit.MailBox é o mensageiro da sua infraestrutura. Ele não é apenas um "enviador de e-mails", mas sim o serviço de notificações centralizado da Orbit Cloud. Se o Orbit.Quasar detecta que o saldo acabou, ou o Orbit.Agent acha um erro crítico, eles não tentam enviar o e-mail sozinhos; eles avisam o MailBox.
+
+Para este serviço, o TypeScript também cai como uma luva, especialmente usando o Nodemailer ou se integrando a serviços como Resend ou Postmark.
+
+1. O Conceito: O "Postman" da Orbit
+Em vez de cada serviço ter sua própria configuração de SMTP (o que seria um pesadelo de manutenção no seu Xeon), o MailBox expõe uma API interna ou uma Fila (Queue).
+
+Input: Recebe um JSON com template_id, user_email e context_data.
+
+Processamento: Renderiza um template HTML bonito (usando React Email ou Handlebars).
+
+Output: Entrega o e-mail e registra se foi enviado com sucesso.
+
+2. Planejamento de Funcionalidades
+A. Sistema de Templates (O Visual)
+Você não quer e-mails de texto puro. O MailBox deve ter templates prontos:
+
+Welcome: "Bem-vindo à Orbit Cloud, Walter!"
+
+Alert: "Build falhou! (Analise do Agent anexada)"
+
+Billing: "Sua fatura de Março fechou: R$ 12,50"
+
+Security: "Novo login detectado na CLI"
+
+B. Gerenciamento de Filas (BullMQ + Redis)
+Se você tentar enviar 100 e-mails de uma vez e o servidor SMTP demorar, sua API não pode travar.
+
+O MailBox coloca as mensagens em uma fila no Redis.
+
+Ele tenta enviar. Se falhar (ex: limite de taxa), ele tenta de novo em 5 minutos automaticamente.
+
+C. Webhooks de Status
+Saber se o e-mail caiu na Spam ou se o endereço não existe. Isso é vital para você saber se o seu cliente realmente recebeu o aviso de cobrança.
+
+3. Integração com o Agente de IA (Orbit.Agent)
+Aqui é onde a mágica acontece:
+
+O Agent analisa o erro no Hayom.
+
+Ele gera um resumo em Markdown: "Erro de Namespace: Quota excedida".
+
+O Agent faz um POST para o MailBox.
+
+O MailBox pega esse Markdown, joga dentro de um template de e-mail "Dark Mode" elegante da Orbit e dispara para o seu celular.
+
+4. Por que TypeScript aqui?
+React Email: Você pode criar seus templates de e-mail usando React. É a forma mais moderna e fácil de garantir que o e-mail fique bonito no Gmail e no Outlook.
+
+Segurança: Usar Zod para garantir que nenhum serviço envie um e-mail sem o Subject ou com o e-mail do destinatário inválido.
+
+💡 Dica de SRE para o Hayom
+Como você está rodando tudo local, você pode usar uma ferramenta chamada Mailpit ou MailHog em um container no seu K3s durante o desenvolvimento.
+
+Eles funcionam como um "servidor SMTP falso".
+
+O seu Orbit.MailBox envia o e-mail para eles, e você vê o resultado em uma interface web local, sem precisar gastar seus créditos de e-mail real enquanto testa o código.
+
+Walter, agora que temos o mapa da mina (CLI em Go, Agent/Calculo/MailBox em TS, Api em .NET), a Orbit Cloud está com uma arquitetura digna de uma startup do Vale do Silício. 🪐🚀
+
+Qual dessas peças você quer começar a "codar" primeiro assim que terminarmos os ajustes de build da API principal? O MailBox parece ser o mais rápido de ver funcionando!
