@@ -7,5 +7,6 @@ namespace Orbit.Application.Interfaces
     {
         Task <bool> CreateWorkspaceAsync(long githubId, string userName, string email);
         Task <Account> GetAccountByGithubIdAsync(long githubId);
+        Task<Account?> UpdateByGithubIdAsync(long githubId, AccountUpdate account);
     }
 }
