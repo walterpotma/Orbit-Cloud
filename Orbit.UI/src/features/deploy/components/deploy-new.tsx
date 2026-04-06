@@ -29,7 +29,6 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
         isPublic: true
     });
 
-    // Busca as imagens ao abrir o modal
     useEffect(() => {
         fetchRegistry();
     }, []);
@@ -37,8 +36,7 @@ export default function NewDeployModal({ onClose }: { onClose: (value: boolean) 
     const fetchRegistry = async () => {
         setIsLoadingRegistry(true);
         try {
-            // Ajuste a URL se necessário
-            const response = await fetch("https://api.orbitcloud.com.br/registry");
+            const response = await fetch("https://orbitcloud.com.br/api/registry");
             const data = await response.json();
             setArtifacts(data);
         } catch (error) {

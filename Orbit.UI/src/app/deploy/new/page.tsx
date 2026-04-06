@@ -53,7 +53,7 @@ export default function NewDeployPage() {
     const fetchRegistry = async () => {
         setIsLoadingRegistry(true);
         try {
-            const response = await fetch(`https://api.orbitcloud.com.br/registry/user?githubId=${UserData?.githubID}`);
+            const response = await fetch(`https://orbitcloud.com.br/api/registry/user?githubId=${UserData?.githubID}`);
             const data = await response.json();
             setArtifacts(data);
         } catch (error) {
