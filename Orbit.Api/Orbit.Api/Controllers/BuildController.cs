@@ -6,7 +6,7 @@ using System.Security.Claims;
 namespace Orbit.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BuildController : Controller
     {
         private readonly IGithubService _githubService;
