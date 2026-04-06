@@ -66,6 +66,8 @@ export default function PipelinePage() {
                 version: formData.version,
             };
 
+            console.log("Enviando payload para build:", payload);
+
             const response = await fetch(`https://orbitcloud.com.br/api/build/artifact`, {
                 method: "POST",
                 headers: {
