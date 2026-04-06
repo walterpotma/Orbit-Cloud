@@ -66,7 +66,7 @@ export default function PipelinePage() {
                 version: formData.version,
             };
 
-            const response = await fetch(`https://orbitcloud.com.br/api/github/deploy`, {
+            const response = await fetch(`https://orbitcloud.com.br/api/build/artifact`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
