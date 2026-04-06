@@ -36,15 +36,16 @@ export default function PipelinePage() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        
-        // Se mudar o repositório, pegamos a URL de clone que guardamos no value ou data-attr
+
         if (name === "gitRepoName") {
             const selectedRepo = repositories.find((r: any) => r.name === value);
+
             setFormData(prev => ({
                 ...prev,
                 gitRepoName: value,
-                cloneUrl: selectedRepo ? `${selectedRepo.html_url}.git` : "",
-                appName: prev.appName || value // Sugere o nome da app como o nome do repo
+                // CORREÇÃO AQUI: htmlUrl em vez de html_url
+                cloneUrl: selectedRepo ? `${selectedRepo.htmlUrl}.git` : "",
+                appName: prev.appName || value
             }));
         } else {
             setFormData(prev => ({ ...prev, [name]: value }));
@@ -134,6 +135,19 @@ export default function PipelinePage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-2 hidden">
+                            <label htmlFor="appName" className="text-sm font-medium text-zinc-300">Nome da Aplicação</label>
+                            <input
+                                type="text"
+                                name="appName"
+                                id="appName"
+                                required
+                                placeholder="ex: orbit-api"
+                                value={formData.cloneUrl}
+                                onChange={handleChange}
+                                className="bg-zinc-950 border border-zinc-700 text-zinc-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                            />
+                        </div>
                         {/* App Name */}
                         <div className="flex flex-col gap-2">
                             <label htmlFor="appName" className="text-sm font-medium text-zinc-300">Nome da Aplicação</label>
