@@ -70,7 +70,9 @@ namespace Orbit.Infrastructure.Services
 
                 var token = handler.CreateToken(descriptor);
 
-                return handler.WriteToken(token);
+                string tokenString = handler.WriteToken(token);
+
+                return tokenString;
             }
         }
 
