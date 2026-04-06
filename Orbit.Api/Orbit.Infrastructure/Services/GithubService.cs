@@ -52,28 +52,27 @@ namespace Orbit.Infrastructure.Services
                     ?? throw new Exception("Chave Privada do GitHub não encontrada.");
             }
 
-            using (var rsa = RSA.Create())
+            using var rsa = RSA.Create();
+            rsa.ImportFromPem(pemContent.ToCharArray());
+
+            var rsaParams = rsa.ExportParameters(true);
+            var rsaCopy = RSA.Create();
+            rsaCopy.ImportParameters(rsaParams);
+
+            var handler = new JwtSecurityTokenHandler();
+            var descriptor = new SecurityTokenDescriptor
             {
-                rsa.ImportFromPem(pemContent.ToCharArray());
+                Issuer = _appId,
+                IssuedAt = DateTime.UtcNow.AddSeconds(-60),
+                Expires = DateTime.UtcNow.AddMinutes(9),
+                SigningCredentials = new SigningCredentials(
+                    new RsaSecurityKey(rsaCopy),
+                    SecurityAlgorithms.RsaSha256
+                )
+            };
 
-                var handler = new JwtSecurityTokenHandler();
-                var descriptor = new SecurityTokenDescriptor
-                {
-                    Issuer = _appId,
-                    IssuedAt = DateTime.UtcNow.AddSeconds(-60),
-                    Expires = DateTime.UtcNow.AddMinutes(9),
-                    SigningCredentials = new SigningCredentials(
-                        new RsaSecurityKey(rsa),
-                        SecurityAlgorithms.RsaSha256
-                    )
-                };
-
-                var token = handler.CreateToken(descriptor);
-
-                string tokenString = handler.WriteToken(token);
-
-                return tokenString;
-            }
+            var token = handler.CreateToken(descriptor);
+            return handler.WriteToken(token);
         }
 
         public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
