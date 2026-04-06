@@ -22,14 +22,14 @@ namespace Orbit.Infrastructure.Services
         private readonly string _privateKeyPath;
 
         public GithubService(
-            IGithubRepository githubRepository, 
-            IHttpContextAccessor httpContextAccessor, 
+            IGithubRepository githubRepository,
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration)
         {
             _githubRepository = githubRepository;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
-            
+
             _appId = _configuration["Github:AppId"] ?? "1981006";
             _privateKeyPath = Path.Combine(AppContext.BaseDirectory, "orbit-ci-cd.2026-03-30.private-key.pem");
         }
@@ -41,7 +41,6 @@ namespace Orbit.Infrastructure.Services
 
         private string GenerateJwt()
         {
-            // Tenta pegar a chave do arquivo ou da configuração direta
             string pemContent;
             if (File.Exists(_privateKeyPath))
             {
@@ -49,27 +48,30 @@ namespace Orbit.Infrastructure.Services
             }
             else
             {
-                pemContent = _configuration["Github:PrivateKey"] 
+                pemContent = _configuration["Github:PrivateKey"]
                     ?? throw new Exception("Chave Privada do GitHub não encontrada.");
             }
 
-            using var rsa = RSA.Create();
-            rsa.ImportFromPem(pemContent.ToCharArray());
-
-            var handler = new JwtSecurityTokenHandler();
-            var descriptor = new SecurityTokenDescriptor
+            using (var rsa = RSA.Create())
             {
-                Issuer = _appId,
-                IssuedAt = DateTime.UtcNow.AddSeconds(-60),
-                Expires = DateTime.UtcNow.AddMinutes(9),
-                SigningCredentials = new SigningCredentials(
-                    new RsaSecurityKey(rsa),
-                    SecurityAlgorithms.RsaSha256
-                )
-            };
+                rsa.ImportFromPem(pemContent.ToCharArray());
 
-            var token = handler.CreateToken(descriptor);
-            return handler.WriteToken(token);
+                var handler = new JwtSecurityTokenHandler();
+                var descriptor = new SecurityTokenDescriptor
+                {
+                    Issuer = _appId,
+                    IssuedAt = DateTime.UtcNow.AddSeconds(-60),
+                    Expires = DateTime.UtcNow.AddMinutes(9),
+                    SigningCredentials = new SigningCredentials(
+                        new RsaSecurityKey(rsa),
+                        SecurityAlgorithms.RsaSha256
+                    )
+                };
+
+                var token = handler.CreateToken(descriptor);
+
+                return handler.WriteToken(token);
+            }
         }
 
         public async Task<IReadOnlyList<Octokit.Repository>> GetRepositoriesAsync(long installationId)
