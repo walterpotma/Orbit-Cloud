@@ -37,15 +37,14 @@ export default function PipelinePage() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
+        // Se mudar o repositório, pegamos a URL de clone que guardamos no value ou data-attr
         if (name === "gitRepoName") {
             const selectedRepo = repositories.find((r: any) => r.name === value);
-
             setFormData(prev => ({
                 ...prev,
                 gitRepoName: value,
-                // CORREÇÃO AQUI: htmlUrl em vez de html_url
                 cloneUrl: selectedRepo ? `${selectedRepo.htmlUrl}.git` : "",
-                appName: prev.appName || value
+                appName: prev.appName || value // Sugere o nome da app como o nome do repo
             }));
         } else {
             setFormData(prev => ({ ...prev, [name]: value }));
