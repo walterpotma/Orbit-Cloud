@@ -57,7 +57,8 @@ export default function PipelinePage() {
         try {
             const token = localStorage.getItem('orbit_token');
 
-            // ADICIONAMOS O installationId AQUI:
+            if (!UserData) return;
+            
             const payload = {
                 repoName: formData.gitRepoName,
                 cloneUrl: formData.cloneUrl,
