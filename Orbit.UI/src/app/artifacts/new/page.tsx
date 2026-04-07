@@ -50,20 +50,20 @@ export default function PipelinePage() {
             setFormData(prev => ({ ...prev, [name]: value }));
         }
     };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus({ loading: true, message: "", type: "" });
 
         try {
-            const token = localStorage.getItem('orbit_token'); // Onde seu JWT fica guardado
+            const token = localStorage.getItem('orbit_token');
 
-            // Payload agora bate com o que seu Backend C# espera
+            // ADICIONAMOS O installationId AQUI:
             const payload = {
                 repoName: formData.gitRepoName,
                 cloneUrl: formData.cloneUrl,
                 appName: formData.appName,
                 version: formData.version,
+                installationId: UserData.accountInfo.githubAppId // O campo que falta!
             };
 
             console.log("Enviando payload para build:", payload);
