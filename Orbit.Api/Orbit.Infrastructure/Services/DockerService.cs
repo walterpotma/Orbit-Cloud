@@ -34,7 +34,7 @@ namespace Orbit.Infrastructure.Services
             var processInfo = new ProcessStartInfo
             {
                 FileName = "nixpacks",
-                Arguments = "generate .",
+                Arguments = "plan .", // 'plan' substitui o antigo 'generate'
                 WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
