@@ -110,50 +110,37 @@ namespace Orbit.Infrastructure.Services
         public async Task<string> CloneRepositoryAsync(string cloneUrl, string accessToken, string appName)
         {
             var githubId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(githubId))
-                throw new Exception("Usuário não autenticado.");
+            if (string.IsNullOrEmpty(githubId)) throw new Exception("Usuário não autenticado.");
 
-            // Caminho base no Hayom
-            var userPath = Path.Combine("/data/archive/clients", githubId, "tmp");
-            var localPath = Path.Combine(userPath, appName);
+            var localPath = Path.Combine("/data/archive/clients", githubId, "tmp", appName);
 
-            // 1. Limpeza Garantida
-            if (Directory.Exists(localPath))
+            if (Directory.Exists(localPath)) Directory.Delete(localPath, true);
+            Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
+
+            // MONTAGEM DA URL COM TOKEN (O segredo para funcionar no terminal)
+            // De: https://github.com/walterpotma/repo.git
+            // Para: https://x-access-token:TOKEN@github.com/walterpotma/repo.git
+            var authenticatedUrl = cloneUrl.Replace("https://", $"https://x-access-token:{accessToken}@");
+
+            var startInfo = new System.Diagnostics.ProcessStartInfo
             {
-                // No Linux, precisamos garantir que arquivos de sistema não travem a exclusão
-                var di = new DirectoryInfo(localPath);
-                foreach (var file in di.GetFiles("*", SearchOption.AllDirectories)) file.Attributes = FileAttributes.Normal;
-                Directory.Delete(localPath, true);
-            }
-
-            Directory.CreateDirectory(userPath);
-
-            var options = new LibGit2Sharp.CloneOptions
-            {
-                FetchOptions =
-        {
-            CredentialsProvider = (_url, _user, _cred) =>
-                new LibGit2Sharp.UsernamePasswordCredentials
-                {
-                    // Essencial para GitHub Apps
-                    Username = "x-access-token",
-                    Password = accessToken
-                }
-        },
-                // 2. Checkout automático para evitar que a pasta fique vazia
-                Checkout = true
+                FileName = "git",
+                Arguments = $"clone {authenticatedUrl} {localPath}",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
             };
 
-            try
+            using var process = System.Diagnostics.Process.Start(startInfo);
+            var errors = await process.StandardError.ReadToEndAsync();
+            await process.WaitForExitAsync();
+
+            if (process.ExitCode != 0)
             {
-                // 3. O Clone propriamente dito
-                await Task.Run(() => LibGit2Sharp.Repository.Clone(cloneUrl, localPath, options));
-                Console.WriteLine($"[ORBIT-PIPELINE] Clone concluído com sucesso em: {localPath}");
-            }
-            catch (LibGit2SharpException ex) when (ex.Message.Contains("404"))
-            {
-                // Se der 404 aqui, é porque a URL está vindo sem o .git ou o Token não tem escopo
-                throw new Exception($"O GitHub retornou Not Found. Verifique se a URL {cloneUrl} está correta e se o App tem permissão de 'Contents'.");
+                // Se o GIT do sistema também der Not Found, o erro é 100% permissão do App
+                Console.WriteLine($"[GIT-SHELL ERROR]: {errors}");
+                throw new Exception($"Erro no Git nativo: {errors}");
             }
 
             return localPath;
