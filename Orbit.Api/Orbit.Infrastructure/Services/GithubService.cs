@@ -110,37 +110,30 @@ namespace Orbit.Infrastructure.Services
         public async Task<string> CloneRepositoryAsync(string cloneUrl, string accessToken, string appName)
         {
             var githubId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(githubId)) throw new Exception("Usuário não autenticado.");
-
             var localPath = Path.Combine("/data/archive/clients", githubId, "tmp", appName);
 
             if (Directory.Exists(localPath)) Directory.Delete(localPath, true);
             Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
 
-            // MONTAGEM DA URL COM TOKEN (O segredo para funcionar no terminal)
-            // De: https://github.com/walterpotma/repo.git
-            // Para: https://x-access-token:TOKEN@github.com/walterpotma/repo.git
+            // Injetamos o token direto na URL para o Git nativo autenticar
             var authenticatedUrl = cloneUrl.Replace("https://", $"https://x-access-token:{accessToken}@");
 
             var startInfo = new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "git",
                 Arguments = $"clone {authenticatedUrl} {localPath}",
-                RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
 
             using var process = System.Diagnostics.Process.Start(startInfo);
-            var errors = await process.StandardError.ReadToEndAsync();
+            var stderr = await process.StandardError.ReadToEndAsync();
             await process.WaitForExitAsync();
 
             if (process.ExitCode != 0)
             {
-                // Se o GIT do sistema também der Not Found, o erro é 100% permissão do App
-                Console.WriteLine($"[GIT-SHELL ERROR]: {errors}");
-                throw new Exception($"Erro no Git nativo: {errors}");
+                throw new Exception($"Git Clone falhou: {stderr}");
             }
 
             return localPath;
