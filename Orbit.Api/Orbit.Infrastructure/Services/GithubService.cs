@@ -110,34 +110,51 @@ namespace Orbit.Infrastructure.Services
         public async Task<string> CloneRepositoryAsync(string cloneUrl, string accessToken, string appName)
         {
             var githubId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             if (string.IsNullOrEmpty(githubId))
                 throw new Exception("Usuário não autenticado.");
 
-            var localPath = Path.Combine("/data/archive/clients", githubId, "tmp", appName);
+            // Caminho base no Hayom
+            var userPath = Path.Combine("/data/archive/clients", githubId, "tmp");
+            var localPath = Path.Combine(userPath, appName);
 
+            // 1. Limpeza Garantida
             if (Directory.Exists(localPath))
             {
-                // LibGit2Sharp trava arquivos, as vezes Directory.Delete falha se não for recursivo/forçado
-                await Task.Run(() => Directory.Delete(localPath, true));
+                // No Linux, precisamos garantir que arquivos de sistema não travem a exclusão
+                var di = new DirectoryInfo(localPath);
+                foreach (var file in di.GetFiles("*", SearchOption.AllDirectories)) file.Attributes = FileAttributes.Normal;
+                Directory.Delete(localPath, true);
             }
 
-            Directory.CreateDirectory(Path.GetDirectoryName(localPath)!);
+            Directory.CreateDirectory(userPath);
 
             var options = new LibGit2Sharp.CloneOptions
             {
                 FetchOptions =
+        {
+            CredentialsProvider = (_url, _user, _cred) =>
+                new LibGit2Sharp.UsernamePasswordCredentials
                 {
-                    CredentialsProvider = (_url, _user, _cred) =>
-                        new LibGit2Sharp.UsernamePasswordCredentials
-                        {
-                            Username = "x-access-token",
-                            Password = accessToken
-                        }
+                    // Essencial para GitHub Apps
+                    Username = "x-access-token",
+                    Password = accessToken
                 }
+        },
+                // 2. Checkout automático para evitar que a pasta fique vazia
+                Checkout = true
             };
 
-            await Task.Run(() => LibGit2Sharp.Repository.Clone(cloneUrl, localPath, options));
+            try
+            {
+                // 3. O Clone propriamente dito
+                await Task.Run(() => LibGit2Sharp.Repository.Clone(cloneUrl, localPath, options));
+                Console.WriteLine($"[ORBIT-PIPELINE] Clone concluído com sucesso em: {localPath}");
+            }
+            catch (LibGit2SharpException ex) when (ex.Message.Contains("404"))
+            {
+                // Se der 404 aqui, é porque a URL está vindo sem o .git ou o Token não tem escopo
+                throw new Exception($"O GitHub retornou Not Found. Verifique se a URL {cloneUrl} está correta e se o App tem permissão de 'Contents'.");
+            }
 
             return localPath;
         }
