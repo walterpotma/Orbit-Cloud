@@ -75,7 +75,7 @@ export default function Nav() {
                 <div className="h-20 flex items-center justify-center border-b border-zinc-800/50">
                     <div className={`flex items-center overflow-hidden whitespace-nowrap transition-all ${isCollapsed ? "px-0" : "px-4"}`}>
                         <div className="shrink-0">
-                            <Logo />
+                            <Logo classname={"w-20 h-20 scale-16"} />
                         </div>
                         <div className={`flex space-x-1 transition-opacity duration-200 ${isCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"}`}>
                             <span className="font-bold text-2xl text-zinc-100 leading-none">Orbit</span>
