@@ -30,5 +30,9 @@ RUN apt-get update && apt-get install -y curl git&& \
 
 COPY --from=publish /app/publish .
 
+RUN mkdir -p /data/archive/clients && chmod -R 777 /data/archive
+
+USER root
+
 ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "Orbit.Api.dll"]
