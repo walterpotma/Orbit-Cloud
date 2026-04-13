@@ -78,7 +78,7 @@ namespace Orbit.Infrastructure.Services
                 throw new FileNotFoundException($"[ERRO] Dockerfile não encontrado em {dockerfilePath}.");
             }
         }
-        }
+
         public async Task GenerateImage(string githubId, string appName, string version)
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
