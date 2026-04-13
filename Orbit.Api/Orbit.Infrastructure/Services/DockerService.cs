@@ -54,20 +54,30 @@ namespace Orbit.Infrastructure.Services
 
             await process.WaitForExitAsync();
 
-            if (process.ExitCode != 0)
-                throw new Exception($"Nixpacks falhou ao gerar plano (Exit Code {process.ExitCode}).");
+            Console.WriteLine($"[DEBUG] Verificando diretório: {sourcePath}");
+            if (Directory.Exists(sourcePath))
+            {
+                var dirs = Directory.GetDirectories(sourcePath);
+                Console.WriteLine($"[DEBUG] Pastas encontradas: {string.Join(", ", dirs)}");
+            }
 
-            var dockerfilePath = Path.Combine(sourcePath, ".nixpacks", "Dockerfile");
+            var dockerfilePath = Path.Combine(outputPath, "Dockerfile");
 
             if (File.Exists(dockerfilePath))
             {
-                Console.WriteLine($"[NIXPACKS] Sucesso! Dockerfile gerado em: {dockerfilePath}");
+                Console.WriteLine($"[NIXPACKS] Sucesso! Dockerfile detectado em: {dockerfilePath}");
             }
             else
             {
-                Console.WriteLine($"[ERRO] Dockerfile não foi encontrado em {dockerfilePath}. Verifique as permissões de escrita.");
-                throw new FileNotFoundException("O Nixpacks terminou, mas o arquivo Dockerfile não foi gerado.");
+                if (Directory.Exists(outputPath))
+                {
+                    var filesInOutput = Directory.GetFiles(outputPath);
+                    Console.WriteLine($"[DEBUG] Pasta de saída existe, mas arquivos nela são: {string.Join(", ", filesInOutput)}");
+                }
+
+                throw new FileNotFoundException($"[ERRO] Dockerfile não encontrado em {dockerfilePath}.");
             }
+        }
         }
         public async Task GenerateImage(string githubId, string appName, string version)
         {
