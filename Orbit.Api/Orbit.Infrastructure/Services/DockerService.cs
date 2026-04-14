@@ -115,7 +115,7 @@ namespace Orbit.Infrastructure.Services
         public async Task GenerateImage(string githubId, string appName, string version)
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
-            var outputPath = Path.Combine(sourcePath, "nixpacks"); // Pasta gerada na etapa anterior
+            var outputPath = Path.Combine(sourcePath, ".nixpacks"); // Pasta gerada na etapa anterior
             var tag = $"{appName.ToLower()}:{version}";
 
             Console.WriteLine($"[DOCKER] Buildando imagem {tag}...");
