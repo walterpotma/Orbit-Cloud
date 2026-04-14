@@ -83,7 +83,7 @@ namespace Orbit.Application.Mappers
             {
                 new V1IngressRule
                 {
-                    Host = $"{request.Host}.crion.dev",
+                    Host = $"{request.Host}.orbitcloud.dev.br",
                     Http = new V1HTTPIngressRuleValue
                     {
                         Paths = new List<V1HTTPIngressPath>
