@@ -163,6 +163,7 @@ namespace Orbit.Infrastructure.Services
                 pushProcess!.OutputDataReceived += (s, e) => Console.WriteLine($"[PUSH-OUT] {e.Data}");
                 pushProcess.Start();
                 pushProcess.BeginOutputReadLine();
+                pushProcess.BeginErrorReadLine();
                 await pushProcess.WaitForExitAsync();
 
                 if (pushProcess.ExitCode != 0) throw new Exception("Falha ao enviar imagem para o Registry.");
