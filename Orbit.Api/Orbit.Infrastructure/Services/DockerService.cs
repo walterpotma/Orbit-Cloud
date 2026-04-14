@@ -115,38 +115,60 @@ namespace Orbit.Infrastructure.Services
         public async Task GenerateImage(string githubId, string appName, string version)
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
-            var outputPath = Path.Combine(sourcePath, ".nixpacks"); // Pasta gerada na etapa anterior
-            var tag = $"{githubId}/{appName.ToLower()}:{version}";
+            var dockerfilePath = Path.Combine(sourcePath, ".nixpacks", "Dockerfile");
 
-            Console.WriteLine($"[DOCKER] Buildando imagem {tag}...");
+            // 1. Nome local e Nome do Registry
+            var registryUrl = _configuration["Docker:Registry"]?.Replace("http://", "").Replace("https://", "");
+            var localTag = $"{githubId}/{appName.ToLower()}:{version}";
+            var remoteTag = $"{registryUrl}/{localTag}";
 
-            var processInfo = new ProcessStartInfo
+            Console.WriteLine($"[ORBIT] Iniciando Build: {localTag}");
+
+            // --- STEP A: DOCKER BUILD ---
+            var buildInfo = new ProcessStartInfo
             {
                 FileName = "docker",
-                // AGORA APONTAMOS PARA A PASTA CERTA QUE O SCRIPT CRIOU
-                Arguments = $"build -t {tag} -f {outputPath}/Dockerfile {sourcePath}",
+                Arguments = $"build -t {localTag} -f {dockerfilePath} .",
                 WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
+                UseShellExecute = false
             };
 
-            using var process = new Process { StartInfo = processInfo };
+            using (var buildProcess = Process.Start(buildInfo))
+            {
+                await buildProcess!.WaitForExitAsync();
+                if (buildProcess.ExitCode != 0) throw new Exception("Build falhou.");
+            }
 
-            process.OutputDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[DOCKER-OUT] {e.Data}"); };
-            process.ErrorDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[DOCKER-ERR] {e.Data}"); };
+            // --- STEP B: DOCKER TAG (Prepara para o Registry) ---
+            Console.WriteLine($"[ORBIT] Taggeando para Registry: {remoteTag}");
+            var tagProcess = Process.Start("docker", $"tag {localTag} {remoteTag}");
+            await tagProcess!.WaitForExitAsync();
 
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
+            // --- STEP C: DOCKER PUSH (Envia para o Registry) ---
+            Console.WriteLine($"[ORBIT] Fazendo Push para o Registry...");
+            var pushInfo = new ProcessStartInfo
+            {
+                FileName = "docker",
+                Arguments = $"push {remoteTag}",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false
+            };
 
-            await process.WaitForExitAsync();
+            using (var pushProcess = Process.Start(pushInfo))
+            {
+                // Captura log do push para garantir que foi enviado
+                pushProcess!.OutputDataReceived += (s, e) => Console.WriteLine($"[PUSH-OUT] {e.Data}");
+                pushProcess.Start();
+                pushProcess.BeginOutputReadLine();
+                await pushProcess.WaitForExitAsync();
 
-            if (process.ExitCode != 0)
-                throw new Exception($"Docker build falhou!");
+                if (pushProcess.ExitCode != 0) throw new Exception("Falha ao enviar imagem para o Registry.");
+            }
 
-            Console.WriteLine($"[ORBIT] Imagem {tag} gerada com sucesso!");
+            Console.WriteLine($"[ORBIT] Pipeline concluído! Imagem disponível em {remoteTag}");
         }
     }
 }
