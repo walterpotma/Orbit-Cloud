@@ -24,15 +24,16 @@ RUN dotnet publish "Orbit.Api.csproj" -c Release -o /app/publish /p:UseAppHost=f
 FROM base AS final
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y curl git&& \
+# Adicionamos docker.io para o C# conseguir disparar comandos docker
+RUN apt-get update && apt-get install -y curl git docker.io && \
     curl -sLS https://nixpacks.com/install.sh | bash && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=publish /app/publish .
 
+# Mantemos a criação da pasta e o root (essencial para o socket do Hayom)
 RUN mkdir -p /data/archive/clients && chmod -R 777 /data/archive
 
-# Força o usuário root para evitar conflitos de permissão com o Nixpacks e Docker Socket
 USER root
 
 ENV ASPNETCORE_URLS=http://+:8080
