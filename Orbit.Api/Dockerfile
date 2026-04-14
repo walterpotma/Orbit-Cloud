@@ -31,7 +31,6 @@ RUN apt-get update && apt-get install -y curl git&& \
 COPY --from=publish /app/publish .
 
 RUN mkdir -p /data/archive/clients && chmod -R 777 /data/archive
-RUN chmod+x /
 
 # Força o usuário root para evitar conflitos de permissão com o Nixpacks e Docker Socket
 USER root
