@@ -35,7 +35,7 @@ namespace Orbit.Infrastructure.Services
             var processInfo = new ProcessStartInfo
             {
                 FileName = "nixpacks",
-                Arguments = $"build . --out {outputPath}",
+                Arguments = $"-c \"nixpacks build . --out {outputPath} && sync\"",
                 WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -93,7 +93,7 @@ namespace Orbit.Infrastructure.Services
             var processInfo = new ProcessStartInfo
             {
                 FileName = "docker",
-                Arguments = $"-c \"nixpacks build . --out {outputPath} && sync\"",
+                Arguments = $"build -t {tag} -f .nixpacks/Dockerfile .",
                 WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,

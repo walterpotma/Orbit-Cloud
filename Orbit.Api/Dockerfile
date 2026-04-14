@@ -32,6 +32,7 @@ COPY --from=publish /app/publish .
 
 RUN mkdir -p /data/archive/clients && chmod -R 777 /data/archive
 
+# Força o usuário root para evitar conflitos de permissão com o Nixpacks e Docker Socket
 USER root
 
 ENV ASPNETCORE_URLS=http://+:8080
