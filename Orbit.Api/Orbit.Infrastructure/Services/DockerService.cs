@@ -19,7 +19,7 @@ namespace Orbit.Infrastructure.Services
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", repoName);
             // IMPORTANTE: Use o mesmo nome que o seu script .sh usa internamente
             var outputPath = Path.Combine(sourcePath, "nixpacks"); 
-            var scriptPath = _configuration["Scripts:NixpacksGeneratePath"] ?? "/app/scripts/generate-nixpacks.sh";
+            var scriptPath = _configuration["FileExplorer:NixPack"];
 
             if (!Directory.Exists(sourcePath))
                 throw new DirectoryNotFoundException($"Pasta não encontrada: {sourcePath}");
