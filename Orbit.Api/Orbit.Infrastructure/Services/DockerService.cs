@@ -17,8 +17,7 @@ namespace Orbit.Infrastructure.Services
         public async Task GenerateDockerfile(string githubId, string repoName, string appName)
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", repoName);
-            // IMPORTANTE: Use o mesmo nome que o seu script .sh usa internamente
-            var outputPath = Path.Combine(sourcePath, "nixpacks"); 
+            var outputPath = Path.Combine(sourcePath, "nixpacks");
             var scriptPath = _configuration["FileExplorer:NixPack"];
 
             if (!Directory.Exists(sourcePath))
@@ -29,7 +28,6 @@ namespace Orbit.Infrastructure.Services
             var processInfo = new ProcessStartInfo
             {
                 FileName = "/bin/bash",
-                // Passamos os argumentos: 1. Onde está o código, 2. Onde salvar o Dockerfile
                 Arguments = $"{scriptPath} {sourcePath} {outputPath}",
                 WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
@@ -52,31 +50,68 @@ namespace Orbit.Infrastructure.Services
             if (process.ExitCode != 0)
                 throw new Exception($"O script de build falhou com código {process.ExitCode}");
 
-            // --- VALIDAÇÃO COM RETRY (O segredo para Volumes K8s) ---
+            // --- VALIDAÇÃO COM RETRY E FORÇA BRUTA ---
             var dockerfilePath = Path.Combine(outputPath, "Dockerfile");
             bool found = false;
 
             for (int i = 0; i < 5; i++)
             {
-                if (File.Exists(dockerfilePath)) { found = true; break; }
-                Console.WriteLine($"[DEBUG] Aguardando sync do volume... ({i+1}/5)");
-                await Task.Delay(1000);
+                // Força o SO a atualizar os metadados da pasta
+                if (Directory.Exists(outputPath))
+                {
+                    new DirectoryInfo(outputPath).Refresh();
+                }
+
+                if (File.Exists(dockerfilePath))
+                {
+                    found = true;
+                    break;
+                }
+
+                Console.WriteLine($"[DEBUG] Aguardando sync do volume... ({i + 1}/5)");
+
+                // HACK DE SRE: Executa um 'ls' via Shell para forçar o Kernel a indexar o arquivo
+                try
+                {
+                    var syncProcess = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "ls",
+                        Arguments = $"-la {outputPath}",
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false
+                    });
+                    await syncProcess!.WaitForExitAsync();
+                }
+                catch { /* ignore */ }
+
+                await Task.Delay(1500); // Aumentei um pouco o delay
             }
 
             if (!found)
             {
-                // Debug final se falhar
                 if (Directory.Exists(outputPath))
                 {
-                    var files = Directory.GetFiles(outputPath);
-                    Console.WriteLine($"[DEBUG] Pasta existe, mas arquivos são: {string.Join(", ", files)}");
+                    // Listagem profunda para o log
+                    var allFiles = Directory.GetFiles(outputPath, "*", SearchOption.AllDirectories);
+                    Console.WriteLine($"[DEBUG] Pasta existe, mas arquivos detectados pelo .NET são: {string.Join(", ", allFiles)}");
+
+                    // Tenta ver se o arquivo está com outro nome (nixpacks às vezes cria subpastas)
+                    foreach (var f in allFiles)
+                    {
+                        if (f.EndsWith("Dockerfile"))
+                        {
+                            Console.WriteLine($"[DEBUG] ACHEI! O arquivo estava em: {f}");
+                            // Opcional: dockerfilePath = f; found = true; break;
+                        }
+                    }
                 }
-                throw new FileNotFoundException($"Dockerfile não encontrado em: {dockerfilePath}");
+
+                if (!found)
+                    throw new FileNotFoundException($"Dockerfile não encontrado em: {dockerfilePath}");
             }
 
-            Console.WriteLine($"[ORBIT] Dockerfile pronto para o próximo passo!");
+            Console.WriteLine($"[ORBIT] Dockerfile pronto em {dockerfilePath}!");
         }
-
         public async Task GenerateImage(string githubId, string appName, string version)
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
