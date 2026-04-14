@@ -17,7 +17,7 @@ namespace Orbit.Infrastructure.Services
         public async Task GenerateDockerfile(string githubId, string repoName, string appName)
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", repoName);
-            var outputPath = Path.Combine(sourcePath, "nixpacks");
+            var outputPath = Path.Combine(sourcePath);
             var scriptPath = _configuration["FileExplorer:NixPack"];
 
             if (!Directory.Exists(sourcePath))
