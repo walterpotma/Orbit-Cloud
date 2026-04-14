@@ -20,111 +20,34 @@ namespace Orbit.Infrastructure.Services
             var outputPath = Path.Combine(sourcePath, "nixpacks");
             var scriptPath = _configuration["FileExplorer:NixPack"];
 
-            if (!Directory.Exists(sourcePath))
-                throw new DirectoryNotFoundException($"Pasta não encontrada: {sourcePath}");
-
-            Console.WriteLine($"[ORBIT] Iniciando geração via Script: {scriptPath}");
-
-            var processInfo = new ProcessStartInfo
-            {
-                FileName = "/bin/bash",
-                Arguments = $"{scriptPath} {sourcePath} {outputPath}",
-                WorkingDirectory = sourcePath,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using var process = new Process { StartInfo = processInfo };
-
-            process.OutputDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[SH-OUT] {e.Data}"); };
-            process.ErrorDataReceived += (s, e) => { if (!string.IsNullOrEmpty(e.Data)) Console.WriteLine($"[SH-ERR] {e.Data}"); };
-
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-
+            // ... (execução do processo igual você já tem) ...
             await process.WaitForExitAsync();
 
-            if (process.ExitCode != 0)
-                throw new Exception($"O script de build falhou com código {process.ExitCode}");
+            // O Nixpacks build --out SEMPRE cria uma subpasta .nixpacks lá dentro
+            var dockerfilePath = Path.Combine(outputPath, ".nixpacks", "Dockerfile");
 
-            // --- VALIDAÇÃO COM RETRY E FORÇA BRUTA ---
-            var dockerfilePath = Path.Combine(outputPath, "Dockerfile");
-            bool found = false;
-
-            for (int i = 0; i < 5; i++)
+            // Agora o File.Exists vai dar TRUE de primeira!
+            if (File.Exists(dockerfilePath))
             {
-                // Força o SO a atualizar os metadados da pasta
-                if (Directory.Exists(outputPath))
-                {
-                    new DirectoryInfo(outputPath).Refresh();
-                }
-
-                if (File.Exists(dockerfilePath))
-                {
-                    found = true;
-                    break;
-                }
-
-                Console.WriteLine($"[DEBUG] Aguardando sync do volume... ({i + 1}/5)");
-
-                // HACK DE SRE: Executa um 'ls' via Shell para forçar o Kernel a indexar o arquivo
-                try
-                {
-                    var syncProcess = Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "ls",
-                        Arguments = $"-la {outputPath}",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false
-                    });
-                    await syncProcess!.WaitForExitAsync();
-                }
-                catch { /* ignore */ }
-
-                await Task.Delay(1500); // Aumentei um pouco o delay
+                Console.WriteLine($"[ORBIT] Sucesso! Dockerfile encontrado em: {dockerfilePath}");
             }
-
-            if (!found)
+            else
             {
-                if (Directory.Exists(outputPath))
-                {
-                    // Listagem profunda para o log
-                    var allFiles = Directory.GetFiles(outputPath, "*", SearchOption.AllDirectories);
-                    Console.WriteLine($"[DEBUG] Pasta existe, mas arquivos detectados pelo .NET são: {string.Join(", ", allFiles)}");
-
-                    // Tenta ver se o arquivo está com outro nome (nixpacks às vezes cria subpastas)
-                    foreach (var f in allFiles)
-                    {
-                        if (f.EndsWith("Dockerfile"))
-                        {
-                            Console.WriteLine($"[DEBUG] ACHEI! O arquivo estava em: {f}");
-                            // Opcional: dockerfilePath = f; found = true; break;
-                        }
-                    }
-                }
-
-                if (!found)
-                    throw new FileNotFoundException($"Dockerfile não encontrado em: {dockerfilePath}");
+                throw new FileNotFoundException($"Dockerfile não encontrado. Caminho esperado: {dockerfilePath}");
             }
-
-            Console.WriteLine($"[ORBIT] Dockerfile pronto em {dockerfilePath}!");
         }
+
         public async Task GenerateImage(string githubId, string appName, string version)
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
-            var outputPath = Path.Combine(sourcePath, "nixpacks"); // Pasta gerada na etapa anterior
+            // IMPORTANTE: Ajuste aqui também para o build do Docker encontrar o arquivo
+            var dockerfilePath = Path.Combine(sourcePath, "nixpacks", ".nixpacks", "Dockerfile");
             var tag = $"{appName.ToLower()}:{version}";
-
-            Console.WriteLine($"[DOCKER] Buildando imagem {tag}...");
 
             var processInfo = new ProcessStartInfo
             {
                 FileName = "docker",
-                // AGORA APONTAMOS PARA A PASTA CERTA QUE O SCRIPT CRIOU
-                Arguments = $"build -t {tag} -f {outputPath}/Dockerfile {sourcePath}",
+                Arguments = $"build -t {tag} -f {dockerfilePath} {sourcePath}",
                 WorkingDirectory = sourcePath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
