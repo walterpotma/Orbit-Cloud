@@ -116,7 +116,7 @@ namespace Orbit.Infrastructure.Services
         {
             var sourcePath = Path.Combine(BaseClonePath, githubId, "tmp", appName);
             var outputPath = Path.Combine(sourcePath, ".nixpacks"); // Pasta gerada na etapa anterior
-            var tag = $"{appName.ToLower()}:{version}";
+            var tag = $"{githubId}/{appName.ToLower()}:{version}";
 
             Console.WriteLine($"[DOCKER] Buildando imagem {tag}...");
 
