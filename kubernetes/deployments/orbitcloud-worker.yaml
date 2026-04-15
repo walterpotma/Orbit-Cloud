@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orbitcloud-worker-deployment
+  namespace: orbitcloud
+  labels:
+    app: orbitcloud-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orbitcloud-worker
+  template:
+    metadata:
+      labels:
+        app: orbitcloud-worker
+    spec:
+      containers:
+      - name: orbitcloud-worker-container
+        image: localhost:5000/orbitcloud-worker:v0.0.0
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: orbit-storage
+          mountPath: /data/
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+        - name: nixpacks
+          mountPath: /nixpacks.sh
+          readOnly: true
+        - name: clonepack
+          mountPath: /clone.sh
+          readOnly: true
+        - name: buildpack
+          mountPath: /build.sh
+          readOnly: true
+      volumes:
+      - name: orbit-storage
+        hostPath:
+          path: /data/
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
+      - name: nixpacks
+        hostPath:
+          path: /home/hayom/Orbit-Cloud/kubernetes/bash/nixpacks.sh
+          type: File
+      - name: clonepack
+        hostPath:
+          path: /home/hayom/Orbit-Cloud/kubernetes/bash/clone.sh
+          type: File
+      - name: buildpack
+        hostPath:
+          path: /home/hayom/Orbit-Cloud/kubernetes/bash/build.sh
+          type: File
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orbitcloud-worker-service
+  namespace: orbitcloud
+spec:
+  selector:
+    app: orbitcloud-worker
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: orbit-api-admin-binding
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: orbitcloud
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
