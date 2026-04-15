@@ -38,7 +38,6 @@ catch (Exception ex)
 }
 
 builder.Services.AddDbContext<OrbitContext>(options => options.UseNpgsql(connectionString));
-builder.Services.AddHostedService<BuildQueueReceiver>();
 
 var host = builder.Build();
 
