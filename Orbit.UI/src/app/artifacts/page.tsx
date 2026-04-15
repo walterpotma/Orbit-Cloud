@@ -96,7 +96,7 @@ export default function Page() {
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <Tag size={16} className="text-zinc-500" />
-                                                    <span className="font-mono text-sm text-green-400 font-medium">
+                                                    <span className="font-mono text-sm text-blue-500 font-medium">
                                                         {tag}
                                                     </span>
                                                 </div>

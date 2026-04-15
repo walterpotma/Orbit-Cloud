@@ -2,126 +2,118 @@
 import {
     Box,
     CheckCircle2,
-    AlertCircle,
+    Activity,
     XCircle,
+    AlertCircle,
     Clock,
-    Activity
+    Cpu,
+    Zap,
+    Disc3
 } from "lucide-react";
+import CircularProgressMini from "@/features/dashboard/components/dash-circular-progress-mini";
 
-// Definindo as props para bater com o DTO do C#
 type CardDeployProps = {
     name: string;
     namespace: string;
-    status: string;        // "Running", "Pending", "Failed"
-    ready: number;         // Réplicas prontas (Ex: 1)
-    desired: number;       // Réplicas desejadas (Ex: 3)
+    status: string;
+    ready: number;
+    desired: number;
     age: string;
-    tag: string;    // Tempo de vida (Ex: "2d")
+    tag: string;
     className?: string;
 }
 
 export default function CardDeploy({ name, namespace, status, ready, desired, age, tag, className }: CardDeployProps) {
 
-    // Calcula a porcentagem de saúde do deploy (Ex: 1/2 = 50%)
-    const percentage = desired > 0 ? (ready / desired) * 100 : 0;
-
-    // Função auxiliar para definir cores baseadas no status
+    // Configuração de cores e ícones do cabeçalho
     const getStatusConfig = (status: string) => {
         switch (status.toLowerCase()) {
             case "running":
-                return {
-                    text: "text-emerald-400",
-                    bg: "bg-emerald-500",
-                    border: "border-emerald-500/20",
-                    icon: <CheckCircle2 className="w-4 h-4" />
-                };
+                return { text: "text-emerald-400", border: "border-emerald-500/20", icon: <CheckCircle2 className="w-4 h-4" /> };
             case "pending":
-            case "containercreating":
-                return {
-                    text: "text-amber-400",
-                    bg: "bg-amber-500",
-                    border: "border-amber-500/20",
-                    icon: <Activity className="w-4 h-4 animate-pulse" />
-                };
-            case "failed":
-            case "error":
-            case "crashloopbackoff":
-                return {
-                    text: "text-red-400",
-                    bg: "bg-red-500",
-                    border: "border-red-500/20",
-                    icon: <XCircle className="w-4 h-4" />
-                };
+                return { text: "text-amber-400", border: "border-amber-500/20", icon: <Activity className="w-4 h-4 animate-pulse" /> };
             default:
-                return {
-                    text: "text-slate-400",
-                    bg: "bg-slate-500",
-                    border: "border-slate-700",
-                    icon: <AlertCircle className="w-4 h-4" />
-                };
+                return { text: "text-red-400", border: "border-red-500/20", icon: <XCircle className="w-4 h-4" /> };
         }
     };
 
     const style = getStatusConfig(status);
 
+    // Lógica das Barras de Réplicas (Dashed)
+    // Criamos um array com o tamanho do 'desired'
+    const replicas = Array.from({ length: desired }, (_, i) => {
+        // Se o index for menor que o número de réplicas prontas, ela está Running (Verde)
+        // Se o status geral for pending e estivermos criando, usamos Amber
+        // Se houver erro, usamos Red
+        let stateColor = "bg-zinc-800"; // Default / Offline
+
+        if (i < ready) {
+            stateColor = "bg-emerald-500";
+        } else if (status.toLowerCase() === "pending") {
+            stateColor = "bg-amber-500 animate-pulse";
+        } else {
+            stateColor = "bg-red-500";
+        }
+        return stateColor;
+    });
+
     return (
-        <div className={`w-full p-5 bg-slate-900/80 border border-slate-800 rounded-xl flex flex-col gap-4 hover:border-slate-600 transition-all duration-300 ${className}`}>
+        <div className={`group relative w-full p-6 bg-zinc-950/50 backdrop-blur-md border border-zinc-800/50 rounded-2xl hover:border-zinc-700/50 hover:bg-zinc-900/60 transition-all duration-300 ${className}`}>
+            <div className="flex flex-col gap-6">
 
-            {/* Cabeçalho: Ícone e Títulos */}
-            <div className="w-full flex justify-between gap-3 items-start">
-                <div className={`p-2.5 rounded-lg bg-slate-800 border ${style.border} flex justify-center items-center`}>
-                    <Box className={`w-5 h-5 ${style.text}`} />
-                </div>
-
-                <div className="w-full overflow-hidden">
-                    <div className="flex items-center justify-between">
-                        <h1 className="text-base font-semibold text-white truncate" title={name}>
-                            {name}
-                        </h1>
-
+                {/* Top Section */}
+                <div className="grid grid-cols-[1fr,auto] gap-4 items-center">
+                    <div className="flex justify-between gap-4">
+                        <div className="flex gap-3">
+                            <div className={`p-3.5 rounded-xl bg-zinc-950 border ${style.border} flex justify-center items-center shadow-inner`}>
+                                <Box className={`w-9 h-9 ${style.text}`} />
+                            </div>
+                            <div className="flex flex-col justify-center">
+                                <h1 className="text-xl font-bold text-zinc-100 tracking-tight leading-tight truncate max-w-[140px]" title={name}>{name}</h1>
+                                <div className={`flex items-center gap-1.5 mt-0.5 ${style.text}`}>
+                                    {style.icon}
+                                    <span className="text-xs font-bold uppercase tracking-widest">{status}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="gap-3 flex items-center justify-between pt-4 border-t border-zinc-800/50 text-[10px]">
+                            <div className="flex items-center gap-1.5 text-zinc-600 font-medium">
+                                <Clock className="w-3.5 h-3.5" />
+                                <span className="whitespace-nowrap">HÁ {age.toUpperCase()}</span>
+                            </div>
+                            <span className="px-2.5 py-1 bg-zinc-950/50 text-zinc-400 border border-zinc-800 rounded-lg font-mono">
+                                {tag}
+                            </span>
+                        </div>
                     </div>
 
-                    <div className={`flex items-center gap-1.5 mt-1 ${style.text}`}>
-                        {style.icon}
-                        <p className="text-sm font-medium">{status}</p>
+                    <div className="flex items-center gap-2">
+                        <CircularProgressMini percentage={0} color="text-blue-500" icon={Cpu} label="CPU" />
+                        <CircularProgressMini percentage={0} color="text-violet-500" icon={Zap} label="RAM" />
+                        <CircularProgressMini percentage={0} color="text-indigo-500" icon={Disc3} label="DISK" />
                     </div>
                 </div>
-                <div className="min-w-20 flex flex-col gap-1">
-                    {/* <span className="text-sm px-2 py-0.5 bg-slate-800 rounded-full text-slate-400 border border-slate-700">
-                        {namespace}
-                    </span> */}
-                    <span className="text-sm px-2 py-0.5 bg-slate-800 rounded-full text-slate-400 border border-slate-700">
-                        {tag}
-                    </span>
-                </div>
-            </div>
 
-            {/* Barra de Progresso (Réplicas) */}
-            <div className="w-full space-y-1.5">
-                <div className="flex justify-between text-xs text-slate-400">
-                    <span>Availability</span>
-                    <span className="font-mono text-slate-300">{ready} / {desired}</span>
-                </div>
-                <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                    <div
-                        className={`h-full rounded-full transition-all duration-1000 ease-out ${style.bg}`}
-                        style={{ width: `${percentage}%` }}
-                    ></div>
-                </div>
-            </div>
+                {/* Replica Status Section (O NOVO DASHED BAR) */}
+                <div className="space-y-3">
+                    <div className="flex justify-between items-end text-[11px] uppercase tracking-tighter font-bold">
+                        <span className="text-zinc-500">Replicas</span>
+                        <span className="text-zinc-300 font-mono tracking-normal">{ready} / {desired}</span>
+                    </div>
 
-            {/* Rodapé: Idade */}
-            <div className="pt-3 border-t border-slate-800 flex justify-between items-center gap-2 text-xs text-slate-500">
-                <div className="flex gap-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>Há {age}</span>
+                    {/* Grid de Barras Separadas */}
+                    <div className="flex w-full gap-1.5 h-2">
+                        {replicas.map((colorClass, index) => (
+                            <div
+                                key={index}
+                                className={`flex-1 h-full rounded-sm transition-all duration-500 ${colorClass}`}
+                            />
+                        ))}
+                    </div>
                 </div>
-                {/* <div className="flex justify-center items-center gap-2">
-                    <button className="px-2 py-1 rounded-lg border border-blue-500 text-blue-500 flex gap-1 cursor-pointer hover:bg-blue-500 hover:text-white transition-colors duration-300">
-                        <i className="bi bi-gear-fill"></i>
-                        {/* <p>Editar</p>
-                    </button>
-                </div> */}
+
+                {/* Bottom Section */}
+
             </div>
         </div>
     );
