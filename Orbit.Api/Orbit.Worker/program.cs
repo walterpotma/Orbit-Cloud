@@ -22,7 +22,7 @@ builder.Services.AddDbContext<OrbitContext>(options =>
     options.UseNpgsql(connectionString)
 );
 
-builder.Services.AddHostedService<Orbit.Worker.Queue.DockerQueue>();
+// builder.Services.AddHostedService<Orbit.Worker.Queue.DockerQueue>();
 
 var host = builder.Build();
 await host.RunAsync();
