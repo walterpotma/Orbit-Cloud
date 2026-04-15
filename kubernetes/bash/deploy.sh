@@ -7,7 +7,7 @@ CONTEXT=$4
 
 echo "[SH] Iniciando deploy para $APP_NAME"
 
-DOCKER_BUILDKIT=1 docker build -t localhost:5000/$APP_NAME:v$VERSION $APP_FILE $CONTEXT
+DOCKER_BUILDKIT=1 docker build -t localhost:5000/$APP_NAME:v$VERSION -f "$APP_FILE/Dockerfile" "$CONTEXT"
 
 if [ $? -ne 0 ]; then
     echo "[SH] Erro ao construir a imagem Docker."
