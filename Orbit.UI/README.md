@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🪐 Orbit Cloud - Planos & Identidade Visual
+> "Potência de Datacenter com preço de Home Lab."
 
-## Getting Started
+Este documento define a hierarquia de recursos e a paleta de cores baseada em corpos celestes para os diferentes níveis de serviço da **Orbit Cloud**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎨 Design System: Especificação de Cores
+Cada plano utiliza uma paleta de 9 tonalidades dinâmicas:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Variável | Categoria | Descrição |
+| :--- | :--- | :--- |
+| `--theme-1, 2, 3` | **Fundo** | Primário, Secundário e Terciário |
+| `--theme-4, 5` | **Bordas** | Sutil e Destaque (Stroke) |
+| `--theme-6` | **Destaque** | Brand, Botões e Call to Action |
+| `--theme-7, 8, 9` | **Texto** | Primário, Secundário e Mudo (Disabled) |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Níveis de Serviço
 
-## Learn More
+### 🌑 Moon (Micro)
+*Ideal para pequenos bots e testes rápidos.*
+- **Recursos:** 250m CPU | 500Mi RAM | 10GB Disco
 
-To learn more about Next.js, take a look at the following resources:
+```css
+:root .theme-moon {
+  --theme-1: #09090b;
+  --theme-2: #18181b;
+  --theme-3: #27272a;
+  --theme-4: #3f3f46;
+  --theme-5: #52525b;
+  --theme-6: #e2e8f0;
+  --theme-7: #ffffff;
+  --theme-8: #a1a1aa;
+  --theme-9: #71717a;
+}
+🔴 Mars (Starter)
+Para aplicações web em estágio inicial.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Recursos: 500m CPU | 1Gi RAM | 20GB Disco
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+CSS
+:root .theme-mars {
+  --theme-1: #090101;
+  --theme-2: #1a0505;
+  --theme-3: #2d0a0a;
+  --theme-4: #450a0a;
+  --theme-5: #7f1d1d;
+  --theme-6: #f87171;
+  --theme-7: #fef2f2;
+  --theme-8: #fca5a5;
+  --theme-9: #991b1b;
+}
+🪐 Neptune (Advanced)
+O equilíbrio perfeito. O padrão Orbit.
 
-## Deploy on Vercel
+Recursos: 1000m CPU | 2Gi RAM | 50GB Disco
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+CSS
+:root .theme-neptune {
+  --theme-1: #020617;
+  --theme-2: #0f172a;
+  --theme-3: #1e293b;
+  --theme-4: #1e3a8a;
+  --theme-5: #2563eb;
+  --theme-6: #38bdf8;
+  --theme-7: #f0f9ff;
+  --theme-8: #7dd3fc;
+  --theme-9: #075985;
+}
+💜 Supernova (Professional)
+Alta performance para workloads pesados.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Recursos: 1000m CPU | 4Gi RAM | 100GB Disco
+
+CSS
+:root .theme-supernova {
+  --theme-1: #09050f;
+  --theme-2: #1e1b4b;
+  --theme-3: #2e1065;
+  --theme-4: #4c1d95;
+  --theme-5: #6d28d9;
+  --theme-6: #a855f7;
+  --theme-7: #faf5ff;
+  --theme-8: #d8b4fe;
+  --theme-9: #7e22ce;
+}
+🕳️ Black Hole (Ultra)
+Onde a física (e o lag) deixam de existir.
+
+Recursos: 4000m CPU | 16Gi RAM | 500GB Disco
+
+CSS
+:root .theme-blackhole {
+  --theme-1: #000000;
+  --theme-2: #09090b;
+  --theme-3: #18181b;
+  --theme-4: #27272a;
+  --theme-5: #ffffff;
+  --theme-6: #ffffff;
+  --theme-7: #ffffff;
+  --theme-8: #d4d4d8;
+  --theme-9: #52525b;
+}
+🛠️ Exemplo de Implementação
+CSS
+.card {
+  background-color: var(--theme-2);
+  border: 1px solid var(--theme-4);
+  color: var(--theme-8);
+  border-radius: 1rem;
+}
+
+.card-title {
+  color: var(--theme-7);
+  font-weight: bold;
+}
+
+.button-primary {
+  background-color: var(--theme-6);
+  color: var(--theme-1);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
