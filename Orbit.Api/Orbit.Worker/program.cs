@@ -1,7 +1,9 @@
-using k8s;
-using Microsoft.EntityFrameworkCore;
-using Orbit.Infrastructure.Data;
-
+using Microsoft.Extensions.Hosting;           // Resolve o erro do 'Host'
+using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Client;                        // Resolve o erro do 'ConnectionFactory'
+using Orbit.Infrastructure.Data;              // Para o OrbitContext
+using Orbit.Worker.Queue;                     // Para o seu DockerQueue
+using k8s;                                    // Para o Kubernetes
 var builder = Host.CreateApplicationBuilder(args);
 
 #region Kubernetes Admin
