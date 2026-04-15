@@ -6,12 +6,12 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 WORKDIR /src
 
-COPY ["../Orbit.Worker/Orbit.Worker.csproj", "../Orbit.Worker/"]
-COPY ["../Orbit.Application/Orbit.Application.csproj", "../Orbit.Application/"]
-COPY ["../Orbit.Domain/Orbit.Domain.csproj", "../Orbit.Domain/"]
-COPY ["../Orbit.Infrastructure/Orbit.Infrastructure.csproj", "../Orbit.Infrastructure/"]
+COPY ["Orbit.Worker/Orbit.Worker.csproj", "Orbit.Worker/"]
+COPY ["Orbit.Application/Orbit.Application.csproj", "Orbit.Application/"]
+COPY ["Orbit.Domain/Orbit.Domain.csproj", "Orbit.Domain/"]
+COPY ["Orbit.Infrastructure/Orbit.Infrastructure.csproj", "Orbit.Infrastructure/"]
 
-RUN dotnet restore "../Orbit.Worker/Orbit.Worker.csproj"
+RUN dotnet restore "Orbit.Worker/Orbit.Worker.csproj"
 
 COPY . .
 
