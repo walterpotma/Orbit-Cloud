@@ -1,48 +1,27 @@
-using Microsoft.Extensions.Hosting;           // Resolve o erro do 'Host'
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration; // IMPORTANTE
 using Microsoft.Extensions.DependencyInjection;
-using RabbitMQ.Client;                        // Resolve o erro do 'ConnectionFactory'
-using Orbit.Infrastructure.Data;              // Para o OrbitContext
-using Orbit.Worker.Queue;                     // Para o seu DockerQueue
-using k8s;                                    // Para o Kubernetes
+using Microsoft.EntityFrameworkCore;       // IMPORTANTE
+using RabbitMQ.Client;
+using Orbit.Infrastructure.Data; 
+using k8s;
+
 var builder = Host.CreateApplicationBuilder(args);
 
-#region Kubernetes Admin
-Console.WriteLine("🪐 Orbit.Worker: Iniciando em modo In-Cluster");
-
-var kubernetesConfig = KubernetesClientConfiguration.InClusterConfig();
-
-builder.Services.AddSingleton<IKubernetes>(new Kubernetes(kubernetesConfig));
-
-#endregion
-
+// Resolve o erro do GetConnectionString
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var rabbitHost = builder.Configuration["Kubernetes:RabbitMQ:Host"];
 
-Console.WriteLine($"🐇 Tentando estabelecer conexão com RabbitMQ em: {rabbitHost}...");
+// Resolve o erro do RabbitMQ (Ajustado para v6.x ou v7.x conforme seu uso)
+// Se estiver usando v7.x, lembre-se de usar await e tornar o fluxo async
+var factory = new ConnectionFactory { HostName = builder.Configuration["RabbitMQ:Host"] ?? "localhost" };
+using var connection = factory.CreateConnection(); // Se for v7.x use: await factory.CreateConnectionAsync();
 
-try 
-{
-    var factory = new ConnectionFactory { HostName = rabbitHost };
-    
-    using var connection = factory.CreateConnection();
-    using var channel = connection.CreateModel();
-    
-    Console.WriteLine("✅ Conexão com RabbitMQ estabelecida com sucesso!");
-}
-catch (Exception ex)
-{
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine("❌ ERRO FATAL: Não foi possível conectar ao RabbitMQ.");
-    Console.WriteLine($"Motive: {ex.Message}");
-    Console.ResetColor();
-    
-    Environment.Exit(1); 
-}
+// Resolve o erro do UseNpgsql
+builder.Services.AddDbContext<OrbitContext>(options =>
+    options.UseNpgsql(connectionString)
+);
 
-builder.Services.AddDbContext<OrbitContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddHostedService<Orbit.Worker.Queue.DockerQueue>();
 
 var host = builder.Build();
-
-Console.WriteLine("🚀 Orbit.Worker em órbita e pronto para processar!");
-
 await host.RunAsync();
