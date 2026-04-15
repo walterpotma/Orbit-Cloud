@@ -13,7 +13,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // Resolve o erro do RabbitMQ (Ajustado para v6.x ou v7.x conforme seu uso)
 // Se estiver usando v7.x, lembre-se de usar await e tornar o fluxo async
-var factory = new ConnectionFactory { HostName = builder.Configuration["RabbitMQ:Host"] ?? "localhost" };
+var factory = new ConnectionFactory { HostName = builder.Configuration["Kubernetes:RabbitMQ:Host"] ?? "localhost" };
 using var connection = factory.CreateConnection(); // Se for v7.x use: await factory.CreateConnectionAsync();
 
 // Resolve o erro do UseNpgsql
