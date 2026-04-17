@@ -7,6 +7,7 @@ using Orbit.Infrastructure.Data;
 using k8s;
 
 var builder = Host.CreateApplicationBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 // 1. Pegando as configurações do JSON corretamente
 var rabbitSection = builder.Configuration.GetSection("Kubernetes:RabbitMQ");
