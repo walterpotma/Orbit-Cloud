@@ -24,10 +24,12 @@ try
 {
     Console.WriteLine($"🐇 Tentando conectar ao RabbitMQ em: {factory.HostName}...");
     using var connection = await factory.CreateConnectionAsync();
+    Console.WriteLine($"🔍 DEBUG: Conectando com Host: '{factory.HostName}', User: '{factory.UserName}'");
     Console.WriteLine("✅ Conexão com RabbitMQ estabelecida com sucesso!");
 }
 catch (Exception ex)
 {
+    Console.WriteLine($"🔍 DEBUG: Conectando com Host: '{factory.HostName}', User: '{factory.UserName}'");
     Console.WriteLine($"❌ Erro ao conectar no RabbitMQ: {ex.Message}");
 }
 
