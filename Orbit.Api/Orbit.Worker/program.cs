@@ -13,7 +13,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // Resolve o erro do RabbitMQ (Ajustado para v6.x ou v7.x conforme seu uso)
 // Se estiver usando v7.x, lembre-se de usar await e tornar o fluxo async
-var factory = new ConnectionFactory { HostName = builder.Configuration["Kubernetes:RabbitMQ:Host"] ?? "localhost" };
+var factory = new ConnectionFactory { HostName = builder.Configuration["Kubernetes:RabbitMQ:HostName"] ?? "localhost" };
 
 using var connection = await factory.CreateConnectionAsync();
 
