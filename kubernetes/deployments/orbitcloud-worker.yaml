@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: orbitcloud-worker-container
-        image: localhost:5000/orbitcloud-worker:v0.0.6
+        image: localhost:5000/orbitcloud-worker:v0.0.7
         ports:
         - containerPort: 8080
         volumeMounts:

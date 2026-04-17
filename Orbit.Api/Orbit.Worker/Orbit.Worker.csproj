@@ -25,5 +25,11 @@
     <ProjectReference Include="..\Orbit.Infrastructure\Orbit.Infrastructure.csproj" />
     <ProjectReference Include="..\Orbit.Domain\Orbit.Domain.csproj" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+    
 </Project>
