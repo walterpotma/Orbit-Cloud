@@ -1,23 +1,37 @@
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration; // IMPORTANTE
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;       // IMPORTANTE
+using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 using Orbit.Infrastructure.Data; 
 using k8s;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-// Resolve o erro do GetConnectionString
+// 1. Pegando as configurações do JSON corretamente
+var rabbitSection = builder.Configuration.GetSection("Kubernetes:RabbitMQ");
+
+// 2. Configurando a Factory com TODAS as informações do seu print
+var factory = new ConnectionFactory 
+{ 
+    HostName = rabbitSection["HostName"] ?? "rabbitmq",
+    Port = int.Parse(rabbitSection["Port"] ?? "5672"),
+    UserName = rabbitSection["UserName"] ?? "guest",
+    Password = rabbitSection["Password"] ?? "guest"
+};
+
+try 
+{
+    Console.WriteLine($"🐇 Tentando conectar ao RabbitMQ em: {factory.HostName}...");
+    using var connection = await factory.CreateConnectionAsync();
+    Console.WriteLine("✅ Conexão com RabbitMQ estabelecida com sucesso!");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"❌ Erro ao conectar no RabbitMQ: {ex.Message}");
+}
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Resolve o erro do RabbitMQ (Ajustado para v6.x ou v7.x conforme seu uso)
-// Se estiver usando v7.x, lembre-se de usar await e tornar o fluxo async
-var factory = new ConnectionFactory { HostName = builder.Configuration["Kubernetes:RabbitMQ:HostName"] ?? "localhost" };
-
-using var connection = await factory.CreateConnectionAsync();
-
-// Resolve o erro do UseNpgsql
 builder.Services.AddDbContext<OrbitContext>(options =>
     options.UseNpgsql(connectionString)
 );
